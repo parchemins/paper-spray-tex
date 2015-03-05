@@ -1,0 +1,79 @@
+\documentclass[conference]{IEEEtran}
+%%\documentclass{article} %% hevea
+%%\usepackage[utf8]{inputenc} %% hevea
+
+\usepackage[nocompress]{cite}
+\usepackage{hyperref}
+%% url
+\usepackage{url}
+%% maths
+\usepackage[cmex10]{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%% algorithms
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+%% images
+\usepackage{graphicx}
+%% inparaenum
+\usepackage{paralist}
+%% tables
+\usepackage{booktabs}
+\usepackage{multirow}
+%% figures
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing,plotmarks,shapes}
+%% transform eps in pdf crossplateform
+\usepackage{epstopdf}
+\usepackage{epsfig}
+
+\newcommand{\TOFIX}[1]{\textcolor{orange}{#1}}
+\newcommand{\TODO}[1]{\textcolor{red}{#1}}
+
+\newcounter{example}
+\setcounter{example}{0}
+\newcommand{\EXAMPLE}[0]{\stepcounter{example}\the\value{example}}
+%paralist
+\renewcommand*\descriptionlabel[1]{%
+\scshape #1}
+\renewcommand\paradescriptionlabel[1]{%
+\scshape #1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title{Scamplon}
+
+\author{Authors%
+
+\IEEEcompsocitemizethanks{\IEEEcompsocthanksitem The authors are affiliated to
+Université de Nantes, LINA, FRANCE. \protect\\
+E-mail: first.last{@}univ-nantes.fr}
+\thanks{}
+}
+\date{}
+
+
+
+\maketitle
+\input{input/abstract.tex}
+\IEEEpeerreviewmaketitle
+
+\input{input/introduction.tex}
+\input{input/background.tex}
+\input{input/proposal.tex}
+\input{input/experiments.tex}
+\input{input/relatedwork.tex}
+\input{input/conclusion.tex}
+\input{input/acknowledgment.tex}
+
+%% Bibliographie
+\bibliographystyle{IEEEtran}
+\bibliography{bibliographie}
+\clearpage
+  
+\end{document}
