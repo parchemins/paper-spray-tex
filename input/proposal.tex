@@ -1,6 +1,23 @@
 
 \section{Scamplon}
+\label{sec:proposal}
 
+Scamplon\footnote{Scamplon stands as the contraction of Scamp and Cyclon.} is a
+random peer sampling protocol inspired by both Scamp and Cyclon. It provides
+the best of its parents: a logarithmically increasing partial view size
+compared to the global network size, and fast convergence to a random graph
+using only neighbour-to-neighbour connection establishments. As such, it
+constitutes an improvement over state-of-the-art approaches in the common
+context of one-way connections. Additionally, it greatly outperforms
+state-of-the-art in the three-way handshake connection establishments. The
+latter context becomes increasingly important with the apparition of technology
+allowing peer-to-peer within modern web browsers. This section details the
+Scamplon protocol through intuitions, examples and algorithms.
+
+\begin{algorithm}
+  \input{./input/scamplonalgo.tex}
+  \caption{\label{algo:scamplon}The Scamplon protocol.}
+\end{algorithm}
 
 %%% Local Variables:
 %%% mode: latex

@@ -1,0 +1,53 @@
+
+\small
+\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+
+\newcommand{\comment}[1]{$\rhd$ #1}
+
+
+\algblockdefx[initially]{initially}{endInitially}
+  [0] {\textbf{INITIALLY:}} 
+
+\algblockdefx[act]{act}{endAct}
+  [0] {\textbf{ACTIVE THREAD:}}
+
+\algblockdefx[pas]{pas}{endPas}
+  [0] {\textbf{PASSIVE THREAD:}}
+
+
+\newcommand{\LINEFOR}[2]{%
+  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+  }
+
+\newcommand{\LINEIFTHEN}[2]{%
+  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
+  }
+
+\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
+
+\begin{algorithmic}[1]
+  \Statex
+  \initially
+    \State $p$ ; \hfill \comment{Identity of the local peer}
+    \State $\mathcal{P} \leftarrow \varnothing$;
+    \hfill \comment{the partial view}
+  \endInitially
+  
+  \act
+    \Function{loop}{ } \hfill \comment{Every $\Delta$ time}
+    \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
+    \State \textbf{let} $q \leftarrow getOldest(\mathcal{P})$;
+    \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\},\, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil) \cup \left\{\langle p,\, 0 \rangle\right\}$;
+    \State $sendTo(q,\, sample)$;
+    \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
+    \EndFunction
+  \endAct
+  
+  \pas
+    \Function{onExchange}{$origin,\, sample$}
+    \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P},\, \left\lceil |\mathcal{P}|\over{2} \right\rceil ) \setminus \left\{p\right\}$;
+    \State $sendTo(origin,\, sample')$;
+    \EndFunction
+  \endPas
+  
+\end{algorithmic}
