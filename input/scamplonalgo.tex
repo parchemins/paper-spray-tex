@@ -48,6 +48,24 @@
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P},\, \left\lceil |\mathcal{P}|\over{2} \right\rceil ) \setminus \left\{p\right\}$;
     \State $sendTo(origin,\, sample')$;
     \EndFunction
+    \Statex
+    \Function{onContact}{$origin$}
+    \State \LINEFOR{\textbf{each} $q\in\mathcal{P}$}
+    {$sendTo(q,\, 'fwdSubs',\, origin)$;}
+    \State \LINEFOR{$i \leftarrow 0$ \textbf{to} $c$}
+    {\INDSTATE $sendTo(\mathcal{P}[\left\lfloor rand()*
+        |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, origin)$;}
+    \EndFunction
+    \Statex
+    \Function{onFwdSubs}{$origin$}
+    \If {$rand() < (1 / (|\mathcal{P}|+1))$}
+    \State $\mathcal{P} \leftarrow
+    \mathcal{P}\cup \left\{\langle origin,\, 0 \rangle\right\}$;
+    \Else
+    \State $sendTo(\mathcal{P}[\left\lfloor rand()*
+      |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, origin)$;
+    \EndIf
+    \EndFunction
   \endPas
   
 \end{algorithmic}

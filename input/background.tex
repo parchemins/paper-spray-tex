@@ -46,10 +46,10 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
 
 %% Talk about Scamp
 \begin{asparadesc}
-\item [Scamp] (REF) stands for SCalable Membership Protocol. It is a reactive
-  protocol which provides each membership event with an appropriate reaction.
-  The most important event is the joining event which creates a logarithmically
-  increasing number of connections compared to the total network size.
+\item [Scamp] (REF) stands for SCalable Membership Protocol. This protocol
+  links each membership event with an appropriate reaction.  The most important
+  event is the joining event which creates a logarithmically increasing number
+  of connections compared to the total network size.
   Figure~\ref{fig:scampexample} depicts the joining protocol of Scamp. As we
   can see, the resulting graph is connected. However, the last peer $p_1$ only
   has one neighbour in its partial view, meaning that if $p_4$ crashes, $p_1$
@@ -86,23 +86,26 @@ use Scamp. However the subscription mechanism can create connections several
 hops away from the origin. Each of these hops is an opportunity of failure.
 
 Let $P_f$ the probability of either the peer or the link between the latter and
-the next peer crash/disconnect when it holds the subscription, without
-recovery. Let $P_E$ the probability that a connection establishment cannot be
-completed. Without handshake, $P_E$ is straightforward:
-\begin{equation} P_{E,\,1way}^{Cyclon}=2*P_f \end{equation}
-\begin{equation} P_{E,\,1way}^{Scamp}=k*P_f \end{equation} where $k$ is the
+the next peer crashes/disconnects when it holds the subscription, without
+possible recovery. Let $P_E$ the probability that a connection establishment
+cannot be completed. Without handshake, $P_E$ is straightforward:
+\begin{equation} P_{E,\,1way}^{Cyclon}=2 P_f \end{equation}
+\begin{equation} P_{E,\,1way}^{Scamp}=k P_f \end{equation} where $k$ is the
 number of hops before the acceptance of the subscription. On the other hand, in
 the handshaking context, the subscription must travel back to its origin in
 order to be completed. As consequence, when a subscription travels through a
 peer or a link, they are not allowed to fail until the subscription travels
 back. Thus, we have (TO DOUBLE CHECK):
-\begin{equation} P_{E,\,3way}^{Cyclon}=6*P_f \end{equation}.
-\begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2k} * (1-P_f)^{2(k-1)}*
-                                     \ldots *(1-P_f)^2) \\
+\begin{equation} P_{E,\,3way}^{Cyclon}=6 P_f \end{equation}.
+\begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2k} (1-P_f)^{2(k-1)}
+                                     \ldots (1-P_f)^2) \\
                                    &=1-(1-P_f)^{k^2+k}
 \end{align}
 From these analysis, it is worth noting that while Cyclon remains at a same
-order of magnitude in both cases, Scamp is dramatically impacted.
+order of magnitude in both cases, Scamp is dramatically impacted. To sustain
+these theoretical analysis, we conducted series of experiments to highlight the
+differences between the contexts and the influence of failures on convergence
+speed (INSERT GRAPH).
 
 \begin{figure}
   \centering
