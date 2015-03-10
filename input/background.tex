@@ -17,16 +17,16 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
 
 %% Talk about Cyclon
 \begin{asparadesc}
-\item [Cyclon] (REF) is a periodic random peer sampling protocol which updates
-  its partial view every interval of time. The partial view has a fixed-size
-  set at start. In this view, each neighbour is associated with an age
-  incremented at each cycle. To update its partial view, Cyclon exchanges a
-  subset of its partial view with one of its neighbour chosen using the age.
-  Assuming a well chosen $|\mathcal{P}|$, Cyclon quickly converges to a random
-  graph (cf. (REF experiments)) providing desirable properties such as
-  robustness (MOAR) etc.  Figure~\ref{fig:cyclonexample} depicts the periodic
-  exchanges of Cyclon. We can see that peers only communicate in their direct
-  neighbourhood to renew connections.
+\item [Cyclon]~\cite{voulgaris2005cyclon} is a periodic random peer sampling
+  protocol which updates its partial view every interval of time. The partial
+  view has a fixed-size set at start. In this view, each neighbour is
+  associated with an age incremented at each cycle. To update its partial view,
+  Cyclon exchanges a subset of its partial view with one of its neighbour
+  chosen using the age.  Assuming a well chosen $|\mathcal{P}|$, Cyclon quickly
+  converges to a random graph (cf. (REF experiments)) providing desirable
+  properties such as robustness (MOAR) etc.  Figure~\ref{fig:cyclonexample}
+  depicts the periodic exchanges of Cyclon. We can see that peers only
+  communicate in their direct neighbourhood to renew connections.
 \end{asparadesc}
 
 \begin{figure}
@@ -46,18 +46,18 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
 
 %% Talk about Scamp
 \begin{asparadesc}
-\item [Scamp] (REF) stands for SCalable Membership Protocol. This protocol
-  links each membership event with an appropriate reaction.  The most important
-  event is the joining event which creates a logarithmically increasing number
-  of connections compared to the total network size.
-  Figure~\ref{fig:scampexample} depicts the joining protocol of Scamp. As we
-  can see, the resulting graph is connected. However, the last peer $p_1$ only
-  has one neighbour in its partial view, meaning that if $p_4$ crashes, $p_1$
-  cannot send messages to the network any more. To avoid that, a periodic
-  re-subscription is necessary. This re-subscription mechanism will likely add
-  new neighbours in the partial view of the newest peers and reorganise the
-  neighbourhood of oldest peer. Just as Cyclon, Scamp converges to a random
-  graph and provide their desirable properties.
+\item [Scamp]~\cite{ganesh2003peer} stands for SCalable Membership
+  Protocol. This protocol links each membership event with an appropriate
+  reaction.  The most important event is the joining event which creates a
+  logarithmically increasing number of connections compared to the total
+  network size.  Figure~\ref{fig:scampexample} depicts the joining protocol of
+  Scamp. As we can see, the resulting graph is connected. However, the last
+  peer $p_1$ only has one neighbour in its partial view, meaning that if $p_4$
+  crashes, $p_1$ cannot send messages to the network any more. To avoid that, a
+  periodic re-subscription is necessary. This re-subscription mechanism will
+  likely add new neighbours in the partial view of the newest peers and
+  reorganise the neighbourhood of oldest peer. Just as Cyclon, Scamp converges
+  to a random graph and provide their desirable properties.
 \end{asparadesc}
 
 \begin{figure}
@@ -83,7 +83,8 @@ establishment using such set-up forces a round trip negotiation much more
 costly and subject to failure. In this context, each connection matters. Hence,
 we cannot afford oversized partial views. Consequently, one would be tempted to
 use Scamp. However the subscription mechanism can create connections several
-hops away from the origin. Each of these hops is an opportunity of failure.
+hops away from the origin. Each of these hops is an opportunity of failure
+(cf. Fig~\ref{fig:failureexample}).
 
 Let $P_f$ the probability of either the peer or the link between the latter and
 the next peer crashes/disconnects when it holds the subscription, without
@@ -110,8 +111,13 @@ speed (INSERT GRAPH).
 \begin{figure}
   \centering
   \input{./input/failureexample.tex}
-  \caption{\label{fig:failureexample}Influence of handshaking on probability of
-    failures.}
+  \caption{\label{fig:failureexample}Handshaking differences of Cyclon and
+    Scamp. While subscriptions travel from $p_1$ to $p_3$ using one
+    intermediate in Cyclon, the subscriptions travel from $p_1$ to $p_k$ in
+    Scamp. This difference change the complexity of the two approaches. In
+    particular, the failure probability is much more important in
+    Scamp. Indeed, links and peers, once employed, must be kept alive until the
+    subscriptions travel back. Otherwise, the handshaking is not complete.}
 \end{figure}
 
 To summarise, we would like the best of the aforementioned approaches: a random

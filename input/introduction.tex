@@ -8,22 +8,22 @@ allows a scalable yet highly reliable broadcasting which constitutes the core
 of numerous decentralized applications (REFs). However, current random peer
 sampling approaches are not entirely satisfying. 
 
-The Cyclon protocol (REF) provides each peer with a fixed size partial view.
-Each element in this view has an age which allows quick withdrawing of left
-peers. Nevertheless, the user must foresee the maximum size of the network to
-set the appropriate view size. As such, the views are generally oversized. On
-the other hand, the Scamp protocol (REF) incrementally builds the partial views
-of peers at join. Thus, each peer has a partial view size logarithmically
-growing compared to the global size of the network. Nevertheless, a peer may
-connect to peers at several hops from him. Hence, the connections are more
-likely to fail.  Furthermore, both approaches do not consider three-way
-handshake connections set-up which becomes increasingly imporant with
-technologies such as WebRTC, allowing peer-to-peer connections establishment
-directly within modern web browser. In such context, each connection
-matters. Therefore, oversizing the partial views as in Cyclon becomes a heavy
-burden. Also, handshaking requires a round trip of joining messages which
-increases the Scamp's complexity of failures. Scamp becomes unusable in
-pratice.
+The Cyclon protocol~\cite{voulgaris2005cyclon} provides each peer with a fixed
+size partial view.  Each element in this view has an age which allows quick
+withdrawing of left peers. Nevertheless, the user must foresee the maximum size
+of the network to set the appropriate view size. As such, the views are
+generally oversized. On the other hand, the Scamp
+protocol~\cite{ganesh2003peer} incrementally builds the partial views of peers
+at join. Thus, each peer has a partial view size logarithmically growing
+compared to the global size of the network. Nevertheless, a peer may connect to
+peers at several hops from him. Hence, the connections are more likely to fail.
+Furthermore, both approaches do not consider three-way handshake connections
+set-up which becomes increasingly imporant with technologies such as WebRTC,
+allowing peer-to-peer connections establishment directly within modern web
+browser. In such context, each connection matters. Therefore, oversizing the
+partial views as in Cyclon becomes a heavy burden. Also, handshaking requires a
+round trip of joining messages which increases the Scamp's complexity of
+failures. Scamp becomes unusable in pratice.
 
 In this paper, we introduce Scamplon, a random peer sampling protocol
 \begin{inparaenum}[(i)]
