@@ -14,6 +14,51 @@ latter context becomes increasingly important with the apparition of technology
 allowing peer-to-peer within modern web browsers. This section details the
 Scamplon protocol through intuitions, examples and algorithms.
 
+\begin{asparadesc}
+\item [Scamplon] reuses the joining process of Scamp to incrementally build the
+network. While such network is not flawless, it has the interesting property of
+logarithmically increasing the number of connections at each join, compared to
+the global network size. Still, newest members have a small partial view size,
+and oldest peers are more clustered. To alleviates these issues, a periodic
+Cyclon-like protocol takes place in order to balance the partial views, using
+only neighbour-to-neighbour interactions. This balancing concerns both the
+partial view sizes, and the uniformity of chosen peers within
+them. Unfortunately, Cyclon handles fixed-size partial views. Therefore, it
+must be adapted to handle partial views that grow and shrink as the network
+dynamically adapts to the membership.
+\end{asparadesc}
+
+The first issue of Cyclon concerns the partial view sizes. For the recall, the
+user of Cyclon must foresee the maximum size of the network to set the partial
+view size, and the size of the subset to exchange from neighbour-to-neighbour.
+However, in Scamplon, a peer with $2$ neighbours in its partial view can
+exchange with a peer with $10$ neighbours. Ideally, the resulting size of both
+partial views would be $6$ after the exchange. Yet, reaching this ideal value
+in one cycle is difficult without the knowledge of each other's partial view
+size. Instead of acquiring this knowledge, Scamplon aims to converge to the
+ideal value by averaging their view size over exchanges. Therefore, the
+initiating peer sends $\left\lceil\mathcal{P}\over{2}\right\rceil$ members to
+the chosen peer (chosen by age). The latter sends back
+$\left\lfloor\mathcal{P}\over{2}\right\rfloor$ members. After the receipt, both
+peers remove the sent members and add the received members. It worth noting
+that the global number of connections after the process must not
+change. Otherwise, Scamplon cannot guarantee that the partial view sizes are
+logarithmic in average compared to the network size.
+
+A remarkable difference regarding Cyclon is that Scamplon explicitely allows to
+have a same neighbour multiple times in a partial view. It impacts on the
+clustering coefficient. However, the impact is not significant since these
+artifacts are not numerous because of the random graph, and because they
+disappear over the Scamplon cycles.
+
+There are dew optimisations concerning the establishements of connections. For
+instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
+partial view, instead of inverting the link between $p$ and $q$, and $q$ and
+$p$, Scamplon does not change them. Another optimisation concerns a peer having
+a neighbour multiple times in its partial view. While Scamplon keeps such
+information in its partial view, only one connection per neighbour is
+necessary.
+
 \begin{algorithm}
   \input{./input/scamplonalgo.tex}
   \caption{\label{algo:scamplon}The Scamplon protocol.}

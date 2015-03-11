@@ -29,8 +29,8 @@
   \Statex
   \initially
     \State $p$ ; \hfill \comment{Identity of the local peer}
-    \State $\mathcal{P} \leftarrow \varnothing$;
-    \hfill \comment{the partial view}
+    \State $\mathcal{P} \leftarrow [\,]$;
+    \hfill \comment{the partial view, sorted by age}
   \endInitially
   
   \act
@@ -44,26 +44,27 @@
   \endAct
   
   \pas
-    \Function{onExchange}{$origin,\, sample$}
-    \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P},\, \left\lceil |\mathcal{P}|\over{2} \right\rceil ) \setminus \left\{p\right\}$;
-    \State $sendTo(origin,\, sample')$;
+    \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
+    \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P}\setminus \left\{o\right\} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )  \cup \left\{\langle p,\,0 \rangle\right\}$;
+    \State $sendTo(o ,\, sample')$;
+    \State $\mathcal{P}\leftarrow \mathcal{P} \cup sample$;
     \EndFunction
     \Statex
-    \Function{onContact}{$origin$}
+    \Function{onContact}{$o$} \hfill \comment{$o: origin$}
     \State \LINEFOR{\textbf{each} $q\in\mathcal{P}$}
-    {$sendTo(q,\, 'fwdSubs',\, origin)$;}
+    {$sendTo(q,\, 'fwdSubs',\, o)$;}
     \State \LINEFOR{$i \leftarrow 0$ \textbf{to} $c$}
     {\INDSTATE $sendTo(\mathcal{P}[\left\lfloor rand()*
-        |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, origin)$;}
+        |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, o)$;}
     \EndFunction
     \Statex
-    \Function{onFwdSubs}{$origin$}
+    \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
     \If {$rand() < (1 / (|\mathcal{P}|+1))$}
     \State $\mathcal{P} \leftarrow
-    \mathcal{P}\cup \left\{\langle origin,\, 0 \rangle\right\}$;
+    \mathcal{P}\cup \left\{\langle o,\, 0 \rangle\right\}$;
     \Else
     \State $sendTo(\mathcal{P}[\left\lfloor rand()*
-      |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, origin)$;
+      |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, o)$;
     \EndIf
     \EndFunction
   \endPas
