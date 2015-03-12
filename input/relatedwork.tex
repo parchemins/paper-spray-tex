@@ -3,6 +3,14 @@
 \label{sec:relatedwork}
 
 \subsection{Network size estimators}
+There exists a plethora of network size estimator, either using sampling
+technics (REF?), sketching technics (REF?), or averaging technics (REF?). Using
+such estimator to resize the partial view of each peer is possible. However,
+these approaches are often very costly, and can assume some network properties
+(e.g. no dynamic network during an estimating). On the other hand, Scamplon
+provides partial views logarithmically growing compared to the network
+size. Thus, it implies no overhead since it converges by design to a random
+graph. Then, each peer is able to compute a rough estimate of the network size.
 
 %%% Local Variables:
 %%% mode: latex

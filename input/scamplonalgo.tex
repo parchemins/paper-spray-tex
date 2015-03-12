@@ -40,6 +40,7 @@
     \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\},\, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil) \cup \left\{\langle p,\, 0 \rangle\right\}$;
     \State $sendTo(q,\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
+    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{ q \right\}) \cup sample'$;  \hfill \comment{update $\mathcal{P}$}
     \EndFunction
   \endAct
   
@@ -47,7 +48,7 @@
     \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P}\setminus \left\{o\right\} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )  \cup \left\{\langle p,\,0 \rangle\right\}$;
     \State $sendTo(o ,\, sample')$;
-    \State $\mathcal{P}\leftarrow \mathcal{P} \cup sample$;
+    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample') \setminus \left\{ o \right\}) \cup sample$; \hfill \comment{update $\mathcal{P}$}
     \EndFunction
     \Statex
     \Function{onContact}{$o$} \hfill \comment{$o: origin$}
