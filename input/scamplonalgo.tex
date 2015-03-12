@@ -28,9 +28,12 @@
 \begin{algorithmic}[1]
   \Statex
   \initially
-    \State $p$ ; \hfill \comment{Identity of the local peer}
     \State $\mathcal{P} \leftarrow [\,]$;
     \hfill \comment{the partial view, sorted by age}
+    \State $p$ ; \hfill \comment{identity of the local peer}
+    \State $c \leftarrow 2$;
+    \hfill \comment{additionnal connections when joining}
+
   \endInitially
   
   \act

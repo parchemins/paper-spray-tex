@@ -39,19 +39,19 @@ size. Instead of acquiring this knowledge, Scamplon aims to converge to the
 ideal value by averaging their view size over exchanges. Therefore, the
 initiating peer sends $\left\lceil\mathcal{P}\over{2}\right\rceil$ members to
 the chosen peer (chosen by age). The latter sends back
-$\left\lfloor\mathcal{P}\over{2}\right\rfloor$ members. After the receipt, both
-peers remove the sent members and add the received members. It worth noting
-that the global number of connections after the process must not
+$\left\lceil\mathcal{P}\over{2}\right\rceil$ members too. After the receipt,
+both peers remove the sent members and add the received members. It worth
+noting that the global number of connections after the process must not
 change. Otherwise, Scamplon cannot guarantee that the partial view sizes are
 logarithmic in average compared to the network size.
 
-A remarkable difference regarding Cyclon is that Scamplon explicitely allows to
+A remarkable difference regarding Cyclon is that Scamplon explicitly allows to
 have a same neighbour multiple times in a partial view. It impacts on the
 clustering coefficient. However, the impact is not significant since these
-artifacts are not numerous because of the random graph, and because they
+artefacts are not numerous because the graph is random, and because they
 disappear over the Scamplon cycles.
 
-There are dew optimisations concerning the establishements of connections. For
+There are few optimisations concerning the establishments of connections. For
 instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
 partial view, instead of inverting the link between $p$ and $q$, and $q$ and
 $p$, Scamplon does not change them. Another optimisation concerns a peer having
