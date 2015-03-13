@@ -41,15 +41,16 @@
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
     \State \textbf{let} $q \leftarrow getOldest(\mathcal{P})$;
     \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\},\, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil) \cup \left\{\langle p,\, 0 \rangle\right\}$;
-    \State $sendTo(q,\, sample)$;
+    \State $sendTo(q,\, 'exchange',\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
+    \State $sample' \leftarrow replace(sample',\, p,\, q)$;
     \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{ q \right\}) \cup sample'$;  \hfill \comment{update $\mathcal{P}$}
     \EndFunction
   \endAct
   
   \pas
     \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
-    \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P}\setminus \left\{o\right\} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )  \cup \left\{\langle p,\,0 \rangle\right\}$;
+    \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )$;
     \State $sendTo(o ,\, sample')$;
     \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample') \setminus \left\{ o \right\}) \cup sample$; \hfill \comment{update $\mathcal{P}$}
     \EndFunction
@@ -63,7 +64,8 @@
     \EndFunction
     \Statex
     \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
-    \If {$rand() < (1 / (|\mathcal{P}|+1))$}
+    \If {$((rand() < (1 / (|\mathcal{P}|+1))) \wedge (o\not\in\mathcal{P}) 
+      \wedge (o\neq p))$}
     \State $\mathcal{P} \leftarrow
     \mathcal{P}\cup \left\{\langle o,\, 0 \rangle\right\}$;
     \Else

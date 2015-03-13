@@ -49,7 +49,7 @@ A remarkable difference regarding Cyclon is that Scamplon explicitly allows to
 have a same neighbour multiple times in a partial view. It impacts on the
 clustering coefficient. However, the impact is not significant since these
 artefacts are not numerous because the graph is random, and because they
-disappear over the Scamplon cycles.
+disappear over the Scamplon cycles (EXAMPLIFY).
 
 There are few optimisations concerning the establishments of connections. For
 instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
@@ -58,6 +58,35 @@ $p$, Scamplon does not change them. Another optimisation concerns a peer having
 a neighbour multiple times in its partial view. While Scamplon keeps such
 information in its partial view, only one connection per neighbour is
 necessary.
+
+\begin{asparadesc}
+\item [Algorithm]\ref{algo:scamplon} shows the Scamplon protocol running at
+  each peer. It is divided between an active thread looping to update the
+  partial view, and the passive thread which provides the reactions to received
+  messages. A peer $o$ joining the network will reach a contact peer. The
+  latter will call Function $onContact$ which spreads $(|\mathcal{P}|+c)$
+  copies of $o$ inside the network. Then, each time a peer receives one of
+  these message, assuming that this peer does not have $o$ already and this
+  peer is not $o$, it has a probability $1\over{|\mathcal{P}|+1}$ to integrate
+  $o$ in $\mathcal{P}$. Otherwise it forwards the copy to a random neighbour.
+  At this point, $o$ has $1$ neighbour in its partial view, and appears
+  $(c+(c+1)log(N))$ times in partial views of other members. The active thread
+  aims to balance the partial views. Each time Function $loop$ is called, the
+  age of each element in $\mathcal{P}$ is incremented. Then, the oldest peer
+  $q$ is chosen to exchange a subset of their partial view. If Peer $q$ cannot
+  be reached (i.e. it crashed/disconnected), it is removed from the partial
+  view and the operation is repeated. Once the initiating peer $p$ found a
+  reachable peer $q$, the former selects a sample of its partial view,
+  excluding $q$ and including itself. The size of this sample is half of its
+  partial view, with a minimum of one peer: the initiating peer. The answer of
+  $q$ is of the exact same kind. Afterwards, both of them remove the sent
+  sample from their view, remove the chosen neighbour, and add the received
+  sample.
+\end{asparadesc}
+
+Note that extending the algorithm to provide handshaking is not difficult: it
+only requires to keep track of the neighbour from where the membership messages
+arrived, and forward the answer to this neighbour accordingly.
 
 \begin{algorithm}
   \input{./input/scamplonalgo.tex}
