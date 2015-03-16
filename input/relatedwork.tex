@@ -2,15 +2,44 @@
 \section{Related work}
 \label{sec:relatedwork}
 
+\subsection{Distributed ecosystem within browser}
+Currently, the ecosystem of distributed browser-embedded applications is
+blooming. Indeed, the arrival of peer-to-peer within modern browsers opened the
+gate to a large variety of real-time distributed web applications, previously
+quartered to standalone applications. As consequence, they become accessible to
+a larger audience. A majority of these applications targets a small number of
+simultaneous users (e.g. Sharefest~\cite{sharefest}). Therefore, they can
+afford the use of fully connected graph (e.g. PeerJS~\cite{peerjs}). More
+recently, applications aiming larger scale have been arising. For instance,
+WebTorrent~\cite{webtorrent} is a file-sharing system based on the BitTorrent
+protocol. Nevertheless, users of this application share static data. As such,
+the built network could be completely clustered but still working as long as
+one member in each cluster has all the data.  Till now, the class of
+applications requiring scalable broadcast has been neglected. The goal of
+Scamplon is to fill this gap by providing a scalable membership protocol
+well-adapted to such context. Using Scamplon, the network is connected, yet
+using few connections. Therefore, the broadcast messages reach all members
+either directly, or transitively.
+
+
 \subsection{Network size estimators}
-There exists a plethora of network size estimator, either using sampling
-technics (REF?), sketching technics (REF?), or averaging technics (REF?). Using
-such estimator to resize the partial view of each peer is possible. However,
-these approaches are often very costly, and can assume some network properties
-(e.g. no dynamic network during an estimating). On the other hand, Scamplon
-provides partial views logarithmically growing compared to the network
-size. Thus, it implies no overhead since it converges by design to a random
-graph. Then, each peer is able to compute a rough estimate of the network size.
+There exists a plethora of network size
+estimator~\cite{kostoulas2007active,baquero2012extrema}, either using
+\begin{inparaenum}[(i)]
+\item sampling technics~\cite{kostoulas2007active} which analyse a subset of
+  the network and deduce the network size using probabilistic functions,
+\item sketching technics (REF?) which use hashing to compress the high amount
+  of data and deduce the network size using the collisions,
+\item averaging technics (REF?) which use aggregations that converge over
+  exchanges to the network size.
+\end{inparaenum}
+Using such estimator to resize the partial view of each peer is
+possible. However, these approaches are often very costly, and can assume some
+network properties (e.g. no dynamic network during an estimating). On the other
+hand, Scamplon provides partial views logarithmically growing compared to the
+network size. Thus, it implies no overhead since it converges by design to a
+random graph. Then, each peer is able to compute a rough estimate of the
+network size.
 
 %%% Local Variables:
 %%% mode: latex

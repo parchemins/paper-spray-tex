@@ -33,31 +33,32 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
   \centering
   \input{./input/cyclonexample.tex}
   \caption{\label{fig:cyclonexample}Example of Cyclon's periodic exchange of
-    partial views. For simplicity sake, we set $|\mathcal{P}|$ to $3$ and the
+    partial views. For simplicity sake, we set $|\mathcal{P}|$ to $4$ and the
     exchanges concern only $2$ neighbours. Furthermore, while the network
-    contains $8$ members, we only show the partial views of $p_1$ and $p_5$.
+    contains $9$ members, we only show the partial views of $p_1$ and $p_5$.
     Peer $p_1$ initiates the view exchange with its oldest neighbour $p_5$,
-    giving $\left\{p_1,\,p_4\right\}$. On receipt, Peer $p_5$ establishes the
-    connection to $p_1$ and $p_4$ and gives away its connection to
-    $\left\{p_7\right\}$.  On receipt of this latter, $p_1$ establishes the
-    connection to Peer $p_7$. Altogether, we cut $3$ links to create $3$ other
-    links only by using neighbour-to-neighbour interactions.}
+    giving $\left\{p_1,\,p_2\right\}$. On receipt, Peer $p_5$ establishes the
+    connection to $p_1$ and $p_2$ and gives away its connection to
+    $\left\{p_6,\,p_9\right\}$.  On receipt of this latter, $p_1$ establishes
+    the connection to Peer $p_6$ and Peer $p_9$. Altogether, we cut $4$ links
+    to create $4$ other links only by using neighbour-to-neighbour
+    interactions.}
 \end{figure}
 
 %% Talk about Scamp
 \begin{asparadesc}
-\item [Scamp]\cite{ganesh2003peer} stands for SCalable Membership
-  Protocol. This protocol links each membership event with an appropriate
-  reaction.  The most important event is the joining event which creates a
-  logarithmically increasing number of connections compared to the total
-  network size.  Figure~\ref{fig:scampexample} depicts the joining protocol of
-  Scamp. As we can see, the resulting graph is connected. However, the last
-  peer $p_1$ only has one neighbour in its partial view, meaning that if $p_4$
-  crashes, $p_1$ cannot send messages to the network any more. To avoid that, a
-  periodic re-subscription is necessary. This re-subscription mechanism will
-  likely add new neighbours in the partial view of the newest peers and
-  reorganise the neighbourhood of oldest peer. Just as Cyclon, Scamp converges
-  to a random graph and provide their desirable properties.
+\item [Scamp]\cite{ganesh2001scamp,ganesh2003peer} stands for SCalable
+  Membership Protocol. This protocol links each membership event with an
+  appropriate reaction.  The most important event is the joining event which
+  creates a logarithmically increasing number of connections compared to the
+  total network size.  Figure~\ref{fig:scampexample} depicts the joining
+  protocol of Scamp. As we can see, the resulting graph is connected. However,
+  the last peer $p_1$ only has one neighbour in its partial view, meaning that
+  if $p_4$ crashes, $p_1$ cannot send messages to the network any more. To
+  avoid that, a periodic re-subscription is necessary. This re-subscription
+  mechanism will likely add new neighbours in the partial view of the newest
+  peers and reorganise the neighbourhood of oldest peer. Just as Cyclon, Scamp
+  converges to a random graph and provide their desirable properties.
 \end{asparadesc}
 
 \begin{figure}
