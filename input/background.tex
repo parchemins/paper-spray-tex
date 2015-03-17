@@ -78,27 +78,69 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
     accepts it. The resulting graph is connected.}
 \end{figure}
 
+\subsection{Three-way handshake}
+In this paper, we do not restrict ourselves to one-way connections. We are 
+also interested in three-way handshake connection set-up. In such context, 
+a subscription message must be
+\begin{inparaenum}[(1)]
+\item emitted at Peer $p$,
+\item accepted at Peer $q$,
+\item completed at Peer $p$.
+\end{inparaenum}
+Thus, when a peer needs to establish a connection to another peer, a message
+must travel back and forth. One could use a dedicated server to establish the
+dialog. Nevertheless, this solution does not scale when each peer in the
+network must repeatedly renew connections over time, which is an expected
+behaviour of random peer sampling protocols. On the other hand, using the built
+network itself to properly exchange the subscription messages seems
+appropriate. Figure~\ref{fig:handshakeexample} depicts how it can be performed
+in Cyclon and Scamp. As we can see, Cyclon subscription messages always travel
+two hops away from their origin, while Scamp subscription messages can travel
+longer ($k$ hops where $k$ is in average $log(N)$).  This difference deeply
+impacts performances of Scamp as detailed hereafter, while Cyclon suffers from
+other flaws.
+
+\begin{figure}
+  \centering
+  \input{./input/handshakeexample.tex}
+  \caption{\label{fig:handshakeexample}Handshaking differences of Cyclon and
+    Scamp. While subscriptions travel from $p_1$ to $p_3$ using one
+    intermediate in Cyclon, the subscriptions travel from $p_1$ to $p_k$ in
+    Scamp. This difference change the complexity of the two approaches. In
+    particular, the failure probability is much more important in
+    Scamp. Indeed, links and peers, once employed, must be kept alive until the
+    subscriptions travel back. Otherwise, the handshaking is not complete.}
+\end{figure}
+
+
 \subsection{Motivations}
-In this paper, we do not restrict ourselves to one-way connections. We also
-study the effect of three-way handshake connection set-up. The connection
-establishment using such set-up forces a round trip negotiation much more
-costly and subject to failure. In this context, each connection matters. Hence,
-we cannot afford oversized partial views. Consequently, one would be tempted to
-use Scamp. However the subscription mechanism can create connections several
-hops away from the origin. Each of these hops is an opportunity of failure
-(cf. Fig~\ref{fig:failureexample}).
+The establishment of connections using 3-way hanshaking forces a round-trip
+negotiation much more costly and subject to failure compared to 1-way
+connection. In this context, each connection matters. Hence, we cannot afford
+oversized partial views like in Cyclon. For instance, considering an
+application usable by small or large groups of users indifferently, Cyclon will
+overestimate to adapt to the largest groups. While it is required for these
+latter, the small groups of users will suffer of increased traffic (maintaining
+the oversized views, broadcasting with increased redundancy (NOTSURE)) . If the
+group is small enough, the graph could be fully connected which is undesirable.
+
+As consequence, one would be tempted to use Scamp since it provides a
+logarithmically growing number of connections. However, the Scamp subscription
+mechanism can create connections several hops away from its origin
+(c.f. Fig~\ref{fig:handshakeexample}. Unfortunately, each of these hops is an
+opportunity to failures.
 
 Let $P_f$ the probability of either the peer or the link between the latter and
 the next peer crashes/disconnects when it holds the subscription, without
 possible recovery. Let $P_E$ the probability that a connection establishment
-cannot be completed. Without handshake, $P_E$ is straightforward:
+cannot be completed. Without 3-way handshake, $P_E$ is straightforward:
 \begin{equation} P_{E,\,1way}^{Cyclon}=1-(1- P_f)^2 \end{equation}
 \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^k \end{equation} where $k$ is
 the number of hops before the acceptance of the subscription. On the other
 hand, in the handshaking context, the subscription must travel back to its
 origin in order to be completed. As consequence, when a subscription travels
 through a peer or a link, they are not allowed to fail until the subscription
-travels back. Thus, we have (TO DOUBLE CHECK):
+travels back. Thus, we obtain:
 \begin{equation} P_{E,\,3way}^{Cyclon}=1-(1- P_f)^6\end{equation}.
 \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2k} (1-P_f)^{2(k-1)}
                                      \ldots (1-P_f)^2) \\
@@ -109,18 +151,6 @@ order of magnitude in both cases, Scamp is dramatically impacted. To sustain
 these theoretical analysis, we conducted series of experiments to highlight the
 differences between the contexts and the influence of failures on convergence
 speed (INSERT GRAPH).
-
-\begin{figure}
-  \centering
-  \input{./input/failureexample.tex}
-  \caption{\label{fig:failureexample}Handshaking differences of Cyclon and
-    Scamp. While subscriptions travel from $p_1$ to $p_3$ using one
-    intermediate in Cyclon, the subscriptions travel from $p_1$ to $p_k$ in
-    Scamp. This difference change the complexity of the two approaches. In
-    particular, the failure probability is much more important in
-    Scamp. Indeed, links and peers, once employed, must be kept alive until the
-    subscriptions travel back. Otherwise, the handshaking is not complete.}
-\end{figure}
 
 To summarise, we would like the best of the aforementioned approaches: a random
 peer sampling protocol providing a logarithmically growing partial view size
