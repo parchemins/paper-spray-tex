@@ -54,7 +54,7 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
   total network size.  Figure~\ref{fig:scampexample} depicts the joining
   protocol of Scamp. As we can see, the resulting graph is connected. However,
   the last peer $p_1$ only has one neighbour in its partial view, meaning that
-  if $p_4$ crashes, $p_1$ cannot send messages to the network any more. To
+  if $p_2$ crashes, $p_1$ cannot send messages to the network any more. To
   avoid that, a periodic re-subscription is necessary. This re-subscription
   mechanism will likely add new neighbours in the partial view of the newest
   peers and reorganise the neighbourhood of oldest peer. Just as Cyclon, Scamp
@@ -64,16 +64,17 @@ based on two state-of-the-art approaches, namely Scamp and Cyclon.
 \begin{figure}
   \centering
   \input{./input/scampexample.tex}
-  \caption{\label{fig:scampexample} Scamp's joining protocol on a small
-    network. Peer $p_1$ wants to join $p_4$'s network composed of $p_2$,
-    $p_3$, $p_4$, and $p_5$. Peer $p_1$ establishes a connection to $p_4$. Then
-    $p_4$ copies $|\mathcal{P}|$-times the new subscription and sends one to
-    each neighbour. To handle possible failures, $c$ additional copies (here
-    $0$ for simplicity sake), are sent to random neighbours. Then, each peer
-    has a probability of $1\over{|\mathcal{P}|+1}$ to accept the forwarded
+  \caption{\label{fig:scampexample} Scamp's joining protocol on a small network
+    with an identical legend to Fig~\ref{fig:cyclonexample}. Peer $p_1$ wants
+    to join $p_2$'s network composed of $p_2$, $p_3$, $p_4$, and $p_5$. Peer
+    $p_1$ establishes a connection to $p_2$. Then $p_2$ copies
+    $|\mathcal{P}|$-times the new subscription and sends one to each
+    neighbour. To handle possible failures, $c$ additional copies (here $0$ for
+    simplicity sake), are sent to random neighbours. Then, each peer has a
+    probability of $1\over{|\mathcal{P}|+1}$ to accept the forwarded
     subscription, hence, to establish a connection to reach $p_1$. Otherwise,
     the peer forwards it to another peer in $\mathcal{P}$ at random. Here,
-    $p_3$ accepts the subscription, $p_2$ forwards it to $p5$, and the latter
+    $p_3$ accepts the subscription, $p_5$ forwards it to $p4$, and the latter
     accepts it. The resulting graph is connected.}
 \end{figure}
 
