@@ -1,12 +1,45 @@
 
-\section{Experiments}
+\section{Experimentation}
 \label{sec:experiments}
+In this section, we aim to validate Scamplon by highlighting its properties and
+compare them to the state-of-the-art random peer sampling protocols. In
+particular, we inspect 3 properties characteristic of random graphs, namely the
+\emph{average shortest path length}, the \emph{average clustering coefficient},
+and \emph{the partial view size distribution}. Additionnaly, we investigate on
+\emph{robusteness to random failures}.
 
-\subsection{Average partial view size}
+Experiments are simulations ran on the well-known PeerSim simulator (REF). We
+implemented Scamp, Cyclon, and Scamplon. The code is available on the Github
+platform\footnote{http://github.com/anonymous4now}. Most of the experiments
+involve 100, 1000, and 10000 peers.
 
 \subsection{Clustering coefficient}
+\begin{asparadesc}
+\item[Objective:]
+\item[Description:] The average clustering coefficient measures the
+  connectivity of each peer's neighbourhood in the network.
+  \begin{equation}
+    \overline{C} = {1\over N}\sum\limits_{i=1}^{N}C_i
+    \end{equation}
+    where $C_i$ is the local clustering coefficient of Peer $i$. The higher the
+    coefficient, the more likely the network contains cliques. These
+    experiments involve 100, 1000, and 10000 peers. Cyclon is set to be optimal
+    at 1000 peers with $|\mathcal{P}|$ set to $7$. The exchanges concern $3$
+    neighbours.
+\item[Results:]
+\item[Reasons:]
+\end{asparadesc}
 
 \subsection{Average path length}
+
+
+\subsection{Partial view size distribution}
+\begin{asparadesc}
+\item[Objective:]
+\item[Description:]
+\item[Results:]
+\item[Reasons:]
+\end{asparadesc}
 
 \subsection{Resilience to failure}
 
