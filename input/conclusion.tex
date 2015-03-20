@@ -2,16 +2,16 @@
 \section{Conclusion and perspectives}
 \label{sec:conclusion}
 
-In this paper, we introduced a random peer sampling approach called Scamplon.
-This new approach, inspired of two state-of-the-art approaches, namely Scamp
-and Cyclon, provide the best of both worlds:
+In this paper, we introduced a random peer sampling approach called
+\SCAMPLON{}.  This new approach, inspired of two state-of-the-art approaches,
+namely \SCAMP{} and \CYCLON{}, provide the best of both worlds:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views compared to the global network
   size,
 \item a quick convergence to a random graph
 \item using neighbour-to-neighbour interactions.
 \end{inparaenum}
-As such, Scamplon outperforms its parents in the context of 1-way connection
+As such, \SCAMPLON{} outperforms its parents in the context of 1-way connection
 establishments. In addition, it greatly outperforms state-of-the-art in the
 3-way handshake connection establishment set-up which becomes increasingly
 important with recent technologies such as WebRTC that allows peer-to-peer
@@ -19,11 +19,11 @@ connection within modern browser. Since, random peer sampling constitutes the
 ground of many decentralised applications.
 
 Future work includes an analysis of the chosen size of exchanges in
-Scamplon. Indeed, currently, each peer choose a linear number of neighbours to
-exchange compared to the size of partial view:
+\SCAMPLON{}. Indeed, currently, each peer choose a linear number of neighbours
+to exchange compared to the size of partial view:
 $\left\lceil |\mathcal{P}|\over{2} \right\rceil$. Nevertheless, the paper
-introducing Cyclon shows that a small subset of the partial view is enough to
-provide a nearly optimal convergence speed. Thus, it lowers the network
+introducing \CYCLON{} shows that a small subset of the partial view is enough
+to provide a nearly optimal convergence speed. Thus, it lowers the network
 overhead induced by the partial view exchanges at a relatively small price.
 
 Future work also includes a Javascript implementation using WebRTC. While

@@ -1,18 +1,18 @@
 
 \section{Introduction}
-Random peer sampling \cite{JGKvS04} is an essential ground to many distributed
-applications. Since the peers cannot afford to have global knowledge of the
-network membership, they only have a partial view of the latter. Using these
-partial views, the peers are able to perform many tasks. In particular, it
-allows a scalable yet highly reliable broadcasting which constitutes the core
-of numerous decentralized applications (REFs). However, current random peer
-sampling approaches are not entirely satisfying. 
+Random peer sampling~\cite{jelasity2004peer} is an essential ground to many
+distributed applications. Since the peers cannot afford to have global
+knowledge of the network membership, they only have a partial view of the
+latter. Using these partial views, the peers are able to perform many tasks. In
+particular, it allows a scalable yet highly reliable broadcasting which
+constitutes the core of numerous decentralized applications (REFs). However,
+current random peer sampling approaches are not entirely satisfying.
 
-The Cyclon protocol~\cite{voulgaris2005cyclon} provides each peer with a fixed
-size partial view.  Each element in this view has an age which allows quick
-withdrawing of left peers. Nevertheless, the user must foresee the maximum size
-of the network to set the appropriate view size. As such, the views are
-generally oversized. On the other hand, the Scamp
+The \CYCLON{} protocol~\cite{voulgaris2005cyclon} provides each peer with a
+fixed size partial view.  Each element in this view has an age which allows
+quick withdrawing of left peers. Nevertheless, the user must foresee the
+maximum size of the network to set the appropriate view size. As such, the
+views are generally oversized. On the other hand, the \SCAMP{}
 protocol~\cite{ganesh2001scamp,ganesh2003peer} incrementally builds the partial
 views of peers at join. Thus, each peer has a partial view size logarithmically
 growing compared to the global size of the network. Nevertheless, a peer may
@@ -21,12 +21,12 @@ likely to fail.  Furthermore, both approaches do not consider three-way
 handshake connections set-up which becomes increasingly imporant with
 technologies such as WebRTC, allowing peer-to-peer connections establishment
 directly within modern web browser. In such context, each connection
-matters. Therefore, oversizing the partial views as in Cyclon becomes a heavy
-burden. Also, handshaking requires a round trip of joining messages which
-increases the Scamp's complexity of failures. Scamp becomes unusable in
+matters. Therefore, oversizing the partial views as in \CYCLON{} becomes a
+heavy burden. Also, handshaking requires a round trip of joining messages which
+increases the \SCAMP{}'s complexity of failures. \SCAMP{} becomes unusable in
 pratice.
 
-In this paper, we introduce Scamplon, a random peer sampling protocol
+In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
 \begin{inparaenum}[(i)]
 \item which provides each peer with a logarithmically growing partial view size
   compared to the global network size,
@@ -37,10 +37,10 @@ Experiments shows that it outperforms the state-of-the-art approaches both in
 one-way connections and three-way handshake connections.
 
 The rest of this paper is organized as follow: Section~\ref{sec:background}
-introduces the necessary background to understand Scamplon and highlights our
-motivations. Section~\ref{sec:proposal} details the Scamplon protocol.
-Section~\ref{sec:experiments} shows the properties of Scamplon and compare them
-to state-of-the-art random peer sampling
+introduces the necessary background to understand \SCAMPLON{} and highlights
+our motivations. Section~\ref{sec:proposal} details the \SCAMPLON{} protocol.
+Section~\ref{sec:experiments} shows the properties of \SCAMPLON{} and compare
+them to state-of-the-art random peer sampling
 approaches. Section~\ref{sec:relatedwork} reviews the related work. We conclude
 and discuss about perspective in Section~\ref{sec:conclusion}.
 
