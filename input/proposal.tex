@@ -63,25 +63,41 @@ necessary.
 \item [Algorithm]\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at
   each peer. It is divided between an active thread looping to update the
   partial view, and the passive thread which provides the reactions to received
-  messages. A peer $o$ joining the network will reach a contact peer. The
-  latter will call Function $onContact$ which spreads $(|\mathcal{P}|+c)$
-  copies of $o$ inside the network. Then, each time a peer receives one of
-  these message, assuming that this peer does not have $o$ already and this
-  peer is not $o$, it has a probability $1\over{|\mathcal{P}|+1}$ to integrate
-  $o$ in $\mathcal{P}$. Otherwise it forwards the copy to a random neighbour.
-  At this point, $o$ has $1$ neighbour in its partial view, and appears
-  $(c+1)log(N)$ (DOUBLE CHECK) times in partial views of other members. The
-  active thread aims to balance the partial views. Each time Function $loop$ is
-  called, the age of each element in $\mathcal{P}$ is incremented. Then, the
-  oldest peer $q$ is chosen to exchange a subset of their partial view. If Peer
-  $q$ cannot be reached (i.e. it crashed/disconnected), it is removed from the
-  partial view and the operation is repeated. Once the initiating peer $p$
-  found a reachable peer $q$, the former selects a sample of its partial view,
-  excluding $q$ and including itself. The size of this sample is half of its
-  partial view, with a minimum of one peer: the initiating peer. The answer of
-  $q$ is of the exact same kind. Afterwards, both of them remove the sent
-  sample from their view, remove the chosen neighbour, and add the received
-  sample.
+  messages. The functions which are not explicitely defined are the following:
+  \begin{itemize}
+  \item $incrementAge(view)$: increments the age of each elements in the view
+    and returns the modified view.
+  \item $getOldest(view)$: retrieves the oldest of peers contained in the view
+  \item $getSample(view, \, size)$: returns a sample of the view containing
+    $size$ elements.
+  \item $replace(view,\,old,\,new)$: replaces in the view all occurances of the
+    $old$ element by the $new$ element and returns the modified view.
+  \item $rand()$: generates a random number between 0 and 1.
+  \end{itemize}
+  A peer $o$ joining the network will reach a contact peer. The latter will
+  call Function $onContact$ which spreads $(|\mathcal{P}|+c)$ copies of $o$
+  inside the network. Then, each time a peer receives one of these message,
+  assuming that this peer does not have $o$ already and this peer is not $o$,
+  it has a probability $1\over{|\mathcal{P}|+1}$ to integrate $o$ in
+  $\mathcal{P}$. Otherwise it forwards the copy to a random neighbour.  At this
+  point, $o$ has $1$ neighbour in its partial view, and appears $(c+1)log(N)$
+  times in partial views of other members. The active thread aims to balance
+  the partial views. Each time Function $loop$ is called, the age of each
+  element in $\mathcal{P}$ is incremented. Then, the oldest peer $q$ is chosen
+  to exchange a subset of their partial view. If Peer $q$ cannot be reached
+  (i.e. it crashed/disconnected), it is removed from the partial view and the
+  operation is repeated. Once the initiating peer $p$ found a reachable peer
+  $q$, the former selects a sample of its partial view, excluding $q$ and
+  including itself. The size of this sample is half of its partial view, with a
+  minimum of one peer: the initiating peer. The answer of $q$ is of the exact
+  same kind. Since peers can appear mutliple times in $\mathcal{P}$, the
+  exchanging peers may send references to the other peer, e.g., Peer $o$'s
+  sample can contain references to $q$. Such sample, without further
+  processing, would create self-loop ($q$'s partial view contains references to
+  $q$). To alleviate this indesirable behaviour, all occurrences of the other
+  peer are replaced with the emitting peer.  Afterwards, both of them remove
+  the sent sample from their view, remove the chosen neighbour, and add the
+  received sample.
 \end{asparadesc}
 
 Note that extending the algorithm to provide handshaking is not difficult: it

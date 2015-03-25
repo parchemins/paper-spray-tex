@@ -40,19 +40,20 @@
     \Function{loop}{ } \hfill \comment{Every $\Delta$ time}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
     \State \textbf{let} $q \leftarrow getOldest(\mathcal{P})$;
-    \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\},\, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil) \cup \left\{\langle p,\, 0 \rangle\right\}$;
+    \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\}, \left \lceil{|\mathcal{P}|-1\over{2}} \right \rceil) \cup \left\{\langle p, 0 \rangle\right\}$; 
+    \State $sample \leftarrow replace(sample,\,q,\,p)$;
     \State $sendTo(q,\, 'exchange',\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
-    \State $sample' \leftarrow replace(sample',\, p,\, q)$;
-    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{ q \right\}) \cup sample'$;  \hfill \comment{update $\mathcal{P}$}
+    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{ q \right\}) \cup sample'$;
     \EndFunction
   \endAct
   
   \pas
     \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )$;
+    \State $sample \leftarrow replace(sample',\,o,\,p);$
     \State $sendTo(o ,\, sample')$;
-    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample') \setminus \left\{ o \right\}) \cup sample$; \hfill \comment{update $\mathcal{P}$}
+    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample') \setminus \left\{ o \right\}) \cup sample$; 
     \EndFunction
     \Statex
     \Function{onContact}{$o$} \hfill \comment{$o: origin$}
