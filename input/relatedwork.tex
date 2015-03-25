@@ -33,21 +33,25 @@ estimator~\cite{kostoulas2007active,baquero2012extrema}, either using
   compress the high amount of data and deduce the network size using the
   collisions,
 \item averaging technics~\cite{jelasity2004epidemic} which use aggregations
-  that converge over exchanges to the network size.
+  that converge over exchanges to a value which depends of the network size.
 \end{inparaenum}
 Using such estimator to resize the partial view of each peer is
-possible. However, these approaches are often very costly, and can assume some
+possible. However, these approaches are often costly and can assume some
 network properties (e.g. no dynamic network during an estimating). On the other
 hand, \SCAMPLON{} provides partial views logarithmically growing compared to
-the network size. Thus, it implies no overhead since it converges by design to
-a random graph. Then, each peer is able to compute a rough estimate of the
-network size.
+the network size. Thus, it does not implies any overhead since it converges by
+design to a random graph. Then, each peer is able to compute a rough estimate
+of the network size.
+
+It worth noting that Paper~\cite{jelasity2004epidemic} proposes to define
+aggregation convergence as the mathematical esperance of the variance the
+values held by each peer equals to zero . They proposed an example to estimate
+the network size, where one initiating peer has a value set to $1$, and all the
+other peers has a value set to $0$. Repeated averaging makes it converge to a
+value depending of the network size. The \SCAMPLON{} protocol exploits such
+averaging over the partial view size.
 
 \subsection{Network topologies}
-Other network topologies with different trade-off has been studied (REFs). For
-instance, Chords creates a ring topology where each peer maintains a
-logarithmically growing partial view to well-chosen peers sorted by distance.
-%% add on random graphs properties 
 
 %%% Local Variables:
 %%% mode: latex
