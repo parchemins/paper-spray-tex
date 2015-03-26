@@ -63,14 +63,14 @@ necessary.
 \item [Algorithm]\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at
   each peer. It is divided between an active thread looping to update the
   partial view, and the passive thread which provides the reactions to received
-  messages. The functions which are not explicitely defined are the following:
+  messages. The functions which are not explicitly defined are the following:
   \begin{itemize}
   \item $incrementAge(view)$: increments the age of each elements in the view
     and returns the modified view.
   \item $getOldest(view)$: retrieves the oldest of peers contained in the view
   \item $getSample(view, \, size)$: returns a sample of the view containing
     $size$ elements.
-  \item $replace(view,\,old,\,new)$: replaces in the view all occurances of the
+  \item $replace(view,\,old,\,new)$: replaces in the view all occurrences of the
     $old$ element by the $new$ element and returns the modified view.
   \item $rand()$: generates a random number between 0 and 1.
   \end{itemize}
@@ -85,16 +85,16 @@ necessary.
   the partial views. Each time Function $loop$ is called, the age of each
   element in $\mathcal{P}$ is incremented. Then, the oldest peer $q$ is chosen
   to exchange a subset of their partial view. If Peer $q$ cannot be reached
-  (i.e. it crashed/disconnected), it is removed from the partial view and the
+  (i.e. it crashed/left), it is removed from the partial view and the
   operation is repeated. Once the initiating peer $p$ found a reachable peer
   $q$, the former selects a sample of its partial view, excluding $q$ and
   including itself. The size of this sample is half of its partial view, with a
   minimum of one peer: the initiating peer. The answer of $q$ is of the exact
-  same kind. Since peers can appear mutliple times in $\mathcal{P}$, the
+  same kind. Since peers can appear multiple times in $\mathcal{P}$, the
   exchanging peers may send references to the other peer, e.g., Peer $o$'s
   sample can contain references to $q$. Such sample, without further
   processing, would create self-loop ($q$'s partial view contains references to
-  $q$). To alleviate this indesirable behaviour, all occurrences of the other
+  $q$). To alleviate this undesirable behaviour, all occurrences of the other
   peer are replaced with the emitting peer.  Afterwards, both of them remove
   the sent sample from their view, remove the chosen neighbour, and add the
   received sample.
@@ -108,6 +108,24 @@ arrived, and forward the answer to this neighbour accordingly.
   \input{./input/scamplonalgo.tex}
   \caption{\label{algo:scamplon}The \SCAMPLON{} protocol.}
 \end{algorithm}
+
+There exists a close relationship between \SCAMPLON{} and the proactive
+aggregation protocol introduced
+in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
+under the assumption of a peer sampling sufficiently random, the mean value
+$\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
+\begin{center}
+  $\mu_i = {1\over{N}} \sum\limits_{k=1}^{N} a_{i,\,k}$ \hfill 
+  $\sigma^2_i = {1\over{N-1}}\sum\limits_{k=1}^N (a_{i,\,k} - \mu_i)^2$
+\end{center}
+where $a_{i,\,k}$ is the value held by Peer $p_k$ at cycle $i$. The estimated
+variance must converge to $0$ over cycles. In the \SCAMPLON{} case, the value
+$a_{i,\,k}$ is the partial view size of Peer $p_k$ at cycle $i$. Indeed, each
+exchange from Peer $p_1$ to Peer $p_2$ is an aggregation resulting to:
+$|\mathcal{P}_1|=|\mathcal{P}_2|={|\mathcal{P}_1| + |\mathcal{P}_2| \over{2}}$.
+This relation being established, we are able to conclude that \SCAMPLON{}
+converges very fast. More precisely, each cycle decreases the variance
+estimation of the overall system by ${2\sqrt{\text{e}}}$.
 
 %%% Local Variables:
 %%% mode: latex
