@@ -1,4 +1,60 @@
 
+\section{Introduction-pascal}
+
+WebRtc drastically simplified direct connection between browsers even
+with complex network settings such as firewall, proxies or Net Address
+Translation (NAT).  Some attractive applications such as FireFox Hello
+or WebTorrent demonstrates how it can be easy for end-users to do
+video-conferencing of file-sharing directly in browsers without a
+third-party providers. However, a different kind of applications such
+as distributed social network or distributed collaborative editing
+requires each participant to broadcast messages to a potentially high
+number of participants. This is traditionally achieved by using
+gossiping algorithms. Unfortunately, applying current gossiping
+algorithms in a webrtc network raises issues on reliability and
+efficiency. 
+
+Gossiping requires each participant to maintain connections with a
+uniform sampling of all others participants. The size of this partial
+view is logarithmic to the number of participants. In order to prevent
+network partitions, this neighboring has to be constantly renewed. In
+webrtc, establishing a browser-to-browser connection require a
+three-way handshake that is much more costly and likely to fail than
+in a traditional setting. Moreover, the established connection can
+rely on a TURN server that is ressource intensive.  Consequently,
+existing gossiping algorithms will either consume too much ressources,
+or fail to maintain a connected network.
+
+The \CYCLON{} protocol~\cite{voulgaris2005cyclon} provides each peer
+with a fixed size partial view.  Each element in this view has an age
+which allows quick withdrawing of left peers. Nevertheless, the user
+must foresee the maximum size of the network to set the appropriate
+view size. As such, the views are generally oversized generating too
+much ressource consumption in a webrtc network. On the other hand, the
+\SCAMP{} protocol~\cite{ganesh2001scamp,ganesh2003peer} incrementally
+builds the partial views of peers at join. Thus, each peer has a
+partial view size logarithmically growing compared to the global size
+of the network. Nevertheless, a peer may connect to peers at several
+hops from him. Hence, the connections are more likely to fail.
+
+In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
+\begin{inparaenum}[(i)]
+\item which provides each peer with a logarithmically growing partial view size
+  compared to the global network size,
+\item which quickly converges to a random graph,
+\item which can handle three-way handshake.
+\end{inparaenum}
+Experiments shows that it outperforms the state-of-the-art approaches both in
+one-way connections and three-way handshake connections.
+
+The rest of this paper is organized as follow: Section~\ref{sec:background}
+introduces the necessary background to understand \SCAMPLON{} and highlights
+our motivations. Section~\ref{sec:proposal} details the \SCAMPLON{} protocol.
+Section~\ref{sec:experiments} shows the properties of \SCAMPLON{} and compare
+them to state-of-the-art random peer sampling
+approaches. Section~\ref{sec:relatedwork} reviews the related work. We conclude
+and discuss about perspective in Section~\ref{sec:conclusion}.
+
 \section{Introduction}
 Random peer sampling~\cite{jelasity2004peer} is an essential ground to many
 distributed applications. Since the peers cannot afford to have global
@@ -18,8 +74,8 @@ views of peers at join. Thus, each peer has a partial view size logarithmically
 growing compared to the global size of the network. Nevertheless, a peer may
 connect to peers at several hops from him. Hence, the connections are more
 likely to fail.  Furthermore, both approaches do not consider three-way
-handshake connections set-up which becomes increasingly imporant with
-technologies such as WebRTC, allowing peer-to-peer connections establishment
+handshake connections set-up which becomes increasingly important with
+technologies such as WebRTC, Allowing peer-to-peer connections establishment
 directly within modern web browser. In such context, each connection
 matters. Therefore, oversizing the partial views as in \CYCLON{} becomes a
 heavy burden. Also, handshaking requires a round trip of joining messages which
