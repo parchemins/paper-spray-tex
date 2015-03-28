@@ -1,90 +1,43 @@
 
-\section{Introduction-pascal}
-
-WebRtc drastically simplified direct connection between browsers even
-with complex network settings such as firewall, proxies or Net Address
-Translation (NAT).  Some attractive applications such as FireFox Hello
-or WebTorrent demonstrates how it can be easy for end-users to do
-video-conferencing of file-sharing directly in browsers without a
-third-party providers. However, a different kind of applications such
-as distributed social network or distributed collaborative editing
-requires each participant to broadcast messages to a potentially high
-number of participants. This is traditionally achieved by using
-gossiping algorithms. Unfortunately, applying current gossiping
-algorithms in a webrtc network raises issues on reliability and
-efficiency. 
-
-Gossiping requires each participant to maintain connections with a
-uniform sampling of all others participants. The size of this partial
-view is logarithmic to the number of participants. In order to prevent
-network partitions, this neighboring has to be constantly renewed. In
-webrtc, establishing a browser-to-browser connection require a
-three-way handshake that is much more costly and likely to fail than
-in a traditional setting. Moreover, the established connection can
-rely on a TURN server that is ressource intensive.  Consequently,
-existing gossiping algorithms will either consume too much ressources,
-or fail to maintain a connected network.
-
-The \CYCLON{} protocol~\cite{voulgaris2005cyclon} provides each peer
-with a fixed size partial view.  Each element in this view has an age
-which allows quick withdrawing of left peers. Nevertheless, the user
-must foresee the maximum size of the network to set the appropriate
-view size. As such, the views are generally oversized generating too
-much ressource consumption in a webrtc network. On the other hand, the
-\SCAMP{} protocol~\cite{ganesh2001scamp,ganesh2003peer} incrementally
-builds the partial views of peers at join. Thus, each peer has a
-partial view size logarithmically growing compared to the global size
-of the network. Nevertheless, a peer may connect to peers at several
-hops from him. Hence, the connections are more likely to fail.
-
-In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
-\begin{inparaenum}[(i)]
-\item which provides each peer with a logarithmically growing partial view size
-  compared to the global network size,
-\item which quickly converges to a random graph,
-\item which can handle three-way handshake.
-\end{inparaenum}
-Experiments shows that it outperforms the state-of-the-art approaches both in
-one-way connections and three-way handshake connections.
-
-The rest of this paper is organized as follow: Section~\ref{sec:background}
-introduces the necessary background to understand \SCAMPLON{} and highlights
-our motivations. Section~\ref{sec:proposal} details the \SCAMPLON{} protocol.
-Section~\ref{sec:experiments} shows the properties of \SCAMPLON{} and compare
-them to state-of-the-art random peer sampling
-approaches. Section~\ref{sec:relatedwork} reviews the related work. We conclude
-and discuss about perspective in Section~\ref{sec:conclusion}.
-
 \section{Introduction}
-Random peer sampling~\cite{jelasity2004peer} is an essential ground to many
-distributed applications. Since the peers cannot afford to have global
-knowledge of the network membership, they only have a partial view of the
-latter. Using these partial views, the peers are able to perform many tasks. In
-particular, it allows a scalable yet highly reliable broadcasting which
-constitutes the core of numerous decentralized applications (REFs). However,
-current random peer sampling approaches are not entirely satisfying.
+
+Recently, WebRTC~\cite{webrtc} allowed the connection establishment between
+web browsers, even with complex network settings such as firewall, proxies or
+Net Address Translation (NAT).  Some attractive applications such as Firefox
+Hello~\cite{firefoxhello} or WebTorrent~\cite{webtorrent} demonstrate how
+video-conferencing or file-sharing directly within browsers becomes simple of
+access to end-users without third-party providers. However, several distributed
+applications such as distributed collaborative editing (REF) require the
+ability to broadcast messages to a potentially large number of
+participants. Traditionally, gossiping algorithms (REF) achieve such
+broadcast. Unfortunately, the current gossiping algorithms in a WebRTC network
+raises reliability and efficiency issues.
+
+Gossiping requires that each participant maintains connections with a uniform
+sample of other participants~\cite{jelasity2004peer}. The sample, called
+partial view, can grow logarithmically compared to the number of participants
+and yet providing connectivity with high probability. Still, the neighbouring
+must be constantly renewed in order to prevent network partitions. In WebRTC,
+establishing a browser-to-browser connection requires a three-way handshake
+which is much more costly and likely to fail compared to traditional
+setting. Consequently, existing gossiping algorithms will either be resource
+intensive, or fail to maintain a connected network.
 
 The \CYCLON{} protocol~\cite{voulgaris2005cyclon} provides each peer with a
 fixed size partial view.  Each element in this view has an age which allows
 quick withdrawing of left peers. Nevertheless, the user must foresee the
 maximum size of the network to set the appropriate view size. As such, the
-views are generally oversized. On the other hand, the \SCAMP{}
+views are generally oversized generating too much resource consumption in a
+WebRTC network. On the other hand, the \SCAMP{}
 protocol~\cite{ganesh2001scamp,ganesh2003peer} incrementally builds the partial
 views of peers at join. Thus, each peer has a partial view size logarithmically
 growing compared to the global size of the network. Nevertheless, a peer may
-connect to peers at several hops from him. Hence, the connections are more
-likely to fail.  Furthermore, both approaches do not consider three-way
-handshake connections set-up which becomes increasingly important with
-technologies such as WebRTC, Allowing peer-to-peer connections establishment
-directly within modern web browser. In such context, each connection
-matters. Therefore, oversizing the partial views as in \CYCLON{} becomes a
-heavy burden. Also, handshaking requires a round trip of joining messages which
-increases the \SCAMP{}'s complexity of failures. \SCAMP{} becomes unusable in
-pratice.
+connect to peers at several hops away from him. Hence, the connections are more
+likely to fail.
 
 In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
 \begin{inparaenum}[(i)]
-\item which provides each peer with a logarithmically growing partial view size
+\item which provides each peer with a partial view logarithmically growing
   compared to the global network size,
 \item which quickly converges to a random graph,
 \item which can handle three-way handshake.
@@ -92,7 +45,7 @@ In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
 Experiments shows that it outperforms the state-of-the-art approaches both in
 one-way connections and three-way handshake connections.
 
-The rest of this paper is organized as follow: Section~\ref{sec:background}
+The rest of this paper is organised as follow: Section~\ref{sec:background}
 introduces the necessary background to understand \SCAMPLON{} and highlights
 our motivations. Section~\ref{sec:proposal} details the \SCAMPLON{} protocol.
 Section~\ref{sec:experiments} shows the properties of \SCAMPLON{} and compare
