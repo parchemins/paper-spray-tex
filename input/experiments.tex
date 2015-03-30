@@ -19,10 +19,10 @@ involve 100, 1000, and 10000 peers.
 \item[Description:] The average clustering coefficient measures the
   connectivity of each peer's neighbourhood in the network.
   \begin{equation}
-    \overline{C} = {1\over N}\sum\limits_{i=1}^{N}C_i
+    \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
     \end{equation}
-    where $C_i$ is the local clustering coefficient of Peer $i$. The higher the
-    coefficient, the more likely the network contains cliques. These
+    where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher
+    the coefficient, the more likely the network contains cliques. These
     experiments involve 100, 1000, and 10000 peers. Cyclon is set to be optimal
     at 1000 peers with $|\mathcal{P}|$ set to $7$. The exchanges concern $3$
     neighbours.

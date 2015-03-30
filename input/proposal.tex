@@ -4,15 +4,20 @@
 
 \SCAMPLON{}\footnote{\SCAMPLON{} stands as the contraction of \SCAMP{} and
   \CYCLON{}.} is a random peer sampling protocol inspired by both \SCAMP{} and
-\CYCLON{}. It provides the best of its parents: a logarithmically increasing
-partial view size compared to the global network size, and fast convergence to
-a random graph using only neighbour-to-neighbour connection establishments. As
-such, it constitutes an improvement over state-of-the-art approaches in the
-common context of one-way connections. Additionally, it greatly outperforms
-state-of-the-art in the three-way handshake connection establishments. The
-latter context becomes increasingly important with the apparition of technology
-allowing peer-to-peer within modern web browsers. This section details the
-\SCAMPLON{} protocol through intuitions, examples and algorithms.
+\CYCLON{}. It provides the best of its parents: 
+\begin{inparaenum}[(i)]
+\item a logarithmically increasing partial view size compared to the global
+  network size,
+\item and fast convergence to a random graph
+\item using only neighbour-to-neighbour connection establishments.
+\end{inparaenum}
+It improves the state-of-the-art approaches in the traditionnal context of
+one-way connections and greatly outperforms the
+state-of-the-art~\cite{ganesh2001scamp,voulgaris2005cyclon} in the context
+three-way handshake connection set up.  The latter becomes increasingly
+important with the appearance of technologies allowing peer-to-peer within
+modern web browsers. This section details the \SCAMPLON{} protocol through
+intuitions, examples and algorithms.
 
 \begin{asparadesc}
 \item [Scamplon] reuses the joining process of \SCAMP{} to incrementally build
@@ -38,26 +43,42 @@ reaching this ideal value in one cycle is difficult without the knowledge of
 each other's partial view size. Instead of acquiring this knowledge,
 \SCAMPLON{} aims to converge to the ideal value by averaging their view size
 over exchanges. Therefore, the initiating peer sends
-$\left\lceil\mathcal{P}\over{2}\right\rceil$ members to the chosen peer (chosen
-by age). The latter sends back $\left\lceil\mathcal{P}\over{2}\right\rceil$
-members too. After the receipt, both peers remove the sent members and add the
-received members. It worth noting that the global number of connections after
-the process must not change. Otherwise, \SCAMPLON{} cannot guarantee that the
-partial view sizes are logarithmic in average compared to the network size.
+$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ members to the chosen peer
+(chosen by age). The latter sends back
+$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ members too. After the receipt,
+both peers remove the sent members and add the received members. It worth
+noting that the global number of connections after the process must not
+change. Otherwise, \SCAMPLON{} cannot guarantee that the partial view sizes are
+logarithmic in average compared to the network size.  A remarkable difference
+regarding \CYCLON{} is that \SCAMPLON{} explicitly allows to have a same
+neighbour multiple times in a partial view. It impacts on the clustering
+coefficient. However, the impact is not significant since these artefacts are
+not numerous because the graph is random, and because they disappear over the
+\SCAMPLON{} cycles (EXAMPLIFY).
 
-A remarkable difference regarding \CYCLON{} is that \SCAMPLON{} explicitly
-allows to have a same neighbour multiple times in a partial view. It impacts on
-the clustering coefficient. However, the impact is not significant since these
-artefacts are not numerous because the graph is random, and because they
-disappear over the \SCAMPLON{} cycles (EXAMPLIFY).
+There exists a close relationship between \SCAMPLON{} and the proactive
+aggregation protocol introduced
+in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
+under the assumption of a peer sampling sufficiently random, the mean value
+$\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
+\begin{center}
+  $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
+  \hfill
+  $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
+  (a_{i,\,x} - \mu_i)^2$
+\end{center}
+where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
+variance must converge to $0$ over cycles. In the \SCAMPLON{} case, the value
+$a_{i,\,x}$ is the partial view size of Peer $p_x$ at cycle $i$. Indeed, each
+exchange from Peer $p_1$ to Peer $p_2$ is an aggregation resulting to:
+$|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
+  \over{2}}$.
+Furthermore, each peer performs this exchange protocol $1+Poisson(1)$ times per
+cycle (i.e. they initiate one and receive one in average).  This relation being
+established, we are able to conclude that \SCAMPLON{} converges exponentially
+fast. More precisely, each cycle decreases the variance estimation of the
+overall system by ${2\sqrt{\text{e}}}$.
 
-There are few optimisations concerning the establishments of connections. For
-instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
-partial view, instead of inverting the link between $p$ and $q$, and $q$ and
-$p$, \SCAMPLON{} does not change them. Another optimisation concerns a peer
-having a neighbour multiple times in its partial view. While \SCAMPLON{} keeps
-such information in its partial view, only one connection per neighbour is
-necessary.
 
 \begin{asparadesc}
 \item [Algorithm]\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at
@@ -70,8 +91,8 @@ necessary.
   \item $getOldest(view)$: retrieves the oldest of peers contained in the view
   \item $getSample(view, \, size)$: returns a sample of the view containing
     $size$ elements.
-  \item $replace(view,\,old,\,new)$: replaces in the view all occurrences of the
-    $old$ element by the $new$ element and returns the modified view.
+  \item $replace(view,\,old,\,new)$: replaces in the view all occurrences of
+    the $old$ element by the $new$ element and returns the modified view.
   \item $rand()$: generates a random number between 0 and 1.
   \end{itemize}
   A peer $o$ joining the network will reach a contact peer. The latter will
@@ -80,24 +101,24 @@ necessary.
   assuming that this peer does not have $o$ already and this peer is not $o$,
   it has a probability $1\over{|\mathcal{P}|+1}$ to integrate $o$ in
   $\mathcal{P}$. Otherwise it forwards the copy to a random neighbour.  At this
-  point, $o$ has $1$ neighbour in its partial view, and appears $(c+1)log(N)$
-  times in partial views of other members. The active thread aims to balance
-  the partial views. Each time Function $loop$ is called, the age of each
-  element in $\mathcal{P}$ is incremented. Then, the oldest peer $q$ is chosen
-  to exchange a subset of their partial view. If Peer $q$ cannot be reached
-  (i.e. it crashed/left), it is removed from the partial view and the
-  operation is repeated. Once the initiating peer $p$ found a reachable peer
-  $q$, the former selects a sample of its partial view, excluding $q$ and
-  including itself. The size of this sample is half of its partial view, with a
-  minimum of one peer: the initiating peer. The answer of $q$ is of the exact
-  same kind. Since peers can appear multiple times in $\mathcal{P}$, the
-  exchanging peers may send references to the other peer, e.g., Peer $o$'s
-  sample can contain references to $q$. Such sample, without further
-  processing, would create self-loop ($q$'s partial view contains references to
-  $q$). To alleviate this undesirable behaviour, all occurrences of the other
-  peer are replaced with the emitting peer.  Afterwards, both of them remove
-  the sent sample from their view, remove the chosen neighbour, and add the
-  received sample.
+  point, $o$ has $1$ neighbour in its partial view, and appears
+  $(c+1)log(|\mathcal{N}|)$ times in partial views of other members. The active
+  thread aims to balance the partial views. Each time Function $loop$ is
+  called, the age of each element in $\mathcal{P}$ is incremented. Then, the
+  oldest peer $q$ is chosen to exchange a subset of their partial view. If Peer
+  $q$ cannot be reached (i.e. it crashed/left), it is removed from the partial
+  view and the operation is repeated. Once the initiating peer $p$ found a
+  reachable peer $q$, the former selects a sample of its partial view,
+  excluding $q$ and including itself. The size of this sample is half of its
+  partial view, with a minimum of one peer: the initiating peer. The answer of
+  $q$ is of the exact same kind. Since peers can appear multiple times in
+  $\mathcal{P}$, the exchanging peers may send references to the other peer,
+  e.g., Peer $o$'s sample can contain references to $q$. Such sample, without
+  further processing, would create self-loop ($q$'s partial view contains
+  references to $q$). To alleviate this undesirable behaviour, all occurrences
+  of the other peer are replaced with the emitting peer.  Afterwards, both of
+  them remove the sent sample from their view, remove the chosen neighbour, and
+  add the received sample.
 \end{asparadesc}
 
 Note that extending the algorithm to provide handshaking is not difficult: it
@@ -109,23 +130,14 @@ arrived, and forward the answer to this neighbour accordingly.
   \caption{\label{algo:scamplon}The \SCAMPLON{} protocol.}
 \end{algorithm}
 
-There exists a close relationship between \SCAMPLON{} and the proactive
-aggregation protocol introduced
-in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
-under the assumption of a peer sampling sufficiently random, the mean value
-$\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
-\begin{center}
-  $\mu_i = {1\over{N}} \sum\limits_{k=1}^{N} a_{i,\,k}$ \hfill 
-  $\sigma^2_i = {1\over{N-1}}\sum\limits_{k=1}^N (a_{i,\,k} - \mu_i)^2$
-\end{center}
-where $a_{i,\,k}$ is the value held by Peer $p_k$ at cycle $i$. The estimated
-variance must converge to $0$ over cycles. In the \SCAMPLON{} case, the value
-$a_{i,\,k}$ is the partial view size of Peer $p_k$ at cycle $i$. Indeed, each
-exchange from Peer $p_1$ to Peer $p_2$ is an aggregation resulting to:
-$|\mathcal{P}_1|=|\mathcal{P}_2|={|\mathcal{P}_1| + |\mathcal{P}_2| \over{2}}$.
-This relation being established, we are able to conclude that \SCAMPLON{}
-converges very fast. More precisely, each cycle decreases the variance
-estimation of the overall system by ${2\sqrt{\text{e}}}$.
+There are few optimisations concerning the establishments of connections. For
+instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
+partial view, instead of inverting the link between $p$ and $q$, and $q$ and
+$p$, \SCAMPLON{} does not change them. Another optimisation concerns a peer
+having a neighbour multiple times in its partial view. While \SCAMPLON{} keeps
+such information in its partial view, only one connection per neighbour is
+necessary.
+
 
 %%% Local Variables:
 %%% mode: latex

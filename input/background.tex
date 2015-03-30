@@ -54,8 +54,8 @@ two state-of-the-art approaches, namely \SCAMP{} and \CYCLON{}.
   \centering
   \input{./input/scampexample.tex}
   \caption{\label{fig:scampexample} \SCAMP{}'s joining protocol on a small
-    network with an identical legend to Fig~\ref{fig:cyclonexample}. Peer $p_1$
-    wants to join $p_2$'s network composed of $p_2$, $p_3$, $p_4$, and
+    network with an identical legend to Figure~\ref{fig:cyclonexample}. Peer
+    $p_1$ wants to join $p_2$'s network composed of $p_2$, $p_3$, $p_4$, and
     $p_5$. Let $\mathcal{P}_x$ denotes the partial view of Peer $p_x$. Peer
     $p_1$ establishes a connection to $p_2$. Then $p_2$ copies
     $|\mathcal{P}_2|$-times the new subscription and sends one to each
@@ -85,26 +85,27 @@ two state-of-the-art approaches, namely \SCAMP{} and \CYCLON{}.
 \end{asparadesc}
 
 \subsection{Three-way handshake}
-In this paper, we do not restrict ourselves to one-way connections. We are 
-also interested in three-way handshake connection set-up. In such context, 
-a subscription message must be
+The recent WebRTC technology has allowed establishing peer-to-peer connections
+directly inside modern web browser. In such context, the browsers use a
+three-way handshake connection establishment instead of a more traditional
+one-way connection. Thus, a subscription message must be
 \begin{inparaenum}[(1)]
 \item emitted at Peer $p$,
 \item accepted at Peer $q$,
 \item completed at Peer $p$.
 \end{inparaenum}
-Thus, when a peer needs to establish a connection to another peer, a message
-must travel back and forth. One could use a dedicated server to establish the
-dialog. Nevertheless, this solution does not scale when each peer in the
-network must repeatedly renew connections over time, which is an expected
-behaviour of random peer sampling protocols. On the other hand, using the built
-network itself to properly exchange the subscription messages seems
-appropriate. Figure~\ref{fig:handshakeexample} depicts how it can be performed
-in \CYCLON{} and \SCAMP{}. As we can see, \CYCLON{} subscription messages
-always travel two hops away from their origin, while \SCAMP{} subscription
-messages can travel longer ($k$ hops where $k$ is in average $log(N)$).  This
-difference deeply impacts performances of \SCAMP{} as detailed hereafter, while
-\CYCLON{} suffers from other flaws.
+Therefore, when a peer needs to establish a connection to another peer, a
+message must travel back and forth. One could use a dedicated server to
+establish the necessary dialog. However, this solution does not scale when
+each peer in the network must repeatedly renew connections over time, which is
+an expected behaviour of random peer sampling protocols. On the other hand,
+using the built network itself to properly exchange the subscription messages
+seems appropriate. Figure~\ref{fig:handshakeexample} depicts how it can be
+performed in \CYCLON{} and \SCAMP{}. As we can see, \CYCLON{} subscription
+messages always travel two hops away from their origin, while \SCAMP{}
+subscription messages can travel longer ($k$ hops where $k$ is in average
+$log(|\mathcal{N}|)$).  This difference deeply impacts performances of \SCAMP{}
+as detailed hereafter, while \CYCLON{} suffers from other flaws.
 
 \begin{figure}
   \centering
@@ -115,55 +116,62 @@ difference deeply impacts performances of \SCAMP{} as detailed hereafter, while
     \SCAMP{}. This difference change the complexity of the two approaches. In
     particular, the failure probability is much more important in
     \SCAMP{}. Indeed, links and peers, once employed, must be kept alive until
-    the subscriptions travel back. Otherwise, the handshaking is not complete.}
+    the subscriptions travel back. Otherwise, the handshaking cannot be
+    completed.}
 \end{figure}
 
 
 \subsection{Motivations}
-The establishment of connections using 3-way hanshaking forces a round-trip
-negotiation much more costly and subject to failure compared to 1-way
-connection. In this context, each connection matters. Hence, we cannot afford
-oversized partial views like in \CYCLON{}. For instance, considering an
+The establishment of connections using three-way handshaking forces a
+round-trip negotiation much more costly and subject to failure compared to
+one-way connection. In this context, each connection matters. Hence, we cannot
+afford oversized partial views like in \CYCLON{}. For instance, considering an
 application usable by small or large groups of users indifferently, \CYCLON{}
-will overestimate to adapt to the largest groups. While it is required for
-these latter, the small groups of users will suffer of increased traffic
-(maintaining the oversized views, broadcasting with increased redundancy
-(NOTSURE)) . If the group is small enough, the graph could be fully connected
-which is undesirable.
+will overestimate to adapt to the largest groups. While this is indeed required
+for these latter, the small groups of users will suffer of increased traffic
+(oversized partial views maintenance, increased redundancy during the broadcast
+of messages). If the group is small enough, the graph could be fully connected
+which is highly undesirable.
 
 As consequence, one would be tempted to use \SCAMP{} since it provides a
-logarithmically growing number of connections. However, the \SCAMP{}
-subscription mechanism can create connections several hops away from its origin
-(c.f. Fig~\ref{fig:handshakeexample}. Unfortunately, each of these hops is an
-opportunity to failures.
+logarithmically growing number of connections compared to
+$|\mathcal{N}|$. However, the \SCAMP{} subscription mechanism can create
+connections several hops away from its origin
+(cf. Figure~\ref{fig:handshakeexample}. Unfortunately, each of these hops is an
+opportunity of failure.
 
 Let $P_f$ the probability of either the peer or the link between the latter and
 the next peer crashes/disconnects when it holds the subscription, without
 possible recovery. Let $P_E$ the probability that a connection establishment
-cannot be completed. Without 3-way handshake, $P_E$ is straightforward:
+cannot be completed. Without three-way handshake, $P_E$ is straightforward:
 \begin{equation} P_{E,\,1way}^{CYCLON}=1-(1- P_f)^2 \end{equation}
 \begin{equation} P_{E,\,1way}^{SCAMP}=1-(1- P_f)^{k+1} \end{equation} where $k$
 is the number of hops before the acceptance of the subscription, i.e., there
-are 2 hops at least. Indeed, the first peer cannot directly accept the
+are $2$ hops at least. Indeed, the first peer cannot directly accept the
 subscription. On the other hand, in the handshaking context, the subscription
 must travel back to its origin in order to be completed. As consequence, when a
 subscription travels through a peer or a link, they are not allowed to fail
 until the subscription travels back. Thus, we obtain:
-\begin{equation} P_{E,\,3way}^{CYCLON}=1-(1- P_f)^6\end{equation}.
+\begin{equation} P_{E,\,3way}^{CYCLON}=1-(1- P_f)^6\end{equation}
 \begin{align} P_{E,\,3way}^{SCAMP} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
-                                     \ldots (1-P_f)^2) \\
+                                     \ldots (1-P_f)^2) \nonumber \\
                                    &=1-(1-P_f)^{k^2+3k+2}
 \end{align}
 From these analysis, it is worth noting that while \CYCLON{} remains at a same
-order of magnitude in both cases, \SCAMP{} is dramatically impacted. To sustain
-these theoretical analysis, we conducted series of experiments to highlight the
-differences between the contexts and the influence of failures on convergence
-speed (INSERT GRAPH).
+order of magnitude in both cases. On the other hand, \SCAMP{} is dramatically
+impacted. 
+
+%% To sustain these theoretical analysis, we conducted series of experiments to
+%% highlight the differences between the contexts and the influence of failures
+%% on convergence speed (INSERT GRAPH).
 
 To summarise, we would like the best of the aforementioned approaches: a random
 peer sampling protocol providing a logarithmically growing partial view size
 compared to the network membership, using neighbour-to-neighbour interactions
-to establish connections, quickly converging to a random network.
+to establish connections, quickly converging to a random network. Such protocol
+would allow gossiping on top of WebRTC. Hence, it would open the gate to a wide
+variety of distributed and decentralised applications requiring a scalable
+broadcast.
 
 %%% Local Variables:
 %%% mode: latex
