@@ -39,24 +39,25 @@
   \act
     \Function{loop}{ } \hfill \comment{Every $\Delta$ time}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
-    \State \textbf{let} $q \leftarrow getOldest(\mathcal{P})$;
-    \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\}, \left \lceil{|\mathcal{P}|-1\over{2}} \right \rceil) \cup \left\{\langle p, 0 \rangle\right\}$; 
+    \State \textbf{let} $q,\, age \leftarrow getOldest(\mathcal{P})$;
+    \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\}, \left \lceil{|\mathcal{P}|-1\over{2}} \right \rceil) \uplus \left\{\langle p, 0 \rangle\right\}$; 
     \State $sample \leftarrow replace(sample,\,q,\,p)$;
     \State $sendTo(q,\, 'exchange',\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
-    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{ q \right\}) \cup sample'$;
+    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{\langle q,\, age \rangle \right\}) \uplus sample'$;
     \EndFunction
   \endAct
   
   \pas
     \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )$;
-    \State $sample \leftarrow replace(sample',\,o,\,p);$
+    \State $sample' \leftarrow replace(sample',\,o,\,p);$
     \State $sendTo(o ,\, sample')$;
-    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample') \setminus \left\{ o \right\}) \cup sample$; 
+    \State $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample') \uplus
+    sample$; 
     \EndFunction
     \Statex
-    \Function{onContact}{$o$} \hfill \comment{$o: origin$}
+    \Function{onSubs}{$o$} \hfill \comment{$o: origin$}
     \State \LINEFOR{\textbf{each} $q\in\mathcal{P}$}
     {$sendTo(q,\, 'fwdSubs',\, o)$;}
     \State \LINEFOR{$i \leftarrow 0$ \textbf{to} $c$}
@@ -65,10 +66,9 @@
     \EndFunction
     \Statex
     \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
-    \If {$((rand() < (1 / (|\mathcal{P}|+1))) \wedge (o\not\in\mathcal{P}) 
-      \wedge (o\neq p))$}
+    \If {$((rand() < (1 / (|\mathcal{P}|+1))) \wedge (o\neq p))$}
     \State $\mathcal{P} \leftarrow
-    \mathcal{P}\cup \left\{\langle o,\, 0 \rangle\right\}$;
+    \mathcal{P}\uplus \left\{\langle o,\, 0 \rangle\right\}$;
     \Else
     \State $sendTo(\mathcal{P}[\left\lfloor rand()*
       |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, o)$;
