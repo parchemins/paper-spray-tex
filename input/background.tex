@@ -146,10 +146,9 @@ on. Also, it highlights the motivations of our approach.
 \end{figure}
 
 \begin{problem}
-  Let $t$ being an arbitrary time variable, $\mathcal{N}^t$ be the network
-  membership at date $t$, $\mathcal{P}_x^t$ be the partial view of Peer $p_x^t$
-  from $\mathcal{N}^t$. A random peer sampling using three-way handshake must
-  provide the optimal:
+  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
+  membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial view of peer $p_x \in \mathcal{N}^t$. 
+  A random peer sampling, especially when three-way handshaking is involved, should provide the following best-case properties:
   \begin{center}
     Partial view size: \hfill $\forall p_x^t, |\mathcal{P}_x^t| = \Theta (\text{ln}\, |\mathcal{N}^t|)$
   \end{center}
