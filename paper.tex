@@ -10,6 +10,7 @@
 \usepackage[cmex10]{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
 %% algorithms
 \usepackage{algorithm}
 \usepackage{algorithmicx}
@@ -38,6 +39,7 @@
 \newcounter{example}
 \setcounter{example}{0}
 \newcommand{\EXAMPLE}[0]{\stepcounter{example}\the\value{example}}
+\newtheorem*{problem}{Problem Statement}
 %paralist
 \renewcommand*\descriptionlabel[1]{%
 \scshape #1}

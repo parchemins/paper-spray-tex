@@ -23,7 +23,7 @@ on. Also, it highlights the motivations of our approach.
   establish the necessary dialog~\cite{peerjs}. However, this solution does not
   scale considering the fact that each peer in the network must dynamically
   create and remove connections over time. On the other hand, using the built
-  network itself distributes the load of these connections establishement among
+  network itself distributes the load of these connections establishment among
   the members.
 \end{asparadesc}
 
@@ -69,8 +69,8 @@ on. Also, it highlights the motivations of our approach.
   direct neighbourhood to renew the connections.
 
   In the WebRTC context, each connection matters. Hence, we cannot afford
-  oversized partial views like in CYCLON. For instance, considering an
-  application usable by small or large groups of users indifferently, CYCLON
+  oversized partial views like in \CYCLON{}. For instance, considering an
+  application usable by small or large groups of users indifferently, \CYCLON{}
   will overestimate to adapt to the largest groups. While this is indeed
   required for these latter, the small groups of users will suffer of increased
   traffic (oversized partial views maintenance, increased redundancy during the
@@ -145,20 +145,30 @@ on. Also, it highlights the motivations of our approach.
     completed.}
 \end{figure}
 
-\ \\
+\begin{problem}
+  Let $t$ being an arbitrary time variable, $\mathcal{N}^t$ be the network
+  membership at date $t$, $\mathcal{P}_x^t$ be the partial view of Peer $p_x^t$
+  from $\mathcal{N}^t$. A random peer sampling using three-way handshake must
+  provide the optimal:
+  \begin{center}
+    Partial view size: \hfill $\forall p_x^t, |\mathcal{P}_x^t| = \Theta (\text{ln}\, |\mathcal{N}^t|)$
+  \end{center}
+  \begin{center}
+    Time complexity of a connection: \hfill $O(1)$
+  \end{center}
+  \begin{center}
+    Convergence speed: \hfill $\Omega(\exp \, t^{-1})$
+  \end{center}
+\end{problem}
 
-To summarise, we would like the best of the aforementioned approaches: a random
-peer sampling protocol providing 
-\begin{inparaenum}[(i)]
-\item a logarithmically growing partial view size compared to the network
-  membership (like \SCAMP{}),
-\item using neighbour-to-neighbour interactions to establish connections (like
-  \CYCLON{}),
-\item  quickly converging to a random network.
-\end{inparaenum}
-Such protocol would allow gossiping on top of WebRTC. Hence, it would open the
-gate to a wide variety of distributed and decentralised applications requiring
-a scalable broadcast.
+Unfortunately, while both approaches converge exponentially fast to a random
+graph, each of them fails either on the partial view size requirement
+(i.e. \CYCLON{}) or the time complexity of connection establishment
+(i.e. \SCAMPLON{}). Knowingly, we would like the best of the aforementioned
+approaches in order to answer to the problem statement. Ultimately, it would
+allow gossiping on top of WebRTC. Hence, it would open the gate to a wide
+variety of distributed and decentralised applications requiring a scalable
+broadcast.
 
 %%% Local Variables:
 %%% mode: latex

@@ -16,7 +16,7 @@ raises reliability and efficiency issues.
 Gossiping requires that each participant maintains connections with a uniform
 sample of other participants~\cite{jelasity2004peer}. The sample, called
 partial view, can grow logarithmically compared to the number of participants
-and yet providing connectivity with high probability. Still, the neighbouring
+and yet providing connectivity with high probability. Still, the neighbourhood
 must be constantly renewed in order to prevent network partitions. In WebRTC,
 establishing a browser-to-browser connection requires a three-way handshake
 which is much more costly and likely to fail compared to traditional
@@ -27,22 +27,10 @@ Knowingly, the main challenge is about
 \begin{inparaenum}[(i)]
 \item quickly converging to a random graph.
 \item Keeping an optimal number of connections alive. To provide connectedness
-  in random graph, each peer must have $\Theta(\text{ln} |\mathcal{N}|)$
+  in random graph, each peer must have $\Theta(\text{ln}\, |\mathcal{N}|)$
   neighbours (REF) where $\mathcal{N}$ is the set of network members.
 \item Keeping an optimal complexity on connection establishment.
 \end{inparaenum}
-
-% The \CYCLON{} protocol~\cite{voulgaris2005cyclon} provides each peer with a
-% fixed size partial view.  Each element in this view has an age which allows
-% quick withdrawing of left peers. Nevertheless, the user must foresee the
-% maximum size of the network to set the appropriate view size. As such, the
-% views are generally oversized generating too much resource consumption in a
-% WebRTC network. On the other hand, the \SCAMP{}
-% protocol~\cite{ganesh2001scamp,ganesh2003peer} incrementally builds the
-% partial views of peers at join. Thus, each peer has a partial view size
-% logarithmically growing compared to the global size of the
-% network. Nevertheless, a peer may connect to peers at several hops away from
-% him. Hence, the connections are more likely to fail.
 
 In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
 \begin{inparaenum}[(i)]
