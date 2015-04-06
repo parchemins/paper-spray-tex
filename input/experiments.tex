@@ -1,31 +1,32 @@
 
 \section{Experimentation}
 \label{sec:experiments}
-In this section, we aim to validate Scamplon by highlighting its properties and
-compare them to the state-of-the-art random peer sampling protocols. In
-particular, we inspect 3 properties characteristic of random graphs, namely the
-\emph{average shortest path length}, the \emph{average clustering coefficient},
-and \emph{the partial view size distribution}. Additionnaly, we investigate on
-\emph{robusteness to random failures}.
+In this section we examine the properties of \SCAMPLON{} and 
+compare them to state-of-the-art random peer sampling protocols, \SCAMP{} and \CYCLON{}. 
+The experiments involved up to 100,000 nodes and were carried out on \PEERSIM{} \cite{peersim}, 
+a simulator for peer-to-peer networks.
+The implementation of the protocols is available on Github\footnote{http://github.com/anonymous4now}.
+As peers periodically exchange information we define a cycle to be 
+the $\Delta t$ time period in which each peer executes the shuffle protocol once.
 
-Experiments are simulations ran on the well-known PeerSim simulator (REF). We
-implemented Scamp, Cyclon, and Scamplon. The code is available on the Github
-platform\footnote{http://github.com/anonymous4now}. Most of the experiments
-involve 100, 1000, and 10000 peers.
+We inspect three properties characteristic of random graphs, namely the
+\emph{average shortest path length}, the \emph{average clustering coefficient},
+and \emph{the partial view size distribution}. Additionally, we investigate on
+\emph{robustness to random failures}.
 
 \subsection{Clustering coefficient}
 \begin{asparadesc}
 \item[Objective:]
 \item[Description:] The average clustering coefficient measures the
-  connectivity of each peer's neighbourhood in the network.
+  connectivity of each peer's neighborhood in the network.
   \begin{equation}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
     \end{equation}
     where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher
     the coefficient, the more likely the network contains cliques. These
-    experiments involve 100, 1000, and 10000 peers. Cyclon is set to be optimal
+    experiments involve 100, 1000, and 10000 peers. \CYCLON{} is set to be optimal
     at 1000 peers with $|\mathcal{P}|$ set to $7$. The exchanges concern $3$
-    neighbours.
+    neighbors.
 \item[Results:]
 \item[Reasons:]
 \end{asparadesc}

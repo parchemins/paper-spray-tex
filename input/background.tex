@@ -59,14 +59,14 @@ on. Also, it highlights the motivations of our approach.
 \begin{asparadesc}
 \item [Cyclon]\cite{voulgaris2005cyclon} is a periodic random peer sampling
   protocol which updates its partial view every interval of time. The partial
-  view has a fixed-size set at start. In this view, each neighbour is
+  view has a fixed-size set at start. In this view, each neighbor is
   associated with an age incremented at each cycle. To update its partial view,
-  \CYCLON{} exchanges a subset of its partial view with one of its neighbour
+  \CYCLON{} exchanges a subset of its partial view with one of its neighbor
   chosen using the age.  Assuming a well chosen $|\mathcal{P}|$, \CYCLON{}
   quickly converges to a random graph and quickly withdraws crashed/left peers.
   Figure~\ref{fig:cyclonexample} depicts the periodic exchanges of
   \CYCLON{}. In particular, we can see that peers only communicate in their
-  direct neighbourhood to renew the connections.
+  direct neighborhood to renew the connections.
 
   In the WebRTC context, each connection matters. Hence, we cannot afford
   oversized partial views like in \CYCLON{}. For instance, considering an
@@ -103,10 +103,10 @@ on. Also, it highlights the motivations of our approach.
   creates a logarithmically increasing number of connections compared to the
   total network size.  Figure~\ref{fig:scampexample} depicts the joining
   protocol of \SCAMP{}. As we can see, the resulting graph is
-  connected. However, the last peer $p_1$ only has one neighbour in its partial
+  connected. However, the last peer $p_1$ only has one neighbor in its partial
   view, meaning that if $p_2$ crashes, $p_1$ cannot send messages to the
   network any more. To avoid that, a periodic re-subscription balances the
-  neighbourhood of the peers over time. Thus, the network converges to a random
+  neighborhood of the peers over time. Thus, the network converges to a random
   graph.
 
   In the WebRTC context, the issue of \SCAMP{} lies in the fact that the
@@ -166,7 +166,7 @@ graph, each of them fails either on the partial view size requirement
 (i.e. \SCAMPLON{}). Knowingly, we would like the best of the aforementioned
 approaches in order to answer to the problem statement. Ultimately, it would
 allow gossiping on top of WebRTC. Hence, it would open the gate to a wide
-variety of distributed and decentralised applications requiring a scalable
+variety of distributed and decentralized applications requiring a scalable
 broadcast.
 
 %%% Local Variables:
