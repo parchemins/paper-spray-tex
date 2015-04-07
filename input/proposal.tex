@@ -28,16 +28,14 @@ intuitions, examples and algorithms.
   issues, a periodic \CYCLON{}-like protocol takes place in order to balance
   the partial views, using only neighbor-to-neighbor interactions. This
   balancing concerns both the partial view sizes, and the uniformity of chosen
-  peers within them. Unfortunately, \CYCLON{} handles fixed-size partial
-  views. Therefore, it must be adapted to handle partial views that grow and
-  shrink as the network dynamically adapts to the membership.
+  peers within them.
 \end{asparadesc}
 
-The first issue of \CYCLON{} concerns the partial view sizes. For the recall,
-the user of \CYCLON{} must foresee the maximum size of the network to set the
-partial view size, and the size of the subset to exchange from
-neighbor-to-neighbor.  However, in \SCAMPLON{}, a peer with $2$ neighbors in
-its partial view can exchange with a peer with $10$ neighbors. Ideally, the
+For the recall, \CYCLON{} uses fixed-size partial views. Thus, the users of
+\CYCLON{} must foresee the maximum size of the network to set their partial
+view size, and the size of the subset to exchange from neighbor-to-neighbor.
+On the opposite, \SCAMPLON{} is adaptive. Therefore, a peer with $2$ neighbors
+in its partial view can exchange with a peer with $10$ neighbors. Ideally, the
 resulting size of both partial views would be $6$ after the exchange. Yet,
 reaching this ideal value in one cycle is difficult without the knowledge of
 each other's partial view size. Instead of acquiring this knowledge,
@@ -68,16 +66,17 @@ $\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
   (a_{i,\,x} - \mu_i)^2$
 \end{center}
 where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
-variance must converge to $0$ over cycles. In the \SCAMPLON{} case, the value
-$a_{i,\,x}$ is the partial view size of Peer $p_x$ at cycle $i$. Indeed, each
-exchange from Peer $p_1$ to Peer $p_2$ is an aggregation resulting to:
+variance must converge to $0$ over cycles. In other terms, the values tends to
+be the same over cycles. In the \SCAMPLON{} case, the value $a_{i,\,x}$ is the
+partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
+$p_1$ to Peer $p_2$ is an aggregation resulting to:
 $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
   \over{2}}$.
 Furthermore, each peer performs this exchange protocol $1+Poisson(1)$ times per
 cycle (i.e. they initiate one and receive one in average).  This relation being
-established, we are able to conclude that \SCAMPLON{} converges exponentially
-fast. More precisely, each cycle decreases the variance estimation of the
-overall system by ${2\sqrt{\text{e}}}$.
+established, we know that \SCAMPLON{} converges exponentially fast. More
+precisely, each cycle decreases the variance estimation of the overall system
+by ${2\sqrt{\text{e}}}$.
 
 
 \begin{asparadesc}
@@ -97,38 +96,39 @@ overall system by ${2\sqrt{\text{e}}}$.
   \end{itemize}
   A peer $o$ joining the network will reach a contact peer. The latter will
   call Function $onContact$ which spreads $(|\mathcal{P}|+c)$ copies of $o$
-  inside the network. Then, each time a peer receives one of these message,
-  assuming that this peer does not have $o$ already and this peer is not $o$,
-  it has a probability $1\over{|\mathcal{P}|+1}$ to integrate $o$ in
-  $\mathcal{P}$. Otherwise it forwards the copy to a random neighbor.  At this
-  point, $o$ has $1$ neighbor in its partial view, and appears
-  $(c+1)log(|\mathcal{N}|)$ times in partial views of other members. The active
-  thread aims to balance the partial views. Each time Function $loop$ is
-  called, the age of each element in $\mathcal{P}$ is incremented. Then, the
-  oldest peer $q$ is chosen to exchange a subset of their partial view. If Peer
-  $q$ cannot be reached (i.e. it crashed/left), it is removed from the partial
-  view and the operation is repeated. Once the initiating peer $p$ found a
-  reachable peer $q$, the former selects a sample of its partial view,
-  excluding $q$ and including itself. The size of this sample is half of its
-  partial view, with a minimum of one peer: the initiating peer. The answer of
-  $q$ is of the exact same kind. Since peers can appear multiple times in
-  $\mathcal{P}$, the exchanging peers may send references to the other peer,
-  e.g., Peer $o$'s sample can contain references to $q$. Such sample, without
-  further processing, would create self-loop ($q$'s partial view contains
-  references to $q$). To alleviate this undesirable behavior, all occurrences
-  of the other peer are replaced with the emitting peer.  Afterwards, both of
-  them remove the sent sample from their view, remove the chosen neighbor, and
-  add the received sample.
+  inside the network, $c$ being a small constant value (typically lower that
+  $3$). Then, each time a peer receives one of these message, assuming that
+  this peer is not $o$, it has a probability $1\over{|\mathcal{P}|+1}$ to
+  integrate $o$ in $\mathcal{P}$. Otherwise it forwards the copy to a random
+  neighbor.  At this point, $o$ has $1$ neighbor in its partial view, and
+  appears $(c+1)log(|\mathcal{N}|)$ times in partial views of other
+  members. The active thread aims to balance the partial views. Each time
+  Function $loop$ is called, the age of each element in $\mathcal{P}$ is
+  incremented. Then, the oldest peer $q$ is chosen to exchange a subset of
+  their partial view. If Peer $q$ cannot be reached (i.e. it crashed/left), it
+  is removed from the partial view and the operation is repeated. Once the
+  initiating peer $p$ found a reachable peer $q$, the former selects a sample
+  of its partial view, excluding $q$ and including itself. The size of this
+  sample is half of its partial view, with a minimum of one peer: the
+  initiating peer. The answer of $q$ is of the exact same kind. Since peers can
+  appear multiple times in $\mathcal{P}$, the exchanging peers may send
+  references to the other peer, e.g., Peer $o$'s sample can contain references
+  to $q$. Such sample, without further processing, would create self-loop
+  ($q$'s partial view contains references to $q$). To alleviate this
+  undesirable behavior, all occurrences of the other peer are replaced with the
+  emitting peer.  Afterwards, both of them remove the sent sample from their
+  view, remove the chosen neighbor, and add the received sample.
 \end{asparadesc}
 
-Note that extending the algorithm to provide handshaking is not difficult: it
-only requires to keep track of the neighbor from where the membership messages
-arrived, and forward the answer to this neighbor accordingly.
 
 \begin{algorithm}
   \input{./input/scamplonalgo.tex}
   \caption{\label{algo:scamplon}The \SCAMPLON{} protocol.}
 \end{algorithm}
+
+Note that extending the algorithm to provide handshaking is not difficult: it
+only requires to keep track of the neighbor from where the membership messages
+arrived, and forward the answer to this neighbor accordingly.
 
 There are few optimization concerning the establishments of connections. For
 instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
