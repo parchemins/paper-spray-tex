@@ -45,15 +45,15 @@ on. Also, it highlights the motivations of our approach.
   \input{./input/cyclonexample.tex}
   \caption{\label{fig:cyclonexample}Example of \CYCLON{}'s periodic exchange of
     partial views. For simplicity sake, we set $|\mathcal{P}|$ to $4$ and the
-    peers involved in the exchange choose only $2$ neighbours among these
+    peers involved in the exchange choose only $2$ neighbors among these
     $4$. Furthermore, while the network contains $9$ members, we only show the
     partial views of $p_1$ and $p_5$.  Peer $p_1$ initiates the view exchange
-    with its oldest neighbour $p_5$, giving $\left\{p_1,\,p_2\right\}$
+    with its oldest neighbor $p_5$, giving $\left\{p_1,\,p_2\right\}$
     (randomly chosen). On receipt, Peer $p_5$ establishes the connection to
     $p_1$ and $p_2$ and gives away its connection to $\left\{p_6,\,p_9\right\}$
     (randomly chosen).  On receipt of this latter, $p_1$ establishes the
     connection to Peer $p_6$ and Peer $p_9$. Altogether, we cut $4$ links to
-    create $4$ other links only by using neighbour-to-neighbour interactions.}
+    create $4$ other links only by using neighbor-to-neighbor interactions.}
 \end{figure}
 
 \begin{asparadesc}
@@ -87,8 +87,8 @@ on. Also, it highlights the motivations of our approach.
     $p_5$. Let $\mathcal{P}_x$ denotes the partial view of Peer $p_x$. Peer
     $p_1$ establishes a connection to $p_2$. Then $p_2$ copies
     $|\mathcal{P}_2|$-times the new subscription and sends one to each
-    neighbour. To handle possible failures, $c$ additional copies (here $0$ for
-    simplicity sake), are sent to random neighbours. Then, each peer $p_x$ has
+    neighbor. To handle possible failures, $c$ additional copies (here $0$ for
+    simplicity sake), are sent to random neighbors. Then, each peer $p_x$ has
     a probability of $1\over{|\mathcal{P}_x|+1}$ to accept the forwarded
     subscription, hence, to establish a connection to reach $p_1$. Otherwise,
     the peer forwards it to another peer in $\mathcal{P}$ at random. Here,
@@ -156,7 +156,7 @@ on. Also, it highlights the motivations of our approach.
     Time complexity of a connection: \hfill $O(1)$
   \end{center}
   \begin{center}
-    Convergence speed: \hfill $\Omega(\exp \, t^{-1})$
+    Convergence speed: \hfill $O(\exp \, t^{-1})$
   \end{center}
 \end{problem}
 

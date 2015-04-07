@@ -9,9 +9,9 @@
 \item a logarithmically increasing partial view size compared to the global
   network size,
 \item and fast convergence to a random graph
-\item using only neighbour-to-neighbour connection establishments.
+\item using only neighbor-to-neighbor connection establishments.
 \end{inparaenum}
-It improves the state-of-the-art approaches in the traditionnal context of
+It improves the state-of-the-art approaches in the traditional context of
 one-way connections and greatly outperforms the
 state-of-the-art~\cite{ganesh2001scamp,voulgaris2005cyclon} in the context
 three-way handshake connection set up.  The latter becomes increasingly
@@ -26,7 +26,7 @@ intuitions, examples and algorithms.
   join, compared to the global network size. Still, newest members have a small
   partial view size, and oldest peers are more clustered. To alleviates these
   issues, a periodic \CYCLON{}-like protocol takes place in order to balance
-  the partial views, using only neighbour-to-neighbour interactions. This
+  the partial views, using only neighbor-to-neighbor interactions. This
   balancing concerns both the partial view sizes, and the uniformity of chosen
   peers within them. Unfortunately, \CYCLON{} handles fixed-size partial
   views. Therefore, it must be adapted to handle partial views that grow and
@@ -36,8 +36,8 @@ intuitions, examples and algorithms.
 The first issue of \CYCLON{} concerns the partial view sizes. For the recall,
 the user of \CYCLON{} must foresee the maximum size of the network to set the
 partial view size, and the size of the subset to exchange from
-neighbour-to-neighbour.  However, in \SCAMPLON{}, a peer with $2$ neighbours in
-its partial view can exchange with a peer with $10$ neighbours. Ideally, the
+neighbor-to-neighbor.  However, in \SCAMPLON{}, a peer with $2$ neighbors in
+its partial view can exchange with a peer with $10$ neighbors. Ideally, the
 resulting size of both partial views would be $6$ after the exchange. Yet,
 reaching this ideal value in one cycle is difficult without the knowledge of
 each other's partial view size. Instead of acquiring this knowledge,
@@ -51,8 +51,8 @@ noting that the global number of connections after the process must not
 change. Otherwise, \SCAMPLON{} cannot guarantee that the partial view sizes are
 logarithmic in average compared to the network size.  A remarkable difference
 regarding \CYCLON{} is that \SCAMPLON{} explicitly allows to have a same
-neighbour multiple times in a partial view. It impacts on the clustering
-coefficient. However, the impact is not significant since these artefacts are
+neighbor multiple times in a partial view. It impacts on the clustering
+coefficient. However, the impact is not significant since these artifacts are
 not numerous because the graph is random, and because they disappear over the
 \SCAMPLON{} cycles (EXAMPLIFY).
 
@@ -100,8 +100,8 @@ overall system by ${2\sqrt{\text{e}}}$.
   inside the network. Then, each time a peer receives one of these message,
   assuming that this peer does not have $o$ already and this peer is not $o$,
   it has a probability $1\over{|\mathcal{P}|+1}$ to integrate $o$ in
-  $\mathcal{P}$. Otherwise it forwards the copy to a random neighbour.  At this
-  point, $o$ has $1$ neighbour in its partial view, and appears
+  $\mathcal{P}$. Otherwise it forwards the copy to a random neighbor.  At this
+  point, $o$ has $1$ neighbor in its partial view, and appears
   $(c+1)log(|\mathcal{N}|)$ times in partial views of other members. The active
   thread aims to balance the partial views. Each time Function $loop$ is
   called, the age of each element in $\mathcal{P}$ is incremented. Then, the
@@ -115,27 +115,27 @@ overall system by ${2\sqrt{\text{e}}}$.
   $\mathcal{P}$, the exchanging peers may send references to the other peer,
   e.g., Peer $o$'s sample can contain references to $q$. Such sample, without
   further processing, would create self-loop ($q$'s partial view contains
-  references to $q$). To alleviate this undesirable behaviour, all occurrences
+  references to $q$). To alleviate this undesirable behavior, all occurrences
   of the other peer are replaced with the emitting peer.  Afterwards, both of
-  them remove the sent sample from their view, remove the chosen neighbour, and
+  them remove the sent sample from their view, remove the chosen neighbor, and
   add the received sample.
 \end{asparadesc}
 
 Note that extending the algorithm to provide handshaking is not difficult: it
-only requires to keep track of the neighbour from where the membership messages
-arrived, and forward the answer to this neighbour accordingly.
+only requires to keep track of the neighbor from where the membership messages
+arrived, and forward the answer to this neighbor accordingly.
 
 \begin{algorithm}
   \input{./input/scamplonalgo.tex}
   \caption{\label{algo:scamplon}The \SCAMPLON{} protocol.}
 \end{algorithm}
 
-There are few optimisations concerning the establishments of connections. For
+There are few optimization concerning the establishments of connections. For
 instance, when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its
 partial view, instead of inverting the link between $p$ and $q$, and $q$ and
-$p$, \SCAMPLON{} does not change them. Another optimisation concerns a peer
-having a neighbour multiple times in its partial view. While \SCAMPLON{} keeps
-such information in its partial view, only one connection per neighbour is
+$p$, \SCAMPLON{} does not change them. Another optimization concerns a peer
+having a neighbor multiple times in its partial view. While \SCAMPLON{} keeps
+such information in its partial view, only one connection per neighbor is
 necessary.
 
 

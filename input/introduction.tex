@@ -16,7 +16,7 @@ raises reliability and efficiency issues.
 Gossiping requires that each participant maintains connections with a uniform
 sample of other participants~\cite{jelasity2004peer}. The sample, called
 partial view, can grow logarithmically compared to the number of participants
-and yet providing connectivity with high probability. Still, the neighbourhood
+and yet providing connectivity with high probability. Still, the neighborhood
 must be constantly renewed in order to prevent network partitions. In WebRTC,
 establishing a browser-to-browser connection requires a three-way handshake
 which is much more costly and likely to fail compared to traditional
@@ -28,7 +28,7 @@ Knowingly, the main challenge is about
 \item quickly converging to a random graph.
 \item Keeping an optimal number of connections alive. To provide connectedness
   in random graph, each peer must have $\Theta(\text{ln}\, |\mathcal{N}|)$
-  neighbours (REF) where $\mathcal{N}$ is the set of network members.
+  neighbors (REF) where $\mathcal{N}$ is the set of network members.
 \item Keeping an optimal complexity on connection establishment.
 \end{inparaenum}
 
@@ -42,7 +42,7 @@ In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
 Experiments shows that it outperforms the state-of-the-art approaches both in
 one-way connections and three-way handshake connections.
 
-The rest of this paper is organised as follow: Section~\ref{sec:background}
+The rest of this paper is organized as follow: Section~\ref{sec:background}
 introduces the necessary background to understand \SCAMPLON{} and highlights
 our motivations. Section~\ref{sec:proposal} details the \SCAMPLON{} protocol.
 Section~\ref{sec:experiments} shows the properties of \SCAMPLON{} and compare

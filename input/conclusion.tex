@@ -9,17 +9,17 @@ namely \SCAMP{} and \CYCLON{}, provide the best of both worlds:
 \item logarithmically growing partial views compared to the global network
   size,
 \item a quick convergence to a random graph
-\item using neighbour-to-neighbour interactions.
+\item using neighbor-to-neighbor interactions.
 \end{inparaenum}
 As such, \SCAMPLON{} outperforms its parents in the context of 1-way connection
 establishments. In addition, it greatly outperforms state-of-the-art in the
 3-way handshake connection establishment set-up which becomes increasingly
 important with recent technologies such as WebRTC that allows peer-to-peer
 connection within modern browser. Since, random peer sampling constitutes the
-ground of many decentralised applications.
+ground of many decentralized applications.
 
 Future work includes an analysis of the chosen size of exchanges in
-\SCAMPLON{}. Indeed, currently, each peer choose a linear number of neighbours
+\SCAMPLON{}. Indeed, currently, each peer choose a linear number of neighbors
 to exchange compared to the size of partial view:
 $\left\lceil |\mathcal{P}|\over{2} \right\rceil$. Nevertheless, the paper
 introducing \CYCLON{} shows that a small subset of the partial view is enough
@@ -29,7 +29,7 @@ overhead induced by the partial view exchanges at a relatively small price.
 Future work also includes a Javascript implementation using WebRTC. While
 experimentation of this paper shows the results of Peersim simulations, the
 real implementation would open the gate to emulations, and even real
-peer-to-peer decentralised applications (MOAR).
+peer-to-peer decentralized applications (MOAR).
 
 %%% Local Variables:
 %%% mode: latex
