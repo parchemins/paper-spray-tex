@@ -20,27 +20,33 @@ and yet providing connectivity with high probability. Still, the neighborhood
 must be constantly renewed in order to prevent network partitions. In WebRTC,
 establishing a browser-to-browser connection requires a three-way handshake
 which is much more costly and likely to fail compared to traditional
-setting. Consequently, existing gossiping algorithms will either be resource
-intensive, or fail to maintain a connected network.
+setting. Consequently, existing gossiping algorithms (REFs) will either be
+resource intensive, or fail to maintain a connected network.
 
 Knowingly, the main challenge is about
 \begin{inparaenum}[(i)]
-\item quickly converging to a random graph.
-\item Keeping an optimal number of connections alive. To provide connectedness
-  in random graph, each peer must have $\Theta(\text{ln}\, |\mathcal{N}|)$
-  neighbors (REF) where $\mathcal{N}$ is the set of network members.
-\item Keeping an optimal complexity on connection establishment.
+\item keeping an optimal $\Theta(\text{ln}\, |\mathcal{N}|)$ on the number of
+  connections alive (REF) (where $\mathcal{N}$ is the set of network members),
+\item keeping an optimal $O(1)$ complexity on connection establishments,
+\item keeping an optimal $O(\exp \, t^{-1})$ convergence speed to a random
+  graph (where $t$ is an arbitrary time frame).
 \end{inparaenum}
 
-In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
+In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol which
+provides the desired properties described in the aforementioned problem
+statement.
 \begin{inparaenum}[(i)]
-\item which provides each peer with a partial view logarithmically growing
-  compared to the global network size,
-\item which quickly converges to a random graph,
-\item which can handle three-way handshake.
+\item It dynamically adapts the neighborhood of each peer. Thus, the number of
+  connections grows logarithmically compared to the size of the network.
+\item It only uses neighbor-to-neighbor interactions to establish the
+  connections. Thus, the connections are established in constant time.
+\item It converges exponentially fast to a random graph. Thus, the network
+  becomes quickly resilient to failure, can broadcast messages efficiently etc.
 \end{inparaenum}
-Experiments shows that it outperforms the state-of-the-art approaches both in
-one-way connections and three-way handshake connections.
+Knowingly, it outperforms state-of-the-art approaches in the traditional
+connection set-up. This improvement is crucial in the three-way connection
+set-up.
+
 
 The rest of this paper is organized as follow: Section~\ref{sec:background}
 introduces the necessary background to understand \SCAMPLON{} and highlights

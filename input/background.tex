@@ -4,15 +4,15 @@
 
 This section introduces the general outlines of state-of-the-art protocols in
 charge of providing the random peer sampling which will be useful later
-on. Also, it highlights the motivations of our approach.
+on. Then, it highlights the motivations of our approach.
 
 \begin{asparadesc}
-\item [WebRTC] is a protocol that allows real-time communication from browser
-  to browser. It is able to establish a peer-to-peer connection, even with
-  complex network settings such as firewall, proxies or Net Address Translation
-  (NAT). Nevertheless, the connection establishment protocol differs from
-  traditional setting: it uses a three-way handshake connection set up.  Thus,
-  a subscription message must be
+\item [WebRTC] is a protocol that allows real-time communication from
+  browser-to-browser. It is able to establish a peer-to-peer connection, even
+  with complex network settings such as firewall, proxies or Net Address
+  Translation (NAT). Nevertheless, the connection establishment protocol
+  differs from traditional setting: it uses a three-way handshake connection
+  set up.  Thus, a subscription message must be
   \begin{inparaenum}[(1)]
   \item emitted at Peer $p$,
   \item accepted at Peer $q$,
@@ -150,7 +150,9 @@ on. Also, it highlights the motivations of our approach.
   membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial view of peer $p_x \in \mathcal{N}^t$. 
   A random peer sampling, especially when three-way handshaking is involved, should provide the following best-case properties:
   \begin{center}
-    Partial view size: \hfill $\forall p_x^t, |\mathcal{P}_x^t| = \Theta (\text{ln}\, |\mathcal{N}^t|)$
+    Partial view size: \hfill
+    $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \Theta (\text{ln}\,
+    |\mathcal{N}^t|)$
   \end{center}
   \begin{center}
     Time complexity of a connection: \hfill $O(1)$
