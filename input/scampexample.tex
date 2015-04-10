@@ -1,10 +1,12 @@
 
 \begin{tikzpicture}[scale=1.15]
   
-  \draw[fill=white] (0pt, 0pt) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick] (0pt, 0pt)
+  node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
 
   \begin{scope}[shift={(75pt,0pt)}]
-  \draw[fill=white] (-25pt, 0pt) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick]
+  (-25pt, 0pt) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] (0pt,  25pt) node{$p_3$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] ( 25pt, 0pt) node{$p_4$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] (0pt, -25pt) node{$p_5$} +(-5pt,-5pt) rectangle +(5pt,5pt);
@@ -16,7 +18,7 @@
   \draw[->] (20pt,  0pt) -- (-20pt, 0pt); 
   \draw[->] (-5pt, 30pt) -- (-30pt, 5pt); 
 
-  \draw[->, densely dashed] (-70pt, 0pt) -- (-30pt, 0pt); 
+  \draw[->, thick, densely dashed] (-70pt, 0pt) -- (-30pt, 0pt); 
   \draw[->, densely dashed] (-5pt, 30pt) -- (-70pt, 5pt); 
   \draw[->, densely dashed] (30pt, -5pt)to[out=-85,in=-95](-70pt,-5pt);
 

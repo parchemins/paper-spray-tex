@@ -28,8 +28,8 @@
 \begin{algorithmic}[1]
   \Statex
   \initially
-    \State $\mathcal{P} \leftarrow [\,]$;
-    \hfill \comment{the partial view, sorted by age}
+    \State $\mathcal{P} \leftarrow \varnothing$;
+    \hfill \comment{the partial view is a multiset}
     \State $p$ ; \hfill \comment{identity of the local peer}
     \State $c \leftarrow 1$;
     \hfill \comment{additionnal connections when joining}
@@ -40,7 +40,8 @@
     \Function{loop}{ } \hfill \comment{Every $\Delta$ time}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
     \State \textbf{let} $q,\, age \leftarrow getOldest(\mathcal{P})$;
-    \State \textbf{let} $sample \leftarrow getSample(\mathcal{P}\setminus\left\{q\right\}, \left \lceil{|\mathcal{P}|-1\over{2}} \right \rceil) \uplus \left\{\langle p, 0 \rangle\right\}$; 
+    \State \textbf{let} $sample \leftarrow $
+    \Statex \hfill $getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}$; 
     \State $sample \leftarrow replace(sample,\,q,\,p)$;
     \State $sendTo(q,\, 'exchange',\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
