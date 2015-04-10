@@ -12,7 +12,7 @@
   [0] {\textbf{ACTIVE THREAD:}}
 
 \algblockdefx[pas]{pas}{endPas}
-  [0] {\textbf{PASSIVE THREAD:}}
+  [0] {\textbf{EVENTS:}}
 
 
 \newcommand{\LINEFOR}[2]{%
@@ -37,7 +37,7 @@
   \endInitially
   
   \act
-    \Function{loop}{ } \hfill \comment{Every $\Delta$ time}
+    \Function{loop}{ } \hfill \comment{Every $\Delta\,t$}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
     \State \textbf{let} $q,\, age \leftarrow getOldest(\mathcal{P})$;
     \State \textbf{let} $sample \leftarrow $

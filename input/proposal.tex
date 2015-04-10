@@ -57,7 +57,7 @@ by ${2\sqrt{\text{e}}}$.
 \begin{asparadesc}
 \item [Algorithm]\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at
   each peer. It is divided between an active thread looping to update the
-  partial view, and the passive thread which provides the reactions to received
+  partial view, and the events which provide the reactions to received
   messages. The functions which are not explicitly defined are the following:
   \begin{itemize}
   \item $incrementAge(view)$: increments the age of each elements in the view
@@ -115,7 +115,11 @@ necessary.
 \begin{figure*}
   \centering
   \input{input/scamplonexample.tex}
-  \caption{\label{fig:scamplonexample}Example}
+  \caption{\label{fig:scamplonexample} A round of exchange between two peers
+    using \SCAMPLON{}. In this case, Peer $p_1$ initiates an exchange with its
+    oldest neighbor $p_2$ (for simplicity sake, only the partial view of the
+    peers invovled in the exchange are explicitely drawn). After the exchange,
+    they both have a partial view size of $6$.}
 \end{figure*}
 
 To summarize, \SCAMPLON{} provides the best of its parents:
