@@ -1,7 +1,8 @@
 
 \begin{tikzpicture}[scale=1.15]
   
-  \draw[fill=white] (0pt, 0pt) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick] (0pt, 0pt)
+  node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] ( 0pt,-25pt) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] (-25pt,0pt) node{$p_3$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] ( 0pt,25pt) node{$p_4$} +(-5pt,-5pt) rectangle +(5pt,5pt);
@@ -11,7 +12,8 @@
   \draw[->] ( 0pt,-5pt) -- node{$\times$} (  0pt,-20pt); %% p1 -> p4
   
   \begin{scope}[shift={(75pt,0pt)}]
-  \draw[fill=white] ( 0pt, 0pt) node{$p_5$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick] ( 0pt, 0pt)
+  node{$p_5$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] (0pt,  25pt) node{$p_6$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] ( 25pt,25pt) node{$p_7$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw[fill=white] (25pt,-25pt) node{$p_8$} +(-5pt,-5pt) rectangle +(5pt,5pt);
@@ -26,7 +28,7 @@
   \draw[->, densely dashed] (5pt,5pt) -- (70pt,20pt); 
   \draw[->, densely dashed] (70pt,-5pt) -- (5pt,-20pt);
   \draw[->, densely dashed] ( 5pt,-5pt) -- (70pt,-20pt);
-  \draw[->] (5pt, 1.5pt) to[out=15,in=165]
+  \draw[->, thick] (5pt, 1.5pt) to[out=15,in=165]
   node{$\times$} (70pt, 1.5pt);
   \draw[<-, densely dashed] (5pt, -1.5pt) to[out=-15,in=-165] (70pt,-1.5pt);
 
