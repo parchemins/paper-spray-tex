@@ -101,16 +101,6 @@ by ${2\sqrt{\text{e}}}$.
   \caption{\label{algo:scamplon}The \SCAMPLON{} protocol.}
 \end{algorithm}
 
-Note that extending the algorithm to provide handshaking is not difficult: it
-only requires to keep track of the neighbor from where the membership messages
-arrived, and forward the answer to this neighbor accordingly. Also, there are
-few optimization concerning the establishments of connections. For instance,
-when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its partial
-view, instead of inverting the link between $p$ and $q$, and $q$ and $p$,
-\SCAMPLON{} does not change them. Another optimization concerns a peer having a
-neighbor multiple times in its partial view. While \SCAMPLON{} keeps such
-information in its partial view, only one connection per neighbor is truly
-necessary.
 
 \begin{asparadesc}
 \item [Figure]~\ref{fig:scamplonexample} depicts an exchanging procedure
@@ -131,7 +121,42 @@ necessary.
   that $p_1$ contains two times Peer $p_6$.
 \end{asparadesc}
 
-% 31 rue de millau
+
+
+\begin{asparadesc}
+\item [Algorithm]~\ref{algo:unreachable} shows the manner in which \SCAMPLON{}
+  deals with crashes. Each time a neighbor is detected as crashed, the peer
+  removes all occurrences of this neighbor in its partial view. The, for each
+  removal, it doubles a reference to another of its neighbor with a probability
+  of $1-{1\over{pSize}}$ where $pSize$ is the size of the partial view before
+  the removals. This probability corresponds to the number of connections to
+  reestablish in order to maintains the logarithmic complexity of partial view
+  sizes. Indeed, on joining, a peer spreads $1+(c+1)log(|\mathcal{N}|)$
+  connections in the network. On crash, it removes $2(c+1)log(|\mathcal{N}|)$
+  connections: from the peers that reference the crashed peer, and from the
+  crashed peer's partial view. Therefore, the peers that reference the crashed
+  peer must reestablish one connection each, one peer excepted. Without global
+  knowledge each peer assumes that it could remove it itself. The probability
+  of removal is ${1\over{pSize}}$. Thus, it will likely reestablish
+  $(c+1)log(|\mathcal{N}|)-1$ connections globally after the execution of the
+  algorithm by all peers referencing the crashed one.
+\end{asparadesc}
+
+\begin{algorithm}
+  \input{./input/unreachablealgo.tex}
+  \caption{\label{algo:unreachable}The crash handler.}
+\end{algorithm}
+
+Note that extending the algorithm to provide handshaking is not difficult: it
+only requires to keep track of the neighbor from where the membership messages
+arrived, and forward the answer to this neighbor accordingly. Also, there are
+few optimization concerning the establishments of connections. For instance,
+when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its partial
+view, instead of inverting the link between $p$ and $q$, and $q$ and $p$,
+\SCAMPLON{} does not change them. Another optimization concerns a peer having a
+neighbor multiple times in its partial view. While \SCAMPLON{} keeps such
+information in its partial view, only one connection per neighbor is truly
+necessary.
 
 \begin{figure*}
   \centering

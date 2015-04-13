@@ -1,0 +1,38 @@
+
+\small
+\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+
+\newcommand{\comment}[1]{$\rhd$ #1}
+
+\newcommand{\LINEFOR}[2]{%
+  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+  }
+
+\newcommand{\LINEIFTHEN}[2]{%
+  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
+  }
+
+\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
+
+\begin{algorithmic}[1]
+  \Function{onUnreachable}{$q$} \hfill \comment{$q$ the crashed peer}  
+  \State \textbf{let} $occ \leftarrow 0$;
+
+  \For{\textbf{each} $\langle n,\,age\rangle \in \mathcal{P}$}
+  \hfill \comment{remove and count}
+  \State \LINEIFTHEN{($n=q$)}
+  {$\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle n,\,age\rangle \}$;
+    $occ \leftarrow occ + 1$;}
+  \EndFor
+
+  \For{$i\leftarrow 0$ \textbf{to} $occ$} \hfill \comment{probabilistic adding}
+  \If{($rand()>{1\over{|\mathcal{P}|+occ}}$)}
+  \State \textbf{let} $n,\,age \leftarrow
+  \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
+  \State $\mathcal{P} \leftarrow \mathcal{P} \uplus
+  \left\{\langle n,\, 0\rangle\right\}$;
+  \EndIf
+  \EndFor
+  
+  \EndFunction
+\end{algorithmic}
