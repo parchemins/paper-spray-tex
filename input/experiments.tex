@@ -3,22 +3,33 @@
 \label{sec:experiments}
 In this section we examine the properties of \SCAMPLON{} and 
 compare them to state-of-the-art random peer sampling protocols, \SCAMP{} and \CYCLON{}. 
-The experiments involved up to 100,000 nodes and were carried out on \PEERSIM{} \cite{peersim}, 
+The experiments\footnote{Implementation: https://github.com/anonymous/anonymous4now}
+involve up to 100,000 nodes and are carried out on \PEERSIM{} \cite{peersim}, 
 a simulator for peer-to-peer networks.
-The implementation of the protocols is available on Github\footnote{http://github.com/anonymous4now}.
-As peers periodically exchange information we define a cycle to be 
-the $\Delta t$ time period in which each peer executes the shuffle protocol once.
+A simulation cycle is defined as $\Delta t$ in which each peer has executed its exchange protocol once.
 
-We inspect three properties characteristic of random graphs, namely the
+We inspect three properties characteristic for random graphs, namely the
 \emph{average shortest path length}, the \emph{average clustering coefficient},
 and \emph{the partial view size distribution}. Additionally, we investigate on
 \emph{robustness to random failures}.
 
 \subsection{Clustering coefficient}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\textwidth]{img/cluster.eps}
+    \caption{Clustering coefficient}
+    \label{fig:clustering}
+\end{figure}
+
+
 \begin{asparadesc}
 \item[Objective:]
-\item[Description:] The average clustering coefficient measures the
-  connectivity of each peer's neighborhood in the network.
+    %% Highlight  
+    With this experiment we want to evaluate to what degree \SCAMPLON{} generates clusters in the overlay.
+    To satisfy the random peer sampling objective it is desirable that the network has very few clusters.
+\item[Description:] 
+   The average clustering coefficient measures the connectivity of each peer's neighborhood in the network.
   \begin{equation}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
     \end{equation}
@@ -28,8 +39,15 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
     at 1000 peers with $|\mathcal{P}|$ set to $7$. The exchanges concern $3$
     neighbors.
 \item[Results:]
+
+
+
 \item[Reasons:]
 \end{asparadesc}
+
+
+
+\subsection{Average path length}
 
 \begin{figure}
     \centering
@@ -38,14 +56,6 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
     \label{fig:avgpath}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.49\textwidth]{img/cluster.eps}
-    \caption{Clustering coefficient}
-    \label{fig:clustering}
-\end{figure}
-
-\subsection{Average path length}
 \begin{asparadesc}
 \item[Objective:]
 \item[Description:] The average path length is the average of the shortest path
@@ -53,15 +63,22 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
   reach a peer from another given peer. The lower the value, the faster a
   message can reach the whole network.
 \item[Results:]
+When undersized, \CYCLON{} yield a shorter average shortest path then \SCAMPLON{}~\ref{fig:clustering}.
 \item[Reasons:]
 \end{asparadesc}
-
 
 \subsection{Partial view size distribution}
 
 \subsection{Resilience to failure}
 
 \subsection{Churn}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\textwidth]{img/churn.eps}
+    \caption{Churn}
+    \label{fig:churn}
+\end{figure}
 
 \subsection{Synthesis}
 
