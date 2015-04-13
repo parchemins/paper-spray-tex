@@ -112,14 +112,37 @@ neighbor multiple times in its partial view. While \SCAMPLON{} keeps such
 information in its partial view, only one connection per neighbor is truly
 necessary.
 
+\begin{asparadesc}
+\item [Figure]~\ref{fig:scamplonexample} depicts an exchanging procedure
+  between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its
+  oldest neighbor $p_2$ to perform a neighborhood exchange. The former selects
+  $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil-1={4\over{2}}-1=1$ random
+  peer among its neighborhood, here $\left\{p_1\right\}$. To this sample, it
+  adds a reference to itself and sends the exchange message to $p_2$. The
+  receipt of the message triggers the $onExchange$ event at Peer $p_2$. Hence,
+  the latter chooses
+  $\left\lceil{|\mathcal{P}_2|\over{2}}\right\rceil= {8\over{2}}=4$ random
+  neighbors from its partial view to send back to Peer $p_1$. In this example
+  it chooses $\{p_6,\,p_7,\,p_8,\,p_9\}$ and sends it to $p_1$. Afterwards,
+  Peer $p_2$ cuts the connections to the peers it sent and creates new one with
+  the received peer from $p_1$. Peer $p_1$ does the same, and additionally
+  removes the connection chosen for the exchange, i.e., the connection to
+  $p_2$. Afterwards, both partial view contains $6$ neighbors. Also, we can see
+  that $p_1$ contains two times Peer $p_6$.
+\end{asparadesc}
+
+% 31 rue de millau
+
 \begin{figure*}
   \centering
   \input{input/scamplonexample.tex}
   \caption{\label{fig:scamplonexample} A round of exchange between two peers
     using \SCAMPLON{}. In this case, Peer $p_1$ initiates an exchange with its
     oldest neighbor $p_2$ (for simplicity sake, only the partial view of the
-    peers invovled in the exchange are explicitely drawn). After the exchange,
-    they both have a partial view size of $6$.}
+    peers involved in the exchange are explicitly drawn). The network on the
+    left shows the network before the exchange, and the network on the right
+    shows the network after the exchange. After the exchange of peers chosen at
+    random, both peers $p_1$ and $p_2$ have a partial view size of $6$.}
 \end{figure*}
 
 To summarize, \SCAMPLON{} provides the best of its parents:
@@ -135,8 +158,8 @@ connection set-up. Furthermore, the improvement becomes crucial in the context
 of three-way handshake connection set-up.  The latter becomes increasingly
 important with the appearance of technologies allowing peer-to-peer within
 modern web browsers.  The next section aims to demonstrate experimentally the
-behavior of \SCAMPLON{}. In particular, it aims to highlight the
-aforementioned properties.
+behavior of \SCAMPLON{}. In particular, it aims to highlight the aforementioned
+properties.
 
 
 %%% Local Variables:
