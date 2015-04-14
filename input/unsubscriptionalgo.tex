@@ -1,0 +1,44 @@
+
+\small
+\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+
+\newcommand{\comment}[1]{$\rhd$ #1}
+
+\algblockdefx[initially]{initially}{endInitially}
+  [0] {\textbf{INITIALLY:}}
+
+\algblockdefx[pas]{pas}{endPas}
+  [0] {\textbf{EVENTS:}}
+
+\newcommand{\LINEFOR}[2]{%
+  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+  }
+
+\newcommand{\LINEIFTHEN}[2]{%
+  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
+  }
+
+\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
+
+\begin{algorithmic}[1]
+  \Statex
+  \initially
+  \State $\mathcal{I}$ \hfill 
+  \comment{set of peers targeting us ($p$) in their partial view}
+  \endInitially
+
+  \pas
+    \Function{unSubscribe}{\ }
+    \For{$i\leftarrow 0$ \textbf{to} $min(|\mathcal{P}|,\, |\mathcal{P}|-c-1)$}
+    \State \textbf{let} $n,\, age \leftarrow \mathcal{P}[i]$;
+    \State $sendTo( \mathcal{I}[\,i\%|\mathcal{I}|\,],\, 'unSubs',\, n)$;
+    \EndFor
+    \EndFunction
+    \Statex
+    \Function{onUnSubs}{$o, \, n$} 
+    \hfill \comment{$o$: origin; $n$: neighbor to add}
+    \State $\mathcal{P}\leftarrow (\mathcal{P}\setminus o)
+    \uplus\{\langle n,\,0\rangle\}$;
+    \EndFunction
+  \endPas
+\end{algorithmic}

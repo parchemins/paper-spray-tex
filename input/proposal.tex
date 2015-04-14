@@ -73,8 +73,8 @@ $1\over{2\sqrt{\text{e}}}$.
     the $old$ element by the $new$ element and returns the modified view.
   \item $rand()$: generates a random number between 0 and 1.
   \end{itemize}
-  A peer $o$ joining the network will reach a contact peer. The latter will
-  call Function $onContact$ which spreads $(|\mathcal{P}|+c)$ copies of $o$
+  A peer $o$ joining the network will reach a first contact peer. The latter
+  will call Function $onSubs$ which spreads $(|\mathcal{P}|+c)$ copies of $o$
   inside the network, $c$ being a small constant value (typically lower that
   $3$). Then, each time a peer receives one of these message, assuming that
   this peer is not $o$, it has a probability $1\over{|\mathcal{P}|+1}$ to
