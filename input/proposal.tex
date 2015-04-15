@@ -2,17 +2,27 @@
 \section{\SCAMPLON{}}
 \label{sec:proposal}
 
-\SCAMPLON{}\footnote{\SCAMPLON{} stands as the contraction of \SCAMP{} and
-  \CYCLON{}.} is a random peer sampling protocol inspired by both \SCAMP{} and
-\CYCLON{}.  Firstly, \SCAMPLON{} reuses the joining process of \SCAMP{} to
-incrementally build the network. While such network is not flawless, it has the
-interesting property of logarithmically increasing the number of connections at
-each join, compared to the global network size. Still, the newest members have
-a small partial view size, and the oldest peers are more clustered. To
-alleviates these issues, a periodic \CYCLON{}-like protocol takes place in
-order to balance the partial views, using only neighbor-to-neighbor
-interactions. This balancing concerns both the partial view sizes, and the
-uniformity of chosen peers within them.
+\SCAMPLON{}\footnote{\SCAMPLONDESCRIPTION{}} is a random peer sampling protocol
+inspired by both \SCAMP{} and \CYCLON{}. \SCAMPLON{} comprises three parts.
+Firstly, \SCAMPLON{} reuses the joining process of \SCAMP{} to incrementally
+build the network. While such network is not flawless, it has the interesting
+property of logarithmically increasing the number of connections at each join,
+compared to the global network size. Still, the newest members have a small
+partial view size, and the oldest peers are more clustered. To alleviates these
+issues, a periodic \CYCLON{}-like protocol takes place in order to balance the
+partial views, using only neighbor-to-neighbor interactions. This balancing
+concerns both the partial view sizes, and the uniformity of chosen peers within
+them.
+
+
+\subsection{Joining}
+
+\begin{algorithm}
+\input{input/joiningalgo.tex}
+\caption{\label{algo:joiningalgo.tex}The joining protocol of \SCAMPLON{}.}
+\end{algorithm}
+
+\subsection{Cyclic}
 
 \SCAMPLON{} is adaptive, e.g., a peer with $2$ neighbors in its partial view
 can exchange with a peer with $10$ neighbors. Ideally, the resulting size of
@@ -58,6 +68,13 @@ exponentially fast. Furthermore, we know that each cycle decreases the variance
 of the overall system at a rate between ${1\over{2}}$ and
 $1\over{2\sqrt{\text{e}}}$.
 
+
+
+\begin{algorithm}
+  \input{./input/cyclicalgo.tex}
+  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
+\end{algorithm}
+
 \begin{asparadesc}
 \item [Algorithm]\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at
   each peer. It is divided between an active thread looping to update the
@@ -99,13 +116,6 @@ $1\over{2\sqrt{\text{e}}}$.
   view, remove the chosen neighbor, and add the received sample.
 \end{asparadesc}
 
-
-\begin{algorithm}
-  \input{./input/scamplonalgo.tex}
-  \caption{\label{algo:scamplon}The \SCAMPLON{} protocol.}
-\end{algorithm}
-
-
 \begin{asparadesc}
 \item [Figure]~\ref{fig:scamplonexample} depicts an exchanging procedure
   between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its
@@ -125,7 +135,24 @@ $1\over{2\sqrt{\text{e}}}$.
   that $p_1$ contains two times Peer $p_6$.
 \end{asparadesc}
 
+\begin{figure*}
+  \centering
+  \input{input/scamplonexample.tex}
+  \caption{\label{fig:scamplonexample} A round of exchange between two peers
+    using \SCAMPLON{}. In this case, Peer $p_1$ initiates an exchange with its
+    oldest neighbor $p_2$ (for simplicity sake, only the partial view of the
+    peers involved in the exchange are explicitly drawn). The network on the
+    left shows the network before the exchange, and the network on the right
+    shows the network after the exchange. After the exchange of peers chosen at
+    random, both peers $p_1$ and $p_2$ have a partial view size of $6$.}
+\end{figure*}
 
+\subsection{Leaving}
+
+\begin{algorithm}
+  \input{./input/unreachablealgo.tex}
+  \caption{\label{algo:unreachable}The crash handler of \SCAMPLON{}.}
+\end{algorithm}
 
 \begin{asparadesc}
 \item [Algorithm]~\ref{algo:unreachable} shows the manner in which \SCAMPLON{}
@@ -146,10 +173,6 @@ $1\over{2\sqrt{\text{e}}}$.
   algorithm by all peers referencing the crashed one.
 \end{asparadesc}
 
-\begin{algorithm}
-  \input{./input/unreachablealgo.tex}
-  \caption{\label{algo:unreachable}The crash handler.}
-\end{algorithm}
 
 Note that extending the algorithm to provide handshaking is not difficult: it
 only requires to keep track of the neighbor from where the membership messages
@@ -162,17 +185,7 @@ neighbor multiple times in its partial view. While \SCAMPLON{} keeps such
 information in its partial view, only one connection per neighbor is truly
 necessary.
 
-\begin{figure*}
-  \centering
-  \input{input/scamplonexample.tex}
-  \caption{\label{fig:scamplonexample} A round of exchange between two peers
-    using \SCAMPLON{}. In this case, Peer $p_1$ initiates an exchange with its
-    oldest neighbor $p_2$ (for simplicity sake, only the partial view of the
-    peers involved in the exchange are explicitly drawn). The network on the
-    left shows the network before the exchange, and the network on the right
-    shows the network after the exchange. After the exchange of peers chosen at
-    random, both peers $p_1$ and $p_2$ have a partial view size of $6$.}
-\end{figure*}
+
 
 To summarize, \SCAMPLON{} provides the best of its parents:
 \begin{inparaenum}[(i)]
