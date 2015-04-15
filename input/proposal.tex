@@ -69,7 +69,6 @@ of the overall system at a rate between ${1\over{2}}$ and
 $1\over{2\sqrt{\text{e}}}$.
 
 
-
 \begin{algorithm}
   \input{./input/cyclicalgo.tex}
   \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
@@ -138,7 +137,7 @@ $1\over{2\sqrt{\text{e}}}$.
 \begin{figure*}
   \centering
   \input{input/scamplonexample.tex}
-  \caption{\label{fig:scamplonexample} A round of exchange between two peers
+  \caption{\label{fig:scamplonexample} Examplary exchange between two peers
     using \SCAMPLON{}. In this case, Peer $p_1$ initiates an exchange with its
     oldest neighbor $p_2$ (for simplicity sake, only the partial view of the
     peers involved in the exchange are explicitly drawn). The network on the
@@ -184,8 +183,6 @@ view, instead of inverting the link between $p$ and $q$, and $q$ and $p$,
 neighbor multiple times in its partial view. While \SCAMPLON{} keeps such
 information in its partial view, only one connection per neighbor is truly
 necessary.
-
-
 
 To summarize, \SCAMPLON{} provides the best of its parents:
 \begin{inparaenum}[(i)]
