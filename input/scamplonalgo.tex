@@ -39,7 +39,7 @@
   \act
     \Function{loop}{ } \hfill \comment{Every $\Delta\,t$}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
-    \State \textbf{let} $q,\, age \leftarrow getOldest(\mathcal{P})$;
+    \State \textbf{let} $ \langle q,\, age \rangle \leftarrow getOldest(\mathcal{P})$;
     \State \textbf{let} $sample \leftarrow $
     \Statex \hfill $getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}$; 
     \State $sample \leftarrow replace(sample,\,q,\,p)$;
@@ -59,7 +59,7 @@
     \EndFunction
     \Statex
     \Function{onSubs}{$o$} \hfill \comment{$o: origin$}
-    \State \LINEFOR{\textbf{each} $q\in\mathcal{P}$}
+    \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
     {$sendTo(q,\, 'fwdSubs',\, o)$;}
     \State \LINEFOR{$i \leftarrow 0$ \textbf{to} $c$}
     {\INDSTATE $sendTo(\mathcal{P}[\left\lfloor rand()*
