@@ -20,14 +20,15 @@
 
   \For{\textbf{each} $\langle n,\,age\rangle \in \mathcal{P}$}
   \hfill \comment{remove and count}
-  \State \LINEIFTHEN{($n=q$)}
-  {$\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle n,\,age\rangle \}$;
-    $occ \leftarrow occ + 1$;}
+  \If {($n=q$)}
+  \State $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle n,\,age\rangle \}$;
+  \State $occ \leftarrow occ + 1$;
+  \EndIf
   \EndFor
 
   \For{$i\leftarrow 0$ \textbf{to} $occ$} \hfill \comment{probabilistic adding}
   \If{($rand()>{1\over{|\mathcal{P}|+occ}}$)}
-  \State \textbf{let} $n,\,age \leftarrow
+  \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
   \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
   \State $\mathcal{P} \leftarrow \mathcal{P} \uplus
   \left\{\langle n,\, 0\rangle\right\}$;

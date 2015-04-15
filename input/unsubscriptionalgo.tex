@@ -30,8 +30,8 @@
   \pas
     \Function{unSubscribe}{\ }
     \For{$i\leftarrow 0$ \textbf{to} $min(|\mathcal{P}|,\, |\mathcal{P}|-c-1)$}
-    \State \textbf{let} $n,\, age \leftarrow \mathcal{P}[i]$;
-    \State $sendTo( \mathcal{I}[\,i\%|\mathcal{I}|\,],\, 'unSubs',\, n)$;
+    \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow \mathcal{P}[i]$;
+    \State $sendTo(\, \mathcal{I}[\,i\%|\mathcal{I}|\,],\, 'unSubs',\, n)$;
     \EndFor
     \EndFunction
     \Statex

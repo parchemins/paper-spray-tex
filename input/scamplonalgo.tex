@@ -61,9 +61,11 @@
     \Function{onSubs}{$o$} \hfill \comment{$o: origin$}
     \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
     {$sendTo(q,\, 'fwdSubs',\, o)$;}
-    \State \LINEFOR{$i \leftarrow 0$ \textbf{to} $c$}
-    {\INDSTATE $sendTo(\mathcal{P}[\left\lfloor rand()*
-        |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, o)$;}
+    \For {$i \leftarrow 0$ \textbf{to} $c$}
+    \State \textbf{let} $\langle n,\, \_ \,\rangle \leftarrow 
+    \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
+    \State $sendTo( n,\, 'fwdSubs',\, o)$;
+    \EndFor
     \EndFunction
     \Statex
     \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
@@ -71,8 +73,9 @@
     \State $\mathcal{P} \leftarrow
     \mathcal{P}\uplus \left\{\langle o,\, 0 \rangle\right\}$;
     \Else
-    \State $sendTo(\mathcal{P}[\left\lfloor rand()*
-      |\mathcal{P}|\right\rfloor],\, 'fwdSubs',\, o)$;
+    \State \textbf{let} $\langle n,\, \_ \,\rangle \leftarrow 
+    \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
+    \State $sendTo( n,\, 'fwdSubs',\, o)$;
     \EndIf
     \EndFunction
   \endPas
