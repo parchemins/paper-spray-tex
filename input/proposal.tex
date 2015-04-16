@@ -13,20 +13,20 @@ size, and uniformity of the chosen peers within them. Quickly, the network
 topology converges to a random graph. Finally, A peer is able to leave at any
 time without giving notice, still the network properties do not degrade. During
 the whole lifecycle, a peer uses local knowledge only and establishes
-connections only with the neighbours of its neighbours.
+connections only with the neighbors of its neighbors.
 
 \subsection{Joining}
 
 The main focus of the joining protocol is about establishing a logarithmically
 growing number of connections in the network compared to the number of members.
 \SCAMPLON{} assumes that each peer has a logarithmic partial view size. Thus,
-when a peer $p_o$ contacts a peer $p_c$ within the network, Peer $p_c$ is able
+when a peer $p_1$ contacts a peer $p_2$ within the network, Peer $p_2$ is able
 to use its partial view size to spread the appropriate number of subscriptions.
-\SCAMPLON{} cautiously establishes connections with the neighbours of
-neighbours. Therefore, the joining protocol at Peer $p_c$ simply forwards the
-identity of $p_o$ to the latter's neigbours where they add it to their partial
-view. Afterwards, $p_o$ is connected to $p_c$, and all the neighbours of $p_c$
-are connected to $p_o$. The total number of connections in the network gently
+\SCAMPLON{} cautiously establishes connections with the neighbors of
+neighbors. Therefore, the joining protocol at Peer $p_2$ simply forwards the
+identity of $p_1$ to the latter's neighbors where they add it to their partial
+view. Afterwards, $p_1$ is connected to $p_2$, and all the neighbors of $p_2$
+are connected to $p_1$. The total number of connections in the network gently
 increases of $1+ln(|\mathcal{N}|)$.
 
 \begin{algorithm}
@@ -36,20 +36,20 @@ increases of $1+ln(|\mathcal{N}|)$.
 
 Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
 protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
-$\langle n,\, age\rangle$ which associate to the neighbour $n$ the age $age$
-(the age is useful in the periodic protocol). Thus, a neighbour can appear
-mutliple times in the partial view. Second, the algorithm shows the $onSubs$
+$\langle n,\, age\rangle$ which associate to the neighbor $n$ the age $age$
+(the age is useful in the periodic protocol). Thus, a neighbor can appear
+multiple times in the partial view. Second, the algorithm shows the $onSubs$
 event called each time a peer joins the network which simply forwards the
 identity of the joining peer to all neighbors, indifferently of the age. The
 $onFwdSubs$ event is called when a peer receives such forwarded
-subscription. It adds the peer as one of its neighbour with an age set to $0$
+subscription. It adds the peer as one of its neighbor with an age set to $0$
 meaning that it is a brand new connection.
 
 (EXAMPLE)
 
 The example shows that the network topology is not ideal after a joining
 protocol. Indeed, the joining peer only has one neighbor in its partial view,
-and all the neigbors of this neighbor have the joining peer in their partial
+and all the neighbors of this neighbor have the joining peer in their partial
 view. Consequently, the network is not robust and highly clustered. Hence, we
 need a rebalancing protocol.
 
@@ -58,23 +58,21 @@ need a rebalancing protocol.
 \SCAMPLON{} is a random peer sampling protocol. As such, it must constantly
 renew the connections to handle the churn (when peers join and leave freely).
 To ensure this constant shuffling, \SCAMPLON{} repeats an exchanging procedure
-during which two peers swap their neighbours. The swapping aims to balance both
+during which two peers swap their neighbors. The swapping aims to balance both
 the size of partial views and the global distribution of peers among them.
 
 \SCAMPLON{} uses a multiset as partial view without any predefined boundary on
-its size. Thus, a peer with $2$ neighbors in its partial view can exchange with
-a peer with $10$ neighbors. Ideally, the resulting size of both partial views
-would be $6$ after the exchange. \SCAMPLON{} aims to converge to the ideal
-value by averaging their view size over exchanges. Therefore, the initiating
-peer $p_1$ sends $\left\lceil|\mathcal{P}_1|\over{2}\right\rceil$ members to
-the chosen peer $p_2$ (chosen by age). The latter sends back
-$\left\lceil|\mathcal{P}_2|\over{2}\right\rceil$ members too. After the
-receipt, both peers remove the sent members and add the received members. It
-worth noting that \SCAMPLON{} uses a multiset as partial view. Therefore, a
-neighbor can appear multiple times in a partial view, nonetheless, it
-guarantees that the global number of connections after the process does not
-change. The latter is crucial to ensure that each partial view tends to the
-desired logarithmic size.
+its size. Thus, two peers with different partial view sizes can swap their
+neighbors, the objective being that both peers become as connected as one
+another. The global number of connections and the connectedness must remain
+unchanged.
+
+\SCAMPLON{} converges to the ideal partial view size by averaging their size
+over exchanges. Therefore, both peers involved send and integrate
+$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each
+other. Since the partial views are multisets, even if a neighbor appears
+multiple times, the network does not lose any connection. It guarantees that
+the global number of connections after the protocol does not change.
 
 There exists a close relationship between \SCAMPLON{} and the proactive
 aggregation protocol introduced
@@ -94,81 +92,52 @@ partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
 $p_1$ to Peer $p_2$ is an aggregation resulting to:
 $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
   \over{2}}$.
-Furthermore, in the best case, each peer performs this exchange protocol
-$1+Poisson(1)$ times per cycle, i.e., they initiate one and, in average,
-receive one. However, the partial view sizes and the distribution of these
-exchange protocol are linked together. Hence, the exchange distribution is
-$1+Dist^t$, where the distribution $Dist$ is converging to $Poisson(1)$ over
-time $t$.  This relation being established, we know that \SCAMPLON{} converges
-exponentially fast. Furthermore, we know that each cycle decreases the variance
-of the overall system at a rate between ${1\over{2}}$ and
+Furthermore, at each cycle, each peer is involved in the exchange protocol at
+least once (they initiate one), and in the best case 1+Poisson(1) (they
+initiate one and, in average, each peer receives another one). This relation
+being established, we know that \SCAMPLON{} converges exponentially
+fast. Furthermore, we know that each cycle decreases the variance of the
+overall system at a rate comprised between ${1\over{2}}$ and
 $1\over{2\sqrt{\text{e}}}$.
-
 
 \begin{algorithm}
   \input{./input/cyclicalgo.tex}
   \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
 \end{algorithm}
 
-\begin{asparadesc}
-\item [Algorithm]\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at
-  each peer. It is divided between an active thread looping to update the
-  partial view, and the events which provide the reactions to received
-  messages. The functions which are not explicitly defined are the following:
-  \begin{itemize}
-  \item $incrementAge(view)$: increments the age of each elements in the view
-    and returns the modified view.
-  \item $getOldest(view)$: retrieves the oldest of peers contained in the view
-  \item $getSample(view, \, size)$: returns a sample of the view containing
-    $size$ elements.
-  \item $replace(view,\,old,\,new)$: replaces in the view all occurrences of
-    the $old$ element by the $new$ element and returns the modified view.
-  \item $rand()$: generates a random number between 0 and 1.
-  \end{itemize}
-  A peer $o$ joining the network will reach a first contact peer. The latter
-  will call Function $onSubs$ which spreads $(|\mathcal{P}|+c)$ copies of $o$
-  inside the network, $c$ being a small constant value (typically lower that
-  $3$). Then, each time a peer receives one of these message, assuming that
-  this peer is not $o$, it has a probability $1\over{|\mathcal{P}|+1}$ to
-  integrate $o$ in $\mathcal{P}$. Otherwise it forwards the copy to a random
-  neighbor.  At this point, $o$ has $1$ neighbor in its partial view, and
-  appears $(c+1)log(|\mathcal{N}|)$ times in partial views of other
-  members. The active thread aims to balance the partial views. Each time
-  Function $loop$ is called, the age of each element in $\mathcal{P}$ is
-  incremented. Then, the oldest peer $q$ is chosen to exchange a subset of
-  their partial view. If Peer $q$ cannot be reached (i.e. it crashed/left), it
-  is removed from the partial view and the operation is repeated. Once the
-  initiating peer $p$ found a reachable peer $q$, the former selects a sample
-  of its partial view, excluding $q$ and including itself. The size of this
-  sample is half of its partial view, with a minimum of one peer: the
-  initiating peer. The answer of $q$ is of the exact same kind. Since peers can
-  appear multiple times in $\mathcal{P}$, the exchanging peers may send
-  references to the other peer, e.g., Peer $o$'s sample can contain references
-  to $q$. Such sample, without further processing, would create self-loop
-  ($q$'s partial view contains references to $q$). To alleviate this
-  undesirable behavior, all occurrences of the other peer are replaced with the
-  emitting peer.  Afterwards, both of them remove the sent sample from their
-  view, remove the chosen neighbor, and add the received sample.
-\end{asparadesc}
-
-\begin{asparadesc}
-\item [Figure]~\ref{fig:scamplonexample} depicts an exchanging procedure
-  between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its
-  oldest neighbor $p_2$ to perform a neighborhood exchange. The former selects
-  $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil-1={4\over{2}}-1=1$ random
-  peer among its neighborhood, here $\left\{p_1\right\}$. To this sample, it
-  adds a reference to itself and sends the exchange message to $p_2$. The
-  receipt of the message triggers the $onExchange$ event at Peer $p_2$. Hence,
-  the latter chooses
-  $\left\lceil{|\mathcal{P}_2|\over{2}}\right\rceil= {8\over{2}}=4$ random
-  neighbors from its partial view to send back to Peer $p_1$. In this example
-  it chooses $\{p_6,\,p_7,\,p_8,\,p_9\}$ and sends it to $p_1$. Afterwards,
-  Peer $p_2$ cuts the connections to the peers it sent and creates new one with
-  the received peer from $p_1$. Peer $p_1$ does the same, and additionally
-  removes the connection chosen for the exchange, i.e., the connection to
-  $p_2$. Afterwards, both partial view contains $6$ neighbors. Also, we can see
-  that $p_1$ contains two times Peer $p_6$.
-\end{asparadesc}
+Algorithm~\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at each
+peer. It is divided between an active thread looping to update the partial
+view, and a passive thread which reacts to an exchange message. The functions
+which are not explicitly defined are the following:
+\begin{itemize}
+\item $incrementAge(view)$: increments the age of each elements in the view
+  and returns the modified view.
+\item $getOldest(view)$: retrieves the oldest of peers contained in the view.
+\item $getSample(view, \, size)$: returns a sample of the view containing
+  $size$ elements.
+\item $replace(view,\,old,\,new)$: replaces in the view all occurrences of
+  the $old$ element by the $new$ element and returns the modified view.
+\item $rand()$: generates a random floating number between $0$ and $1$.
+\end{itemize}
+In the active thread, Function $loop$ is called every $\Delta$ time
+$t$. Firstly, the function increments the age of each neighbor in
+$\mathcal{P}$. Then, the oldest peer $q$ is chosen to exchange a subset of its
+partial view. If Peer $q$ cannot be reached (i.e. it crashed/left), the peer
+$p$ executes the crash handling function (cf. Section~\ref{subsec:leaving}) and
+repeats the process until it finds a reachable peer $q$. Peer $p$ selects a
+sample of its partial view, excluding one occurrence of $q$ and including
+itself. The size of this sample is half of its partial view, with at least one
+peer: the initiating peer (cf. Line~\ref{line:samplesize}). The answer of $q$
+contains half of its partial view too. Since peers can appear multiple times in
+$\mathcal{P}$, the exchanging peers may send references to the other peer,
+e.g., Peer $o$'s sample can contain references to $q$. Such sample, without
+further processing, would create self-loop ($q$'s partial view contains
+references to $q$). To alleviate this undesirable behavior, all occurrences of
+the other peer are replaced with the emitting peer
+(cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of
+them remove the sent sample from their view and add the received
+sample. Additionally, the initiating peer removes an occurrence of the chosen
+peer $q$.
 
 \begin{figure*}
   \centering
@@ -182,45 +151,68 @@ $1\over{2\sqrt{\text{e}}}$.
     random, both peers $p_1$ and $p_2$ have a partial view size of $6$.}
 \end{figure*}
 
+Figure~\ref{fig:scamplonexample} (REDO EXAMPLE) depicts an exchanging procedure
+between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its oldest
+neighbor $p_2$ to perform a neighborhood exchange. The former selects
+$\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil-1={4\over{2}}-1=1$ random
+peer among its neighborhood, here $\left\{p_1\right\}$. To this sample, it adds
+a reference to itself and sends the exchange message to $p_2$. The receipt of
+the message triggers the $onExchange$ event at Peer $p_2$. Hence, the latter
+chooses $\left\lceil{|\mathcal{P}_2|\over{2}}\right\rceil= {8\over{2}}=4$
+random neighbors from its partial view to send back to Peer $p_1$. In this
+example it chooses $\{p_6,\,p_7,\,p_8,\,p_9\}$ and sends it to
+$p_1$. Afterwards, Peer $p_2$ cuts the connections to the peers it sent and
+creates new one with the received peer from $p_1$. Peer $p_1$ does the same,
+and additionally removes the connection chosen for the exchange, i.e., the
+connection to $p_2$. Afterwards, both partial view contains $6$
+neighbors. Also, we can see that $p_1$ contains two times Peer $p_6$.
+
 \subsection{Leaving}
+\label{subsec:leaving}
+
+Using \SCAMPLON{}, the peers are free to leave the network without giving
+notice. However, without any appropriate reaction, the network may collapse due
+to an over zealous removal of connections. Indeed, when a peer joins the
+network, it injects in it $1+ln(|\mathcal{N}|)$ connections. Nevertheless,
+after few exchanges, the partial view of the joining peer becomes populated
+with more neighbors. Then, if this peer leaves, it removes $ln(|\mathcal{N}|)$
+connections from its partial view, and another $ln(|\mathcal{N}|)$ connections
+from peers which have this peer in their partial view. Therefore, without any
+crash handler, we remove $2ln(|\mathcal{N}|)$ connections instead of
+$1+ln(|\mathcal{N}|)$. To alleviate this issue, each peer that detects a crash
+may reestablish a connection with anyone in its neighborhood (which will
+spread in the network over the exchanges). The probability of reestablishing a
+connection is $1-{1\over{|\mathcal{P}|}}$. Since
+${|\mathcal{P}|}\approx ln(|\mathcal{N}|)$ peers have the crashed peer in their
+partial view, it is likely that all of them will reestablish a connection,
+excepted one. Therefore, when a peer leaves, it approximately removes the
+number of connections it injected when it joined.
 
 \begin{algorithm}
   \input{./input/unreachablealgo.tex}
   \caption{\label{algo:unreachable}The crash handler of \SCAMPLON{}.}
 \end{algorithm}
 
-\begin{asparadesc}
-\item [Algorithm]~\ref{algo:unreachable} shows the manner in which \SCAMPLON{}
-  deals with crashes. Each time a neighbor is detected as crashed, the peer
-  removes all occurrences of this neighbor in its partial view. The, for each
-  removal, it doubles a reference to another of its neighbor with a probability
-  of $1-{1\over{pSize}}$ where $pSize$ is the size of the partial view before
-  the removals. This probability corresponds to the number of connections to
-  reestablish in order to maintains the logarithmic complexity of partial view
-  sizes. Indeed, on joining, a peer spreads $1+(c+1)log(|\mathcal{N}|)$
-  connections in the network. On crash, it removes $2(c+1)log(|\mathcal{N}|)$
-  connections: from the peers that reference the crashed peer, and from the
-  crashed peer's partial view. Therefore, the peers that reference the crashed
-  peer must reestablish one connection each, one peer excepted. Without global
-  knowledge, each peer assumes that it could remove it itself. The probability
-  of removal is ${1\over{pSize}}$. Thus, it will likely reestablish
-  $(c+1)log(|\mathcal{N}|)-1$ connections globally after the execution of the
-  algorithm by all peers referencing the crashed one.
-\end{asparadesc}
+Algorithm~\ref{algo:unreachable} shows the manner in which \SCAMPLON{} deals
+with crashes. When the peer $q$ is detected as crashed, a first loop counts the
+occurrences of this neighbor in the partial view, and removes all of them. The,
+the second loop probabilistically doubles a connection with a known peer. The
+probability depends of the partial view size before the removals.
 
+(EXAMPLE)
 
-Note that extending the algorithm to provide handshaking is not difficult: it
-only requires to keep track of the neighbor from where the membership messages
-arrived, and forward the answer to this neighbor accordingly. Also, there are
-few optimization concerning the establishments of connections. For instance,
-when a peer $p$ starts an exchange with $q$, and $q$ has $p$ in its partial
-view, instead of inverting the link between $p$ and $q$, and $q$ and $p$,
-\SCAMPLON{} does not change them. Another optimization concerns a peer having a
-neighbor multiple times in its partial view. While \SCAMPLON{} keeps such
-information in its partial view, only one connection per neighbor is truly
-necessary.
+Note that extending the algorithms to handle three-way handshake is not
+difficult: it only requires to keep track of the neighbor from where the
+membership messages arrived, and forward the answer to this neighbor
+accordingly. Also, there are few optimization concerning the establishments of
+connections. For instance, when a peer $p$ starts an exchange with $q$, and $q$
+has $p$ in its partial view, instead of inverting the link between $p$ and $q$,
+and $q$ and $p$, \SCAMPLON{} does not change them. Another optimization
+concerns a peer having a neighbor multiple times in its partial view. While
+\SCAMPLON{} keeps such information in its partial view, only one connection per
+neighbor is truly necessary.
 
-To summarize, \SCAMPLON{} provides the best of its parents:
+To summarize, \SCAMPLON{} provides:
 \begin{inparaenum}[(i)]
 \item a logarithmically increasing partial view size compared to the global
   network size,

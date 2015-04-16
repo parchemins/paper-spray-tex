@@ -8,7 +8,7 @@
   [0] {\textbf{ACTIVE THREAD:}}
 
 \algblockdefx[pas]{pas}{endPas}
-  [0] {\textbf{EVENTS:}}
+  [0] {\textbf{PASSIVE THREAD:}}
 
 
 \newcommand{\LINEFOR}[2]{%
@@ -27,9 +27,9 @@
     \Function{loop}{ } \hfill \comment{Every $\Delta\,t$}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
     \State \textbf{let} $ \langle q,\, age \rangle \leftarrow getOldest(\mathcal{P})$;
-    \State \textbf{let} $sample \leftarrow $
-    \Statex \hfill $getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}$; 
-    \State $sample \leftarrow replace(sample,\,q,\,p)$;
+    \State \textbf{let} $sample \leftarrow $ \label{line:samplesize}
+    \Statex \hfill $getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\over{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}$;
+    \State $sample \leftarrow replace(sample,\,q,\,p)$; \label{line:replace1}
     \State $sendTo(q,\, 'exchange',\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
     \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{\langle q,\, age \rangle \right\}) \uplus sample'$;
@@ -39,7 +39,7 @@
   \pas
     \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )$;
-    \State $sample' \leftarrow replace(sample',\,o,\,p);$
+    \State $sample' \leftarrow replace(sample',\,o,\,p);$ \label{line:replace2}
     \State $sendTo(o ,\, sample')$;
     \State $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample') \uplus
     sample$; 
