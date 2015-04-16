@@ -2,36 +2,72 @@
 \section{\SCAMPLON{}}
 \label{sec:proposal}
 
-\SCAMPLON{}\footnote{\SCAMPLONDESCRIPTION{}} is a random peer sampling protocol
-inspired by both \SCAMP{} and \CYCLON{}. \SCAMPLON{} comprises three parts.
-Firstly, \SCAMPLON{} reuses the joining process of \SCAMP{} to incrementally
-build the network. While such network is not flawless, it has the interesting
-property of logarithmically increasing the number of connections at each join,
-compared to the global network size. Still, the newest members have a small
-partial view size, and the oldest peers are more clustered. To alleviates these
-issues, a periodic \CYCLON{}-like protocol takes place in order to balance the
-partial views, using only neighbor-to-neighbor interactions. This balancing
-concerns both the partial view sizes, and the uniformity of chosen peers within
-them.
-
+\SCAMPLON{}\footnote{\SCAMPLONDESCRIPTION{}} is scalable and adaptive random
+peer sampling protocol inspired by both \SCAMP{} and \CYCLON{}. \SCAMPLON{}
+comprises three parts representing the lifecycle of a peer in the network.
+Firstly, \SCAMPLON{}'s joining process incrementally builds the network by
+injecting in it a logarithmically growing number of connections. However, the
+resulting network is far from flawless. Consequently, each peer runs a periodic
+process in order to balance the partial views both in terms of partial view
+size, and uniformity of the chosen peers within them. Quickly, the network
+topology converges to a random graph. Finally, A peer is able to leave at any
+time without giving notice, still the network properties do not degrade. During
+the whole lifecycle, a peer uses local knowledge only and establishes
+connections only with the neighbours of its neighbours.
 
 \subsection{Joining}
 
+The main focus of the joining protocol is about establishing a logarithmically
+growing number of connections in the network compared to the number of members.
+\SCAMPLON{} assumes that each peer has a logarithmic partial view size. Thus,
+when a peer $p_o$ contacts a peer $p_c$ within the network, Peer $p_c$ is able
+to use its partial view size to spread the appropriate number of subscriptions.
+\SCAMPLON{} cautiously establishes connections with the neighbours of
+neighbours. Therefore, the joining protocol at Peer $p_c$ simply forwards the
+identity of $p_o$ to the latter's neigbours where they add it to their partial
+view. Afterwards, $p_o$ is connected to $p_c$, and all the neighbours of $p_c$
+are connected to $p_o$. The total number of connections in the network gently
+increases of $1+ln(|\mathcal{N}|)$.
+
 \begin{algorithm}
 \input{input/joiningalgo.tex}
-\caption{\label{algo:joiningalgo.tex}The joining protocol of \SCAMPLON{}.}
+\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
 \end{algorithm}
+
+Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
+protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
+$\langle n,\, age\rangle$ which associate to the neighbour $n$ the age $age$
+(the age is useful in the periodic protocol). Thus, a neighbour can appear
+mutliple times in the partial view. Second, the algorithm shows the $onSubs$
+event called each time a peer joins the network which simply forwards the
+identity of the joining peer to all neighbors, indifferently of the age. The
+$onFwdSubs$ event is called when a peer receives such forwarded
+subscription. It adds the peer as one of its neighbour with an age set to $0$
+meaning that it is a brand new connection.
+
+(EXAMPLE)
+
+The example shows that the network topology is not ideal after a joining
+protocol. Indeed, the joining peer only has one neighbor in its partial view,
+and all the neigbors of this neighbor have the joining peer in their partial
+view. Consequently, the network is not robust and highly clustered. Hence, we
+need a rebalancing protocol.
 
 \subsection{Cyclic}
 
-\SCAMPLON{} is adaptive, e.g., a peer with $2$ neighbors in its partial view
-can exchange with a peer with $10$ neighbors. Ideally, the resulting size of
-both partial views would be $6$ after the exchange. Yet, reaching this ideal
-value in one cycle is difficult without the knowledge of each other's partial
-view size. Instead of acquiring this knowledge, \SCAMPLON{} aims to converge to
-the ideal value by averaging their view size over exchanges. Therefore, the
-initiating peer $p_1$ sends $\left\lceil|\mathcal{P}_1|\over{2}\right\rceil$
-members to the chosen peer $p_2$ (chosen by age). The latter sends back
+\SCAMPLON{} is a random peer sampling protocol. As such, it must constantly
+renew the connections to handle the churn (when peers join and leave freely).
+To ensure this constant shuffling, \SCAMPLON{} repeats an exchanging procedure
+during which two peers swap their neighbours. The swapping aims to balance both
+the size of partial views and the global distribution of peers among them.
+
+\SCAMPLON{} uses a multiset as partial view without any predefined boundary on
+its size. Thus, a peer with $2$ neighbors in its partial view can exchange with
+a peer with $10$ neighbors. Ideally, the resulting size of both partial views
+would be $6$ after the exchange. \SCAMPLON{} aims to converge to the ideal
+value by averaging their view size over exchanges. Therefore, the initiating
+peer $p_1$ sends $\left\lceil|\mathcal{P}_1|\over{2}\right\rceil$ members to
+the chosen peer $p_2$ (chosen by age). The latter sends back
 $\left\lceil|\mathcal{P}_2|\over{2}\right\rceil$ members too. After the
 receipt, both peers remove the sent members and add the received members. It
 worth noting that \SCAMPLON{} uses a multiset as partial view. Therefore, a

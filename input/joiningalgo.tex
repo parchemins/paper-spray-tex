@@ -27,19 +27,12 @@
     \State $\mathcal{P} \leftarrow \varnothing$;
     \hfill \comment{the partial view is a multiset}
     \State $p$ ; \hfill \comment{identity of the local peer}
-    \State $c \leftarrow 1$;
-    \hfill \comment{additionnal connections when joining}
   \endInitially
   
   \pas
   \Function{onSubs}{$o$} \hfill \comment{$o: origin$}
     \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
     {$sendTo(q,\, 'fwdSubs',\, o)$;}
-    \For {$i \leftarrow 0$ \textbf{to} $c$}
-    \State \textbf{let} $\langle n,\, \_ \,\rangle \leftarrow 
-    \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
-    \State $sendTo( n,\, 'fwdSubs',\, o)$;
-    \EndFor
     \EndFunction
     \Statex
     \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
