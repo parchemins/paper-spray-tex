@@ -6,10 +6,10 @@ compare them to state-of-the-art random peer sampling protocols, \SCAMP{} and \C
 The experiments\footnote{Implementation: https://github.com/anonymous/anonymous4now}
 involve up to 100,000 nodes and are carried out on \PEERSIM{} \cite{peersim}, 
 a simulator for peer-to-peer networks.
-A simulation cycle is defined as $\Delta t$ in which each peer has executed its exchange protocol once.
+We define a cycle as $\Delta t$ in which each peer has executed its active protocol once.
 
-We inspect three properties characteristic for random graphs, namely the
-\emph{average shortest path length}, the \emph{average clustering coefficient},
+We inspect three properties characteristic for random graphs, 
+the \emph{average shortest path length}, the \emph{average clustering coefficient},
 and \emph{the partial view size distribution}. Additionally, we investigate on
 \emph{robustness to random failures}.
 
@@ -26,23 +26,28 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
 \begin{asparadesc}
 \item[Objective:]
     %% Highlight  
-    With this experiment we want to evaluate to what degree \SCAMPLON{} generates clusters in the overlay.
-    To satisfy the random peer sampling objective it is desirable that the network has very few clusters.
+    We want to evaluate to what degree \SCAMPLON{} generates clusters in the overlay.
+    To satisfy the random peer sampling objective it is desired that the network has very few clusters,
+    thus has a low clustering coefficient.
 \item[Description:] 
-   The average clustering coefficient measures the connectivity of each peer's neighborhood in the network.
+    The average clustering coefficient $\overline{C}$  measures the connectivity of each peer's neighborhood in the network.
   \begin{equation}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
     \end{equation}
     where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher
     the coefficient, the more likely the network contains cliques. These
-    experiments involve 100, 1000, and 10000 peers. \CYCLON{} is set to be optimal
-    at 1000 peers with $|\mathcal{P}|$ set to $7$. The exchanges concern $3$
-    neighbors.
+    experiments involve 100, 1000, 10000 and 100000 peers. \CYCLON{} is set to be optimal
+    at 1000 peers with $|\mathcal{P}|$ set to $7$ while using $3$ peers for exchange.
+
+
 \item[Results:]
 
 
 
 \item[Reasons:]
+
+    
+
 \end{asparadesc}
 
 
@@ -57,11 +62,14 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:]
+\item[Objective:] 
+    For messages to disseminate quickly into the network it is crucial 
+    that the shortest path to other peers is, in fact, short.
 \item[Description:] The average path length is the average of the shortest path
   length between peers in the graph. It counts the minimum number of hops to
-  reach a peer from another given peer. The lower the value, the faster a
-  message can reach the whole network.
+  reach a peer from another given peer.
+  For performance reasons, we selected a subset of 7 nodes, calculated their
+  average shortest path and averaged it.
 \item[Results:]
 When undersized, \CYCLON{} yield a shorter average shortest path then \SCAMPLON{}~\ref{fig:clustering}.
 \item[Reasons:]
