@@ -4,7 +4,9 @@
 In this section we examine the properties of \SCAMPLON{} and 
 compare them to the properties of \CYCLON{}, a state-of-the-art cyclic peer sampling service.
 As \CYCLON{} uses a fixed-sized partial view, we optimize it for a network of 1000 peers.
-As shown in this paper\cite{erdos1959random}
+As shown by Erd{\H o}s and R{\' e}nyi\cite{erdos1959random} random graphs with less than 
+$(|\mathcal{N}|*\ln|\mathcal{N}|)$ connections are likely to partition - 
+this is an important property for failure resistance.
 To optimize it for said network size, the partial view size $c$ is set to $7\approx \ln{1000}$
 while in each cycle we exchange $l=3$ peers.
 The experiments\footnote{Implementation: https://github.com/anonymous/anonymous4now}
