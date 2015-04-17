@@ -48,10 +48,10 @@ meaning that it is a brand new connection.
 \begin{figure}
   \centering
   \input{./input/joiningexample.tex}
-  \caption{\label{fig:joiningexample}Joining example.}
+  \caption{\label{fig:joiningexample}Joining example. (TODO).}
 \end{figure}
 
-Figure~\ref{fig:joiningexample} depicts a joining scenario.
+Figure~\ref{fig:joiningexample} depicts a joining scenario. (TODO).
 
 The example shows that the network topology is not ideal after a joining
 protocol. Indeed, the joining peer only has one neighbor in its partial view,
@@ -145,17 +145,11 @@ them remove the sent sample from their view and add the received
 sample. Additionally, the initiating peer removes an occurrence of the chosen
 peer $q$.
 
-\begin{figure*}
+\begin{figure}
   \centering
-  \input{input/scamplonexample.tex}
-  \caption{\label{fig:scamplonexample} Examplary exchange between two peers
-    using \SCAMPLON{}. In this case, Peer $p_1$ initiates an exchange with its
-    oldest neighbor $p_2$ (for simplicity sake, only the partial view of the
-    peers involved in the exchange are explicitly drawn). The network on the
-    left shows the network before the exchange, and the network on the right
-    shows the network after the exchange. After the exchange of peers chosen at
-    random, both peers $p_1$ and $p_2$ have a partial view size of $6$.}
-\end{figure*}
+  \input{input/cyclicexample.tex}
+  \caption{\label{fig:cyclicexample}Example of cycle}
+\end{figure}
 
 Figure~\ref{fig:scamplonexample} (REDO EXAMPLE) depicts an exchanging procedure
 between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its oldest
