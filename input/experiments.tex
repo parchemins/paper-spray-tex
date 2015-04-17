@@ -2,7 +2,10 @@
 \section{Experimentation}
 \label{sec:experiments}
 In this section we examine the properties of \SCAMPLON{} and 
-compare them to state-of-the-art random peer sampling protocols, \SCAMP{} and \CYCLON{}. 
+compare them to the properties of \CYCLON{}, a state-of-the-art cyclic peer sampling service.
+As \CYCLON{} uses a fixed-sized partial view, we optimize it for a network of 1000 peers.
+To optimize it for said network size, the partial view size $c$ is set to $7\approx \ln{1000}$
+while in each cycle we exchange $l=3$ peers.
 The experiments\footnote{Implementation: https://github.com/anonymous/anonymous4now}
 involve up to 100,000 nodes and are carried out on \PEERSIM{} \cite{peersim}, 
 a simulator for peer-to-peer networks.
@@ -35,9 +38,8 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
     \end{equation}
     where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher
-    the coefficient, the more likely the network contains cliques. These
-    experiments involve 100, 1000, 10000 and 100000 peers. \CYCLON{} is set to be optimal
-    at 1000 peers with $|\mathcal{P}|$ set to $7$ while using $3$ peers for exchange.
+    the coefficient, the more likely the network contains cliques. 
+    The experiments involve 100, 1000, 10000 and 100000 peers. 
 
 
 \item[Results:]
