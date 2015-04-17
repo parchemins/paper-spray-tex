@@ -151,7 +151,7 @@ peer $q$.
   \caption{\label{fig:cyclicexample}Example of cycle}
 \end{figure}
 
-Figure~\ref{fig:scamplonexample} (REDO EXAMPLE) depicts an exchanging procedure
+Figure~\ref{fig:cyclicexample} (REDO EXAMPLE) depicts an exchanging procedure
 between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its oldest
 neighbor $p_2$ to perform a neighborhood exchange. The former selects
 $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil-1={4\over{2}}-1=1$ random
@@ -199,7 +199,10 @@ occurrences of this neighbor in the partial view, and removes all of them. The,
 the second loop probabilistically doubles a connection with a known peer. The
 probability depends of the partial view size before the removals.
 
-(EXAMPLE)
+\begin{figure}
+  \input{./input/crashexample.tex}
+  \caption{\label{fig:crashexample}Crash handling example.}
+\end{figure}
 
 Note that extending the algorithms to handle three-way handshake is not
 difficult: it only requires to keep track of the neighbor from where the

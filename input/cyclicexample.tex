@@ -12,7 +12,8 @@
   \draw[->] (-5+2*\X, -5pt) -- (5+\X, -2*\Y);
 
   \draw[->,dashed](0pt,5pt)to[out=70,in=200](-5+\X, 2*\Y); %% 1 -> 6
-  \draw[->](-5+\X,2*\Y)to[out=-110,in=20]node{$\times$}(0pt,5pt); %% 6 -> 1
+  \draw[->,thick](-5+\X,2*\Y)
+  to[out=-110,in=20]node{$\times$}(0pt,5pt); %% 6 -> 1
 
   \draw[->](-5+\X, 1*\Y) -- ( 5pt,5pt);
   \draw[->](-5+\X, -1*\Y) -- ( 5pt,-5pt);
