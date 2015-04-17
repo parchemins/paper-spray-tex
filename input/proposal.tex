@@ -45,7 +45,13 @@ $onFwdSubs$ event is called when a peer receives such forwarded
 subscription. It adds the peer as one of its neighbor with an age set to $0$
 meaning that it is a brand new connection.
 
-(EXAMPLE)
+\begin{figure}
+  \centering
+  \input{./input/joiningexample.tex}
+  \caption{\label{fig:joiningexample}Joining example.}
+\end{figure}
+
+Figure~\ref{fig:joiningexample} depicts a joining scenario.
 
 The example shows that the network topology is not ideal after a joining
 protocol. Indeed, the joining peer only has one neighbor in its partial view,

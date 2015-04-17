@@ -1,0 +1,28 @@
+
+\begin{tikzpicture}[scale=1.15]
+
+  \newcommand\X{35pt};
+  \newcommand\Y{15pt};
+
+  \draw[->,dashed](0*\X, 0*\Y) -- node[anchor=south]{$subs$} (-5+ 2*\X, 0*\Y);
+  \draw[->] (-5+2*\X, 5pt) -- (5+\X, \Y);
+  \draw[->] (-5+2*\X, 5pt) -- node[anchor=south]{$fwdSubs$} (5+\X, 2*\Y);
+  \draw[->] (-5+2*\X, -5pt) -- (5+\X, -\Y);
+  \draw[->] (-5+2*\X, -5pt) -- node[anchor=north]{$fwdSubs$} (5+\X, -2*\Y);
+
+  \draw[->,dashed](-5+\X, 2*\Y) -- ( 5pt,5pt);
+  \draw[->,dashed](-5+\X, 1*\Y) -- ( 5pt,5pt);
+  \draw[->,dashed](-5+\X, -1*\Y) -- ( 5pt,-5pt);
+  \draw[->,dashed](-5+\X, -2*\Y) -- ( 5pt,-5pt);
+
+  \draw[fill=white](0*\X, 0*\Y) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](2*\X, 0*\Y) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+
+  \draw[fill=white](1*\X,2*\Y) node{$p_6$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](1*\X,1*\Y) node{$p_5$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](1*\X,-1*\Y) node{$p_4$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](1*\X,-2*\Y) node{$p_3$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  
+
+
+\end{tikzpicture}
