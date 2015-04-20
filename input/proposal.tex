@@ -107,8 +107,8 @@ $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
   \over{2}}$.
 Furthermore, at each cycle, each peer is involved in the exchange protocol at
 least once (they initiate one), and in the best case 1+Poisson(1) (they
-initiate one and, in average, each peer receives another one). This relation
-being established, we know that \SCAMPLON{} converges exponentially
+initiate one and, in average, each peer receives another one). This
+relation being established, we know that \SCAMPLON{} converges exponentially
 fast. Furthermore, we know that each cycle decreases the variance of the
 overall system at a rate comprised between ${1\over{2}}$ and
 $1\over{2\sqrt{\text{e}}}$.
@@ -215,8 +215,28 @@ probability depends of the partial view size before the removals.
 \begin{figure}
   \input{./input/crashexample.tex}
   \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash handler. The
-    scenario follows from prior examples after few other exchanges. }
+    scenario follows from prior examples after few other exchanges. Peer $p_1$
+    leaves the network without giving notice. With it, $7$ connections are
+    down. Peers $p_3$, $p_4$, and $p_5$ have the crashed/left peer in their
+    partial view. Peer $p_5$ has $1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$
+    chance to replace the dead connections. In this case, it doubles the
+    connection to $p_{13}$. Identically, $p_3$ and $p_4$ detect the
+    crash/leaving and run the appropriate procedure. Only $p_3$ doubles one of
+    its connection. In total, $5$ connections have been removed.}
 \end{figure}
+
+Figure~\ref{fig:crashexample} depicts the \SCAMPLON{}'s crash/leaving
+handler. The example shows that some peers reestablish connections if they
+detect a dead connection. The probability depends on the partial view size of
+each of these peer. In average, one of these peer will likely remove the
+connection while the other peers will double one of their existing
+connections. In this case, Peer $p_1$ injected $5$ connections when it
+joined. It removes $7-2 =5 $ connections when it leaves. The global number of
+connections remains logarithmic compared to the number of members in the
+network. Nevertheless, we can see that connectedness is not entirely guaranteed
+(only with the high probability implied by random graphs). Indeed, if Peer
+$p_1$ is the sole bridge between two clusters, adding connections is not enough
+to ensure connectedness (more details in Section~\ref{subsec:churn}).
 
 Note that extending the algorithms to handle three-way handshake is not
 difficult: it only requires to keep track of the neighbor from where the
