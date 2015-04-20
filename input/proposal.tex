@@ -184,11 +184,12 @@ joining protocol.
 \label{subsec:leaving}
 
 Using \SCAMPLON{}, the peers are free to leave the network without giving
-notice. However, without any appropriate reaction, the network may collapse due
-to an over zealous removal of connections. Indeed, when a peer joins the
-network, it injects in it $1+\ln(|\mathcal{N}|)$ connections. Nevertheless,
-after few exchanges, the partial view of the joining peer becomes populated
-with more neighbors. Then, if this peer leaves, it removes $\ln(|\mathcal{N}|)$
+notice. In that regard, we do not consider the departures and the crashs
+differently.  Without any appropriate reaction, the network may collapse due to
+an over zealous removal of connections. Indeed, when a peer joins the network,
+it injects in it $1+\ln(|\mathcal{N}|)$ connections. Nevertheless, after few
+exchanges, the partial view of the joining peer becomes populated with more
+neighbors. Then, if this peer leaves, it removes $\ln(|\mathcal{N}|)$
 connections from its partial view, and another $\ln(|\mathcal{N}|)$ connections
 from peers which have this peer in their partial view. Therefore, without any
 crash handler, we remove $2\ln(|\mathcal{N}|)$ connections instead of
@@ -203,7 +204,7 @@ removes the number of connections it injected when it joined.
 
 \begin{algorithm}
   \input{./input/unreachablealgo.tex}
-  \caption{\label{algo:unreachable}The crash handler of \SCAMPLON{}.}
+  \caption{\label{algo:unreachable}The crash/leaving handler of \SCAMPLON{}.}
 \end{algorithm}
 
 Algorithm~\ref{algo:unreachable} shows the manner in which \SCAMPLON{} deals
@@ -214,15 +215,16 @@ probability depends of the partial view size before the removals.
 
 \begin{figure}
   \input{./input/crashexample.tex}
-  \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash handler. The
-    scenario follows from prior examples after few other exchanges. Peer $p_1$
-    leaves the network without giving notice. With it, $7$ connections are
-    down. Peers $p_3$, $p_4$, and $p_5$ have the crashed/left peer in their
-    partial view. Peer $p_5$ has $1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$
-    chance to replace the dead connections. In this case, it doubles the
-    connection to $p_{13}$. Identically, $p_3$ and $p_4$ detect the
-    crash/leaving and run the appropriate procedure. Only $p_3$ doubles one of
-    its connection. In total, $5$ connections have been removed.}
+  \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash/leaving
+    handler. The scenario follows from prior examples after few other
+    exchanges. Peer $p_1$ leaves the network without giving notice. With it,
+    $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
+    crashed/left peer in their partial view. Peer $p_5$ has
+    $1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$ chance to replace the dead
+    connections. In this case, it doubles the connection to
+    $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
+    appropriate procedure. Only $p_3$ doubles one of its connection. In total,
+    $5$ connections have been removed.}
 \end{figure}
 
 Figure~\ref{fig:crashexample} depicts the \SCAMPLON{}'s crash/leaving
