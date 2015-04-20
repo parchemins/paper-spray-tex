@@ -29,11 +29,6 @@ view. Afterwards, $p_1$ is connected to $p_2$, and all the neighbors of $p_2$
 are connected to $p_1$. The total number of connections in the network gently
 increases of $1+\ln(|\mathcal{N}|)$.
 
-\begin{algorithm}
-\input{input/joiningalgo.tex}
-\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
-\end{algorithm}
-
 Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
 protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
 $\langle n,\, age\rangle$ which associate to the neighbor $n$ the age $age$
@@ -57,6 +52,11 @@ meaning that it is a brand new connection.
     neighbors adds $p_1$ in their partial view. Five connections have been
     established.}
 \end{figure}
+
+\begin{algorithm}
+\input{input/joiningalgo.tex}
+\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
+\end{algorithm}
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario. Although the
 joining peer is connected to the network, the example shows that the network
@@ -214,7 +214,8 @@ probability depends of the partial view size before the removals.
 
 \begin{figure}
   \input{./input/crashexample.tex}
-  \caption{\label{fig:crashexample}Crash handling example.}
+  \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash handler. The
+    scenario follows from prior examples after few other exchanges. }
 \end{figure}
 
 Note that extending the algorithms to handle three-way handshake is not

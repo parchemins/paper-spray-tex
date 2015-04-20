@@ -132,19 +132,6 @@ on. Then, it highlights the motivations of our approach.
   increases. Thus, it does not scale in number of peers any more.
 \end{asparadesc}
 
-\begin{figure}
-  \centering
-  \input{./input/handshakeexample.tex}
-  \caption{\label{fig:handshakeexample}Handshaking differences of \CYCLON{} and
-    \SCAMP{}. While subscriptions travel from $p_1$ to $p_3$ using one
-    intermediate in \CYCLON{}, the subscriptions travel from $p_1$ to $p_k$ in
-    \SCAMP{}. This difference change the complexity of the two approaches. In
-    particular, the failure probability is much more important in
-    \SCAMP{}. Indeed, links and peers, once employed, must be kept alive until
-    the subscriptions travel back. Otherwise, the handshaking cannot be
-    completed.}
-\end{figure}
-
 \begin{problem}
   Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
   membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial view of peer $p_x \in \mathcal{N}^t$. 
@@ -161,6 +148,19 @@ on. Then, it highlights the motivations of our approach.
     Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
   \end{center}
 \end{problem}
+
+\begin{figure}
+  \centering
+  \input{./input/handshakeexample.tex}
+  \caption{\label{fig:handshakeexample}Handshaking differences of \CYCLON{} and
+    \SCAMP{}. While subscriptions travel from $p_1$ to $p_3$ using one
+    intermediate in \CYCLON{}, the subscriptions travel from $p_1$ to $p_k$ in
+    \SCAMP{}. This difference change the complexity of the two approaches. In
+    particular, the failure probability is much more important in
+    \SCAMP{}. Indeed, links and peers, once employed, must be kept alive until
+    the subscriptions travel back. Otherwise, the handshaking cannot be
+    completed.}
+\end{figure}
 
 Unfortunately, while both approaches converge exponentially fast to a random
 graph, each of them fails either on the partial view size requirement
