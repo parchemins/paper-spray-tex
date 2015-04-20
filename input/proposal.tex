@@ -27,7 +27,7 @@ neighbors. Therefore, the joining protocol at Peer $p_2$ simply forwards the
 identity of $p_1$ to the latter's neighbors where they add it to their partial
 view. Afterwards, $p_1$ is connected to $p_2$, and all the neighbors of $p_2$
 are connected to $p_1$. The total number of connections in the network gently
-increases of $1+ln(|\mathcal{N}|)$.
+increases of $1+\ln(|\mathcal{N}|)$.
 
 \begin{algorithm}
 \input{input/joiningalgo.tex}
@@ -48,16 +48,23 @@ meaning that it is a brand new connection.
 \begin{figure}
   \centering
   \input{./input/joiningexample.tex}
-  \caption{\label{fig:joiningexample}Joining example. (TODO).}
+  \caption{\label{fig:joiningexample}Example of the \SCAMPLON{}'s joining
+    protocol. In this scenario, Peer $p_1$ contacts $p_2$ to join the network
+    composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$ (for simplicity sake, only
+    the new connections and the neighborhood of $p_1$ and $p_2$ are
+    displayed). Peer $p_1$ directly adds $p_2$ in its partial view. Peer $p_2$
+    forwards the identity of $p_1$ to its neighborhood. Each of these
+    neighbors adds $p_1$ in their partial view. Five connections have been
+    established.}
 \end{figure}
 
-Figure~\ref{fig:joiningexample} depicts a joining scenario. (TODO).
-
-The example shows that the network topology is not ideal after a joining
-protocol. Indeed, the joining peer only has one neighbor in its partial view,
-and all the neighbors of this neighbor have the joining peer in their partial
-view. Consequently, the network is not robust and highly clustered. Hence, we
-need a rebalancing protocol.
+Figure~\ref{fig:joiningexample} depicts a joining scenario. Although the
+joining peer is connected to the network, the example shows that the network
+topology is not ideal after a joining protocol. Indeed, the joining peer only
+has one neighbor in its partial view, and all the neighbors of this neighbor
+have the joining peer in their partial view. Consequently, the network is not
+robust and highly clustered. Churn puts the connectedness at risk. To avoid it,
+\SCAMPLON{} needs a balancing protocol.
 
 \subsection{Cyclic}
 
@@ -148,24 +155,30 @@ peer $q$.
 \begin{figure}
   \centering
   \input{input/cyclicexample.tex}
-  \caption{\label{fig:cyclicexample}Example of cycle}
+  \caption{\label{fig:cyclicexample}Example of the \SCAMPLON{}'s cyclic
+    protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
+    $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
+    (the oldest among the $p_6$'s partial view). It randomly chooses
+    $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer among its
+    neighborhood. In this case, it picks $p_9$ from $\{p_9,\,p_8,\,p_7\}$.  It
+    sends the chosen peer plus its own identity to Peer $p_1$. In response, the
+    latter picks $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer
+    from its partial view. It sends back its sole neighbor $p_2$ and directly
+    adds the received neighbor to its partial view. After receipt, Peer $p_6$
+    removes the sent neighbors from its partial view, removes an occurrence of
+    $p_1$, and adds the received peer from $p_1$. The peers $\{p_6,\,p_9\}$
+    compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
+    the $p_6$'s partial view.}
 \end{figure}
 
-Figure~\ref{fig:cyclicexample} (REDO EXAMPLE) depicts an exchanging procedure
-between two peers $p_1$ and $p_2$. The initiating peer $p_1$ chooses its oldest
-neighbor $p_2$ to perform a neighborhood exchange. The former selects
-$\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil-1={4\over{2}}-1=1$ random
-peer among its neighborhood, here $\left\{p_1\right\}$. To this sample, it adds
-a reference to itself and sends the exchange message to $p_2$. The receipt of
-the message triggers the $onExchange$ event at Peer $p_2$. Hence, the latter
-chooses $\left\lceil{|\mathcal{P}_2|\over{2}}\right\rceil= {8\over{2}}=4$
-random neighbors from its partial view to send back to Peer $p_1$. In this
-example it chooses $\{p_6,\,p_7,\,p_8,\,p_9\}$ and sends it to
-$p_1$. Afterwards, Peer $p_2$ cuts the connections to the peers it sent and
-creates new one with the received peer from $p_1$. Peer $p_1$ does the same,
-and additionally removes the connection chosen for the exchange, i.e., the
-connection to $p_2$. Afterwards, both partial view contains $6$
-neighbors. Also, we can see that $p_1$ contains two times Peer $p_6$.
+Figure~\ref{fig:cyclicexample} depicts the \SCAMPLON{}'s cyclic procedure. The
+example shows that, at first, the initiating peer has $4$ peers in its partial
+view, while the receiving peer has only $1$ peer. Then, after the exchange, the
+former has $3$ neighbors including $1$ new peer. The receiving peer has $2$
+neighbors, and both of them are new. Thus, the periodic procedure tends to
+even up the partial view size of network members. It also scatters neighbors in
+order to remove the highly clustered groups which may appear because of the
+joining protocol.
 
 \subsection{Leaving}
 \label{subsec:leaving}
@@ -173,20 +186,20 @@ neighbors. Also, we can see that $p_1$ contains two times Peer $p_6$.
 Using \SCAMPLON{}, the peers are free to leave the network without giving
 notice. However, without any appropriate reaction, the network may collapse due
 to an over zealous removal of connections. Indeed, when a peer joins the
-network, it injects in it $1+ln(|\mathcal{N}|)$ connections. Nevertheless,
+network, it injects in it $1+\ln(|\mathcal{N}|)$ connections. Nevertheless,
 after few exchanges, the partial view of the joining peer becomes populated
-with more neighbors. Then, if this peer leaves, it removes $ln(|\mathcal{N}|)$
-connections from its partial view, and another $ln(|\mathcal{N}|)$ connections
+with more neighbors. Then, if this peer leaves, it removes $\ln(|\mathcal{N}|)$
+connections from its partial view, and another $\ln(|\mathcal{N}|)$ connections
 from peers which have this peer in their partial view. Therefore, without any
-crash handler, we remove $2ln(|\mathcal{N}|)$ connections instead of
-$1+ln(|\mathcal{N}|)$. To alleviate this issue, each peer that detects a crash
-may reestablish a connection with anyone in its neighborhood (which will
-spread in the network over the exchanges). The probability of reestablishing a
+crash handler, we remove $2\ln(|\mathcal{N}|)$ connections instead of
+$1+\ln(|\mathcal{N}|)$. To alleviate this issue, each peer that detects a crash
+may reestablish a connection with anyone in its neighborhood (which will spread
+in the network over the exchanges). The probability of reestablishing a
 connection is $1-{1\over{|\mathcal{P}|}}$. Since
-${|\mathcal{P}|}\approx ln(|\mathcal{N}|)$ peers have the crashed peer in their
-partial view, it is likely that all of them will reestablish a connection,
-excepted one. Therefore, when a peer leaves, it approximately removes the
-number of connections it injected when it joined.
+${|\mathcal{P}|}\approx \ln(|\mathcal{N}|)$ peers have the crashed peer in
+their partial view, it is likely that all of them will reestablish a
+connection, excepted one. Therefore, when a peer leaves, it approximately
+removes the number of connections it injected when it joined.
 
 \begin{algorithm}
   \input{./input/unreachablealgo.tex}
