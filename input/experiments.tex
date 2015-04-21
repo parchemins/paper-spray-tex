@@ -1,16 +1,19 @@
-
 \section{Experimentation}
 \label{sec:experiments}
 In this section we examine the properties of \SCAMPLON{} and 
-compare them to the properties of \CYCLON{}, a state-of-the-art cyclic peer sampling service.
-As \CYCLON{} uses a fixed-sized partial view, we optimize it for a network of 1000 peers.
+compare them to properties of \CYCLON{}, a state-of-the-art cyclic peer sampling service.
+As \CYCLON{} uses fixed-sized partial views, we must predefine its partial view size $c$.
 As shown by Erd{\H o}s and R{\' e}nyi\cite{erdos1959random} random graphs with less than 
 $(|\mathcal{N}|*\ln|\mathcal{N}|)$ connections are likely to partition - 
-this is an important property for failure resistance.
-To optimize it for said network size, the partial view size $c$ is set to $7\approx \ln{1000}$
-while in each cycle we exchange $l=3$ peers.
+which is not desired for random peer sampling services.
+We want \CYCLON{} to be optimal for a network size of 1000 peers so we set the partial view size 
+to $c=7\approx \ln{1000}$ while in each cycle we exchange $l=3$ peers.
+We call \CYCLON{} 
+undersized when $\ln{|\mathcal{N}}| > c$, 
+oversized when $\ln{|\mathcal{N}|} < c$ and 
+optimal when $\ln{|\mathcal{N}|} \approx c$.
 The experiments\footnote{Implementation: https://github.com/anonymous/anonymous4now}
-involve up to 100,000 nodes and are carried out on \PEERSIM{} \cite{peersim}, 
+involve up to 500,000 nodes and are carried out on \PEERSIM{} \cite{peersim}, 
 a simulator for peer-to-peer networks.
 We define a cycle as $\Delta t$ in which each peer has executed its active protocol once.
 
@@ -47,11 +50,18 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
 
 \item[Results:]
 
-
+    Figure \ref{fig:clustering} shows that \SCAMPLON{} converges much quicker than \CYCLON{}.
+    Furthermore, oversized \CYCLON{} converges to a higher value than \SCAMPLON while 
+    it converges to a lower one when undersized.
 
 \item[Reasons:]
 
-    
+    The experiments yield the expected results: 
+    \SCAMPLON{} converges much quicker as it is not constraint by a fixed, artificial barrier $l$.
+    On the other hand, \CYCLON{} yields a lower clustering coefficient on convergence when undersized.
+    This can be explained by the fact that peers in an undersized \CYCLON{} overlay have less connections and 
+    thus have a lower probability of forming cliques.
+    This, however, makes it more vulnerable to node failure and churn.
 
 \end{asparadesc}
 
@@ -81,19 +91,27 @@ When undersized, \CYCLON{} yield a shorter average shortest path then \SCAMPLON{
 \end{asparadesc}
 
 \subsection{Partial view size distribution}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\textwidth]{img/histo.eps}
+    \caption{In-degree distribution}
+    \label{fig:histo}
+\end{figure}
 
 \subsection{Resilience to failure}
 
 \subsection{Churn}
-
-\label{subsec:churn}
-
 \begin{figure}
     \centering
     \includegraphics[width=0.49\textwidth]{img/churn.eps}
     \caption{Churn}
     \label{fig:churn}
 \end{figure}
+
+\label{subsec:churn}
+
+
+
 
 \begin{algorithm}
 \input{input/unsubscriptionalgo.tex}
