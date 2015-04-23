@@ -36,8 +36,14 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
 \item[Objective:]
     %% Highlight  
     We want to evaluate to what degree \SCAMPLON{} generates clusters in the overlay.
-    To satisfy the random peer sampling objective it is desired that the network has very few clusters,
+    To satisfy the random peer sampling objective it is desired that the network has few clusters,
     thus has a sufficiently low clustering coefficient.
+    This is important for various reasons:
+    first: highly clustered networks show poor load-balancing when messages are broadcast as
+    peers have a high chance of receiving a message multiple times through their neighbors;
+    and second: A network consisting of poorly connected clusters is less robust regarding peers failing
+    or simply leaving the overlay to disconnect the graph. 
+    % load balancing, everyone is as important as the others, robustness
 \item[Description:] 
     The average clustering coefficient $\overline{C}$  measures the connectivity of each peer's neighborhood in the network.
   \begin{equation}
@@ -77,7 +83,9 @@ and \emph{the partial view size distribution}. Additionally, we investigate on
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] 
+\item[Objective:]
+    In this experiment we examine the shortest path length that peers have to 
+    all other nodes in the network.
     For messages to disseminate quickly into the network it is crucial 
     that the shortest path to other peers is, in fact, short.
 \item[Description:] 
