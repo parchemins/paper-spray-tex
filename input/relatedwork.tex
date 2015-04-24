@@ -2,8 +2,52 @@
 \section{Related work}
 \label{sec:relatedwork}
 
+Part of the scalable membership protocols use the
+broadcast~\cite{eugster2003lightweight, tolgyeski2009adaptive} to advertise the
+existence of the members in the network. The messages contain members' identity
+and timestamps. Nevertheless, the peers maintain a fixed-size partial view to
+remove old entries as fresh ones arrive. This mechanism allows fast discarding
+of the left/departed members but the graph converge to a topology depending of
+the advertising frequency of each peers. On the other side, \SCAMPLON{} is
+adaptive. Thus the partial views grow and shrink reflecting the network
+size. Furthermore, the graph converges to a random topology over exchanges, and
+only the convergence speed is impacted by different frequencies of the periodic
+protocol. Among scalable network membership protocols,
+\CYCLON{}~\cite{voulgaris2005cyclon} and \SCAMP{}~\cite{ganesh2003peer}
+(cf. Section~\ref{sec:background}) are closer to \SCAMPLON{}. In \CYCLON{}, the
+peers have a fixed-size partial view. Thus, the developers must foresee the
+maximum size of the network implied by their application. Then, they can
+configure the partial view size, the size of messages in each exchanges, and
+the frequency of the exchanges. Except for the latter, these decisions cannot
+be safely retracted.  \SCAMPLON{} alleviates these issues since the only
+configuration concerns the exchanging frequency. Like \SCAMP{}, the partial
+view size of \SCAMPLON{} adapts to the network membership. However, while the
+complexity of connections depends of the size of the network in the \SCAMP{}
+case, \SCAMPLON{} only use constant time connections. Therefore, the latter is
+more robust to message failures at the price of a slower convergence to a
+random graph topology.
+
+To foresee the size of the partial view, one could use a network size
+estimator. There exists a plethora of network size estimator, either using
+\begin{inparaenum}[(i)]
+\item sampling techniques~\cite{mane05network, ganesh2007peer,
+    kostoulas2007active} which analyze a network subset and deduce the network
+  size using probabilistic functions,
+\item sketching techniques~\cite{flajolet2008hyperloglog, baquero2012extrema}
+  which use hashing to compress the high amount of data and deduce the network
+  size using the collisions,
+\item averaging techniques~\cite{jelasity2004epidemic} which use aggregations
+  that converge over exchanges to a value which depends of the network size.
+\end{inparaenum}
+The drawbacks of these approaches lie in their cost (e.g. communication
+overhead) and/or their assumptions (e.g. a static network). On the other hand,
+\SCAMPLON{} provides partial views logarithmically growing compared to the
+network size. Thus, it does not imply any overhead since it converges to a
+random graph by design. Conversely, \SCAMPLON{} cannot provide a precise
+estimation of the network size.
+
 Currently, the ecosystem of distributed browser-embedded applications is
-blooming~\cite{firefoxhello,sharefest,webtorrent}. Indeed, the arrival of
+blooming~\cite{firefoxhello, sharefest, webtorrent}. Indeed, the arrival of
 peer-to-peer within modern browsers opened the gate to a large variety of
 real-time distributed web applications, previously quartered to standalone
 applications. As consequence, they become accessible to a larger audience. A
@@ -20,26 +64,6 @@ well-adapted to such context. Using \SCAMPLON{}, the network is connected, yet
 using few connections. Therefore, the broadcast messages reach all members very
 efficiently.
 
-To foresee the size of the partial view, one could use a network size
-estimator. There exists a plethora of network size
-estimator~\cite{jelasity2004epidemic, ganesh2007peer, kostoulas2007active,
-  baquero2012extrema}, either using
-\begin{inparaenum}[(i)]
-\item sampling techniques~\cite{mane05network, ganesh2007peer,
-    kostoulas2007active} which analyze a network subset and deduce the network
-  size using probabilistic functions,
-\item sketching techniques~\cite{baquero2012extrema} which use hashing to
-  compress the high amount of data and deduce the network size using the
-  collisions,
-\item averaging techniques~\cite{jelasity2004epidemic} which use aggregations
-  that converge over exchanges to a value which depends of the network size.
-\end{inparaenum}
-The drawbacks of these approaches lie in their cost (e.g. communication
-overhead) and/or their assumptions (e.g. a static network). On the other hand,
-\SCAMPLON{} provides partial views logarithmically growing compared to the
-network size. Thus, it does not imply any overhead since it converges to a
-random graph by design. Conversely, \SCAMPLON{} cannot provide a precise
-estimation of the network size.
 
 %%% Local Variables:
 %%% mode: latex
