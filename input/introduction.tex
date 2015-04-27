@@ -1,40 +1,46 @@
 
 \section{Introduction}
 
-Recently, WebRTC~\cite{webrtc} allowed the connection establishment between
-web browsers, even with complex network settings such as firewall, proxies or
-Net Address Translation (NAT).  Some attractive applications such as Firefox
+Recently, WebRTC~\cite{webrtc} allowed the connection establishment between web
+browsers, even with complex network settings such as firewall, proxies or Net
+Address Translation (NAT).  Some attractive applications such as Firefox
 Hello~\cite{firefoxhello} or WebTorrent~\cite{webtorrent} demonstrate how
 video-conferencing or file-sharing directly within browsers becomes simple of
 access to end-users without third-party providers. However, several distributed
-applications such as distributed collaborative editing (REF) require the
+applications such as distributed collaborative editors (REFs) require the
 ability to broadcast messages to a potentially large number of
-participants. Traditionally, gossiping algorithms (REF) achieve such
-broadcast. Unfortunately, the current gossiping algorithms in a WebRTC network
-raises reliability and efficiency issues.
+participants. Traditionally, gossiping algorithms~\cite{eugster2003lightweight,
+  tolgyeski2009adaptive} achieve such broadcast in a scalable way by using a
+sample of the whole network. Unfortunately, the sampling
+protocols~\cite{eugster2003lightweight, tolgyeski2009adaptive, ganesh2003peer,
+  jelasity2004peer, voulgaris2005cyclon} raises efficiency and robustness
+issues in the WebRTC context.
 
-Gossiping requires that each participant maintains connections with a uniform
-sample of other participants~\cite{jelasity2004peer}. The sample, called
-partial view, can grow logarithmically compared to the number of participants
-and yet providing connectivity with high probability. Still, the neighborhood
-must be constantly renewed in order to prevent network partitions. In WebRTC,
-establishing a browser-to-browser connection requires a three-way handshake
-which is much more costly and likely to fail compared to traditional
-setting. Consequently, existing gossiping algorithms (REFs) will either be
-resource intensive, or fail to maintain a connected network.
+Scalable gossiping requires that each member maintains connections with a
+uniform sample of the other members. The sample, called partial view, can grow
+logarithmically compared to the number of participants and yet providing
+connectivity with high probability~\cite{erdos1959random}. Still, the
+neighborhood must be constantly renewed in order to prevent network partitions
+due to churn (i.e. members join and leave freely). In WebRTC, establishing a
+browser-to-browser connection requires a three-way handshake which is much more
+costly and likely to fail compared to traditional setting. In such context,
+state-of-the-art random peer sampling protocols either lack of robustness or
+have resource intensive requirements.
 
-Knowingly, the main challenge is about
+Knowingly, the challenge is about
 \begin{inparaenum}[(i)]
 \item keeping an optimal $\Theta(\ln |\mathcal{N}|)$ on the number of
-    connections alive\cite{erdos1959random} (where $\mathcal{N}$ is the set of network members),
+  connections alive\cite{erdos1959random} (where $\mathcal{N}$ is the set of
+  network members),
 \item keeping an optimal $O(1)$ complexity on connection establishments,
 \item keeping an optimal $\Theta(\exp \, t^{-1})$ convergence speed to a random
   graph (where $t$ is an arbitrary time frame).
 \end{inparaenum}
 
-In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol which
-provides the desired properties described in the aforementioned problem
-statement.
+In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
+inspired by both \SCAMP{}~\cite{ganesh2003peer} and
+\CYCLON{}~\cite{voulgaris2005cyclon}. It provides the desired properties
+described in the aforementioned problem statement.
 \begin{inparaenum}[(i)]
 \item It dynamically adapts the neighborhood of each peer. Thus, the number of
   connections grows logarithmically compared to the size of the network.
@@ -43,9 +49,9 @@ statement.
 \item It converges exponentially fast to a random graph. Thus, the network
   becomes quickly resilient to failure, can broadcast messages efficiently etc.
 \end{inparaenum}
-Knowingly, it outperforms state-of-the-art approaches in the traditional
+Knowingly, it improves state-of-the-art approaches in the traditional
 connection set-up. This improvement is crucial in the three-way connection
-set-up.
+set-up and opens the gate to a vast variety of distributed applications.
 
 
 The rest of this paper is organized as follow: Section~\ref{sec:background}

@@ -87,6 +87,11 @@ other. Since the partial views are multisets, even if a neighbor appears
 multiple times, the network does not lose any connection. It guarantees that
 the global number of connections after the protocol does not change.
 
+\begin{algorithm}[b] %% to change if repositionning possible
+  \input{./input/cyclicalgo.tex}
+  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
+\end{algorithm}
+
 There exists a close relationship between \SCAMPLON{} and the proactive
 aggregation protocol introduced
 in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
@@ -113,10 +118,26 @@ fast. Furthermore, we know that each cycle decreases the variance of the
 overall system at a rate comprised between ${1\over{2}}$ and
 $1\over{2\sqrt{\text{e}}}$.
 
-\begin{algorithm}
-  \input{./input/cyclicalgo.tex}
-  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
-\end{algorithm}
+
+\begin{figure}
+  \centering
+  \input{input/cyclicexample.tex}
+  \caption{\label{fig:cyclicexample}Example of the \SCAMPLON{}'s cyclic
+    protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
+    $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
+    (the oldest among the $p_6$'s partial view). It randomly chooses
+    $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer among its
+    neighborhood. In this case, it picks $p_9$ from $\{p_9,\,p_8,\,p_7\}$.  It
+    sends the chosen peer plus its own identity to Peer $p_1$. In response, the
+    latter picks $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer
+    from its partial view. It sends back its sole neighbor $p_2$ and directly
+    adds the received neighbor to its partial view. After receipt, Peer $p_6$
+    removes the sent neighbors from its partial view, removes an occurrence of
+    $p_1$, and adds the received peer from $p_1$. The peers $\{p_6,\,p_9\}$
+    compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
+    the $p_6$'s partial view.}
+\end{figure}
+
 
 Algorithm~\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at each
 peer. It is divided between an active thread looping to update the partial
@@ -152,24 +173,7 @@ them remove the sent sample from their view and add the received
 sample. Additionally, the initiating peer removes an occurrence of the chosen
 peer $q$.
 
-\begin{figure}
-  \centering
-  \input{input/cyclicexample.tex}
-  \caption{\label{fig:cyclicexample}Example of the \SCAMPLON{}'s cyclic
-    protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
-    $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
-    (the oldest among the $p_6$'s partial view). It randomly chooses
-    $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer among its
-    neighborhood. In this case, it picks $p_9$ from $\{p_9,\,p_8,\,p_7\}$.  It
-    sends the chosen peer plus its own identity to Peer $p_1$. In response, the
-    latter picks $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer
-    from its partial view. It sends back its sole neighbor $p_2$ and directly
-    adds the received neighbor to its partial view. After receipt, Peer $p_6$
-    removes the sent neighbors from its partial view, removes an occurrence of
-    $p_1$, and adds the received peer from $p_1$. The peers $\{p_6,\,p_9\}$
-    compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
-    the $p_6$'s partial view.}
-\end{figure}
+
 
 Figure~\ref{fig:cyclicexample} depicts the \SCAMPLON{}'s cyclic procedure. The
 example shows that, at first, the initiating peer has $4$ peers in its partial

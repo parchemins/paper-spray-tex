@@ -117,14 +117,14 @@ on. Then, it highlights the motivations of our approach.
   when it holds the subscription, without possible recovery. Let $P_E$ the
   probability that a connection establishment cannot be completed. Without
   three-way handshake, $P_E$ is straightforward:
-  \begin{equation} P_{E,\,1way}^{SCAMP}=1-(1- P_f)^{k+1} \end{equation} where
+  \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} where
   $k$ is the number of hops before the acceptance of the subscription, i.e.,
   there are $2$ hops at least. Indeed, the first peer cannot directly accept
   the subscription. On the other hand, in the handshaking context, the
   subscription must travel back to its origin in order to be completed. As
   consequence, when a subscription travels through a peer or a link, they are
   not allowed to fail until the subscription travels back. Thus, we obtain:
-  \begin{align} P_{E,\,3way}^{SCAMP} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
+  \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
                                        \ldots (1-P_f)^2) \nonumber \\
                                      &=1-(1-P_f)^{k^2+3k+2}
   \end{align}
