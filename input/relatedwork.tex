@@ -36,8 +36,9 @@ estimator. There exists a plethora of network size estimator, either using
 \item sketching techniques~\cite{flajolet2008hyperloglog, baquero2012extrema}
   which use hashing to compress the high amount of data and deduce the network
   size using the collisions,
-\item averaging techniques~\cite{jelasity2004epidemic} which use aggregations
-  that converge over exchanges to a value which depends of the network size.
+\item averaging techniques~\cite{jelasity2004epidemic, blasa2011symmetric}
+  which use aggregations that converge over exchanges to a value which depends
+  of the network size.
 \end{inparaenum}
 The drawbacks of these approaches lie in their cost (e.g. communication
 overhead) and/or their assumptions (e.g. a static network). On the other hand,

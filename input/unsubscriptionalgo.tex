@@ -23,13 +23,14 @@
 \begin{algorithmic}[1]
   \Statex
   \initially
-  \State $\mathcal{I}$ \hfill 
+  \State $\mathcal{I}$ \hfill \label{line:inview}
   \comment{set of peers targeting us ($p$) in their partial view}
   \endInitially
 
   \pas
     \Function{unSubscribe}{\ }
-    \For{$i\leftarrow 0$ \textbf{to} $min(|\mathcal{P}|,\, |\mathcal{P}|-c-1)$}
+    \For{$i\leftarrow 0$ \textbf{to} $min(|\mathcal{P}|,\, |\mathcal{P}|-1)$ 
+      \label{line:bridge}}    
     \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow \mathcal{P}[i]$;
     \State $sendTo(\, \mathcal{I}[\,i\%|\mathcal{I}|\,],\, 'unSubs',\, n)$;
     \EndFor
