@@ -6,30 +6,37 @@ In this paper, we introduced a random peer sampling approach called
 \SCAMPLON{}.  This new approach, inspired of two state-of-the-art approaches,
 namely \SCAMP{} and \CYCLON{}, provide the best of both worlds:
 \begin{inparaenum}[(i)]
-\item logarithmically growing partial views compared to the global network
-  size,
-\item a quick convergence to a random graph
-\item using neighbor-to-neighbor interactions.
+\item logarithmically growing partial views reflecting the global network size,
+\item constant time complexity on connection establishments using solely
+  neighbor-to-neighbor interactions,
+\item exponentially fast convergence a random graph.
 \end{inparaenum}
-As such, \SCAMPLON{} outperforms its parents in the context of 1-way connection
-establishments. In addition, it greatly outperforms state-of-the-art in the
-3-way handshake connection establishment set-up which becomes increasingly
-important with recent technologies such as WebRTC that allows peer-to-peer
-connection within modern browser. Since, random peer sampling constitutes the
-ground of many decentralized applications.
+As such, \SCAMPLON{} constitutes an improvement over state-of-the-art
+approaches in the traditional context of 1-way connection establishments. In
+addition, the improvement becomes crucial in the 3-way handshake connection
+set-up which is increasingly important since recent technologies (e.g. WebRTC)
+allow peer-to-peer connections between modern web browsers. Random peer
+sampling protocols constitute the ground of many decentralized applications.
+Thus, we expect that decentralized applications (requiring scalable broadcast
+among other) will flourish in web browsers, while they were previously
+quartered to standalone applications.
 
-Future work includes an analysis of the chosen size of exchanges in
-\SCAMPLON{}. Indeed, currently, each peer choose a linear number of neighbors
-to exchange compared to the size of partial view:
-$\left\lceil |\mathcal{P}|\over{2} \right\rceil$. Nevertheless, the paper
-introducing \CYCLON{} shows that a small subset of the partial view is enough
-to provide a nearly optimal convergence speed. Thus, it lowers the network
-overhead induced by the partial view exchanges at a relatively small price.
-
-Future work also includes a Javascript implementation using WebRTC. While
-experimentation of this paper shows the results of Peersim simulations, the
-real implementation would open the gate to emulations, and even real
-peer-to-peer decentralized applications (MOAR).
+Future work includes an analysis of doubles in the \SCAMPLON{}'s partial views.
+Intuitively, these artifacts do not exist in infinite random graphs. However,
+in small networks, they are much more likely to exist. We intend to measure
+these redundant identities and to what extent they become a threat to the
+random topology.  We also want to extend the adaptive partial views to topology
+managers that rely on random peer sampling protocols such as
+T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. For
+instance, it is possible to build a topology based on preferences. Current
+approaches have a fixed-size view of the most closely related neighbors. Once
+again, it may lead to waste in efficiency. On the other hand, if the view size
+could adapt to the size of a cluster (if the topology creates disjoint
+clusters), it would improve the traffic, robustness, etc. Finally, future work
+includes a Javascript implementation using WebRTC. While experimentation of
+this paper shows the results of Peersim simulations, the real implementation
+would open the gate to emulations, and even real peer-to-peer distributed and
+decentralized applications.
 
 %%% Local Variables:
 %%% mode: latex
