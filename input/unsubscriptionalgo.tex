@@ -29,10 +29,10 @@
 
   \pas
     \Function{unSubscribe}{\ }
-    \For{$i\leftarrow 0$ \textbf{to} $min(|\mathcal{P}|,\, |\mathcal{P}|-1)$ 
+    \For{$i\leftarrow 0$ \textbf{to} $\max(0,\, |\mathcal{P}|-1)$ 
       \label{line:bridge}}    
     \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow \mathcal{P}[i]$;
-    \State $sendTo(\, \mathcal{I}[\,i\%|\mathcal{I}|\,],\, 'unSubs',\, n)$;
+    \State $sendTo(\, \mathcal{I}[\,i\bmod|\mathcal{I}|\,],\, 'unSubs',\, n)$;
     \EndFor
     \EndFunction
     \Statex
