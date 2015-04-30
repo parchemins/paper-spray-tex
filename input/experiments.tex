@@ -104,7 +104,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{asparadesc}
 \item[Objective:] As the degree distribution shows the existence of both,
   weakly connected peers as well as strongly connected hubs, it helps to
-  analyse the robustness of the overlay when failure is present.  Additionally,
+  analyze the robustness of the overlay when failure is present.  Additionally,
   it indicates how well-distributed links in the network are which
   helps to approximate the resource usage across peers.
 \item[Description:] As the overlay can be represented as a directed graph we
@@ -122,7 +122,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
   behavior.  In \SCAMPLON{} the distribution is much more fluid...
 \end{asparadesc}
 
-\subsection{Churn}
+\subsection{Dynamic network}
 
 \begin{figure}
   \centering
@@ -131,13 +131,51 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] 
-\item[Description:] 
-\item[Results:]
-\item[Reasons:]
+\item[Objective:] To highlight that \SCAMPLON{} is adaptive, i.e., the total
+  number of connections reflects the network membership. Furthermore, the
+  connections are quickly spread among the members.
+\item[Description:] The first half of the experimentation, $2,500$ peers are
+  added $4$ times successively by intervals of $10$ cycles each. Thus, the
+  network size goes from $0$ to $10,000$ peers in $40$ rounds. Then, half of
+  the network leaves without giving notice ($5,000$ peers). Finally, $2,500$
+  peers join two additionnal times. The final network size is $10,000$
+  members. The measurements concern
+  \begin{inparaenum}
+  \item the number of connections in the network over cycles,
+  \item the variance of the partial view sizes over cycles
+    (cf. Section~\ref{subsec:cyclic}).
+  \end{inparaenum}
+\item[Results:] Figure~\ref{fig:churn} shows the result of the experiment. The
+  x-axis represents the cycles (i.e. the arbitrary unit time frame). The top
+  figure shows the number of connections established in the network (scale
+  $\times 10^3$). The bottom figure shows the variance in the partial view size
+  of the members. We can see that at each batch of joinings, the connection
+  number grows to reflect the needs of the new network membership. The
+  observation is consistent with the variance measures. Indeed, at each batch
+  of insertions, the variance suddenly grows. Then, it exponentially decreases
+  and converges to zero in less than $10$ cycles. The variance is higher when
+  the network size is lower. For instance, the first $2,500$ peers lead to the
+  highest variance. At the $40^{th}$ rounds, half of the peers
+  leave/crash. Around half of the connections are directly removed without
+  disturbing the variance of partial views. The $10$ following cycles show a
+  slight decrease of connections. Then new members are introduced in the
+  network yielding the same results as earlier joinings.
+\item[Reasons:] Since the partial views of \SCAMPLON{} adapt themselves to the
+  network size, the number of connections grows as the network membership
+  grows.  The peaks in variance correspond to the joining parts of the
+  experiment. The disparity comes from the fact that new peers arrive in the
+  network with a small partial view. The peaks are smaller when the network is
+  larger. Indeed, the peers - which already were network members before the new
+  arrivals - had a few rounds to exchanges and even up their partial views. As
+  consequence, it lessens the weight of joinings. The removal of $5,000$ peers
+  do not disturb the variance since they are made at random. Thus, no peers
+  suffer more of these removals than others. The slightly decreasing number of
+  connections after the removal is due to peers realizing that some connections
+  are dead, leading to a probabilistic removal
+  (cf. Algorithm~\ref{algo:unreachable}).
 \end{asparadesc}
 
-\subsection{Resilience to failure}
+\subsection{Robustness}
 \label{subsec:resilience}
 
 \begin{figure}
@@ -162,7 +200,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
   peers which have a particular peer in their partial view populate the
   latter's in view. When a peer leaves, it actively contributes to repair the
   network by acting like a bridge between its in view $\mathcal{I}$ and its
-  partial view $\mathcal{P}$. As consequence, the neigbors from $\mathcal{I}$
+  partial view $\mathcal{P}$. As consequence, the neighbors from $\mathcal{I}$
   add each peer from the leaving peer's partial view in their own partial view.
   Except for one peer (cf. Line~\ref{line:bridge}), it guarantees that these
   peers stay connected, i.e., that at least one partial view references them.
