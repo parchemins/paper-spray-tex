@@ -29,7 +29,10 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/cluster.eps}
-  \caption{\label{fig:clustering}Clustering coefficient}
+  \caption{\label{fig:clustering}The Clustering coefficient of \SCAMPLON{} and
+      \CYCLON{}: the x-axis denotes the elapsed time in cycles while the y-axis
+      denotes the $\log_{10}$-scaled clustering coefficient.
+  }
 \end{figure}
 
 \begin{asparadesc}
@@ -68,7 +71,10 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/avgpath.eps}
-  \caption{\label{fig:avgpath}Average shortest path}
+  \caption{\label{fig:avgpath}Comparison of the average shortest path in \SCAMPLON{}
+      and \CYCLON{}. The x-axis denotes the $\log_{10}$-scaled number of peers in 
+      the overlay while the average shortest path of the graph is displayed on the 
+  y-axis.}
 \end{figure}
 
 \begin{asparadesc}
@@ -89,7 +95,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
   graph and thus yields a lower average path length then \SCAMPLON{}, as soon
   as it is undersized, \SCAMPLON{} is, thanks to bigger partial views, better
   connected into the graph and, consequently, yields the shorter average path
-  length.
+  length. 
 \end{asparadesc}
 
 \subsection{Partial view size distribution}
@@ -98,7 +104,9 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/histo.eps}
-  \caption{\label{fig:histo}In-degree distribution}
+  \caption{\label{fig:histo}The in-degree distribution of \CYCLON{} and \SCAMPLON{}.
+  The x-axis denotes the in-degree in number of nodes while the y-axis indicates 
+  how much of the network features the given in-degree.}
 \end{figure}
 
 \begin{asparadesc}
@@ -127,7 +135,13 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/churn.eps}
-  \caption{\label{fig:churn}Churn effect}
+  \caption{\label{fig:churn}\SCAMPLON{} under examplatory churn: the x-axis denotes
+      the elapsed time in cylces. The upper graphs y-axis shows the
+      number of total connections in the overlay while the lower graph y-axis shows
+      the variance $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.
+      $2500$ peers join the network at cycle $0$, $10$, $20$, $30$, $60$ and $70$
+      while $5000$ peers are removed in cycle $40$
+  }
 \end{figure}
 
 \begin{asparadesc}
