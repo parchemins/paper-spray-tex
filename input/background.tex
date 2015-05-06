@@ -144,7 +144,8 @@ on. Then, it highlights the motivations of our approach.
 \begin{problem}
   Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
   membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial view of peer $p_x \in \mathcal{N}^t$. 
-  A random peer sampling, especially when three-way handshaking is involved, should provide the following best-case properties:
+  A cost-efficiant random peer sampling, especially when three-way handshaking is
+  involved, should provide the following best-case properties:
   \begin{center}
     Partial view size: \hfill
     $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \Theta (\ln
@@ -171,12 +172,12 @@ on. Then, it highlights the motivations of our approach.
     completed.}
 \end{figure}
 
-Unfortunately, while both approaches converge exponentially fast to a random
-graph, each of them fails either on the partial view size requirement
+Unfortunately, while the properties of both approaches converge exponentially fast
+to those of a random graph, each of them fails either on the partial view size requirement
 (i.e. \CYCLON{}) or the time complexity of connection establishment
 (i.e. \SCAMPLON{}). Knowingly, we would like the best of the aforementioned
 approaches in order to answer to the problem statement. Ultimately, it would
-allow gossiping on top of WebRTC. Hence, it would open the gate to a wide
+allow cost-efficient gossiping on top of WebRTC. Hence, it would open the gate to a wide
 variety of distributed and decentralized applications requiring a scalable
 broadcast.
 
