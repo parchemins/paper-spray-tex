@@ -138,7 +138,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
   added $4$ times successively by intervals of $10$ cycles each. Thus, the
   network size goes from $0$ to $10,000$ peers in $40$ rounds. Then, half of
   the network leaves without giving notice ($5,000$ peers). Finally, $2,500$
-  peers join two additionnal times. The final network size is $10,000$
+  peers join two additional times. The final network size is $10,000$
   members. The measurements concern
   \begin{inparaenum}
   \item the number of connections in the network over cycles,
@@ -204,8 +204,61 @@ We inspect three properties characteristic for random graphs, the \emph{average
   add each peer from the leaving peer's partial view in their own partial view.
   Except for one peer (cf. Line~\ref{line:bridge}), it guarantees that these
   peers stay connected, i.e., that at least one partial view references them.
+
 \item[Results:]
 \item[Reasons:]
+\end{asparadesc}
+
+\subsection{Degeneration}
+
+\begin{figure}
+  \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
+  \caption{\label{fig:degen}Degeneration of static network} \end{figure}
+
+\begin{asparadesc} \item[Objective:] \SCAMPLON{}, especially when using
+        \emph{handshaking}, is vulnerable to message loss. When messages can
+        be lost, a static \SCAMPLON{} overlay where peers neither join
+        nor leave will slowly degenerate.
+        The reason for this can be found in Algorithm~\ref{algo:unreachable} 
+        where arcs are potentially lost when a message is lost.
+        As static protocols like \CYCLON{} are not prone to this degeneration
+        we compare with another adaptive probabilistic protocol,
+        \SCAMP{}, instead. We adapted \SCAMP{} so that its lease-mechanism preserves
+        the total number of arcs in the network.
+        This experiment focuses on two features: the total number of arcs in the 
+        graph and the number of weak components.
+\item[Description:]
+    As previously shown, the number of arcs in the network should be
+    $|\mathcal{N}|\log{|\mathcal{N}|}$ for the overlay to be robust. A weak
+    component $\mathcal{W}$ of a graph $G$ is a maximum subgraph where the direction
+    is ignored.
+    Naturally, we want the number of weak components $|\mathcal{W}|$ to be $1$,
+    meaning that the whole network is connected.
+    When the overlay consists of more than one component, the network is disconnected.
+    Unlike with strong component where the direction is taken into account, \SCAMPLON{}
+    cannot repair itself when more than one weak component is present.
+    The experiment involves handshaking and is conducted with an overlay consisting
+    of $10,000$ peers over a period of $100,000$ cycles and a probability of
+    $\frac{1}{1000}$ that a link fails. \TODO{BRICE: PLEASE ELABORATE YOUR CALCS}
+
+\item[Results:]
+    The x-axis in Figure~\ref{fig:degen} shows the number of cycles the protocol was
+    executed.
+    The upper graphs y-axis represents the total number of arcs in the
+    overlay while the lower graphs y-axis shows the percentage that weak components
+    make up of the total network: $\frac{|\mathcal{W}|}{|\mathcal{N}|}$.
+    We clearly see that \SCAMPLON{} degenerates much slower than \SCAMP{} and that
+    it becomes disconnected very late while \SCAMP{} collapses quickly.
+
+\item[Reasons:]
+    As \SCAMP{} must maintain much more links than \SCAMPLON{} when establising a
+    connection it has a higher probability of losing arcs which, in turn, let it
+    degenerate much quicker.
+    Furthermore, while in \SCAMPLON{} we can easily predict if a link failed or if
+    the node failed and thus we can stop the degeneration this is not possible in
+    \SCAMP{} as it cannot be easiliy predicted for when a link failed due to its
+    random walk nature.
+
 \end{asparadesc}
 
 %% \subsection{Synthesis}

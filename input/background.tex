@@ -27,8 +27,17 @@ on. Then, it highlights the motivations of our approach.
   the members.
 \end{asparadesc}
 
-\begin{asparadesc}
-\item[Random peer sampling] protocols~\cite{jelasity2004peer} provide each peer
+\begin{definition}
+    \label{def:graph}
+  An overlay network consisting of peers can be defined as a directed graph
+  $G=(\mathcal{N},E)$ where $\mathcal{N}$ denotes the vertices of the graph
+  and $E$ is a list of ordered pairs of vertices called edge or arc.
+  \TODO{MAKE IT NICER}
+  \end{definition}
+
+\begin{definition}
+    \label{def:rps}
+    \emph{Random peer sampling} protocols~\cite{jelasity2004peer} provide each peer
   with a partial view $\mathcal{P}$ of the network membership
   $\mathcal{N}$. They populate the partial views with peers chosen at random
   among $\mathcal{N}$ following a uniform distribution using local knowledge
@@ -38,7 +47,7 @@ on. Then, it highlights the motivations of our approach.
   management~\cite{voulgaris2005epidemic, jelasity2009tman,dabek2004vivaldi}).  Our \SCAMPLON{}
   protocol is inspired by two state-of-the-art approaches, namely \SCAMP{} and
   \CYCLON{}.
-\end{asparadesc}
+\end{definition}
 
 \begin{figure}
   \centering
