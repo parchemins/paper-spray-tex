@@ -29,6 +29,11 @@ view. Afterwards, $p_1$ is connected to $p_2$, and all the neighbors of $p_2$
 are connected to $p_1$. The total number of connections in the network gently
 increases of $1+\ln(|\mathcal{N}|)$.
 
+\begin{algorithm}[h]
+\input{input/joiningalgo.tex}
+\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
+\end{algorithm}
+
 Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
 protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
 $\langle n,\, age\rangle$ which associate to the neighbor $n$ the age $age$
@@ -58,11 +63,6 @@ meaning that it is a brand new connection.
     forwards the identity of $p_1$ to its neighborhood. Each of these neighbors
     adds $p_1$ in their partial view. Five connections have been established.}
 \end{figure*}
-
-\begin{algorithm}[h]
-\input{input/joiningalgo.tex}
-\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
-\end{algorithm}
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario. Although the
 joining peer is connected to the network, the example shows that the network
@@ -126,9 +126,21 @@ overall system at a rate comprised between ${1\over{2}}$ and
 $1\over{2\sqrt{\text{e}}}$.
 
 
-\begin{figure}
+\begin{figure*}
   \centering
-  \input{input/cyclicexample.tex}
+  \subfloat[Figure A]
+  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
+  latter the multiset $\{p_6,\,p_9\}$.]{
+    \input{./input/cyclicexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][Peer $p_1$ receives the $p_6$'s message. 
+  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
+  partial view.]{
+    \input{./input/cyclicexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
+  adds $\{p_2\}$ to its partial view.]{
+    \input{./input/cyclicexampleC.tex}}
   \caption{\label{fig:cyclicexample}Example of the \SCAMPLON{}'s cyclic
     protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
     $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
@@ -143,7 +155,7 @@ $1\over{2\sqrt{\text{e}}}$.
     $p_1$, and adds the received peer from $p_1$. The peers $\{p_6,\,p_9\}$
     compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
     the $p_6$'s partial view.}
-\end{figure}
+\end{figure*}
 
 
 Algorithm~\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at each
@@ -224,8 +236,18 @@ occurrences of this neighbor in the partial view, and removes all of them. The,
 the second loop probabilistically doubles a connection with a known peer. The
 probability depends of the partial view size before the removals.
 
-\begin{figure}
-  \input{./input/crashexample.tex}
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][Peer $p_1$ crashes.]{
+    \input{./input/crashexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][The peer $p_3$, $p_4$, and $p_5$ notice that they
+  cannot reach $p_1$ anymore.]{
+    \input{./input/crashexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][The peer $p_3$ and $p_5$ choose to establish
+  a duplicate with one of their existing neighbor.]{
+    \input{./input/crashexampleC.tex}}
   \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash/leaving
     handler. The scenario follows from prior examples after few other
     exchanges. Peer $p_1$ leaves the network without giving notice. With it,
@@ -236,7 +258,7 @@ probability depends of the partial view size before the removals.
     $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
     appropriate procedure. Only $p_3$ doubles one of its connection. In total,
     $5$ connections have been removed.}
-\end{figure}
+\end{figure*}
 
 Figure~\ref{fig:crashexample} depicts the \SCAMPLON{}'s crash/leaving
 handler. The example shows that some peers reestablish connections if they

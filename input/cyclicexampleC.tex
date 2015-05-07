@@ -1,0 +1,42 @@
+
+\begin{tikzpicture}[scale=1.2]
+
+  \newcommand\X{35pt};
+  \newcommand\Y{15pt};
+
+  \draw[->] (-5+2*\X, 5pt) -- (5+\X, \Y);
+  \draw[->,dashed, very thick]
+  (5+\X, 2*\Y)to[out=-20,in=110](2*\X, 5pt); %% 6 -> 2
+  \draw[->](2*\X,5pt)to[out=160,in=-70](5+1*\X, 2*\Y); %% 2 -> 6
+  \draw[->] (-5+2*\X, -5pt) -- (5+\X, -\Y);
+  \draw[->] (-5+2*\X, -5pt) -- (5+\X, -2*\Y);
+
+  \draw[->](0pt,5pt)--(-5+\X, 2*\Y); %% 1 -> 6
+
+  \draw[->](-5+\X, 1*\Y) -- ( 5pt,5pt);
+  \draw[->](-5+\X, -1*\Y) -- ( 5pt,-5pt);
+  \draw[->](-5+\X, -2*\Y) -- ( 5pt,-5pt);
+
+  \draw[->](-5+\X, 5+2*\Y)to[out=120,in=30](0pt,5+2*\Y); %% 6 -> 7
+  \draw[->](-5+\X, 5+2*\Y)to[out=120,in=30](-5-\Y ,5+2*\Y); %% 6 -> 8
+  
+  \draw[->](-5pt,5pt)--(-10-2*\Y,-5+2*\Y); %% 1 -> 9
+
+  \normalsize
+  \draw[fill=white]
+  (0*\X, 0*\Y) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](2*\X, 0*\Y) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+
+  \draw[fill=white,very thick]
+  (1*\X,2*\Y) node{$p_6$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](1*\X,1*\Y) node{$p_5$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](1*\X,-1*\Y) node{$p_4$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](1*\X,-2*\Y) node{$p_3$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+
+  \draw[fill=white]( 0*\X,2*\Y)
+  node{$p_7$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](-5+-\Y,2*\Y)node{$p_8$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white](-10+-2*\Y,2*\Y) node{$p_9$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  
+
+\end{tikzpicture}

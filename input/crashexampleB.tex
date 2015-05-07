@@ -1,41 +1,26 @@
 
-\begin{tikzpicture}[scale=1.15]
+\begin{tikzpicture}[scale=1.2]
 
   \newcommand\X{35pt};
   \newcommand\Y{15pt};
 
-  \draw[->,thick](-5+\X, 1*\Y) --node{$\times$} ( 5pt,5pt);
-  \draw[->,thick](-5+\X, -1*\Y) --node{$\times$} ( 5pt,-5pt);
-  \draw[->,thick](-5+\X, -2*\Y) --node{$\times$} ( 5pt,-5pt);
+  \large
+  \draw[->, very thick](-5+\X, 1*\Y) -- node{$\times$} ( 5pt,5pt);
+  \draw[->, very thick](-5+\X, -1*\Y) --node{$\times$} ( 5pt,-5pt);
+  \draw[->, very thick](-5+\X, -2*\Y) --node{$\times$} ( 5pt,-5pt);
 
-  \draw[->](-5pt,5pt)--node{$\times$}(-10-2*\Y,-5+2*\Y); %% 1 -> 9
-  \draw[->](-5pt,5pt)--node{$\times$}(-5-1*\Y,-5+2*\Y); %% 1 ->8 
-  \draw[->](-5pt,5pt)--node{$\times$}(0pt,-5+2*\Y); %% 1 -> 7
-  \draw[->](-5pt,5pt)--node{$\times$}(-5+\X,-5+2*\Y); %% 1 -> 6
-  
+  \normalsize
+
   \draw[->](5+ 1*\X, 5+ 1*\Y)--(-5+2*\X, 2*\Y); %% 5 -> 14
-  \draw[->](5+1*\X, 2.5+ 1*\Y)--(-5+2*\X, 2.5+ 1*\Y); %% 5 -> 13 (^)
-  \draw[->,dashed](  5+1*\X,-2.5+1*\Y)--(-5+2*\X,-2.5+1*\Y); %% 5 -> 13 (v)
+  \draw[->](  5+1*\X, 1*\Y)--(-5+2*\X, 1*\Y); %% 5 -> 13 (v)
   
   \draw[->](5+\X, 5-\Y) -- (-5+2*\X,0pt); %% 4 -> 12
   \draw[->](5+\X, -\Y) -- (-5+2*\X, -\Y); %% 4 -> 11
   
-  \draw[->](5+\X, 2.5-2*\Y) -- (-5+2*\X, 2.5-2*\Y);
-  \draw[->,dashed](5+\X, -2.5-2*\Y) -- (-5+2*\X , -2.5-2*\Y);
+  \draw[->](5+\X, -2*\Y) -- (-5+2*\X, -2*\Y);
   
   \small
-  \begin{scope}[shift={(90pt,20pt)}]
-    \draw[fill=white](5pt, 0pt)node{$p_x$}+(-5pt,-5pt) rectangle +(5pt,5pt);
-    \draw (10pt,0pt) node[anchor=west]{Peer $p_x$};
-    \draw[->](0pt, -12pt)--(10pt, -12pt) node[anchor=west]{Established link};
-    \draw[->, densely dashed](0pt, -19pt)--(10pt, -19pt)
-    node[anchor=west]{New link};
-    \draw[->](0pt, -26pt)-- node{$\times$}(10pt, -26pt)
-    node[anchor=west]{Removed link};
-  \end{scope}
-
-  \small
-  \draw[fill=white,very thick]
+  \draw[fill=white]
   (0*\X, 0*\Y) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
   \draw (-5pt,-5pt) -- (5pt,5pt);
   \draw (-5pt, 5pt) -- (5pt,-5pt);
