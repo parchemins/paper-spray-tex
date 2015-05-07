@@ -1,4 +1,4 @@
-\documentclass[conference]{IEEEtran}
+\documentclass[conference]{sig-alternate}
 %%\documentclass{article} %% hevea
 %%\usepackage[utf8]{inputenc} %% hevea
 
@@ -7,10 +7,10 @@
 %% url
 \usepackage{url}
 %% maths
-\usepackage[cmex10]{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{amsthm}
+%%\usepackage[cmex10]{amsmath}
+%%\usepackage{amsfonts}
+%%\usepackage{amssymb}
+%%\usepackage{amsthm}
 %% algorithms
 \usepackage{algorithm}
 \usepackage{algorithmicx}
@@ -23,6 +23,7 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 %% figures
+\usepackage{subfig}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathreplacing,plotmarks,shapes}
 %% transform eps in pdf crossplateform
@@ -43,7 +44,7 @@
 \setcounter{example}{0}
 \newcommand{\EXAMPLE}[0]{\stepcounter{example}\the\value{example}}
 \newtheorem{definition}{Definition}
-\newtheorem*{problem}{Problem Statement}
+\newtheorem{problem}{Problem Statement}
 %paralist
 \renewcommand*\descriptionlabel[1]{%
 \scshape #1}
@@ -56,7 +57,7 @@
 
 \begin{document}
 
-\title{\SCAMPLON{}: a Fast, Adaptive, and Scalable\\Random Peer Sampling
+\title{Spray: a Fast, Adaptive, and Scalable\\Random Peer Sampling
   Protocol}
 
 \author{Brice N{\'e}delec, Julian Tanke, Davide Frey, Pascal Molli, and Achour
@@ -68,11 +69,8 @@
 }
 \date{}
 
-
-
 \maketitle
 \input{input/abstract.tex}
-\IEEEpeerreviewmaketitle
 
 \input{input/introduction.tex}
 \input{input/background.tex}
@@ -83,7 +81,7 @@
 \input{input/acknowledgment.tex}
 
 %% Bibliographie
-\bibliographystyle{IEEEtran}
+\bibliographystyle{abbrv}
 \bibliography{bibliographie}
 \clearpage
   

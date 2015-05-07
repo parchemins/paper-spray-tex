@@ -1,5 +1,5 @@
 
-\section{\SCAMPLON{}}
+\section{Spray}
 \label{sec:proposal}
 
 \SCAMPLON{} \SCAMPLONDESCRIPTION{} is scalable and adaptive random
@@ -40,20 +40,26 @@ $onFwdSubs$ event is called when a peer receives such forwarded
 subscription. It adds the peer as one of its neighbor with an age set to $0$
 meaning that it is a brand new connection.
 
-\begin{figure}
+\begin{figure*}
   \centering
-  \input{./input/joiningexample.tex}
+  \subfloat[Figure A][Subscription]{
+    \input{./input/joiningexampleA.tex}}
+  \hspace{40pt}
+  \subfloat[Figure B][Forwarding]{
+    \input{./input/joiningexampleB.tex}}
+  \hspace{40pt}
+  \subfloat[Figure C][Connections]{
+    \input{./input/joiningexampleC.tex}}
   \caption{\label{fig:joiningexample}Example of the \SCAMPLON{}'s joining
     protocol. In this scenario, Peer $p_1$ contacts $p_2$ to join the network
     composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$ (for simplicity sake, only
     the new connections and the neighborhood of $p_1$ and $p_2$ are
     displayed). Peer $p_1$ directly adds $p_2$ in its partial view. Peer $p_2$
-    forwards the identity of $p_1$ to its neighborhood. Each of these
-    neighbors adds $p_1$ in their partial view. Five connections have been
-    established.}
-\end{figure}
+    forwards the identity of $p_1$ to its neighborhood. Each of these neighbors
+    adds $p_1$ in their partial view. Five connections have been established.}
+\end{figure*}
 
-\begin{algorithm}
+\begin{algorithm}[h]
 \input{input/joiningalgo.tex}
 \caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
 \end{algorithm}
@@ -88,7 +94,7 @@ other. Since the partial views are multisets, even if a neighbor appears
 multiple times, the network does not lose any connection. It guarantees that
 the global number of connections after the protocol does not change.
 
-\begin{algorithm}[b] %% to change if repositionning possible
+\begin{algorithm}[h] %% to change if repositionning possible
   \input{./input/cyclicalgo.tex}
   \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
 \end{algorithm}
@@ -207,7 +213,7 @@ their partial view, it is likely that all of them will reestablish a
 connection, excepted one. Therefore, when a peer leaves, it approximately
 removes the number of connections it injected when it joined.
 
-\begin{algorithm}
+\begin{algorithm}[h]
   \input{./input/unreachablealgo.tex}
   \caption{\label{algo:unreachable}The crash/leaving handler of \SCAMPLON{}.}
 \end{algorithm}

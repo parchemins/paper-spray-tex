@@ -27,43 +27,18 @@ on. Then, it highlights the motivations of our approach.
   the members.
 \end{asparadesc}
 
-\begin{definition}
-    \label{def:graph}
-  An overlay network consisting of peers can be defined as a directed graph
-  $G=(\mathcal{N},E)$ where $\mathcal{N}$ denotes the vertices of the graph
-  and $E$ is a list of ordered pairs of vertices called edge or arc.
-  \TODO{MAKE IT NICER}
-  \end{definition}
-
-\begin{definition}
-    \label{def:rps}
-    \emph{Random peer sampling} protocols~\cite{jelasity2004peer} provide each peer
-  with a partial view $\mathcal{P}$ of the network membership
+\begin{asparadesc}
+\item [Random peer sampling] protocols~\cite{jelasity2004peer} provide each
+  peer with a partial view $\mathcal{P}$ of the network membership
   $\mathcal{N}$. They populate the partial views with peers chosen at random
   among $\mathcal{N}$ following a uniform distribution using local knowledge
   only. They aim to converge to a random graph, hence, providing connectedness,
   robustness and efficient epidemic spreading of messages. A wide variety of
   gossip-based protocols use random peer sampling (e.g. topology
-  management~\cite{voulgaris2005epidemic, jelasity2009tman,dabek2004vivaldi}).  Our \SCAMPLON{}
-  protocol is inspired by two state-of-the-art approaches, namely \SCAMP{} and
-  \CYCLON{}.
-\end{definition}
-
-\begin{figure}
-  \centering
-  \input{./input/cyclonexample.tex}
-  \caption{\label{fig:cyclonexample}Example of \CYCLON{}'s periodic exchange of
-    partial views. For simplicity sake, we set $|\mathcal{P}|$ to $4$ and the
-    peers involved in the exchange choose only $2$ neighbors among these
-    $4$. Furthermore, while the network contains $9$ members, we only show the
-    partial views of $p_1$ and $p_5$.  Peer $p_1$ initiates the view exchange
-    with its oldest neighbor $p_5$, giving $\left\{p_1,\,p_2\right\}$
-    (randomly chosen). On receipt, Peer $p_5$ establishes the connection to
-    $p_1$ and $p_2$ and gives away its connection to $\left\{p_6,\,p_9\right\}$
-    (randomly chosen).  On receipt of this latter, $p_1$ establishes the
-    connection to Peer $p_6$ and Peer $p_9$. Altogether, we cut $4$ links to
-    create $4$ other links only by using neighbor-to-neighbor interactions.}
-\end{figure}
+  management~\cite{voulgaris2005epidemic, jelasity2009tman,dabek2004vivaldi}).
+  Our \SCAMPLON{} protocol is inspired by two state-of-the-art approaches,
+  namely \SCAMP{} and \CYCLON{}.
+\end{asparadesc}
 
 \begin{asparadesc}
 \item [Cyclon]\cite{voulgaris2005cyclon} is a periodic random peer sampling
@@ -73,9 +48,6 @@ on. Then, it highlights the motivations of our approach.
   \CYCLON{} exchanges a subset of its partial view with one of its neighbor
   chosen using the age.  Assuming a well chosen $|\mathcal{P}|$, \CYCLON{}
   quickly converges to a random graph and quickly withdraws crashed/left peers.
-  Figure~\ref{fig:cyclonexample} depicts the periodic exchanges of
-  \CYCLON{}. In particular, we can see that peers only communicate in their
-  direct neighborhood to renew the connections.
 
   In the WebRTC context, each connection matters. Hence, we cannot afford
   oversized partial views like in \CYCLON{}. For instance, considering an
@@ -87,36 +59,14 @@ on. Then, it highlights the motivations of our approach.
   fully connected which is highly undesirable.
 \end{asparadesc}
 
-\begin{figure}
-  \centering
-  \input{./input/scampexample.tex}
-  \caption{\label{fig:scampexample} \SCAMP{}'s joining protocol on a small
-    network with an identical legend to Figure~\ref{fig:cyclonexample}. Peer
-    $p_1$ wants to join $p_2$'s network composed of $p_2$, $p_3$, $p_4$, and
-    $p_5$. Let $\mathcal{P}_x$ denotes the partial view of Peer $p_x$. Peer
-    $p_1$ establishes a connection to $p_2$. Then $p_2$ copies
-    $|\mathcal{P}_2|$-times the new subscription and sends one to each
-    neighbor. To handle possible failures, $c$ additional copies (here $0$ for
-    simplicity sake), are sent to random neighbors. Then, each peer $p_x$ has
-    a probability of $1\over{|\mathcal{P}_x|+1}$ to accept the forwarded
-    subscription, hence, to establish a connection to reach $p_1$. Otherwise,
-    the peer forwards it to another peer in $\mathcal{P}$ at random. Here,
-    $p_3$ accepts the subscription, $p_5$ forwards it to $p4$, and the latter
-    accepts it. The resulting graph is connected.}
-\end{figure}
-
 \begin{asparadesc}
 \item [Scamp]\cite{ganesh2001scamp,ganesh2003peer} stands for SCalable
   Membership Protocol. This protocol links each membership event with an
   appropriate reaction.  The most important event is the joining event which
   creates a logarithmically increasing number of connections compared to the
-  total network size.  Figure~\ref{fig:scampexample} depicts the joining
-  protocol of \SCAMP{}. As we can see, the resulting graph is
-  connected. However, the last peer $p_1$ only has one neighbor in its partial
-  view, meaning that if $p_2$ crashes, $p_1$ cannot send messages to the
-  network any more. To avoid that, a periodic re-subscription balances the
-  neighborhood of the peers over time. Thus, the network converges to a random
-  graph.
+  total network size. The resulting graph is connected. However, the newest
+  peers have few elements in their partial view, and the older peers are more
+  likely clustered. Thus it needs a balancing protocol.
 
   In the WebRTC context, the issue of \SCAMP{} lies in the fact that the
   subscription mechanism can create connections several hops away from its

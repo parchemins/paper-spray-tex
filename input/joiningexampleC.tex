@@ -1,0 +1,37 @@
+
+\begin{tikzpicture}[scale=1.2]
+
+  \newcommand\X{35pt};
+  \newcommand\Y{15pt};
+
+  \scriptsize
+  \draw[->](5+0*\X, 0*\Y) -- (-5+ 2*\X, 0*\Y);
+  \draw[->] (-5+2*\X, 5pt) -- (5+\X, \Y);
+  \draw[->] (-5+2*\X, 5pt) -- (5+\X, 2*\Y);
+  \draw[->] (-5+2*\X, -5pt) -- (5+\X, -\Y);
+  \draw[->] (-5+2*\X, -5pt) -- (5+\X, -2*\Y);
+
+  \draw[->,dashed, very thick](-5+\X, 2*\Y) --
+  node[anchor=south east]{(c)} ( 5pt,5pt);
+  \draw[->,dashed, very thick](-5+\X, 1*\Y) -- ( 5pt,5pt);
+  \draw[->,dashed, very thick](-5+\X, -1*\Y) -- ( 5pt,-5pt);
+  \draw[->,dashed, very thick](-5+\X, -2*\Y) --
+  node[anchor=north east]{(c)}( 5pt,-5pt);
+
+  \normalsize
+  \draw[fill=white, very thick]
+  (0*\X, 0*\Y) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white]
+  (2*\X, 0*\Y) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+
+  \draw[fill=white, very thick]
+  (1*\X,2*\Y) node{$p_6$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick]
+  (1*\X,1*\Y) node{$p_5$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick]
+  (1*\X,-1*\Y) node{$p_4$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  \draw[fill=white, very thick]
+  (1*\X,-2*\Y) node{$p_3$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+ 
+
+\end{tikzpicture}
