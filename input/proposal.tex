@@ -2,32 +2,31 @@
 \section{Spray}
 \label{sec:proposal}
 
-\SCAMPLON{} \SCAMPLONDESCRIPTION{} is scalable and adaptive random
-peer sampling protocol inspired by both \SCAMP{} and \CYCLON{}. \SCAMPLON{}
-comprises three parts representing the lifecycle of a peer in the network.
-Firstly, \SCAMPLON{}'s joining process incrementally builds the network by
-injecting in it a logarithmically growing number of connections. However, the
-resulting network is far from flawless. Consequently, each peer runs a periodic
-process in order to balance the partial views both in terms of partial view
-size, and uniformity of the chosen peers within them. Quickly, the network
-topology converges to a random graph. Finally, A peer is able to leave at any
-time without giving notice, still the network properties do not degrade. During
-the whole lifecycle, a peer uses local knowledge only and establishes
-connections only with the neighbors of its neighbors.
+\SCAMPLON{} \SCAMPLONDESCRIPTION{} is an adaptive random peer sampling protocol
+inspired by \SCAMP{}~\cite{ganesh2003peer} and
+\CYCLON{}~\cite{voulgaris2005cyclon}. It comprises three parts representing the
+lifecycle of a peer in the network.  Firstly, the joining process injects a
+logarithmically growing number of arcs in the network. Hence, the number of
+arcs scales with the network size.  Nevertheless, the resulting overlay has
+flaws. Consequently, each peer runs a periodic process in order to balance the
+partial views both in terms of partial view size, and uniformity of the
+referenced peers within them. Quickly, the overlay network converges to a
+topology exposing properties of the random graphs. Finally, A peer is able to
+leave at any time without giving notice (equivalent to a crash), still the
+network properties do not degrade.
 
 \subsection{Joining}
 
 The main focus of the joining protocol is about establishing a logarithmically
-growing number of connections in the network compared to the number of members.
+growing number of arcs in the network compared to the number of members.
 \SCAMPLON{} assumes that each peer has a logarithmic partial view size. Thus,
 when a peer $p_1$ contacts a peer $p_2$ within the network, Peer $p_2$ is able
 to use its partial view size to spread the appropriate number of subscriptions.
-\SCAMPLON{} cautiously establishes connections with the neighbors of
-neighbors. Therefore, the joining protocol at Peer $p_2$ simply forwards the
-identity of $p_1$ to the latter's neighbors where they add it to their partial
-view. Afterwards, $p_1$ is connected to $p_2$, and all the neighbors of $p_2$
-are connected to $p_1$. The total number of connections in the network gently
-increases of $1+\ln(|\mathcal{N}|)$.
+Peer $p_2$ simply forwards the identity of $p_1$ to the latter's neighbors
+where they directly add it to their partial view. Afterwards, $p_1$ is
+connected to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$. The
+total number of connections in the network gently increases of
+$1+\ln(|\mathcal{N}|)$.
 
 \begin{algorithm}[h]
 \input{input/joiningalgo.tex}
