@@ -1,57 +1,67 @@
 
 \section{Introduction}
 
-WebRTC~\cite{webrtc} allows the connection establishment between web
-browsers, even with complex network settings such as firewall, proxies or Net
-Address Translation (NAT).  Some attractive applications such as Firefox
-Hello~\cite{firefoxhello} or WebTorrent~\cite{webtorrent} demonstrate how
-video-conferencing or file-sharing directly within browsers becomes simple of
-access to end-users without third-party providers. However, several distributed
-applications such as distributed collaborative editors (REFs) require the
-ability to broadcast messages to a potentially large number of
-participants. Traditionally, gossiping algorithms~\cite{eugster2003lightweight,
-  tolgyeski2009adaptive} achieve such broadcast in a scalable way by using a
-sample of the whole network. Unfortunately, the sampling
-protocols~\cite{eugster2003lightweight, tolgyeski2009adaptive, ganesh2003peer,
-  jelasity2004peer, voulgaris2005cyclon} raise efficiency or robustness
-issues in the WebRTC context.
+Peer-sampling service is a fundamental mechanism for many large scale
+distributed applications including information dissemination,
+aggregation or network management~\cite{jelasity2007gossip}. Recently,
+WebRTC~\cite{webrtc} opened the opportunity to deploy large scale
+distributed application on browsers that can run on laptops, desktops,
+tablets or mobile phones. This opportunity is appealing because it
+drastically simplify the deployment of large distributed applications
+even with complex network settings such as firewall, proxies or Net
+Address Translation (NAT).
 
-Scalable gossiping requires that each member maintains connections with a
-uniform sample of the other members. The sample, called partial view, can grow
-logarithmically compared to the number of participants and yet providing
-connectivity with high probability~\cite{erdos1959random}. Still, the
-neighborhood must be constantly renewed in order to prevent network partitions
-due to churn (i.e. members join and leave freely). In WebRTC, establishing a
-browser-to-browser connection requires a three-way handshake which is much more
-costly and likely to fail compared to traditional setting. In such context,
-state-of-the-art random peer sampling protocols either lack of robustness or
-have resource intensive requirements.
+%Some attractive applications such as Firefox Hello~\cite{firefoxhello}
+%or WebTorrent~\cite{webtorrent} demonstrate how video-conferencing or
+%file-sharing directly within browsers becomes simple of access to
+%end-users without third-party providers.
 
-Knowingly, the challenge is about
-\begin{inparaenum}[(i)]
-\item keeping an optimal $\Theta(\ln |\mathcal{N}|)$ on the number of
-  connections alive\cite{erdos1959random} (where $\mathcal{N}$ is the set of
-  network members),
-\item keeping an optimal $O(1)$ complexity on connection establishments,
-\item keeping an optimal $\Theta(\exp \, t^{-1})$ convergence speed to a random
-  graph (where $t$ is an arbitrary time frame).
-\end{inparaenum}
+However, WebRTC has several constraints that makes existing
+peer-sampling service inefficient or unreliable. First, browsers can
+run on mobile devices and keeping the number of connections as low as
+possible is a major requirement. Unfortunately, peer-sampling service
+such as Cyclon~\cite{ voulgaris2005cyclon} is not able to adapt the
+number of connections to the real number of
+participants. Consequently, a user on a mobile phone can maintain 10
+connections with others remote browsers, even if just 3 was
+enough. Adapting the number of connections to the number of
+participants is crucial and is handled by peer-sampling service such
+as Scamp~\cite{ganesh2003peer}. Unfortunatly, browser-to-browser connection
+in WebRTC requires a three-way handshake which is much more costly and
+likely to fail compared to traditional settings. We show in this paper
+that three-way handshake makes SCAMP fail. 
 
-In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
-inspired by both \SCAMP{}~\cite{ganesh2003peer} and
-\CYCLON{}~\cite{voulgaris2005cyclon}. It provides the desired properties
-described in the aforementioned problem statement.
+% PASCAL: too soon, keep that for Pb statement
+% Knowingly, the challenge is about
+% \begin{inparaenum}[(i)]
+% \item keeping an optimal $\Theta(\ln |\mathcal{N}|)$ on the number of
+%   connections alive\cite{erdos1959random} (where $\mathcal{N}$ is the set of
+%   network members),
+% \item keeping an optimal $O(1)$ complexity on connection establishments,
+% \item keeping an optimal $\Theta(\exp \, t^{-1})$ convergence speed to a random
+%   graph (where $t$ is an arbitrary time frame).
+% \end{inparaenum}
+
+In this paper, we introduce \SCAMPLON{}, a random peer sampling
+protocol inspired by both \SCAMP{}~\cite{ganesh2003peer} and
+\CYCLON{}~\cite{voulgaris2005cyclon}. Compared to state of art,
 \begin{inparaenum}[(i)]
 \item It dynamically adapts the neighborhood of each peer. Thus, the number of
   connections grows logarithmically compared to the size of the network.
 \item It only uses neighbor-to-neighbor interactions to establish the
   connections. Thus, the connections are established in constant time.
 \item It converges exponentially fast to a random graph. Thus, the network
-  becomes quickly resilient to failure, can broadcast messages efficiently etc.
+  becomes quickly resilient to failure, can broadcast messages
+  efficiently etc.
+\item In experimental setup, we demonstrate how adaptivity of
+  \SCAMPLON{} saves connections compared to\CYCLON{} at the cost of a
+  little overhead.
 \end{inparaenum}
-Knowingly, it improves state-of-the-art approaches in the traditional
-connection set-up. This improvement is crucial in the three-way connection
-set-up and opens the gate to a vast variety of distributed applications.
+
+
+% Knowingly, it improves state-of-the-art approaches in the traditional
+% connection set-up. This improvement is crucial in the three-way connection
+% set-up and opens the gate to a vast variety of distributed applications.
 
 
 The rest of this paper is organized as follow: Section~\ref{sec:background}
