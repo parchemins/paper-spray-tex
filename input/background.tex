@@ -2,30 +2,99 @@
 \section{Background and motivations}
 \label{sec:background}
 
-This section introduces the general outlines of state-of-the-art protocols in
-charge of providing the random peer sampling which will be useful later
-on. Then, it highlights the motivations of our approach.
+\begin{figure*}
+\centering
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p2) edge[dashed] node[fill=white]{1:emit} (ss)
+  (p3) edge[dashed] node[fill=white,bend left]{2:pull} (ss)
+  (p3) edge[dashed, bend right] node[fill=white]{3:accept} (ss)
+  (p2) edge[dashed,bend left] node[fill=white]{4:pull} (ss)
+  (p3) edge[<->,thick] node[fill=white,right]{5:connected} (p2);
+\end{tikzpicture}%
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p1) edge[dashed,bend left] node[fill=white]{1:emit} (p2)
+  (p2) edge[dashed,bend left] node[fill=white,left]{2:emit/p1} (p3)
+  (p3) edge[dashed,bend left] node[fill=white,right]{3:accept/p1} (p2)
+  (p2) edge[dashed,bend left] node[fill=white]{4:accept} (p1)
+  (p1) edge[<->,thick] (p2)
+%  (p1) edge[<->,thick,bend left] (p3)
+  (p2) edge[<->,thick]  (p3);
+
+\end{tikzpicture}%
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p1) edge[<->,thick] (p2)
+  (p1) edge[<->,thick] (p3)
+  (p2) edge[<->,thick]  (p3);
+\end{tikzpicture}
+
+
+\end{figure*}
+WebRTC is able to establish a data channel between two browsers even
+with complex network settings such as firewall, proxies or Net Address
+Translation (NAT). Nevertheless, the connection establishment protocol
+differs from traditional setting: it uses a three-way handshake
+connection set up.  Thus, a subscription message must be
+\begin{inparaenum}[(1)]
+\item emitted at Peer $p$,
+\item accepted at Peer $q$,
+\item completed at Peer $p$.
+\end{inparaenum}
+  
+Therefore, when a peer needs to establish a connection to another
+peer, a message must travel back and forth. One could use a dedicated
+server to establish the necessary dialog~\cite{peerjs}. However, this
+solution does not scale considering the fact that each peer in the
+network must dynamically create and remove connections over time. On
+the other hand, using the built network itself distributes the load of
+these connections establishment among the members.
 
 \begin{asparadesc}
-\item [WebRTC] is a protocol that allows real-time communication from
-  browser-to-browser. It is able to establish a peer-to-peer connection, even
-  with complex network settings such as firewall, proxies or Net Address
-  Translation (NAT). Nevertheless, the connection establishment protocol
-  differs from traditional setting: it uses a three-way handshake connection
-  set up.  Thus, a subscription message must be
-  \begin{inparaenum}[(1)]
-  \item emitted at Peer $p$,
-  \item accepted at Peer $q$,
-  \item completed at Peer $p$.
-  \end{inparaenum}
-  Therefore, when a peer needs to establish a connection to another peer, a
-  message must travel back and forth. One could use a dedicated server to
-  establish the necessary dialog~\cite{peerjs}. However, this solution does not
-  scale considering the fact that each peer in the network must dynamically
-  create and remove connections over time. On the other hand, using the built
-  network itself distributes the load of these connections establishment among
-  the members.
+\item [Scamp]\cite{ganesh2001scamp,ganesh2003peer} stands for SCalable
+  Membership Protocol. This protocol links each membership event with an
+  appropriate reaction.  The most important event is the joining event which
+  creates a logarithmically increasing number of connections compared to the
+  total network size. The resulting graph is connected. However, the newest
+  peers have few elements in their partial view, and the older peers are more
+  likely clustered. Thus it needs a balancing protocol.
+
+  In the WebRTC context, the issue of \SCAMP{} lies in the fact that the
+  subscription mechanism can create connections several hops away from its
+  origin (cf. Figure~\ref{fig:handshakeexample}). Unfortunately each of these
+  hops is an opportunity of failure. Let $P_f$ the probability of either the
+  peer or the link between the latter and the next peer crashes/disconnects
+  when it holds the subscription, without possible recovery. Let $P_E$ the
+  probability that a connection establishment cannot be completed. Without
+  three-way handshake, $P_E$ is straightforward:
+  \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} where
+  $k$ is the number of hops before the acceptance of the subscription, i.e.,
+  there are $2$ hops at least. Indeed, the first peer cannot directly accept
+  the subscription. On the other hand, in the handshaking context, the
+  subscription must travel back to its origin in order to be completed. As
+  consequence, when a subscription travels through a peer or a link, they are
+  not allowed to fail until the subscription travels back. Thus, we obtain:
+  \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
+                                       \ldots (1-P_f)^2) \nonumber \\
+                                     &=1-(1-P_f)^{k^2+3k+2}
+  \end{align}
+  The complexity class of the \SCAMP{} failure rate under three-way handshake
+  increases. Thus, it does not scale in number of peers any more.
 \end{asparadesc}
+
 
 \begin{asparadesc}
 \item [Random peer sampling] protocols~\cite{jelasity2004peer} provide each
@@ -59,37 +128,6 @@ on. Then, it highlights the motivations of our approach.
   fully connected which is highly undesirable.
 \end{asparadesc}
 
-\begin{asparadesc}
-\item [Scamp]\cite{ganesh2001scamp,ganesh2003peer} stands for SCalable
-  Membership Protocol. This protocol links each membership event with an
-  appropriate reaction.  The most important event is the joining event which
-  creates a logarithmically increasing number of connections compared to the
-  total network size. The resulting graph is connected. However, the newest
-  peers have few elements in their partial view, and the older peers are more
-  likely clustered. Thus it needs a balancing protocol.
-
-  In the WebRTC context, the issue of \SCAMP{} lies in the fact that the
-  subscription mechanism can create connections several hops away from its
-  origin (cf. Figure~\ref{fig:handshakeexample}). Unfortunately each of these
-  hops is an opportunity of failure. Let $P_f$ the probability of either the
-  peer or the link between the latter and the next peer crashes/disconnects
-  when it holds the subscription, without possible recovery. Let $P_E$ the
-  probability that a connection establishment cannot be completed. Without
-  three-way handshake, $P_E$ is straightforward:
-  \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} where
-  $k$ is the number of hops before the acceptance of the subscription, i.e.,
-  there are $2$ hops at least. Indeed, the first peer cannot directly accept
-  the subscription. On the other hand, in the handshaking context, the
-  subscription must travel back to its origin in order to be completed. As
-  consequence, when a subscription travels through a peer or a link, they are
-  not allowed to fail until the subscription travels back. Thus, we obtain:
-  \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
-                                       \ldots (1-P_f)^2) \nonumber \\
-                                     &=1-(1-P_f)^{k^2+3k+2}
-  \end{align}
-  The complexity class of the \SCAMP{} failure rate under three-way handshake
-  increases. Thus, it does not scale in number of peers any more.
-\end{asparadesc}
 
 \begin{problem}
   Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
