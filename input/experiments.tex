@@ -265,13 +265,45 @@ We inspect three properties characteristic for random graphs, the \emph{average
     it becomes disconnected very late while \SCAMP{} collapses quickly.
 
 \item[Reasons:]
-    As \SCAMP{} must maintain much more links than \SCAMPLON{} when establising a
+    As \SCAMP{} must maintain much more links than \SCAMPLON{} when establishing a
     connection it has a higher probability of losing arcs which, in turn, let it
     degenerate much quicker.
     Furthermore, while in \SCAMPLON{} we can easily predict if a link failed or if
     the node failed and thus we can stop the degeneration this is not possible in
-    \SCAMP{} as it cannot be easiliy predicted for when a link failed due to its
+    \SCAMP{} as it cannot be predicted easy for when a link failed due to its
     random walk nature.
+
+\end{asparadesc}
+
+\subsection{Duplicates in Partial Views}
+
+\begin{figure}
+  \centering \includegraphics[width=0.49\textwidth]{img/dupl.eps}
+  \caption{\label{fig:dupl}
+  Duplicates in Networks of different size: the x-axis denotes the elapsed time
+  in cycles while the $log_{10}$-scaled y-axis denotes the share of the nodes that
+  have more than one pointer to the same node in their partial view.
+  } \end{figure}
+
+\begin{asparadesc} 
+\item[Objective:]
+    \SCAMPLON{}`s only constraint for a peers partial view is that it must not contain
+    self-loops, however, multiple links to the same peer different from oneself
+    are explicitly allowed.
+    This characteristic strongly distinguishes \SCAMPLON{} from \CYCLON{} and other 
+    \emph{random peer sampling services} who ensure that only one link per peer exists.
+    We want to avoid duplicates in partial views for two obvious reasons:
+    First, it lowers the robustness: when a peer $a$ references another peer $b$ 
+    multiple times and peer $b$ leaves the network than $a$ will lose not one but 
+    multiple links and thus making \SCAMPLON{} potentially more disruptive than 
+    its sibling protocols.
+    Second, duplicates might be problematic for protocols that make use of \SCAMPLON{} as
+    a random peer sampling service. When used for broadcasting, unnecessary messages
+    are sent which increases the network costs of the protocol.
+    All of this demands a closer look on the behavior of duplicates.
+\item[Description:]
+\item[Results:]
+\item[Reasons:]
 
 \end{asparadesc}
 
