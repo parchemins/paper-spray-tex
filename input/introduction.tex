@@ -20,13 +20,13 @@ However, WebRTC has several constraints that makes existing
 peer-sampling service inefficient or unreliable. First, browsers can
 run on mobile devices and keeping the number of connections as low as
 possible is a major requirement. Unfortunately, peer-sampling service
-such as Cyclon~\cite{ voulgaris2005cyclon} is not able to adapt the
+such as \CYCLON{}~\cite{ voulgaris2005cyclon} is not able to adapt the
 number of connections to the real number of
 participants. Consequently, a user on a mobile phone can maintain 10
 connections with others remote browsers, even if just 3 was
 enough. Adapting the number of connections to the number of
 participants is crucial and is handled by peer-sampling service such
-as Scamp~\cite{ganesh2003peer}. Unfortunatly, browser-to-browser connection
+as \SCAMP{}~\cite{ganesh2003peer}. Unfortunately, browser-to-browser connection
 in WebRTC requires a three-way handshake which is much more costly and
 likely to fail compared to traditional settings. We show in this paper
 that three-way handshake makes SCAMP fail. 
@@ -60,7 +60,7 @@ protocol inspired by both \SCAMP{}~\cite{ganesh2003peer} and
 
 
 % Knowingly, it improves state-of-the-art approaches in the traditional
-% connection set-up. This improvement is crucial in the three-way connection
+% connection set-up. This improvement is crucial in the three-way conn\ection
 % set-up and opens the gate to a vast variety of distributed applications.
 
 

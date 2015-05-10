@@ -29,6 +29,68 @@ massive failures.
 
 (TODO Motivating example including WebRTC and mobile devices)
 
+\begin{figure*}
+\centering
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p2) edge[dashed] node[fill=white]{1:emit} (ss)
+  (p3) edge[dashed] node[fill=white,bend left]{2:pull} (ss)
+  (p3) edge[dashed, bend right] node[fill=white]{3:accept} (ss)
+  (p2) edge[dashed,bend left] node[fill=white]{4:pull} (ss)
+  (p3) edge[<->,thick] node[fill=white,right]{5:connected} (p2);
+\end{tikzpicture}%
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p1) edge[dashed,bend left] node[fill=white]{1:emit} (p2)
+  (p2) edge[dashed,bend left] node[fill=white,left]{2:emit/p1} (p3)
+  (p3) edge[dashed,bend left] node[fill=white,right]{3:accept/p1} (p2)
+  (p2) edge[dashed,bend left] node[fill=white]{4:accept} (p1)
+  (p1) edge[<->,thick] (p2)
+%  (p1) edge[<->,thick,bend left] (p3)
+  (p2) edge[<->,thick]  (p3);
+
+\end{tikzpicture}%
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p1) edge[<->,thick] (p2)
+  (p1) edge[<->,thick] (p3)
+  (p2) edge[<->,thick]  (p3);
+\end{tikzpicture}
+\caption{Connection establishement using WebRTC.}
+\end{figure*}
+
+WebRTC is able to establish a data channel between two browsers even
+with complex network settings such as firewall, proxies or Net Address
+Translation (NAT). Nevertheless, the connection establishment protocol
+differs from traditional setting: it uses a three-way handshake
+connection set up.  Thus, a subscription message must be
+\begin{inparaenum}[(1)]
+\item emitted at Peer $p$,
+\item accepted at Peer $q$,
+\item completed at Peer $p$.
+\end{inparaenum}
+  
+Therefore, when a peer needs to establish a connection to another
+peer, a message must travel back and forth. One could use a dedicated
+server to establish the necessary dialog~\cite{peerjs}. However, this
+solution does not scale considering the fact that each peer in the
+network must dynamically create and remove connections over time. On
+the other hand, using the built network itself distributes the load of
+these connections establishment among the members.
+
+
 \begin{problem}
   Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
   membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial
