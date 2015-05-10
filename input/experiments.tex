@@ -110,12 +110,14 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] As the degree distribution shows the existence of both,
+\item[Objective:]
+    As the degree distribution shows the existence of both,
   weakly connected peers as well as strongly connected hubs, it helps to
   analyze the robustness of the overlay when failure is present.  Additionally,
   it indicates how well-distributed links in the network are which
   helps to approximate the resource usage across peers.
-\item[Description:] As the overlay can be represented as a directed graph we
+\item[Description:]
+    As the overlay can be represented as a directed graph we
   distinguish between out-degree which determines to how many other nodes a
   peer points, and the in-degree which determines from how many other peers a
   certain peer is referenced.  We concentrate on the in-degree for better
@@ -302,7 +304,15 @@ We inspect three properties characteristic for random graphs, the \emph{average
     are sent which increases the network costs of the protocol.
     All of this demands a closer look on the behavior of duplicates.
 \item[Description:]
+    The experiment is conducted with networks of different size, ranging form 1000 
+    to 1 million peers that all join at the same moment. We then examine the convergence
+    of duplicates in the overlay, the results can be seen in Figure~\ref{fig:dupl}:
+    The x-axis denotes the elapsed time in cycles while the y-axis denotes the share of
+    nodes that contain duplicate links in their partial view.
 \item[Results:]
+    Figure~\ref{fig:dupl} indicates that all examined networks contain duplicates but
+    that the relative count towards the network size gets smaller the bigger the overlay
+    is. \TODO{ELABORATE WHAT KIND OF FUNCTION!}
 \item[Reasons:]
 
 \end{asparadesc}
