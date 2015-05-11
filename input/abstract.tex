@@ -1,20 +1,17 @@
 
 \begin{abstract}
-
-  Deploying peer-sampling service on top of WebRTC allow to run large
-  scale distributed applications on a network of browsers. However,
-  WebRTC has several constraints that makes existing peer-sampling
-  service inefficient or unreliable.  In this paper, we propose
-  \SCAMPLON{}, an adaptative peer-sampling service designed to meet
-  WebRTC constraints. \SCAMPLON{} dynamically adapts the neighborhood
-  of each peer to the size of network. It only uses
-  neighbor-to-neighbor interactions to establish the connections and
-  converges exponentially fast to a random graph. On experiments, we
-  demonstrated how \SCAMPLON{} saves connections compared to\CYCLON{}
-  at the cost of a little overhead.
-
+  Deploying peer sampling services on top of WebRTC allows running large scale
+  distributed applications on a network of browsers. However, WebRTC has
+  several constraints that makes existing peer sampling services inefficient or
+  unreliable.  In this paper, we propose \SCAMPLON{}, an adaptive
+  peer-sampling service designed to meet the WebRTC constraints. \SCAMPLON{}
+  dynamically adapts the neighborhood of each peer to the network
+  size. Furthermore, it only uses neighbor-to-neighbor interactions to
+  establish the connections and converges exponentially fast to a topology
+  exposing similar properties of random graphs. Experiments demonstrate the
+  adaptiveness of \SCAMPLON{} and highlight its efficiency improvement compared
+  to \CYCLON{} at the cost of a small overhead.
 \end{abstract}
-
 
 %%% Local Variables:
 %%% mode: latex
