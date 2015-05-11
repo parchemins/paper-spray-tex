@@ -1,0 +1,13 @@
+
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p2) edge[dashed] node[fill=white]{1:emit} (ss)
+  (p3) edge[dashed] node[fill=white,bend left]{2:pull} (ss)
+  (p3) edge[dashed, bend right] node[fill=white]{3:accept} (ss)
+  (p2) edge[dashed,bend left] node[fill=white]{4:pull} (ss)
+  (p3) edge[<->,thick] node[fill=white,right]{5:connected} (p2);
+\end{tikzpicture}
