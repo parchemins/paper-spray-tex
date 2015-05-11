@@ -11,8 +11,8 @@ arcs scales with the network size.  Nevertheless, the resulting overlay has
 flaws. Consequently, each peer runs a periodic process in order to balance the
 partial views both in terms of partial view size, and uniformity of the
 referenced peers within them. Quickly, the overlay network converges to a
-topology exposing properties of the random graphs. Finally, A peer is able to
-leave at any time without giving notice (equivalent to a crash), still the
+topology exposing properties similar to random graphs. Finally, A peer is able
+to leave at any time without giving notice (equivalent to a crash), still the
 network properties do not degrade.
 
 \subsection{Joining}
@@ -25,7 +25,7 @@ to use its partial view size to spread the appropriate number of subscriptions.
 Peer $p_2$ simply forwards the identity of $p_1$ to the latter's neighbors
 where they directly add it to their partial view. Afterwards, $p_1$ is
 connected to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$. The
-total number of connections in the network gently increases of
+total number of arcs in the network gently increases of
 $1+\ln(|\mathcal{N}|)$.
 
 \begin{algorithm}[h]
@@ -36,13 +36,13 @@ $1+\ln(|\mathcal{N}|)$.
 Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
 protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
 $\langle n,\, age\rangle$ which associate to the neighbor $n$ the age $age$
-(the age is useful in the periodic protocol). Thus, a neighbor can appear
-multiple times in the partial view. Second, the algorithm shows the $onSubs$
-event called each time a peer joins the network which simply forwards the
-identity of the joining peer to all neighbors, indifferently of the age. The
-$onFwdSubs$ event is called when a peer receives such forwarded
-subscription. It adds the peer as one of its neighbor with an age set to $0$
-meaning that it is a brand new connection.
+(the age is useful in the periodic protocol described in
+Section~\ref{subsec:cyclic}). Thus, a neighbor can appear multiple times in the
+partial view. Second, the algorithm shows the $onSubs$ event called each time a
+peer joins the network which simply forwards the identity of the joining peer
+to all neighbors, indifferently of the age. The $onFwdSubs$ event is called
+when a peer receives such forwarded subscription. It adds the peer as one of
+its neighbor with an age set to $0$ meaning that it is a brand new reference.
 
 \begin{figure*}
   \centering
@@ -57,10 +57,10 @@ meaning that it is a brand new connection.
   \caption{\label{fig:joiningexample}Example of the \SCAMPLON{}'s joining
     protocol. In this scenario, Peer $p_1$ contacts $p_2$ to join the network
     composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$ (for simplicity sake, only
-    the new connections and the neighborhood of $p_1$ and $p_2$ are
-    displayed). Peer $p_1$ directly adds $p_2$ in its partial view. Peer $p_2$
-    forwards the identity of $p_1$ to its neighborhood. Each of these neighbors
-    adds $p_1$ in their partial view. Five connections have been established.}
+    the new arcs and the neighborhood of $p_1$ and $p_2$ are displayed). Peer
+    $p_1$ directly adds $p_2$ in its partial view. Peer $p_2$ forwards the
+    identity of $p_1$ to its neighborhood. Each of these neighbors adds $p_1$
+    in their partial view. Five connections have been established.}
 \end{figure*}
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario. Although the
@@ -68,35 +68,36 @@ joining peer is connected to the network, the example shows that the network
 topology is not ideal after a joining protocol. Indeed, the joining peer only
 has one neighbor in its partial view, and all the neighbors of this neighbor
 have the joining peer in their partial view. Consequently, the network is not
-robust and highly clustered. Churn puts the connectedness at risk. To avoid it,
-\SCAMPLON{} needs a balancing protocol.
+robust and highly clustered. Churn (when peers can join and leave the network
+freely) puts the connectedness at risk. To avoid it, \SCAMPLON{} needs a fast
+balancing protocol.
 
 \subsection{Cyclic}
 \label{subsec:cyclic}
 
 \SCAMPLON{} is a random peer sampling protocol. As such, it must constantly
-renew the connections to handle the churn (when peers join and leave freely).
-To ensure this constant shuffling, \SCAMPLON{} repeats an exchanging procedure
-during which two peers swap their neighbors. The swapping aims to balance both
-the size of partial views and the global distribution of peers among them.
+renew its arcs to handle the churn.  To ensure this constant shuffling,
+\SCAMPLON{} repeats an exchanging procedure during which two peers swap their
+neighbors. The swapping aims to balance both the size of partial views and the
+global distribution of peers among them.
 
-\SCAMPLON{} uses a multiset as partial view without any predefined boundary on
-its size. Thus, two peers with different partial view sizes can swap their
-neighbors, the objective being that both peers become as connected as one
-another. The global number of connections and the connectedness must remain
-unchanged.
+A singularity of \SCAMPLON{} lies in the fact that \emph{the partial views may
+  not have the same size}. Indeed, the protocol uses a multiset as partial view
+without any predefined boundary on its size. Thus, two peers with different
+partial view sizes can swap their neighbors, the objective being that both
+peers become as connected as one another. The global number of arcs and the
+connectedness must remain unchanged.
 
 \SCAMPLON{} converges to the ideal partial view size by averaging their size
 over exchanges. Therefore, both peers involved send and integrate
-$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each
-other. Since the partial views are multisets, even if a neighbor appears
-multiple times, the network does not lose any connection. It guarantees that
-the global number of connections after the protocol does not change.
-
-\begin{algorithm}[h] %% to change if repositionning possible
-  \input{./input/cyclicalgo.tex}
-  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
-\end{algorithm}
+$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each other.  It
+brings another singularity of \SCAMPLON{}: \emph{a partial view may contain
+  duplicated references to another peer}. Using a multisets, even if a neighbor
+appears multiple times, the network does not lose any arcs.  Thus, the number
+of arcs does not decrease over time. It worth noting that these duplicates
+remain proportionally low in number compared to the network size. Also, this
+proportion becomes negligible when the network size grows (cf. the experiments
+section~\ref{sec:experiments}). \TODO{Explain it with the birthday paradox.}
 
 There exists a close relationship between \SCAMPLON{} and the proactive
 aggregation protocol introduced
@@ -118,12 +119,11 @@ $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
   \over{2}}$.
 Furthermore, at each cycle, each peer is involved in the exchange protocol at
 least once (they initiate one), and in the best case 1+Poisson(1) (they
-initiate one and, in average, each peer receives another one). This
-relation being established, we know that \SCAMPLON{} converges exponentially
-fast. Furthermore, we know that each cycle decreases the variance of the
-overall system at a rate comprised between ${1\over{2}}$ and
-$1\over{2\sqrt{\text{e}}}$.
-
+initiate one and, in average, each peer receives another one). This relation
+being established, we know that \SCAMPLON{}'s partial view sizes converge
+exponentially fast to the global average size. Additionally, we know that each
+cycle decreases their variance in overall system at a rate comprised between
+${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
 
 \begin{figure*}
   \centering
@@ -155,6 +155,12 @@ $1\over{2\sqrt{\text{e}}}$.
     compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
     the $p_6$'s partial view.}
 \end{figure*}
+
+
+\begin{algorithm}[h] %% to change if repositionning possible
+  \input{./input/cyclicalgo.tex}
+  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
+\end{algorithm}
 
 
 Algorithm~\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at each
@@ -206,7 +212,7 @@ joining protocol.
 \label{subsec:leaving}
 
 Using \SCAMPLON{}, the peers are free to leave the network without giving
-notice. In that regard, we do not consider the departures and the crashs
+notice. In that regard, we do not consider the departures and the crashes
 differently.  Without any appropriate reaction, the network may collapse due to
 an over zealous removal of connections. Indeed, when a peer joins the network,
 it injects in it $1+\ln(|\mathcal{N}|)$ connections. Nevertheless, after few
