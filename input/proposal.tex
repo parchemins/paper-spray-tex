@@ -2,75 +2,104 @@
 \section{Spray}
 \label{sec:proposal}
 
-\SPRAY{} \SCAMPLONDESCRIPTION{} is an adaptive random peer sampling protocol
-inspired by \SCAMP{}~\cite{ganesh2003peer} and
-\CYCLON{}~\cite{voulgaris2005cyclon}. It comprises three parts representing the
-lifecycle of a peer in the network.  Firstly, the joining process injects a
-logarithmically growing number of arcs in the network. Hence, the number of
-arcs scales with the network size.  Nevertheless, the resulting overlay has
-flaws. Consequently, each peer runs a periodic process in order to balance the
-partial views both in terms of partial view size, and uniformity of the
-referenced peers within them. Quickly, the overlay network converges to a
-topology exposing properties similar to random graphs. Finally, A peer is able
-to leave at any time without giving notice (equivalent to a crash), still the
-network properties do not degrade.
+\SPRAY{} is an adaptive random peer sampling protocol inspired by
+\SCAMP{}~\cite{ganesh2003peer} and
+\CYCLON{}~\cite{voulgaris2005cyclon}. It comprises three parts
+representing the lifecycle of a peer in the network.  Firstly, the
+joining process injects a logarithmically growing number of arcs in
+the network. Hence, the number of arcs scales with the network size.
+Next, each peer runs a periodic process in order to balance the
+partial views both in terms of partial view size, and uniformity of
+the referenced peers within them. Quickly, the overlay network
+converges to a topology exposing properties similar to random
+graphs. Finally, A peer is able to leave at any time without giving
+notice (equivalent to a crash), still the network properties do not
+degrade.
 
 \subsection{Joining}
 
-The main focus of the joining protocol is about establishing a logarithmically
-growing number of arcs in the network compared to the number of members.
-\SPRAY{} assumes that each peer has a logarithmic partial view size. Thus,
-when a peer $p_1$ contacts a peer $p_2$ within the network, Peer $p_2$ is able
-to use its partial view size to spread the appropriate number of subscriptions.
-Peer $p_2$ simply forwards the identity of $p_1$ to the latter's neighbors
-where they directly add it to their partial view. Afterwards, $p_1$ is
-connected to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$. The
-total number of arcs in the network gently increases of
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][$p2$ executes OnSubs($p1$)]{
+    \input{./input/joiningexampleA.tex}}
+  \hspace{40pt}
+  \subfloat[Figure B][$p2$ calls $fwdSubs(p1)$ on its neighbor]{
+    \input{./input/joiningexampleB.tex}}
+  \hspace{40pt}
+  \subfloat[Figure C][$p3-p6$ execute $fwdSubs(p1)$]{
+    \input{./input/joiningexampleC.tex}}
+  \caption{\label{fig:joiningexample}Example of the \SPRAY{}'s joining
+    protocol.}
+\end{figure*}
+
+% Pascal: Already said...
+% The main focus of the joining protocol is about establishing a logarithmically
+% growing number of arcs in the network compared to the number of members.
+
+In the \SPRAY{} joining algorithm, a newcomer $p1$ only contact one
+node $p2$. $p2$ mediates the WebRTC connection protocol between $p1$
+and neighbors of $p2$. By this way, the risk of connection failures is
+reduced compared to \SCAMP{} and the second condition of our problem
+statement is fulfilled.
+
+The \SPRAY{} joining algorithm assumes that each connected peer has a
+logarithmic partial view size. After the joining procedure completes,
+the total number of arcs in the network gently increases of
 $1+\ln(|\mathcal{N}|)$.
 
-\begin{algorithm}[h]
+ % Thus, when a peer $p_1$ contacts a peer
+% $p_2$ within the network, Peer $p_2$ is able to use its partial view
+% size to spread the appropriate number of subscriptions.  Peer $p_2$
+% forwards the identity of $p_1$ to the latter's neighbors where they
+% directly add it to their partial view. Afterwards, $p_1$ is connected
+% to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$.
+
+The SPRAY{} joining algorithm is presented in
+Algorithm~\ref{algo:joiningalgo}.
+
+\begin{algorithm}
 \input{input/joiningalgo.tex}
 \caption{\label{algo:joiningalgo}The joining protocol of \SPRAY{}.}
 \end{algorithm}
 
-Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
-protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
-$\langle n,\, age\rangle$ which associate to the neighbor $n$ the age $age$
-(the age is useful in the periodic protocol described in
-Section~\ref{subsec:cyclic}). Thus, a neighbor can appear multiple times in the
-partial view. Second, the algorithm shows the $onSubs$ event called each time a
-peer joins the network which simply forwards the identity of the joining peer
-to all neighbors, indifferently of the age. The $onFwdSubs$ event is called
-when a peer receives such forwarded subscription. It adds the peer as one of
-its neighbor with an age set to $0$ meaning that it is a brand new reference.
+The partial view $\mathcal{P}$ is a multiset of pairs
+$\langle n,\, age\rangle$ which associate to the neighbor $n$ the age
+$age$. We chosen a multiset to allow a neighbor to appear multiple
+times in the partial view. Having duplicates in partial views is
+unlikely but mandatory for adaptivity as we will see later. Age is
+managed by the periodic protocol described in
+Section~\ref{subsec:cyclic} to accelerate convergence as in
+\CYCLON{}. \TODO{to check ??}
 
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][Subscription]{
-    \input{./input/joiningexampleA.tex}}
-  \hspace{40pt}
-  \subfloat[Figure B][Forwarding]{
-    \input{./input/joiningexampleB.tex}}
-  \hspace{40pt}
-  \subfloat[Figure C][Connections]{
-    \input{./input/joiningexampleC.tex}}
-  \caption{\label{fig:joiningexample}Example of the \SPRAY{}'s joining
-    protocol. In this scenario, Peer $p_1$ contacts $p_2$ to join the network
-    composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$ (for simplicity sake, only
-    the new arcs and the neighborhood of $p_1$ and $p_2$ are displayed). Peer
-    $p_1$ directly adds $p_2$ in its partial view. Peer $p_2$ forwards the
-    identity of $p_1$ to its neighborhood. Each of these neighbors adds $p_1$
-    in their partial view. Five connections have been established.}
-\end{figure*}
+The $onSubs$ event is called each time a peer joins the
+network. $OnSubs$ forwards the identity of the joining peer to all
+neighbors, indifferently of the age. The $onFwdSubs$ event is called
+when a peer receives such forwarded subscription. It adds the peer as
+one of its neighbor with an age set to $0$ meaning that it is a brand
+new reference.
 
-Figure~\ref{fig:joiningexample} depicts a joining scenario. Although the
-joining peer is connected to the network, the example shows that the network
-topology is not ideal after a joining protocol. Indeed, the joining peer only
-has one neighbor in its partial view, and all the neighbors of this neighbor
-have the joining peer in their partial view. Consequently, the network is not
-robust and highly clustered. Churn (when peers can join and leave the network
-freely) puts the connectedness at risk. To avoid it, \SPRAY{} needs a fast
-balancing protocol.
+Figure~\ref{fig:joiningexample} depicts a
+joining scenario. In this scenario, Peer $p_1$ contacts $p_2$ to join
+the network composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$. For
+simplicity sake, only the new arcs and the neighborhood of $p_1$ and
+$p_2$ are displayed. Peer $p_1$ directly adds $p_2$ in its partial
+view. Peer $p_2$ forwards the identity of $p_1$ to its
+neighborhood. Each of these neighbors adds $p_1$ in their partial
+view. Five connections have been established.
+
+The partial view of new node is clearly unbalanced and violates the
+first condition of our problem statement. The periodic protocol
+described in Section~\ref{subsec:cyclic} will re-balance the partial
+views.
+
+% Although the
+% joining peer is connected to the network, the example shows that the network
+% topology is not ideal after a joining protocol. Indeed, the joining peer only
+% has one neighbor in its partial view, and all the neighbors of this neighbor
+% have the joining peer in their partial view. Consequently, the network is not
+% robust and highly clustered. Churn (when peers can join and leave the network
+% freely) puts the connectedness at risk. To avoid it, \SPRAY{} needs a fast
+% balancing protocol.
 
 \subsection{Cyclic}
 \label{subsec:cyclic}
