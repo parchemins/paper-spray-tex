@@ -237,8 +237,9 @@ We inspect three properties characteristic for random graphs, the \emph{average
         nor leave will slowly degenerate.
         The reason for this can be found in Algorithm~\ref{algo:unreachable} 
         where arcs are potentially lost when a message is lost.
-        As static protocols like \CYCLON{} are not prone to this degeneration
-        we compare with another adaptive probabilistic protocol,
+        Protocols with fixed partial view sizes like \CYCLON{} are not prone 
+        to this degeneration as they can easily repair lost arcs.
+        For this reason, we compare with another adaptive probabilistic protocol,
         \SCAMP{}, instead. We adapted \SCAMP{} so that its lease-mechanism preserves
         the total number of arcs in the network.
         This experiment focuses on two features: the total number of arcs in the 
