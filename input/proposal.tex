@@ -64,12 +64,12 @@ Algorithm~\ref{algo:joiningalgo}.
 
 The partial view $\mathcal{P}$ is a multiset of pairs
 $\langle n,\, age\rangle$ which associate to the neighbor $n$ the age
-$age$. We chosen a multiset to allow a neighbor to appear multiple
-times in the partial view. Having duplicates in partial views is
-unlikely but mandatory for adaptivity as we will see later. Age is
-managed by the periodic protocol described in
-Section~\ref{subsec:cyclic} to accelerate convergence as in
-\CYCLON{}. \TODO{to check ??}
+$age$. Multiset allows a neighbor to appear multiple times in the
+partial view. Having duplicates in partial views is unlikely but
+mandatory for adaptivity as described in
+section~\ref{subsec:cyclic}. Age is managed by the periodic protocol
+described in Section~\ref{subsec:cyclic} to accelerate convergence as
+in \CYCLON{}. \TODO{to check ??}
 
 The $onSubs$ event is called each time a peer joins the
 network. $OnSubs$ forwards the identity of the joining peer to all
@@ -104,11 +104,16 @@ views.
 \subsection{Cyclic}
 \label{subsec:cyclic}
 
-\SPRAY{} is a random peer sampling protocol. As such, it must constantly
-renew its arcs to handle the churn.  To ensure this constant shuffling,
-\SPRAY{} repeats an exchanging procedure during which two peers swap their
-neighbors. The swapping aims to balance both the size of partial views and the
-global distribution of peers among them.
+The shuffling algorithm of \SPRAY{} balances the size of partial views
+and ensures uniform distribution of peers within partial views.
+
+% Pasca: Redundant...
+% \SPRAY{} is a random peer sampling protocol. As such, it must constantly
+% renew its arcs to handle the churn.  To ensure this constant shuffling,
+% \SPRAY{} repeats an exchanging procedure during which two peers swap their
+% neighbors. The swapping aims to balance both the size of partial views and the
+% global distribution of peers among them.
+
 
 A singularity of \SPRAY{} lies in the fact that \emph{the partial views may
   not have the same size}. Indeed, the protocol uses a multiset as partial view
