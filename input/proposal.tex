@@ -32,6 +32,7 @@ degrade.
     protocol.}
 \end{figure*}
 
+
 % Pascal: Already said...
 % The main focus of the joining protocol is about establishing a logarithmically
 % growing number of arcs in the network compared to the number of members.
@@ -44,7 +45,7 @@ statement is fulfilled.
 
 The \SPRAY{} joining algorithm assumes that each connected peer has a
 logarithmic partial view size. After the joining procedure completes,
-the total number of arcs in the network gently increases of
+the total number of arcs in the network increases of
 $1+\ln(|\mathcal{N}|)$.
 
  % Thus, when a peer $p_1$ contacts a peer
@@ -101,13 +102,11 @@ views.
 % freely) puts the connectedness at risk. To avoid it, \SPRAY{} needs a fast
 % balancing protocol.
 
-\subsection{Cyclic}
+\subsection{Shuffling}
 \label{subsec:cyclic}
 
-The shuffling algorithm of \SPRAY{} balances the size of partial views
-and ensures uniform distribution of peers within partial views.
 
-% Pasca: Redundant...
+% Pascal: Redundant...
 % \SPRAY{} is a random peer sampling protocol. As such, it must constantly
 % renew its arcs to handle the churn.  To ensure this constant shuffling,
 % \SPRAY{} repeats an exchanging procedure during which two peers swap their
@@ -115,49 +114,24 @@ and ensures uniform distribution of peers within partial views.
 % global distribution of peers among them.
 
 
-A singularity of \SPRAY{} lies in the fact that \emph{the partial views may
-  not have the same size}. Indeed, the protocol uses a multiset as partial view
-without any predefined boundary on its size. Thus, two peers with different
-partial view sizes can swap their neighbors, the objective being that both
-peers become as connected as one another. The global number of arcs and the
-connectedness must remain unchanged.
+% A singularity of \SPRAY{} lies in the fact that \emph{the partial views may
+%   not have the same size}. Indeed, the protocol uses a multiset as partial view
+% without any predefined boundary on its size. Thus, two peers with different
+% partial view sizes can swap their neighbors, the objective being that both
+% peers become as connected as one another. The global number of arcs and the
+% connectedness must remain unchanged.
 
-\SPRAY{} converges to the ideal partial view size by averaging their size
-over exchanges. Therefore, both peers involved send and integrate
-$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each other.  It
-brings another singularity of \SPRAY{}: \emph{a partial view may contain
-  duplicated references to another peer}. Using a multisets, even if a neighbor
-appears multiple times, the network does not lose any arcs.  Thus, the number
-of arcs does not decrease over time. It worth noting that these duplicates
-remain proportionally low in number compared to the network size. Also, this
-proportion becomes negligible when the network size grows (cf. the experiments
-section~\ref{sec:experiments}). \TODO{Explain it with the birthday paradox.}
-
-There exists a close relationship between \SPRAY{} and the proactive
-aggregation protocol introduced
-in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
-under the assumption of a peer sampling sufficiently random, the mean value
-$\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
-\begin{center}
-  $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
-  \hfill
-  $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
-  (a_{i,\,x} - \mu_i)^2$
-\end{center}
-where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
-variance must converge to $0$ over cycles. In other terms, the values tends to
-be the same over cycles. In the \SPRAY{} case, the value $a_{i,\,x}$ is the
-partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
-$p_1$ to Peer $p_2$ is an aggregation resulting to:
-$|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
-  \over{2}}$.
-Furthermore, at each cycle, each peer is involved in the exchange protocol at
-least once (they initiate one), and in the best case 1+Poisson(1) (they
-initiate one and, in average, each peer receives another one). This relation
-being established, we know that \SPRAY{}'s partial view sizes converge
-exponentially fast to the global average size. Additionally, we know that each
-cycle decreases their variance in overall system at a rate comprised between
-${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
+Unlike \CYCLON{}, \SPRAY{} shuffles partial views of different
+sizes. It converges to the ideal partial view size by averaging their
+size over exchanges. Therefore, both peers involved send and integrate
+$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each
+other. However, shuffling has to preserve the number of arcs even if
+it requires to have duplicates in partial views. If the number of arcs
+decreases during shuffling, the network will eventually be
+partitioned. In section~\ref{sec:experiments} , we show in experiments
+that the proportion of duplicates remains very low compared to
+the network size. This proportion becomes negligible when the network
+size grows. \TODO{Explain it with the birthday paradox.}
 
 \begin{figure*}
   \centering
@@ -174,20 +148,8 @@ ${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
   \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
   adds $\{p_2\}$ to its partial view.]{
     \input{./input/cyclicexampleC.tex}}
-  \caption{\label{fig:cyclicexample}Example of the \SPRAY{}'s cyclic
-    protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
-    $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
-    (the oldest among the $p_6$'s partial view). It randomly chooses
-    $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer among its
-    neighborhood. In this case, it picks $p_9$ from $\{p_9,\,p_8,\,p_7\}$.  It
-    sends the chosen peer plus its own identity to Peer $p_1$. In response, the
-    latter picks $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer
-    from its partial view. It sends back its sole neighbor $p_2$ and directly
-    adds the received neighbor to its partial view. After receipt, Peer $p_6$
-    removes the sent neighbors from its partial view, removes an occurrence of
-    $p_1$, and adds the received peer from $p_1$. The peers $\{p_6,\,p_9\}$
-    compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
-    the $p_6$'s partial view.}
+  \caption{\label{fig:cyclicexample}Example of the \SPRAY{}'s shuffling
+    protocol. }
 \end{figure*}
 
 
@@ -195,7 +157,6 @@ ${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
   \input{./input/cyclicalgo.tex}
   \caption{\label{algo:scamplon}The cyclic protocol of \SPRAY{}.}
 \end{algorithm}
-
 
 Algorithm~\ref{algo:scamplon} shows the \SPRAY{} protocol running at each
 peer. It is divided between an active thread looping to update the partial
@@ -211,6 +172,7 @@ which are not explicitly defined are the following:
   the $old$ element by the $new$ element and returns the modified view.
 \item $rand()$: generates a random floating number between $0$ and $1$.
 \end{itemize}
+
 In the active thread, Function $loop$ is called every $\Delta$ time
 $t$. Firstly, the function increments the age of each neighbor in
 $\mathcal{P}$. Then, the oldest peer $q$ is chosen to exchange a subset of its
@@ -231,16 +193,62 @@ them remove the sent sample from their view and add the received
 sample. Additionally, the initiating peer removes an occurrence of the chosen
 peer $q$.
 
+Figure~\ref{fig:cyclicexample} depicts the \SPRAY{}'s cyclic
+procedure. This scenario follows from Figure~\ref{fig:joiningexample}:
+Peer $p_1$ just joined the network. Peer $p_6$ initiates an exchange
+with $p_1$ (the oldest among the $p_6$'s partial view). It randomly
+chooses $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer
+among its neighborhood. In this case, it picks $p_9$ from
+$\{p_9,\,p_8,\,p_7\}$.  It sends the chosen peer plus its own identity
+to Peer $p_1$. In response, the latter picks
+$\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer from its
+partial view. It sends back its sole neighbor $p_2$ and directly adds
+the received neighbor to its partial view. After receipt, Peer $p_6$
+removes the sent neighbors from its partial view, removes an
+occurrence of $p_1$, and adds the received peer from $p_1$. The peers
+$\{p_6,\,p_9\}$ compose the $p_1$'s partial view. The peers
+$\{p_2,\,p_7,\,p_8\}$ compose the $p_6$'s partial view.
 
+The example shows that, at first, the initiating peer has $4$ peers in
+its partial view, while the receiving peer has only $1$ peer. Then,
+after the exchange, the former has $3$ neighbors including $1$ new
+peer. The receiving peer has $2$ neighbors, and both of them are
+new. Thus, the periodic procedure tends to even up the partial view
+size of network members. It also scatters neighbors in order to remove
+the highly clustered groups which may appear because of the joining
+protocol.
 
-Figure~\ref{fig:cyclicexample} depicts the \SPRAY{}'s cyclic procedure. The
-example shows that, at first, the initiating peer has $4$ peers in its partial
-view, while the receiving peer has only $1$ peer. Then, after the exchange, the
-former has $3$ neighbors including $1$ new peer. The receiving peer has $2$
-neighbors, and both of them are new. Thus, the periodic procedure tends to
-even up the partial view size of network members. It also scatters neighbors in
-order to remove the highly clustered groups which may appear because of the
-joining protocol.
+Concerning convergence speed of the shuffling algorithm, there exists
+a close relationship between \SPRAY{} and the proactive aggregation
+protocol introduced
+in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states
+that, under the assumption of a peer sampling sufficiently random, the
+mean value $\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
+\begin{center}
+  $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
+  \hfill
+  $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
+  (a_{i,\,x} - \mu_i)^2$
+\end{center}
+where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
+variance must converge to $0$ over cycles. In other terms, the values tends to
+be the same over cycles. In the \SPRAY{} case, the value $a_{i,\,x}$ is the
+partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
+$p_1$ to Peer $p_2$ is an aggregation resulting to:
+$|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
+  \over{2}}$.
+Furthermore, at each cycle, each peer is involved in the exchange protocol at
+least once (they initiate one), and in the best case 1+Poisson(1) (they
+initiate one and, in average, each peer receives another one). This relation
+being established, we know that \SPRAY{}'s partial view sizes converge
+exponentially fast to the global average size. Additionally, we know that each
+cycle decreases their variance in overall system at a rate comprised between
+${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$. 
+
+The shuffling algorithm provides adaptability at the cost of
+duplicates. Averaging size of partial views over exchanges provides
+exponential convergence speed as expected.
+
 
 \subsection{Leaving}
 \label{subsec:leaving}
