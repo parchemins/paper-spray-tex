@@ -1,7 +1,7 @@
 \section{Experimentation}
 \label{sec:experiments}
 
-In this section we examine the properties of \SCAMPLON{} and compare them to
+In this section we examine the properties of \SPRAY{} and compare them to
 properties of \CYCLON{}, a state-of-the-art cyclic peer sampling service.  As
 \CYCLON{} uses fixed-sized partial views, we must predefine its partial view
 size $c$.  As shown by Erd{\H o}s and R{\' e}nyi\cite{erdos1959random} random
@@ -29,14 +29,14 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/cluster.eps}
-  \caption{\label{fig:clustering}The Clustering coefficient of \SCAMPLON{} and
+  \caption{\label{fig:clustering}The Clustering coefficient of \SPRAY{} and
       \CYCLON{}: the x-axis denotes the elapsed time in cycles while the y-axis
       denotes the $\log_{10}$-scaled clustering coefficient.
   }
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] We want to evaluate to what degree \SCAMPLON{} generates
+\item[Objective:] We want to evaluate to what degree \SPRAY{} generates
   clusters in the overlay.  To satisfy the random peer sampling objective it is
   desired that the network has few clusters, thus has a sufficiently low
   clustering coefficient.  This is important for various reasons: first: highly
@@ -53,11 +53,11 @@ We inspect three properties characteristic for random graphs, the \emph{average
   where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher the
   coefficient, the more likely the network contains cliques.  The experiments
   involve 100, 1000, 10000 and 100000 peers.
-\item[Results:] Figure \ref{fig:clustering} shows that \SCAMPLON{} converges
+\item[Results:] Figure \ref{fig:clustering} shows that \SPRAY{} converges
   faster than \CYCLON{}.  Furthermore, oversized \CYCLON{} converges to a
-  higher value than \SCAMPLON while it converges to a lower one when
+  higher value than \SPRAY while it converges to a lower one when
   undersized.
-\item[Reasons:] The experiments yield the expected results: \SCAMPLON{}
+\item[Reasons:] The experiments yield the expected results: \SPRAY{}
   converges faster as it is not constraint by a fixed, artificial barrier
   $l$.  On the other hand, \CYCLON{} yields a lower clustering coefficient on
   convergence when undersized.  This can be explained by the fact that peers in
@@ -71,7 +71,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/avgpath.eps}
-  \caption{\label{fig:avgpath}Comparison of the average shortest path in \SCAMPLON{}
+  \caption{\label{fig:avgpath}Comparison of the average shortest path in \SPRAY{}
       and \CYCLON{}. The x-axis denotes the $\log_{10}$-scaled number of peers in 
       the overlay while the average shortest path of the graph is displayed on the 
   y-axis.}
@@ -87,13 +87,13 @@ We inspect three properties characteristic for random graphs, the \emph{average
   reach a peer from another given peer.  For performance reasons, we select a
   subset of 7 nodes, calculate their average shortest path and average it by 7.
 \item[Results:] Figure~\ref{fig:avgpath} shows that \CYCLON{}, when oversized,
-  yield a shorter average path length then \SCAMPLON{} but is quickly exceeded
+  yield a shorter average path length then \SPRAY{} but is quickly exceeded
   when undersized.
-  %after its optimal partial view size is exceeded \SCAMPLON{} yields a shorter
+  %after its optimal partial view size is exceeded \SPRAY{} yields a shorter
   %path.
 \item[Reasons:] While oversized \CYCLON{} is much better connected into the
-  graph and thus yields a lower average path length then \SCAMPLON{}, as soon
-  as it is undersized, \SCAMPLON{} is, thanks to bigger partial views, better
+  graph and thus yields a lower average path length then \SPRAY{}, as soon
+  as it is undersized, \SPRAY{} is, thanks to bigger partial views, better
   connected into the graph and, consequently, yields the shorter average path
   length. 
 \end{asparadesc}
@@ -104,7 +104,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/histo.eps}
-  \caption{\label{fig:histo}The in-degree distribution of \CYCLON{} and \SCAMPLON{}.
+  \caption{\label{fig:histo}The in-degree distribution of \CYCLON{} and \SPRAY{}.
   The x-axis denotes the in-degree in number of nodes while the y-axis indicates 
   how much of the network features the given in-degree.}
 \end{figure}
@@ -123,13 +123,13 @@ We inspect three properties characteristic for random graphs, the \emph{average
   certain peer is referenced.  We concentrate on the in-degree for better
   comparison as in \CYCLON{} the out-degree is fixed ($c$).
 \item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
-  \CYCLON{} and \SCAMPLON{}.  In \CYCLON{} the number of peers in the overlay
+  \CYCLON{} and \SPRAY{}.  In \CYCLON{} the number of peers in the overlay
   has no influence on the degree distribution always as it always gathers
-  around the selected partial view size $c$.  In \SCAMPLON{}, however, the
+  around the selected partial view size $c$.  In \SPRAY{}, however, the
   degree distribution depends logarithmically on the network size and grows and
   shrinks with the network.
 \item[Reasons:] \CYCLON{}'s fixed partial view size accounts for its rigid
-  behavior.  In \SCAMPLON{} the distribution is much more fluid...
+  behavior.  In \SPRAY{} the distribution is much more fluid...
 \end{asparadesc}
 
 \subsection{Dynamic network}
@@ -137,7 +137,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/churn.eps}
-  \caption{\label{fig:churn}\SCAMPLON{} under examplatory churn: the x-axis denotes
+  \caption{\label{fig:churn}\SPRAY{} under examplatory churn: the x-axis denotes
       the elapsed time in cylces. The upper graphs y-axis shows the
       number of total connections in the overlay while the lower graph y-axis shows
       the variance $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.
@@ -147,7 +147,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To highlight that \SCAMPLON{} is adaptive, i.e., the total
+\item[Objective:] To highlight that \SPRAY{} is adaptive, i.e., the total
   number of connections reflects the network membership. Furthermore, the
   connections are quickly spread among the members.
 \item[Description:] The first half of the experimentation, $2,500$ peers are
@@ -176,7 +176,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
   disturbing the variance of partial views. The $10$ following cycles show a
   slight decrease of connections. Then new members are introduced in the
   network yielding the same results as earlier joinings.
-\item[Reasons:] Since the partial views of \SCAMPLON{} adapt themselves to the
+\item[Reasons:] Since the partial views of \SPRAY{} adapt themselves to the
   network size, the number of connections grows as the network membership
   grows.  The peaks in variance correspond to the joining parts of the
   experiment. The disparity comes from the fact that new peers arrive in the
@@ -231,9 +231,9 @@ We inspect three properties characteristic for random graphs, the \emph{average
   \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
   \caption{\label{fig:degen}Degeneration of static network} \end{figure}
 
-\begin{asparadesc} \item[Objective:] \SCAMPLON{}, especially when using
+\begin{asparadesc} \item[Objective:] \SPRAY{}, especially when using
         \emph{handshaking}, is vulnerable to message loss. When messages can
-        be lost, a static \SCAMPLON{} overlay where peers neither join
+        be lost, a static \SPRAY{} overlay where peers neither join
         nor leave will slowly degenerate.
         The reason for this can be found in Algorithm~\ref{algo:unreachable} 
         where arcs are potentially lost when a message is lost.
@@ -251,7 +251,7 @@ We inspect three properties characteristic for random graphs, the \emph{average
     Naturally, we want the number of weak components $|\mathcal{W}|$ to be $1$,
     meaning that the whole network is connected.
     When the overlay consists of more than one component, the network is disconnected.
-    Unlike with strong component where the direction is taken into account, \SCAMPLON{}
+    Unlike with strong component where the direction is taken into account, \SPRAY{}
     cannot repair itself when more than one weak component is present.
     The experiment involves handshaking and is conducted with an overlay consisting
     of $10,000$ peers over a period of $100,000$ cycles and a probability of
@@ -263,14 +263,14 @@ We inspect three properties characteristic for random graphs, the \emph{average
     The upper graphs y-axis represents the total number of arcs in the
     overlay while the lower graphs y-axis shows the percentage that weak components
     make up of the total network: $\frac{|\mathcal{W}|}{|\mathcal{N}|}$.
-    We clearly see that \SCAMPLON{} degenerates much slower than \SCAMP{} and that
+    We clearly see that \SPRAY{} degenerates much slower than \SCAMP{} and that
     it becomes disconnected very late while \SCAMP{} collapses quickly.
 
 \item[Reasons:]
-    As \SCAMP{} must maintain much more links than \SCAMPLON{} when establishing a
+    As \SCAMP{} must maintain much more links than \SPRAY{} when establishing a
     connection it has a higher probability of losing arcs which, in turn, let it
     degenerate much quicker.
-    Furthermore, while in \SCAMPLON{} we can easily predict if a link failed or if
+    Furthermore, while in \SPRAY{} we can easily predict if a link failed or if
     the node failed and thus we can stop the degeneration this is not possible in
     \SCAMP{} as it cannot be predicted easy for when a link failed due to its
     random walk nature.
@@ -289,17 +289,17 @@ We inspect three properties characteristic for random graphs, the \emph{average
 
 \begin{asparadesc} 
 \item[Objective:]
-    \SCAMPLON{}`s only constraint for a peers partial view is that it must not contain
+    \SPRAY{}`s only constraint for a peers partial view is that it must not contain
     self-loops, however, multiple links to the same peer different from oneself
     are explicitly allowed.
-    This characteristic strongly distinguishes \SCAMPLON{} from \CYCLON{} and other 
+    This characteristic strongly distinguishes \SPRAY{} from \CYCLON{} and other 
     \emph{random peer sampling services} who ensure that only one link per peer exists.
     We want to avoid duplicates in partial views for two obvious reasons:
     First, it lowers the robustness: when a peer $a$ references another peer $b$ 
     multiple times and peer $b$ leaves the network than $a$ will lose not one but 
-    multiple links and thus making \SCAMPLON{} potentially more disruptive than 
+    multiple links and thus making \SPRAY{} potentially more disruptive than 
     its sibling protocols.
-    Second, duplicates might be problematic for protocols that make use of \SCAMPLON{} as
+    Second, duplicates might be problematic for protocols that make use of \SPRAY{} as
     a random peer sampling service. When used for broadcasting, unnecessary messages
     are sent which increases the network costs of the protocol.
     All of this demands a closer look on the behavior of duplicates.

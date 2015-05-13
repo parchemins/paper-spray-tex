@@ -2,7 +2,7 @@
 \section{Spray}
 \label{sec:proposal}
 
-\SCAMPLON{} \SCAMPLONDESCRIPTION{} is an adaptive random peer sampling protocol
+\SPRAY{} \SCAMPLONDESCRIPTION{} is an adaptive random peer sampling protocol
 inspired by \SCAMP{}~\cite{ganesh2003peer} and
 \CYCLON{}~\cite{voulgaris2005cyclon}. It comprises three parts representing the
 lifecycle of a peer in the network.  Firstly, the joining process injects a
@@ -19,7 +19,7 @@ network properties do not degrade.
 
 The main focus of the joining protocol is about establishing a logarithmically
 growing number of arcs in the network compared to the number of members.
-\SCAMPLON{} assumes that each peer has a logarithmic partial view size. Thus,
+\SPRAY{} assumes that each peer has a logarithmic partial view size. Thus,
 when a peer $p_1$ contacts a peer $p_2$ within the network, Peer $p_2$ is able
 to use its partial view size to spread the appropriate number of subscriptions.
 Peer $p_2$ simply forwards the identity of $p_1$ to the latter's neighbors
@@ -30,7 +30,7 @@ $1+\ln(|\mathcal{N}|)$.
 
 \begin{algorithm}[h]
 \input{input/joiningalgo.tex}
-\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
+\caption{\label{algo:joiningalgo}The joining protocol of \SPRAY{}.}
 \end{algorithm}
 
 Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
@@ -54,7 +54,7 @@ its neighbor with an age set to $0$ meaning that it is a brand new reference.
   \hspace{40pt}
   \subfloat[Figure C][Connections]{
     \input{./input/joiningexampleC.tex}}
-  \caption{\label{fig:joiningexample}Example of the \SCAMPLON{}'s joining
+  \caption{\label{fig:joiningexample}Example of the \SPRAY{}'s joining
     protocol. In this scenario, Peer $p_1$ contacts $p_2$ to join the network
     composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$ (for simplicity sake, only
     the new arcs and the neighborhood of $p_1$ and $p_2$ are displayed). Peer
@@ -69,29 +69,29 @@ topology is not ideal after a joining protocol. Indeed, the joining peer only
 has one neighbor in its partial view, and all the neighbors of this neighbor
 have the joining peer in their partial view. Consequently, the network is not
 robust and highly clustered. Churn (when peers can join and leave the network
-freely) puts the connectedness at risk. To avoid it, \SCAMPLON{} needs a fast
+freely) puts the connectedness at risk. To avoid it, \SPRAY{} needs a fast
 balancing protocol.
 
 \subsection{Cyclic}
 \label{subsec:cyclic}
 
-\SCAMPLON{} is a random peer sampling protocol. As such, it must constantly
+\SPRAY{} is a random peer sampling protocol. As such, it must constantly
 renew its arcs to handle the churn.  To ensure this constant shuffling,
-\SCAMPLON{} repeats an exchanging procedure during which two peers swap their
+\SPRAY{} repeats an exchanging procedure during which two peers swap their
 neighbors. The swapping aims to balance both the size of partial views and the
 global distribution of peers among them.
 
-A singularity of \SCAMPLON{} lies in the fact that \emph{the partial views may
+A singularity of \SPRAY{} lies in the fact that \emph{the partial views may
   not have the same size}. Indeed, the protocol uses a multiset as partial view
 without any predefined boundary on its size. Thus, two peers with different
 partial view sizes can swap their neighbors, the objective being that both
 peers become as connected as one another. The global number of arcs and the
 connectedness must remain unchanged.
 
-\SCAMPLON{} converges to the ideal partial view size by averaging their size
+\SPRAY{} converges to the ideal partial view size by averaging their size
 over exchanges. Therefore, both peers involved send and integrate
 $\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each other.  It
-brings another singularity of \SCAMPLON{}: \emph{a partial view may contain
+brings another singularity of \SPRAY{}: \emph{a partial view may contain
   duplicated references to another peer}. Using a multisets, even if a neighbor
 appears multiple times, the network does not lose any arcs.  Thus, the number
 of arcs does not decrease over time. It worth noting that these duplicates
@@ -99,7 +99,7 @@ remain proportionally low in number compared to the network size. Also, this
 proportion becomes negligible when the network size grows (cf. the experiments
 section~\ref{sec:experiments}). \TODO{Explain it with the birthday paradox.}
 
-There exists a close relationship between \SCAMPLON{} and the proactive
+There exists a close relationship between \SPRAY{} and the proactive
 aggregation protocol introduced
 in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
 under the assumption of a peer sampling sufficiently random, the mean value
@@ -112,7 +112,7 @@ $\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
 \end{center}
 where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
 variance must converge to $0$ over cycles. In other terms, the values tends to
-be the same over cycles. In the \SCAMPLON{} case, the value $a_{i,\,x}$ is the
+be the same over cycles. In the \SPRAY{} case, the value $a_{i,\,x}$ is the
 partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
 $p_1$ to Peer $p_2$ is an aggregation resulting to:
 $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
@@ -120,7 +120,7 @@ $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
 Furthermore, at each cycle, each peer is involved in the exchange protocol at
 least once (they initiate one), and in the best case 1+Poisson(1) (they
 initiate one and, in average, each peer receives another one). This relation
-being established, we know that \SCAMPLON{}'s partial view sizes converge
+being established, we know that \SPRAY{}'s partial view sizes converge
 exponentially fast to the global average size. Additionally, we know that each
 cycle decreases their variance in overall system at a rate comprised between
 ${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
@@ -140,7 +140,7 @@ ${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
   \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
   adds $\{p_2\}$ to its partial view.]{
     \input{./input/cyclicexampleC.tex}}
-  \caption{\label{fig:cyclicexample}Example of the \SCAMPLON{}'s cyclic
+  \caption{\label{fig:cyclicexample}Example of the \SPRAY{}'s cyclic
     protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
     $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
     (the oldest among the $p_6$'s partial view). It randomly chooses
@@ -159,11 +159,11 @@ ${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$.
 
 \begin{algorithm}[h] %% to change if repositionning possible
   \input{./input/cyclicalgo.tex}
-  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
+  \caption{\label{algo:scamplon}The cyclic protocol of \SPRAY{}.}
 \end{algorithm}
 
 
-Algorithm~\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at each
+Algorithm~\ref{algo:scamplon} shows the \SPRAY{} protocol running at each
 peer. It is divided between an active thread looping to update the partial
 view, and a passive thread which reacts to an exchange message. The functions
 which are not explicitly defined are the following:
@@ -199,7 +199,7 @@ peer $q$.
 
 
 
-Figure~\ref{fig:cyclicexample} depicts the \SCAMPLON{}'s cyclic procedure. The
+Figure~\ref{fig:cyclicexample} depicts the \SPRAY{}'s cyclic procedure. The
 example shows that, at first, the initiating peer has $4$ peers in its partial
 view, while the receiving peer has only $1$ peer. Then, after the exchange, the
 former has $3$ neighbors including $1$ new peer. The receiving peer has $2$
@@ -211,7 +211,7 @@ joining protocol.
 \subsection{Leaving}
 \label{subsec:leaving}
 
-Using \SCAMPLON{}, the peers are free to leave the network without giving
+Using \SPRAY{}, the peers are free to leave the network without giving
 notice. In that regard, we do not consider the departures and the crashes
 differently.  Without any appropriate reaction, the network may collapse due to
 an over zealous removal of connections. Indeed, when a peer joins the network,
@@ -232,10 +232,10 @@ removes the number of connections it injected when it joined.
 
 \begin{algorithm}[h]
   \input{./input/unreachablealgo.tex}
-  \caption{\label{algo:unreachable}The crash/leaving handler of \SCAMPLON{}.}
+  \caption{\label{algo:unreachable}The crash/leaving handler of \SPRAY{}.}
 \end{algorithm}
 
-Algorithm~\ref{algo:unreachable} shows the manner in which \SCAMPLON{} deals
+Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY{} deals
 with crashes. When the peer $q$ is detected as crashed, a first loop counts the
 occurrences of this neighbor in the partial view, and removes all of them. The,
 the second loop probabilistically doubles a connection with a known peer. The
@@ -253,7 +253,7 @@ probability depends of the partial view size before the removals.
   \subfloat[Figure C][The peer $p_3$ and $p_5$ choose to establish
   a duplicate with one of their existing neighbor.]{
     \input{./input/crashexampleC.tex}}
-  \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash/leaving
+  \caption{\label{fig:crashexample}Example of \SPRAY{}'s crash/leaving
     handler. The scenario follows from prior examples after few other
     exchanges. Peer $p_1$ leaves the network without giving notice. With it,
     $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
@@ -265,7 +265,7 @@ probability depends of the partial view size before the removals.
     $5$ connections have been removed.}
 \end{figure*}
 
-Figure~\ref{fig:crashexample} depicts the \SCAMPLON{}'s crash/leaving
+Figure~\ref{fig:crashexample} depicts the \SPRAY{}'s crash/leaving
 handler. The example shows that some peers reestablish connections if they
 detect a dead connection. The probability depends on the partial view size of
 each of these peer. In average, one of these peer will likely remove the
@@ -284,25 +284,25 @@ membership messages arrived, and forward the answer to this neighbor
 accordingly. Also, there are few optimization concerning the establishments of
 connections. For instance, when a peer $p$ starts an exchange with $q$, and $q$
 has $p$ in its partial view, instead of inverting the link between $p$ and $q$,
-and $q$ and $p$, \SCAMPLON{} does not change them. Another optimization
+and $q$ and $p$, \SPRAY{} does not change them. Another optimization
 concerns a peer having a neighbor multiple times in its partial view. While
-\SCAMPLON{} keeps such information in its partial view, only one connection per
+\SPRAY{} keeps such information in its partial view, only one connection per
 neighbor is truly necessary.
 
-To summarize, \SCAMPLON{} provides:
+To summarize, \SPRAY{} provides:
 \begin{inparaenum}[(i)]
 \item a logarithmically increasing partial view size compared to the global
   network size,
 \item a constant complexity to establish the connections,
 \item an exponentially fast convergence to a random graph.
 \end{inparaenum}
-Providing these three properties, \SCAMPLON{} improves the state-of-the-art
+Providing these three properties, \SPRAY{} improves the state-of-the-art
 approaches~\cite{ganesh2001scamp,voulgaris2005cyclon} in the traditional
 connection set-up. Furthermore, the improvement becomes crucial in the context
 of three-way handshake connection set-up.  The latter becomes increasingly
 important with the appearance of technologies allowing peer-to-peer within
 modern web browsers.  The next section aims to demonstrate experimentally the
-behavior of \SCAMPLON{}. In particular, it aims to highlight the aforementioned
+behavior of \SPRAY{}. In particular, it aims to highlight the aforementioned
 properties.
 
 

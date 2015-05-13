@@ -3,7 +3,7 @@
 \label{sec:conclusion}
 
 In this paper, we introduced a random peer sampling approach called
-\SCAMPLON{}.  This new approach, inspired of two state-of-the-art approaches,
+\SPRAY{}.  This new approach, inspired of two state-of-the-art approaches,
 namely \SCAMP{} and \CYCLON{}, provide the best of both worlds:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
@@ -11,7 +11,7 @@ namely \SCAMP{} and \CYCLON{}, provide the best of both worlds:
   neighbor-to-neighbor interactions,
 \item exponentially fast convergence to a random graph.
 \end{inparaenum}
-As such, \SCAMPLON{} constitutes an improvement over state-of-the-art
+As such, \SPRAY{} constitutes an improvement over state-of-the-art
 approaches in the traditional context of 1-way connection establishments. In
 addition, the improvement becomes crucial in the 3-way handshake connection
 set-up which is increasingly important since recent technologies (e.g. WebRTC)
@@ -21,7 +21,7 @@ Thus, we expect that decentralized applications (requiring scalable broadcast
 among other) will flourish in the web browsers, while they were previously
 quartered to standalone applications.
 
-Future work includes an analysis of doubles in the \SCAMPLON{}'s partial views.
+Future work includes an analysis of doubles in the \SPRAY{}'s partial views.
 Intuitively, these artifacts do not exist in infinite random graphs. However,
 in small networks, they are much more likely to exist. We intend to measure
 these redundant identities and to what extent they become a threat to the

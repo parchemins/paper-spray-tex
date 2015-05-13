@@ -22,7 +22,7 @@ peer sampling service \SCAMP{}~\cite{ganesh2003peer} is adaptive but
 uses random walks to establish its connections that is much more
 costly and likely to fail in the WebRTC context.
 
-In this paper, we introduce \SCAMPLON{}, a random peer sampling protocol
+In this paper, we introduce \SPRAY{}, a random peer sampling protocol
 inspired by both \SCAMP{}~\cite{ganesh2003peer} and
 \CYCLON{}~\cite{voulgaris2005cyclon}. Compared to state of art,
 \begin{inparaenum}[(i)]
@@ -33,14 +33,14 @@ inspired by both \SCAMP{}~\cite{ganesh2003peer} and
 \item It converges exponentially fast to a topology exposing properties similar
   to random graphs. Thus, the network becomes quickly resilient to massive
   failures, efficiently disseminates information etc.
-\item In experimental setup, we show the adaptiveness of \SCAMPLON{} and
+\item In experimental setup, we show the adaptiveness of \SPRAY{} and
   highlight its efficiency improvement compared to \CYCLON{}, at the cost of a
   little overhead.
 \end{inparaenum}
 
 The rest of this paper is organized as follow: Section~\ref{sec:relatedwork}
-reviews the related work. Section~\ref{sec:proposal} details the \SCAMPLON{}
-protocol.  Section~\ref{sec:experiments} shows the properties of \SCAMPLON{}
+reviews the related work. Section~\ref{sec:proposal} details the \SPRAY{}
+protocol.  Section~\ref{sec:experiments} shows the properties of \SPRAY{}
 and compare them to state-of-the-art random peer sampling approaches. We
 conclude and discuss about perspective in Section~\ref{sec:conclusion}.
 
