@@ -296,29 +296,33 @@ probability depends of the partial view size before the removals.
   a duplicate with one of their existing neighbor.]{
     \input{./input/crashexampleC.tex}}
   \caption{\label{fig:crashexample}Example of \SPRAY{}'s crash/leaving
-    handler. The scenario follows from prior examples after few other
-    exchanges. Peer $p_1$ leaves the network without giving notice. With it,
-    $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
-    crashed/left peer in their partial view. Peer $p_5$ has
-    $1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$ chance to replace the dead
-    connections. In this case, it doubles the connection to
-    $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
-    appropriate procedure. Only $p_3$ doubles one of its connection. In total,
-    $5$ connections have been removed.}
+    handler. }
 \end{figure*}
 
 Figure~\ref{fig:crashexample} depicts the \SPRAY{}'s crash/leaving
-handler. The example shows that some peers reestablish connections if they
-detect a dead connection. The probability depends on the partial view size of
-each of these peer. In average, one of these peer will likely remove the
-connection while the other peers will double one of their existing
-connections. In this case, Peer $p_1$ injected $5$ connections when it
-joined. It removes $7-2 =5 $ connections when it leaves. The global number of
-connections remains logarithmic compared to the number of members in the
-network. Nevertheless, we can see that connectedness is not entirely guaranteed
-(only with the high probability implied by random graphs). Indeed, if Peer
-$p_1$ is the sole bridge between two clusters, adding connections is not enough
-to ensure connectedness (more details in Section~\ref{subsec:resilience}).
+handler. The scenario follows from prior examples after few other
+exchanges. Peer $p_1$ leaves the network without giving notice. With
+it, $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
+crashed/left peer in their partial view. Peer $p_5$ has
+$1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$ chance to replace the dead
+connections. In this case, it doubles the connection to
+$p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and
+run the appropriate procedure. Only $p_3$ doubles one of its
+connection. In total, $5$ connections have been removed.  
+
+The example shows that some peers reestablish connections if they
+detect a dead connection. The probability depends on the partial view
+size of each of these peer. In average, one of these peer will likely
+remove the connection while the other peers will double one of their
+existing connections. In this case, Peer $p_1$ injected $5$
+connections when it joined. It removes $7-2 =5 $ connections when it
+leaves. The global number of connections remains logarithmic compared
+to the number of members in the network. Nevertheless, we can see that
+connectedness is not entirely guaranteed (only with the high
+probability implied by random graphs). Indeed, if Peer $p_1$ is the
+sole bridge between two clusters, adding connections is not enough to
+ensure connectedness (more details in
+Section~\ref{subsec:resilience}).
 
 Note that extending the algorithms to handle three-way handshake is not
 difficult: it only requires to keep track of the neighbor from where the
