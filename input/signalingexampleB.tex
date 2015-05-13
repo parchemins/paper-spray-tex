@@ -1,0 +1,16 @@
+
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p1) edge[dashed,bend left] node[fill=white]{1:emit} (p2)
+  (p2) edge[dashed,bend left] node[fill=white,left]{2:emit/p1} (p3)
+  (p3) edge[dashed,bend left] node[fill=white,right]{3:accept/p1} (p2)
+  (p2) edge[dashed,bend left] node[fill=white]{4:accept} (p1)
+  (p1) edge[<->,thick] (p2)
+%  (p1) edge[<->,thick,bend left] (p3)
+  (p2) edge[<->,thick]  (p3);
+
+\end{tikzpicture}

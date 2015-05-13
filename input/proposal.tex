@@ -2,128 +2,136 @@
 \section{Spray}
 \label{sec:proposal}
 
-\SCAMPLON{} \SCAMPLONDESCRIPTION{} is an adaptive random peer sampling protocol
-inspired by \SCAMP{}~\cite{ganesh2003peer} and
-\CYCLON{}~\cite{voulgaris2005cyclon}. It comprises three parts representing the
-lifecycle of a peer in the network.  Firstly, the joining process injects a
-logarithmically growing number of arcs in the network. Hence, the number of
-arcs scales with the network size.  Nevertheless, the resulting overlay has
-flaws. Consequently, each peer runs a periodic process in order to balance the
-partial views both in terms of partial view size, and uniformity of the
-referenced peers within them. Quickly, the overlay network converges to a
-topology exposing properties of the random graphs. Finally, A peer is able to
-leave at any time without giving notice (equivalent to a crash), still the
-network properties do not degrade.
+\SPRAY{} is an adaptive random peer sampling protocol inspired by
+\SCAMP{}~\cite{ganesh2003peer} and
+\CYCLON{}~\cite{voulgaris2005cyclon}. It comprises three parts
+representing the lifecycle of a peer in the network.  Firstly, the
+joining process injects a logarithmically growing number of arcs in
+the network. Hence, the number of arcs scales with the network size.
+Next, each peer runs a periodic process in order to balance the
+partial views both in terms of partial view size, and uniformity of
+the referenced peers within them. Quickly, the overlay network
+converges to a topology exposing properties similar to random
+graphs. Finally, A peer is able to leave at any time without giving
+notice (equivalent to a crash), still the network properties do not
+degrade.
 
 \subsection{Joining}
 
-The main focus of the joining protocol is about establishing a logarithmically
-growing number of arcs in the network compared to the number of members.
-\SCAMPLON{} assumes that each peer has a logarithmic partial view size. Thus,
-when a peer $p_1$ contacts a peer $p_2$ within the network, Peer $p_2$ is able
-to use its partial view size to spread the appropriate number of subscriptions.
-Peer $p_2$ simply forwards the identity of $p_1$ to the latter's neighbors
-where they directly add it to their partial view. Afterwards, $p_1$ is
-connected to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$. The
-total number of connections in the network gently increases of
-$1+\ln(|\mathcal{N}|)$.
-
-\begin{algorithm}[h]
-\input{input/joiningalgo.tex}
-\caption{\label{algo:joiningalgo}The joining protocol of \SCAMPLON{}.}
-\end{algorithm}
-
-Algorithm~\ref{algo:joiningalgo} shows the simplicity of this joining
-protocol. First, the partial view $\mathcal{P}$ is a multiset of pairs
-$\langle n,\, age\rangle$ which associate to the neighbor $n$ the age $age$
-(the age is useful in the periodic protocol). Thus, a neighbor can appear
-multiple times in the partial view. Second, the algorithm shows the $onSubs$
-event called each time a peer joins the network which simply forwards the
-identity of the joining peer to all neighbors, indifferently of the age. The
-$onFwdSubs$ event is called when a peer receives such forwarded
-subscription. It adds the peer as one of its neighbor with an age set to $0$
-meaning that it is a brand new connection.
-
 \begin{figure*}
   \centering
-  \subfloat[Figure A][Subscription]{
+  \subfloat[Figure A][$p2$ executes OnSubs($p1$)]{
     \input{./input/joiningexampleA.tex}}
   \hspace{40pt}
-  \subfloat[Figure B][Forwarding]{
+  \subfloat[Figure B][$p2$ calls $fwdSubs(p1)$ on its neighbor]{
     \input{./input/joiningexampleB.tex}}
   \hspace{40pt}
-  \subfloat[Figure C][Connections]{
+  \subfloat[Figure C][$p3-p6$ execute $fwdSubs(p1)$]{
     \input{./input/joiningexampleC.tex}}
-  \caption{\label{fig:joiningexample}Example of the \SCAMPLON{}'s joining
-    protocol. In this scenario, Peer $p_1$ contacts $p_2$ to join the network
-    composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$ (for simplicity sake, only
-    the new connections and the neighborhood of $p_1$ and $p_2$ are
-    displayed). Peer $p_1$ directly adds $p_2$ in its partial view. Peer $p_2$
-    forwards the identity of $p_1$ to its neighborhood. Each of these neighbors
-    adds $p_1$ in their partial view. Five connections have been established.}
+  \caption{\label{fig:joiningexample}Example of the \SPRAY{}'s joining
+    protocol.}
 \end{figure*}
 
-Figure~\ref{fig:joiningexample} depicts a joining scenario. Although the
-joining peer is connected to the network, the example shows that the network
-topology is not ideal after a joining protocol. Indeed, the joining peer only
-has one neighbor in its partial view, and all the neighbors of this neighbor
-have the joining peer in their partial view. Consequently, the network is not
-robust and highly clustered. Churn puts the connectedness at risk. To avoid it,
-\SCAMPLON{} needs a balancing protocol.
 
-\subsection{Cyclic}
-\label{subsec:cyclic}
+% Pascal: Already said...
+% The main focus of the joining protocol is about establishing a logarithmically
+% growing number of arcs in the network compared to the number of members.
 
-\SCAMPLON{} is a random peer sampling protocol. As such, it must constantly
-renew the connections to handle the churn (when peers join and leave freely).
-To ensure this constant shuffling, \SCAMPLON{} repeats an exchanging procedure
-during which two peers swap their neighbors. The swapping aims to balance both
-the size of partial views and the global distribution of peers among them.
+In the \SPRAY{} joining algorithm, a newcomer $p1$ only contact one
+node $p2$. $p2$ mediates the WebRTC connection protocol between $p1$
+and neighbors of $p2$. By this way, the risk of connection failures is
+reduced compared to \SCAMP{} and the second condition of our problem
+statement is fulfilled.
 
-\SCAMPLON{} uses a multiset as partial view without any predefined boundary on
-its size. Thus, two peers with different partial view sizes can swap their
-neighbors, the objective being that both peers become as connected as one
-another. The global number of connections and the connectedness must remain
-unchanged.
+The \SPRAY{} joining algorithm assumes that each connected peer has a
+logarithmic partial view size. After the joining procedure completes,
+the total number of arcs in the network increases of
+$1+\ln(|\mathcal{N}|)$.
 
-\SCAMPLON{} converges to the ideal partial view size by averaging their size
-over exchanges. Therefore, both peers involved send and integrate
-$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each
-other. Since the partial views are multisets, even if a neighbor appears
-multiple times, the network does not lose any connection. It guarantees that
-the global number of connections after the protocol does not change.
+ % Thus, when a peer $p_1$ contacts a peer
+% $p_2$ within the network, Peer $p_2$ is able to use its partial view
+% size to spread the appropriate number of subscriptions.  Peer $p_2$
+% forwards the identity of $p_1$ to the latter's neighbors where they
+% directly add it to their partial view. Afterwards, $p_1$ is connected
+% to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$.
 
-\begin{algorithm}[h] %% to change if repositionning possible
-  \input{./input/cyclicalgo.tex}
-  \caption{\label{algo:scamplon}The cyclic protocol of \SCAMPLON{}.}
+The SPRAY{} joining algorithm is presented in
+Algorithm~\ref{algo:joiningalgo}.
+
+\begin{algorithm}
+\input{input/joiningalgo.tex}
+\caption{\label{algo:joiningalgo}The joining protocol of \SPRAY{}.}
 \end{algorithm}
 
-There exists a close relationship between \SCAMPLON{} and the proactive
-aggregation protocol introduced
-in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states that,
-under the assumption of a peer sampling sufficiently random, the mean value
-$\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
-\begin{center}
-  $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
-  \hfill
-  $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
-  (a_{i,\,x} - \mu_i)^2$
-\end{center}
-where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
-variance must converge to $0$ over cycles. In other terms, the values tends to
-be the same over cycles. In the \SCAMPLON{} case, the value $a_{i,\,x}$ is the
-partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
-$p_1$ to Peer $p_2$ is an aggregation resulting to:
-$|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
-  \over{2}}$.
-Furthermore, at each cycle, each peer is involved in the exchange protocol at
-least once (they initiate one), and in the best case 1+Poisson(1) (they
-initiate one and, in average, each peer receives another one). This
-relation being established, we know that \SCAMPLON{} converges exponentially
-fast. Furthermore, we know that each cycle decreases the variance of the
-overall system at a rate comprised between ${1\over{2}}$ and
-$1\over{2\sqrt{\text{e}}}$.
+The partial view $\mathcal{P}$ is a multiset of pairs
+$\langle n,\, age\rangle$ which associate to the neighbor $n$ the age
+$age$. Multiset allows a neighbor to appear multiple times in the
+partial view. Having duplicates in partial views is unlikely but
+mandatory for adaptivity as described in
+section~\ref{subsec:cyclic}. Age is managed by the periodic protocol
+described in Section~\ref{subsec:cyclic} to accelerate convergence as
+in \CYCLON{}. \TODO{to check ??}
 
+The $onSubs$ event is called each time a peer joins the
+network. $OnSubs$ forwards the identity of the joining peer to all
+neighbors, indifferently of the age. The $onFwdSubs$ event is called
+when a peer receives such forwarded subscription. It adds the peer as
+one of its neighbor with an age set to $0$ meaning that it is a brand
+new reference.
+
+Figure~\ref{fig:joiningexample} depicts a
+joining scenario. In this scenario, Peer $p_1$ contacts $p_2$ to join
+the network composed of $\{p_2,\,p_3,\,p_4,\,p_5,\,p_6\}$. For
+simplicity sake, only the new arcs and the neighborhood of $p_1$ and
+$p_2$ are displayed. Peer $p_1$ directly adds $p_2$ in its partial
+view. Peer $p_2$ forwards the identity of $p_1$ to its
+neighborhood. Each of these neighbors adds $p_1$ in their partial
+view. Five connections have been established.
+
+The partial view of new node is clearly unbalanced and violates the
+first condition of our problem statement. The periodic protocol
+described in Section~\ref{subsec:cyclic} will re-balance the partial
+views.
+
+% Although the
+% joining peer is connected to the network, the example shows that the network
+% topology is not ideal after a joining protocol. Indeed, the joining peer only
+% has one neighbor in its partial view, and all the neighbors of this neighbor
+% have the joining peer in their partial view. Consequently, the network is not
+% robust and highly clustered. Churn (when peers can join and leave the network
+% freely) puts the connectedness at risk. To avoid it, \SPRAY{} needs a fast
+% balancing protocol.
+
+\subsection{Shuffling}
+\label{subsec:cyclic}
+
+
+% Pascal: Redundant...
+% \SPRAY{} is a random peer sampling protocol. As such, it must constantly
+% renew its arcs to handle the churn.  To ensure this constant shuffling,
+% \SPRAY{} repeats an exchanging procedure during which two peers swap their
+% neighbors. The swapping aims to balance both the size of partial views and the
+% global distribution of peers among them.
+
+
+% A singularity of \SPRAY{} lies in the fact that \emph{the partial views may
+%   not have the same size}. Indeed, the protocol uses a multiset as partial view
+% without any predefined boundary on its size. Thus, two peers with different
+% partial view sizes can swap their neighbors, the objective being that both
+% peers become as connected as one another. The global number of arcs and the
+% connectedness must remain unchanged.
+
+Unlike \CYCLON{}, \SPRAY{} shuffles partial views of different
+sizes. It converges to the ideal partial view size by averaging their
+size over exchanges. Therefore, both peers involved send and integrate
+$\left\lceil|\mathcal{P}|\over{2}\right\rceil$ neighbors from each
+other. However, shuffling has to preserve the number of arcs even if
+it requires to have duplicates in partial views. If the number of arcs
+decreases during shuffling, the network will eventually be
+partitioned. In section~\ref{sec:experiments} , we show in experiments
+that the proportion of duplicates remains very low compared to
+the network size. This proportion becomes negligible when the network
+size grows. \TODO{Explain it with the birthday paradox.}
 
 \begin{figure*}
   \centering
@@ -140,24 +148,17 @@ $1\over{2\sqrt{\text{e}}}$.
   \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
   adds $\{p_2\}$ to its partial view.]{
     \input{./input/cyclicexampleC.tex}}
-  \caption{\label{fig:cyclicexample}Example of the \SCAMPLON{}'s cyclic
-    protocol. This scenario follows from Figure~\ref{fig:joiningexample}: Peer
-    $p_1$ just joined the network. Peer $p_6$ initiates an exchange with $p_1$
-    (the oldest among the $p_6$'s partial view). It randomly chooses
-    $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer among its
-    neighborhood. In this case, it picks $p_9$ from $\{p_9,\,p_8,\,p_7\}$.  It
-    sends the chosen peer plus its own identity to Peer $p_1$. In response, the
-    latter picks $\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer
-    from its partial view. It sends back its sole neighbor $p_2$ and directly
-    adds the received neighbor to its partial view. After receipt, Peer $p_6$
-    removes the sent neighbors from its partial view, removes an occurrence of
-    $p_1$, and adds the received peer from $p_1$. The peers $\{p_6,\,p_9\}$
-    compose the $p_1$'s partial view. The peers $\{p_2,\,p_7,\,p_8\}$ compose
-    the $p_6$'s partial view.}
+  \caption{\label{fig:cyclicexample}Example of the \SPRAY{}'s shuffling
+    protocol. }
 \end{figure*}
 
 
-Algorithm~\ref{algo:scamplon} shows the \SCAMPLON{} protocol running at each
+\begin{algorithm}[h] %% to change if repositionning possible
+  \input{./input/cyclicalgo.tex}
+  \caption{\label{algo:scamplon}The cyclic protocol of \SPRAY{}.}
+\end{algorithm}
+
+Algorithm~\ref{algo:scamplon} shows the \SPRAY{} protocol running at each
 peer. It is divided between an active thread looping to update the partial
 view, and a passive thread which reacts to an exchange message. The functions
 which are not explicitly defined are the following:
@@ -171,6 +172,7 @@ which are not explicitly defined are the following:
   the $old$ element by the $new$ element and returns the modified view.
 \item $rand()$: generates a random floating number between $0$ and $1$.
 \end{itemize}
+
 In the active thread, Function $loop$ is called every $\Delta$ time
 $t$. Firstly, the function increments the age of each neighbor in
 $\mathcal{P}$. Then, the oldest peer $q$ is chosen to exchange a subset of its
@@ -191,22 +193,68 @@ them remove the sent sample from their view and add the received
 sample. Additionally, the initiating peer removes an occurrence of the chosen
 peer $q$.
 
+Figure~\ref{fig:cyclicexample} depicts the \SPRAY{}'s cyclic
+procedure. This scenario follows from Figure~\ref{fig:joiningexample}:
+Peer $p_1$ just joined the network. Peer $p_6$ initiates an exchange
+with $p_1$ (the oldest among the $p_6$'s partial view). It randomly
+chooses $\left\lceil{|\mathcal{P}_6|\over{2}}\right\rceil-1 = 1$ peer
+among its neighborhood. In this case, it picks $p_9$ from
+$\{p_9,\,p_8,\,p_7\}$.  It sends the chosen peer plus its own identity
+to Peer $p_1$. In response, the latter picks
+$\left\lceil{|\mathcal{P}_1|\over{2}}\right\rceil = 1$ peer from its
+partial view. It sends back its sole neighbor $p_2$ and directly adds
+the received neighbor to its partial view. After receipt, Peer $p_6$
+removes the sent neighbors from its partial view, removes an
+occurrence of $p_1$, and adds the received peer from $p_1$. The peers
+$\{p_6,\,p_9\}$ compose the $p_1$'s partial view. The peers
+$\{p_2,\,p_7,\,p_8\}$ compose the $p_6$'s partial view.
 
+The example shows that, at first, the initiating peer has $4$ peers in
+its partial view, while the receiving peer has only $1$ peer. Then,
+after the exchange, the former has $3$ neighbors including $1$ new
+peer. The receiving peer has $2$ neighbors, and both of them are
+new. Thus, the periodic procedure tends to even up the partial view
+size of network members. It also scatters neighbors in order to remove
+the highly clustered groups which may appear because of the joining
+protocol.
 
-Figure~\ref{fig:cyclicexample} depicts the \SCAMPLON{}'s cyclic procedure. The
-example shows that, at first, the initiating peer has $4$ peers in its partial
-view, while the receiving peer has only $1$ peer. Then, after the exchange, the
-former has $3$ neighbors including $1$ new peer. The receiving peer has $2$
-neighbors, and both of them are new. Thus, the periodic procedure tends to
-even up the partial view size of network members. It also scatters neighbors in
-order to remove the highly clustered groups which may appear because of the
-joining protocol.
+Concerning convergence speed of the shuffling algorithm, there exists
+a close relationship between \SPRAY{} and the proactive aggregation
+protocol introduced
+in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states
+that, under the assumption of a peer sampling sufficiently random, the
+mean value $\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
+\begin{center}
+  $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
+  \hfill
+  $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
+  (a_{i,\,x} - \mu_i)^2$
+\end{center}
+where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
+variance must converge to $0$ over cycles. In other terms, the values tends to
+be the same over cycles. In the \SPRAY{} case, the value $a_{i,\,x}$ is the
+partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
+$p_1$ to Peer $p_2$ is an aggregation resulting to:
+$|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{|\mathcal{P}_1| + |\mathcal{P}_2|
+  \over{2}}$.
+Furthermore, at each cycle, each peer is involved in the exchange protocol at
+least once (they initiate one), and in the best case 1+Poisson(1) (they
+initiate one and, in average, each peer receives another one). This relation
+being established, we know that \SPRAY{}'s partial view sizes converge
+exponentially fast to the global average size. Additionally, we know that each
+cycle decreases their variance in overall system at a rate comprised between
+${1\over{2}}$ and $1\over{2\sqrt{\text{e}}}$. 
+
+The shuffling algorithm provides adaptability at the cost of
+duplicates. Averaging size of partial views over exchanges provides
+exponential convergence speed as expected.
+
 
 \subsection{Leaving}
 \label{subsec:leaving}
 
-Using \SCAMPLON{}, the peers are free to leave the network without giving
-notice. In that regard, we do not consider the departures and the crashs
+Using \SPRAY{}, the peers are free to leave the network without giving
+notice. In that regard, we do not consider the departures and the crashes
 differently.  Without any appropriate reaction, the network may collapse due to
 an over zealous removal of connections. Indeed, when a peer joins the network,
 it injects in it $1+\ln(|\mathcal{N}|)$ connections. Nevertheless, after few
@@ -226,10 +274,10 @@ removes the number of connections it injected when it joined.
 
 \begin{algorithm}[h]
   \input{./input/unreachablealgo.tex}
-  \caption{\label{algo:unreachable}The crash/leaving handler of \SCAMPLON{}.}
+  \caption{\label{algo:unreachable}The crash/leaving handler of \SPRAY{}.}
 \end{algorithm}
 
-Algorithm~\ref{algo:unreachable} shows the manner in which \SCAMPLON{} deals
+Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY{} deals
 with crashes. When the peer $q$ is detected as crashed, a first loop counts the
 occurrences of this neighbor in the partial view, and removes all of them. The,
 the second loop probabilistically doubles a connection with a known peer. The
@@ -247,30 +295,34 @@ probability depends of the partial view size before the removals.
   \subfloat[Figure C][The peer $p_3$ and $p_5$ choose to establish
   a duplicate with one of their existing neighbor.]{
     \input{./input/crashexampleC.tex}}
-  \caption{\label{fig:crashexample}Example of \SCAMPLON{}'s crash/leaving
-    handler. The scenario follows from prior examples after few other
-    exchanges. Peer $p_1$ leaves the network without giving notice. With it,
-    $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
-    crashed/left peer in their partial view. Peer $p_5$ has
-    $1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$ chance to replace the dead
-    connections. In this case, it doubles the connection to
-    $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
-    appropriate procedure. Only $p_3$ doubles one of its connection. In total,
-    $5$ connections have been removed.}
+  \caption{\label{fig:crashexample}Example of \SPRAY{}'s crash/leaving
+    handler. }
 \end{figure*}
 
-Figure~\ref{fig:crashexample} depicts the \SCAMPLON{}'s crash/leaving
-handler. The example shows that some peers reestablish connections if they
-detect a dead connection. The probability depends on the partial view size of
-each of these peer. In average, one of these peer will likely remove the
-connection while the other peers will double one of their existing
-connections. In this case, Peer $p_1$ injected $5$ connections when it
-joined. It removes $7-2 =5 $ connections when it leaves. The global number of
-connections remains logarithmic compared to the number of members in the
-network. Nevertheless, we can see that connectedness is not entirely guaranteed
-(only with the high probability implied by random graphs). Indeed, if Peer
-$p_1$ is the sole bridge between two clusters, adding connections is not enough
-to ensure connectedness (more details in Section~\ref{subsec:resilience}).
+Figure~\ref{fig:crashexample} depicts the \SPRAY{}'s crash/leaving
+handler. The scenario follows from prior examples after few other
+exchanges. Peer $p_1$ leaves the network without giving notice. With
+it, $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
+crashed/left peer in their partial view. Peer $p_5$ has
+$1-{1\over{|\mathcal{P}_5|}}={2\over{3}}$ chance to replace the dead
+connections. In this case, it doubles the connection to
+$p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and
+run the appropriate procedure. Only $p_3$ doubles one of its
+connection. In total, $5$ connections have been removed.  
+
+The example shows that some peers reestablish connections if they
+detect a dead connection. The probability depends on the partial view
+size of each of these peer. In average, one of these peer will likely
+remove the connection while the other peers will double one of their
+existing connections. In this case, Peer $p_1$ injected $5$
+connections when it joined. It removes $7-2 =5 $ connections when it
+leaves. The global number of connections remains logarithmic compared
+to the number of members in the network. Nevertheless, we can see that
+connectedness is not entirely guaranteed (only with the high
+probability implied by random graphs). Indeed, if Peer $p_1$ is the
+sole bridge between two clusters, adding connections is not enough to
+ensure connectedness (more details in
+Section~\ref{subsec:resilience}).
 
 Note that extending the algorithms to handle three-way handshake is not
 difficult: it only requires to keep track of the neighbor from where the
@@ -278,25 +330,25 @@ membership messages arrived, and forward the answer to this neighbor
 accordingly. Also, there are few optimization concerning the establishments of
 connections. For instance, when a peer $p$ starts an exchange with $q$, and $q$
 has $p$ in its partial view, instead of inverting the link between $p$ and $q$,
-and $q$ and $p$, \SCAMPLON{} does not change them. Another optimization
+and $q$ and $p$, \SPRAY{} does not change them. Another optimization
 concerns a peer having a neighbor multiple times in its partial view. While
-\SCAMPLON{} keeps such information in its partial view, only one connection per
+\SPRAY{} keeps such information in its partial view, only one connection per
 neighbor is truly necessary.
 
-To summarize, \SCAMPLON{} provides:
+To summarize, \SPRAY{} provides:
 \begin{inparaenum}[(i)]
 \item a logarithmically increasing partial view size compared to the global
   network size,
 \item a constant complexity to establish the connections,
 \item an exponentially fast convergence to a random graph.
 \end{inparaenum}
-Providing these three properties, \SCAMPLON{} improves the state-of-the-art
+Providing these three properties, \SPRAY{} improves the state-of-the-art
 approaches~\cite{ganesh2001scamp,voulgaris2005cyclon} in the traditional
 connection set-up. Furthermore, the improvement becomes crucial in the context
 of three-way handshake connection set-up.  The latter becomes increasingly
 important with the appearance of technologies allowing peer-to-peer within
 modern web browsers.  The next section aims to demonstrate experimentally the
-behavior of \SCAMPLON{}. In particular, it aims to highlight the aforementioned
+behavior of \SPRAY{}. In particular, it aims to highlight the aforementioned
 properties.
 
 

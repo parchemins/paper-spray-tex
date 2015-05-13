@@ -1,76 +1,48 @@
 
 \section{Introduction}
 
-Peer-sampling service is a fundamental mechanism for many large scale
-distributed applications including information dissemination,
-aggregation or network management~\cite{jelasity2007gossip}. Recently,
-WebRTC~\cite{webrtc} opened the opportunity to deploy large scale
-distributed application on browsers that can run on laptops, desktops,
-tablets or mobile phones. This opportunity is appealing because it
-drastically simplify the deployment of large distributed applications
-even with complex network settings such as firewall, proxies or Net
-Address Translation (NAT).
+Peer sampling service is a fundamental mechanism for many large scale
+distributed applications including information dissemination, aggregation
+ or network management~\cite{jelasity2007gossip}. Recently,
+WebRTC\footnote{\url{http://www.webrtc.org/}} opened the opportunity to deploy large scale distributed
+applications on browsers that can run on laptops, desktops, tablets or mobile
+phones. Among other, it drastically simplify the deployment of large
+distributed applications even with complex network settings such as firewall,
+proxies or Net Address Translation (NAT).
 
-%Some attractive applications such as Firefox Hello~\cite{firefoxhello}
-%or WebTorrent~\cite{webtorrent} demonstrate how video-conferencing or
-%file-sharing directly within browsers becomes simple of access to
-%end-users without third-party providers.
+Unfortunately, WebRTC has several constraints that makes existing peer
+sampling services inefficient or unreliable. First, browsers can run
+on small devices on mobile networks. Hence, keeping the number of
+connections as low as possible is a major requirement. However, peer
+sampling services such as \CYCLON{}~\cite{ voulgaris2005cyclon} do not
+adapt the number of connections to the real number of
+participants. For instance, a user must maintain 10 connections with
+other remote browsers when only 6 were enough. On the other hand, the
+peer sampling service \SCAMP{}~\cite{ganesh2003peer} is adaptive but
+uses random walks to establish its connections that is much more
+costly and likely to fail in the WebRTC context.
 
-However, WebRTC has several constraints that makes existing
-peer-sampling service inefficient or unreliable. First, browsers can
-run on mobile devices and keeping the number of connections as low as
-possible is a major requirement. Unfortunately, peer-sampling service
-such as \CYCLON{}~\cite{ voulgaris2005cyclon} is not able to adapt the
-number of connections to the real number of
-participants. Consequently, a user on a mobile phone can maintain 10
-connections with others remote browsers, even if just 3 was
-enough. Adapting the number of connections to the number of
-participants is crucial and is handled by peer-sampling service such
-as \SCAMP{}~\cite{ganesh2003peer}. Unfortunately, browser-to-browser connection
-in WebRTC requires a three-way handshake which is much more costly and
-likely to fail compared to traditional settings. We show in this paper
-that three-way handshake makes SCAMP fail. 
-
-% PASCAL: too soon, keep that for Pb statement
-% Knowingly, the challenge is about
-% \begin{inparaenum}[(i)]
-% \item keeping an optimal $\Theta(\ln |\mathcal{N}|)$ on the number of
-%   connections alive\cite{erdos1959random} (where $\mathcal{N}$ is the set of
-%   network members),
-% \item keeping an optimal $O(1)$ complexity on connection establishments,
-% \item keeping an optimal $\Theta(\exp \, t^{-1})$ convergence speed to a random
-%   graph (where $t$ is an arbitrary time frame).
-% \end{inparaenum}
-
-In this paper, we introduce \SCAMPLON{}, a random peer sampling
-protocol inspired by both \SCAMP{}~\cite{ganesh2003peer} and
+In this paper, we introduce \SPRAY{}, a random peer sampling protocol
+inspired by both \SCAMP{}~\cite{ganesh2003peer} and
 \CYCLON{}~\cite{voulgaris2005cyclon}. Compared to state of art,
 \begin{inparaenum}[(i)]
-\item It dynamically adapts the neighborhood of each peer. Thus, the number of
+\item it dynamically adapts the neighborhood of each peer. Thus, the number of
   connections grows logarithmically compared to the size of the network.
 \item It only uses neighbor-to-neighbor interactions to establish the
   connections. Thus, the connections are established in constant time.
-\item It converges exponentially fast to a random graph. Thus, the network
-  becomes quickly resilient to failure, can broadcast messages
-  efficiently etc.
-\item In experimental setup, we demonstrate how adaptivity of
-  \SCAMPLON{} saves connections compared to\CYCLON{} at the cost of a
+\item It converges exponentially fast to a topology exposing properties similar
+  to random graphs. Thus, the network becomes quickly resilient to massive
+  failures, efficiently disseminates information etc.
+\item In experimental setup, we show the adaptiveness of \SPRAY{} and
+  highlight its efficiency improvement compared to \CYCLON{}, at the cost of a
   little overhead.
 \end{inparaenum}
 
-
-% Knowingly, it improves state-of-the-art approaches in the traditional
-% connection set-up. This improvement is crucial in the three-way conn\ection
-% set-up and opens the gate to a vast variety of distributed applications.
-
-
-The rest of this paper is organized as follow: Section~\ref{sec:background}
-introduces the necessary background to understand \SCAMPLON{} and highlights
-our motivations. Section~\ref{sec:proposal} details the \SCAMPLON{} protocol.
-Section~\ref{sec:experiments} shows the properties of \SCAMPLON{} and compare
-them to state-of-the-art random peer sampling
-approaches. Section~\ref{sec:relatedwork} reviews the related work. We conclude
-and discuss about perspective in Section~\ref{sec:conclusion}.
+The rest of this paper is organized as follow: Section~\ref{sec:relatedwork}
+reviews the related work. Section~\ref{sec:proposal} details the \SPRAY{}
+protocol.  Section~\ref{sec:experiments} shows the properties of \SPRAY{}
+and compare them to state-of-the-art random peer sampling approaches. We
+conclude and discuss about perspective in Section~\ref{sec:conclusion}.
 
 %%% Local Variables:
 %%% mode: latex

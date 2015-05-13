@@ -1,34 +1,77 @@
 
+\begin{figure*}
+\centering
+\subfloat[Figure A][Access to the network using a signaling server]{
+  \input{input/signalingexampleA.tex}}
+\hspace{20pt}
+\subfloat[Figure B][\label{fig:webrtcB}Use the network itself to establish new
+connections]{
+  \input{input/signalingexampleB.tex}}
+\hspace{20pt}
+\subfloat[Figure C][Resulting network overlay]{
+  \input{input/signalingexampleC.tex}}
+\caption{\label{fig:webrtc}Creating an overlay network on top of WebRTC.}
+\end{figure*}
+
+
 \section{Related work}
 \label{sec:relatedwork}
 
-Part of the scalable membership protocols use the
-broadcast~\cite{eugster2003lightweight, tolgyeski2009adaptive} to advertise the
-existence of the members in the network. The messages contain members' identity
-and timestamps. Nevertheless, the peers maintain a fixed-size partial view to
-remove old entries as fresh ones arrive. This mechanism allows fast discarding
-of the left/departed members but the graph converge to a topology depending of
-the advertising frequency of each peers. On the other side, \SCAMPLON{} is
-adaptive. Thus the partial views grow and shrink reflecting the network
-size. Furthermore, the graph converges to a random topology over exchanges, and
-only the convergence speed is impacted by different frequencies of the periodic
-protocol. Among scalable network membership protocols,
-\CYCLON{}~\cite{voulgaris2005cyclon} and \SCAMP{}~\cite{ganesh2003peer}
-(cf. Section~\ref{sec:background}) are closer to \SCAMPLON{}. In \CYCLON{}, the
-peers have a fixed-size partial view. Thus, the developers must foresee the
-maximum size of the network implied by their application. Then, they can
-configure the partial view size, the size of messages in each exchanges, and
-the frequency of the exchanges. Except for the latter, these decisions cannot
-be safely retracted.  \SCAMPLON{} alleviates these issues since the only
-configuration concerns the exchanging frequency. Like \SCAMP{}, the partial
-view size of \SCAMPLON{} adapts to the network membership. However, while the
-complexity of connections depends of the size of the network in the \SCAMP{}
-case, \SCAMPLON{} only use constant time connections. Therefore, the latter is
-more robust to message failures at the price of a slower convergence to a
-random graph topology.
 
-To foresee the size of the partial view, one could use a network size
-estimator. There exists a plethora of network size estimator, either using
+WebRTC allows real-time communication from browser-to-browser even
+with complex network settings such as firewall, proxies or Net Address
+Translation (NAT). However, WebRTC does not manage addressing nor
+routing. To establish a connection, browsers exchange offers
+and acknowledges through a mediator that can be mails, dedicated
+signaling service\footnote{\url{http://peerjs.com/}}, or existing
+WebRTC connections\footnote{\url{http://github/P ??}}. In
+figure~\ref{fig:webrtc}, $p2$ wants to connect $p3$. $p2$ pushes an
+offer ticket to a signaling service\footnote{Many signaling services
+  can exist}. $p3$ pulls the offers, stamps it and pushes it back to
+the signaling service. Next, $p2$ pulls the stamped ticket and
+establish a bidirectional connection with $p3$. The same protocol is
+used for connecting $p1$ to $p2$. In this state, it is possible to
+establish a connection between $p1$ and $p3$ without the mediation of
+the signaling service. $p1$ pushes an offer ticket to $p2$.  As $p2$
+is already connected to $p1$, it forwards the offer to $p3$ and
+piggyback $p1$ to the offer. $p3$ stamps the ticket and sends it back
+to $p2$ that forwards it to $p1$. Notices that If $p2$ crashes between
+step 2 and 3, then connection will fail even if an alternative route
+exists as webRTC does not manage routing.  
+
+Using signaling services and existing WebRTC connections allow to
+deploy random peer sampling protocols~\cite{jelasity2004peer} easily
+on browsers that can run on mobile phones or tablets connected to
+mobile networks. In this context, it is crucial to keep the number of
+connections as low as possible in order to limit the traffic and
+ressource consumption. 
+
+Random peer sampling protocols~\cite{jelasity2004peer} provide each
+peer with a partial view $\mathcal{P}$ of the network membership
+$\mathcal{N}$. They populate the partial views with the reference of
+peers chosen at random among $\mathcal{N}$ following a uniform
+distribution using local knowledge only. Their goal is to converge to
+an overlay network exposing properties similar to random
+graphs~\cite{erdos1959random}. They efficiently provide connectedness,
+robustness, messages dissemination etc. A wide variety of gossip-based
+protocols use random peer sampling (e.g. topology
+management~\cite{voulgaris2005epidemic, jelasity2009tman,
+  dabek2004vivaldi}).
+
+Representatives of random peer sampling
+protocols~\cite{voulgaris2005cyclon, eugster2003lightweight,
+  tolgyeski2009adaptive} use a fixed-size partial view.  Thus, they
+have to know \emph{a priori} the maximum order of magnitude of the
+network size to set their appropriate parameters. These decisions
+cannot be safely retracted afterwards. For this reason, the partial
+views are commonly oversized compared to the actual network
+size. Consequently, it is possible for a browser to maintain 10
+connections with others while only 6 were required. In WebRTC context,
+we need a dynamic peer sampling service able to adapt to number of
+participants.
+
+Network size estimators can be used to introduce adaptivity in peer
+sampling. These approaches either use
 \begin{inparaenum}[(i)]
 \item sampling techniques~\cite{mane05network, ganesh2007peer,
     kostoulas2007active} which analyze a network subset and deduce the network
@@ -40,31 +83,73 @@ estimator. There exists a plethora of network size estimator, either using
   which use aggregations that converge over exchanges to a value which depends
   of the network size.
 \end{inparaenum}
-The drawbacks of these approaches lie in their cost (e.g. communication
-overhead) and/or their assumptions (e.g. a static network). On the other hand,
-\SCAMPLON{} provides partial views logarithmically growing compared to the
-network size. Thus, it does not imply any overhead since it converges to a
-random graph by design. Conversely, \SCAMPLON{} cannot provide a precise
-estimation of the network size.
+Unfortunately, while they can be very precise in their estimate, they
+imply a communication overhead and may have strong assumptions
+(e.g. random graph topology). In WebRTC context, adaptivity should
+introduce a minimum overhead in peer sampling.
 
-Currently, the ecosystem of distributed browser-embedded applications is
-blooming~\cite{firefoxhello, sharefest, webtorrent}. Indeed, the arrival of
-peer-to-peer within modern browsers opened the gate to a large variety of
-real-time distributed web applications, previously quartered to standalone
-applications. As consequence, they become accessible to a larger audience. A
-majority of these applications targets a small number of simultaneous users
-(e.g. Video conferencing~\cite{firefoxhello}) but more recently, applications
-aiming larger scale have been arising. For instance,
-WebTorrent~\cite{webtorrent} is a file-sharing system based on the BitTorrent
-protocol. Nevertheless, the users of this application share static data. As
-such, the built network could be completely clustered but still working as long
-as one member in each cluster has all the data.  Till now, the class of
-applications requiring scalable broadcast has been neglected. The goal of
-\SCAMPLON{} is to fill this gap by providing a scalable membership protocol
-well-adapted to such context. Using \SCAMPLON{}, the network is connected, yet
-using few connections. Therefore, the broadcast messages reach all members very
-efficiently.
+The sole representative of adaptive-by-design random peer sampling is
+\SCAMP{}~\cite{ganesh2001scamp,ganesh2003peer} which stands for
+SCalable Membership Protocol. Its interesting property lies in its
+logarithmically growing partial view sizes meeting the sharp threshold
+of connectedness of random
+graphs~\cite{erdos1959random}. Nevertheless, \SCAMP{} suffers from
+other flaws. In particular, it systematically performs random walks to
+establish its connections. In the WebRTC context, each random walk
+must be traveled back to finalize the connection establishment as
+illustrated in figure~\ref{fig:webrtc}. It drastically impacts on the
+\SCAMP{} failure probability of establishing a connection. Indeed, let
+$P_f$ the probability of either the peer or the link between the
+latter and the next peer crashes/disconnects when it holds the
+traveling message, without any possible recovery. Let $P_E$ the
+probability that a connection establishment cannot be
+completed. Without three-way handshake, $P_E$ is straightforward:
+\begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} where $k$
+is the number of hops before the end of the random walk with a minimum of $2$
+hops. On the other hand, in the handshaking context, the message must travel
+back to its origin in order to be completed. As consequence, when a
+subscription travels through a peer or a link, they are not allowed to fail
+until the subscription travels back. Thus, we obtain:
+\begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
+                                     \ldots (1-P_f)^2) \nonumber \\
+                                   &=1-(1-P_f)^{k^2+3k+2}
+\end{align}
+The complexity class of the \SCAMP{} failure rate increases leading to a quick
+degenerating number of connections over time. This behaviour endangers the
+connectedness of network.
 
+Building an adaptive-by-design random peer sampling that meet WebRTC
+constraints raises the following scientific problem:
+
+\begin{problem}
+  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the
+  network membership at that given time $t$ and let $\mathcal{P}_x^t$
+  be the partial view of peer $p_x \in \mathcal{N}^t$.  A
+  cost-efficient random peer sampling should provide the following
+  best-case properties:
+  \begin{enumerate}
+  \item  \begin{center}
+    Partial view size: \hfill
+    $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \Theta (\ln
+    |\mathcal{N}^t|)$
+  \end{center}
+  
+\item \begin{center}
+    Connection establishment: \hfill $O(1)$
+  \end{center}
+ 
+\item  \begin{center}
+    Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
+  \end{center}
+  \end{enumerate}
+\end{problem}
+
+The first condition states that partial view size is relative to size
+of the network at any time. The second condition states that joining
+the network require connection to only one participant. The last
+condition states that a random network is established exponentially
+fast. \CYCLON{} fails to fill condition 1 and \SCAMP{} the second
+condition.
 
 %%% Local Variables:
 %%% mode: latex

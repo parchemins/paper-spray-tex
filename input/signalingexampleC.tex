@@ -1,0 +1,11 @@
+
+\begin{tikzpicture}
+\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+};
+\path[->]
+  (p1) edge[<->,thick] (p2)
+  (p1) edge[<->,thick] (p3)
+  (p2) edge[<->,thick]  (p3);
+\end{tikzpicture}
