@@ -122,23 +122,34 @@ Building an adaptive-by-design random peer sampling that meet WebRTC
 constraints raises the following scientific problem:
 
 \begin{problem}
-  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
-  membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial
-  view of peer $p_x \in \mathcal{N}^t$.  A cost-efficient random peer sampling,
-  especially when three-way handshaking is involved, should provide the
-  following best-case properties:
-  \begin{center}
+  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the
+  network membership at that given time $t$ and let $\mathcal{P}_x^t$
+  be the partial view of peer $p_x \in \mathcal{N}^t$.  A
+  cost-efficient random peer sampling should provide the following
+  best-case properties:
+  \begin{enumerate}
+  \item  \begin{center}
     Partial view size: \hfill
     $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \Theta (\ln
     |\mathcal{N}^t|)$
   \end{center}
-  \begin{center}
+  
+\item \begin{center}
     Connection establishment: \hfill $O(1)$
   \end{center}
-  \begin{center}
+ 
+\item  \begin{center}
     Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
   \end{center}
+  \end{enumerate}
 \end{problem}
+
+The first condition states that partial view size is relative to size
+of the network at any time. The second condition states that joining
+the network require connection to only one participant. The last
+condition states that a random network is established exponentially
+fast. \CYCLON{} fails to fill condition 1 and \SCAMP{} the second
+condition.
 
 %%% Local Variables:
 %%% mode: latex
