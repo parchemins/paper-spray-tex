@@ -20,19 +20,19 @@ connections]{
 
 WebRTC allows real-time communication from browser-to-browser even
 with complex network settings such as firewall, proxies or Net Address
-Translation (NAT). However, WebRTC do not manage addressing nor
-routing. To establish a connection, browsers have to exchange offers
+Translation (NAT). However, WebRTC does not manage addressing nor
+routing. To establish a connection, browsers exchange offers
 and acknowledges through a mediator that can be mails, dedicated
-signaling service~\footnote{\url{http://peerjs.com/}}, or existing
-WebRTC connections~\footnote{\url{http://github/P ??}}. In
-figure~\ref{fig:webrtc}, $p2$ wants to connect $p3$. $p2$ push an
+signaling service\footnote{\url{http://peerjs.com/}}, or existing
+WebRTC connections\footnote{\url{http://github/P ??}}. In
+figure~\ref{fig:webrtc}, $p2$ wants to connect $p3$. $p2$ pushes an
 offer ticket to a signaling service\footnote{Many signaling services
   can exist}. $p3$ pulls the offers, stamps it and pushes it back to
 the signaling service. Next, $p2$ pulls the stamped ticket and
 establish a bidirectional connection with $p3$. The same protocol is
 used for connecting $p1$ to $p2$. In this state, it is possible to
 establish a connection between $p1$ and $p3$ without the mediation of
-the signaling service. $p1$ pushes an offer ticket to $p2$.  as $p2$
+the signaling service. $p1$ pushes an offer ticket to $p2$.  As $p2$
 is already connected to $p1$, it forwards the offer to $p3$ and
 piggyback $p1$ to the offer. $p3$ stamps the ticket and sends it back
 to $p2$ that forwards it to $p1$. Notices that If $p2$ crashes between
