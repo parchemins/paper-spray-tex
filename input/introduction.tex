@@ -6,7 +6,7 @@ distributed applications including information dissemination, aggregation
  or network management~\cite{jelasity2007gossip}. Recently,
 WebRTC\footnote{\url{http://www.webrtc.org/}} opened the opportunity to deploy large scale distributed
 applications on browsers that can run on laptops, desktops, tablets or mobile
-phones. Among other, it drastically simplify the deployment of large
+phones. Among others, it drastically simplifies the deployment of large
 distributed applications even with complex network settings such as firewall,
 proxies or Net Address Translation (NAT).
 
@@ -14,7 +14,7 @@ Unfortunately, WebRTC has several constraints that makes existing peer
 sampling services inefficient or unreliable. First, browsers can run
 on small devices on mobile networks. Hence, keeping the number of
 connections as low as possible is a major requirement. However, peer
-sampling services such as \CYCLON{}~\cite{ voulgaris2005cyclon} do not
+sampling services such as \CYCLON{}~\cite{voulgaris2005cyclon} do not
 adapt the number of connections to the real number of
 participants. For instance, a user must maintain 10 connections with
 other remote browsers when only 6 were enough. On the other hand, the
@@ -22,9 +22,9 @@ peer sampling service \SCAMP{}~\cite{ganesh2003peer} is adaptive but
 uses random walks to establish its connections that is much more
 costly and likely to fail in the WebRTC context.
 
-In this paper, we introduce \SPRAY{}, a random peer sampling protocol
-inspired by both \SCAMP{}~\cite{ganesh2003peer} and
-\CYCLON{}~\cite{voulgaris2005cyclon}. Compared to state of art,
+In this paper, we introduce \SPRAY{}, a random peer sampling protocol inspired
+by both \CYCLON{}~\cite{voulgaris2005cyclon} and
+\SCAMP{}~\cite{ganesh2003peer}. Compared to the state of art,
 \begin{inparaenum}[(i)]
 \item it dynamically adapts the neighborhood of each peer. Thus, the number of
   connections grows logarithmically compared to the size of the network.
