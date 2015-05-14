@@ -1,7 +1,7 @@
 
 \begin{figure*}
 \centering
-\subfloat[Figure A][Access to the network using a signaling server]{
+\subfloat[Figure A][Access the network using a signaling server]{
   \input{input/signalingexampleA.tex}}
 \hspace{20pt}
 \subfloat[Figure B][\label{fig:webrtcB}Use the network itself to establish new
@@ -18,33 +18,32 @@ connections]{
 \label{sec:relatedwork}
 
 
-WebRTC allows real-time communication from browser-to-browser even
-with complex network settings such as firewall, proxies or Net Address
-Translation (NAT). However, WebRTC does not manage addressing nor
-routing. To establish a connection, browsers exchange offers
-and acknowledges through a mediator that can be mails, dedicated
-signaling service\footnote{\url{http://peerjs.com/}}, or existing
-WebRTC connections\footnote{\url{http://github/P ??}}. In
-figure~\ref{fig:webrtc}, $p2$ wants to connect $p3$. $p2$ pushes an
-offer ticket to a signaling service\footnote{Many signaling services
-  can exist}. $p3$ pulls the offers, stamps it and pushes it back to
-the signaling service. Next, $p2$ pulls the stamped ticket and
-establish a bidirectional connection with $p3$. The same protocol is
-used for connecting $p1$ to $p2$. In this state, it is possible to
-establish a connection between $p1$ and $p3$ without the mediation of
-the signaling service. $p1$ pushes an offer ticket to $p2$.  As $p2$
-is already connected to $p1$, it forwards the offer to $p3$ and
-piggyback $p1$ to the offer. $p3$ stamps the ticket and sends it back
-to $p2$ that forwards it to $p1$. Notices that If $p2$ crashes between
-step 2 and 3, then connection will fail even if an alternative route
-exists as webRTC does not manage routing.  
+WebRTC allows real-time communication from browser-to-browser even with complex
+network settings such as firewall, proxies or Net Address Translation
+(NAT). However, WebRTC does not manage addressing nor routing. To establish a
+connection, the browsers exchange offers and acknowledges through a mediator,
+e.g., mails, dedicated signaling services\footnote{\url{http://peerjs.com/}},
+existing WebRTC connections\footnote{\url{http://ozan.io/p/}} etc. In
+figure~\ref{fig:webrtc}, $p_2$ wants to connect to $p_3$. Therefore, $p_2$
+pushes an offer ticket to a signaling service\footnote{Many signaling services
+  can exist}. Peer $p_3$ pulls the offers, stamps it and pushes it back to the
+signaling service. Finally, $p_2$ pulls the stamped ticket and establishes a
+bidirectional connection with $p_3$.  Identically, $p_1$ establishes a
+connection to $p_2$. This round-trip procedure is called \emph{three-way
+  handshake}. At this point, Peer $p_1$ is able to establish a connection to
+$p_3$ without the mediation of the signaling service. Peer $p_1$ pushes an
+offer ticket to $p_2$.  As $p_2$ is already connected to $p_1$, it forwards the
+offer to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket
+and sends it back to $p_2$. The latter forwards it to $p_1$. On receipt, $p_1$
+establishes a bidirectional connection with $p_3$. Notice that if $p_2$
+crashes during the forwarding process, then connection establishment will fail,
+even if an alternative route exists as WebRTC does not manage routing.
 
-Using signaling services and existing WebRTC connections allow to
-deploy random peer sampling protocols~\cite{jelasity2004peer} easily
-on browsers that can run on mobile phones or tablets connected to
-mobile networks. In this context, it is crucial to keep the number of
-connections as low as possible in order to limit the traffic and
-ressource consumption. 
+Using signaling services and the existing WebRTC connections allows deploying
+random peer sampling protocols~\cite{jelasity2004peer} easily on browsers that
+can run on mobile phones or tablets connected to mobile networks. In this
+context, it is crucial to keep the number of connections as low as possible in
+order to limit the traffic and resource consumption.
 
 Random peer sampling protocols~\cite{jelasity2004peer} provide each
 peer with a partial view $\mathcal{P}$ of the network membership
@@ -70,7 +69,7 @@ connections with others while only 6 were required. In WebRTC context,
 we need a dynamic peer sampling service able to adapt to number of
 participants.
 
-Network size estimators can be used to introduce adaptivity in peer
+Network size estimators can be used to introduce adaptiveness in peer
 sampling. These approaches either use
 \begin{inparaenum}[(i)]
 \item sampling techniques~\cite{mane05network, ganesh2007peer,
@@ -85,7 +84,7 @@ sampling. These approaches either use
 \end{inparaenum}
 Unfortunately, while they can be very precise in their estimate, they
 imply a communication overhead and may have strong assumptions
-(e.g. random graph topology). In WebRTC context, adaptivity should
+(e.g. random graph topology). In WebRTC context, adaptiveness should
 introduce a minimum overhead in peer sampling.
 
 The sole representative of adaptive-by-design random peer sampling is
@@ -115,8 +114,8 @@ until the subscription travels back. Thus, we obtain:
                                    &=1-(1-P_f)^{k^2+3k+2}
 \end{align}
 The complexity class of the \SCAMP{} failure rate increases leading to a quick
-degenerating number of connections over time. This behaviour endangers the
-connectedness of network.
+degenerating number of connections over time. This behavior endangers the
+network connectedness.
 
 Building an adaptive-by-design random peer sampling that meet WebRTC
 constraints raises the following scientific problem:
@@ -144,12 +143,15 @@ constraints raises the following scientific problem:
   \end{enumerate}
 \end{problem}
 
-The first condition states that partial view size is relative to size
-of the network at any time. The second condition states that joining
-the network require connection to only one participant. The last
-condition states that a random network is established exponentially
-fast. \CYCLON{} fails to fill condition 1 and \SCAMP{} the second
-condition.
+The first condition states that partial view size is relative to size of the
+network at any time. It also states that partial views grow and shrink
+logarithmically compared to the size of the network. The second condition
+states that each connection establishment requires a constant number of
+intermediary peers. Since this number is constant, connections establishments
+do not depend of the network size. The last condition states that the network
+overlay converges exponentially fast to a topology exposing properties similar
+to random graphs.  \CYCLON{} and \SCAMP{} fail to fulfill the first condition
+and the second condition, respectively.
 
 %%% Local Variables:
 %%% mode: latex
