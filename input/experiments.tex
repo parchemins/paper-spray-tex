@@ -8,9 +8,9 @@ random graphs:
 \begin{itemize}
 \item the clustering coefficient: show the convergence speed, how scattered
   are the peers from each other, how close are the peer from partitioning.
-\item the average minimum path length: show the efficiency of information
+\item the average shortest path length: show the efficiency of information
   dissemination.
-\item the distribution of the incomming arcs: show how much the peers appear
+\item the distribution of the incoming arcs: show how much the peers appear
   in the others' partial view.
 \end{itemize}
 Then, in a more dynamic context, the measurements concern:
@@ -27,7 +27,7 @@ measuring the number of duplicates inside the partial view sizes.
 The experiments run on the \PEERSIM{}
 simulator~\cite{montresor2009peersim}. The code of the random peer sampling
 protocols \CYCLON{}, \SCAMP{}, and \SPRAY{} is available on Github
-plateform~\footnote{https://github.com/justayak/peersim-spray}.
+platform~\footnote{https://github.com/justayak/peersim-spray}.
 
 \subsection{Clustering coefficient}
 \label{subsec:cluster}
@@ -98,39 +98,60 @@ plateform~\footnote{https://github.com/justayak/peersim-spray}.
   which gently reflects the network size with a logarithimic growth. Thus, when
   the network has 1000 peers, the partial view size adapts to this network
   size: \TODO{SIZE}. It explains the slightly higher clustering coefficient of
-  \SPRAY{} on this run (i.e. \TODO{SIZE} vs 7).
+  \SPRAY{} on this run (i.e. \TODO{SIZE} vs 7). By extending the reasoning, it
+  explains the reasons of the \SPRAY{} lower value when \CYCLON{} is oversized,
+  and the reasons of the \SPRAY{} higher value when \CYCLON{} is undersized.
 \end{asparadesc}
 
-\subsection{Average path length}
+\subsection{Average shortest path length}
 \label{subsec:avg}
+
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/avgpath.eps}
-  \caption{\label{fig:avgpath}Comparison of the average shortest path in \SPRAY{}
-      and \CYCLON{}. The x-axis denotes the $\log_{10}$-scaled number of peers in 
-      the overlay while the average shortest path of the graph is displayed on the 
-  y-axis.}
+  \caption{\label{fig:avgpath}The average shortest path in \SPRAY{} and
+    \CYCLON{}. The x-axis denotes the $\log_{10}$-scaled number of peers in the
+    network while the y-axis denotes the average shortest path length of the
+    network.}
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] In this experiment we examine the shortest path length that
-  peers have to all other nodes in the network.  Messages should disseminate
-  quickly into the network which makes it crucial that the shortest path to
-  other peers is, in fact, short.
+\item[Objective:] To show that the information dissemination is efficient in
+  both \SPRAY{} and the fixed-size representative \CYCLON{}. \TODO{To show that
+    \SPRAY{} scales better than \CYCLON{} in term of network size.}
 \item[Description:] The average path length is the average of the shortest path
   length between peers in the graph. It counts the minimum number of hops to
-  reach a peer from another given peer.  For performance reasons, we select a
-  subset of 7 nodes, calculate their average shortest path and average it by 7.
-\item[Results:] Figure~\ref{fig:avgpath} shows that \CYCLON{}, when oversized,
-  yield a shorter average path length then \SPRAY{} but is quickly exceeded
-  when undersized.
-  %after its optimal partial view size is exceeded \SPRAY{} yields a shorter
-  %path.
-\item[Reasons:] While oversized \CYCLON{} is much better connected into the
-  graph and thus yields a lower average path length then \SPRAY{}, as soon
-  as it is undersized, \SPRAY{} is, thanks to bigger partial views, better
-  connected into the graph and, consequently, yields the shorter average path
-  length. 
+  reach a peer from another given peer. It basically represents the traveling
+  time of any information to reach all the peers at least once. We average the
+  path length on a small subset of the network membership and run $100$ times
+  the simulation on \SPRAY{} to avoid any side effects due to randomness. We
+  also run the simulation on different configurations of \CYCLON{} targeting
+  different optimal network size.  \CYCLON{} set with the partial view size of
+  $5$ roughly targets $150$ peers. \CYCLON{} set with the partial view size of
+  $7$ roughly targets $1100$ peers. \CYCLON{} set with the partial view size of
+  $9$ roughly targets $8100$ peers. In all these simulations, we perform the
+  measurements after convergence. The checkpoints for the measurements are
+  $100$, $500$, $1000$, $5000$, \ldots, $100000$ peers.
+\item[Results:] Figure~\ref{fig:avgpath} shows that both \CYCLON{} and \SPRAY{}
+  have an average shortest path length relatively small. Thus, the information
+  can disseminate to all the network very quickly. Figure~\ref{fig:avgpath}
+  also shows that, each run of \CYCLON{} taken alone can be divided in three
+  parts compared to \SPRAY{}. First, an oversized \CYCLON{} disseminates the
+  information faster than \SPRAY{}. Then, \SPRAY{} and \CYCLON{} are equivalent
+  where the latter is optimally configured. Finally, \SPRAY{} yields better
+  results. Yet, overall, \SPRAY{} scales better than \CYCLON{} since the
+  gradient of the former is lower than any configuration of the latter one.
+\item[Reasons:] We perform all the measurements after convergence where the
+  network overlay is closely related to random graphs. In such graph, the the
+  diameter and average shortest path length stay relatively small, as the
+  resulting values shown in Figure~\ref{fig:avgpath}. The second observation
+  concern each \CYCLON{} configuration compared alone with \SPRAY{}. While an
+  oversized \CYCLON{} is much better connected into the graph and thus yields a
+  lower average path length then \SPRAY{}, as soon as it is undersized,
+  \SPRAY{} is, thanks to larger partial views, better connected into the graph
+  and, consequently, yields the shorter average path length. The overall
+  observation is due to the fact that \SPRAY{} always follows the optimal
+  value.
 \end{asparadesc}
 
 \subsection{Partial view size distribution}
@@ -139,9 +160,9 @@ plateform~\footnote{https://github.com/justayak/peersim-spray}.
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/histo.eps}
-  \caption{\label{fig:histo}The in-degree distribution of \CYCLON{} and \SPRAY{}.
-  The x-axis denotes the in-degree in number of nodes while the y-axis indicates 
-  how much of the network features the given in-degree.}
+  \caption{\label{fig:histo}The in-degree distribution of \CYCLON{} and
+    \SPRAY{}.  The x-axis denotes the in-degree in number of nodes while the
+    y-axis indicates how much of the network features the given in-degree.}
 \end{figure}
 
 \begin{asparadesc}
