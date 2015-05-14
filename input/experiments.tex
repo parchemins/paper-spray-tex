@@ -1,27 +1,33 @@
 \section{Experimentation}
 \label{sec:experiments}
 
-In this section we examine the properties of \SPRAY{} and compare them to
-properties of \CYCLON{}, a state-of-the-art cyclic peer sampling service.  As
-\CYCLON{} uses fixed-sized partial views, we must predefine its partial view
-size $c$.  As shown by Erd{\H o}s and R{\' e}nyi\cite{erdos1959random} random
-graphs with less than $(|\mathcal{N}|*\ln|\mathcal{N}|)$ connections are likely
-to partition - which is not desired for random peer sampling services.  We want
-\CYCLON{} to be optimal for a network size of 1000 peers so we set the partial
-view size to $c=7\approx \ln{1000}$ while in each cycle we exchange $l=3$
-peers.  We call \CYCLON{} undersized when $\ln{|\mathcal{N}}| > c$, oversized
-when $\ln{|\mathcal{N}|} < c$ and optimal when $\ln{|\mathcal{N}|} \approx c$.
-The experiments\footnote{Implementation:
-  https://github.com/anonymous/anonymous4now} involve up to 500,000 nodes and
-are carried out on \PEERSIM{}\footnote{\url{http://peersim.sourceforge.net/}}, a simulator for peer-to-peer
-networks.  We define a cycle as $\Delta t$ in which each peer has executed its
-active protocol once.
+In this section we examine the properties of \SPRAY{} and compare them to a
+state-of-the-art fixed-size partial view approach, namely \CYCLON{}. We focus
+on the adaptiveness of \SPRAY{}. The measurements concern common properties of
+random graphs:
+\begin{itemize}
+\item the clustering coefficient: show the convergence speed, how scattered
+  are the peers from each other, how close are the peer from partitioning.
+\item the average minimum path length: show the efficiency of information
+  dissemination.
+\item the distribution of the incomming arcs: show how much the peers appear
+  in the others' partial view.
+\end{itemize}
+Then, in a more dynamic context, the measurements concern:
+\begin{itemize}
+\item the arcs count: show the adaptiveness to the network size.
+\item the variance of the partial view size: show the convergence speed under
+  network dynamic change.
+\item the number of connected components: show the robustness to massive
+  failures, show where the network is beyond self-repairing.
+\end{itemize}
+Finally, the experiments highlight the small overhead of our approach by
+measuring the number of duplicates inside the partial view sizes.
 
-We inspect three properties characteristic for random graphs, the \emph{average
-  clustering coefficient}~\ref{subsec:cluster}, the \emph{average shortest path
-  length}~\ref{subsec:avg} and \emph{the partial view size
-  distribution}~\ref{subsec:dist}. Additionally, we investigate on
-\emph{robustness to random failures}.
+The experiments run on the \PEERSIM{}
+simulator~\cite{montresor2009peersim}. The code of the random peer sampling
+protocols \CYCLON{}, \SCAMP{}, and \SPRAY{} is available on Github
+plateform~\footnote{https://github.com/justayak/peersim-spray}.
 
 \subsection{Clustering coefficient}
 \label{subsec:cluster}
@@ -29,41 +35,70 @@ We inspect three properties characteristic for random graphs, the \emph{average
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/cluster.eps}
-  \caption{\label{fig:clustering}The Clustering coefficient of \SPRAY{} and
-      \CYCLON{}: the x-axis denotes the elapsed time in cycles while the y-axis
-      denotes the $\log_{10}$-scaled clustering coefficient.
-  }
+  \caption{\label{fig:clustering}The clustering coefficient of \CYCLON{} and
+    \SPRAY{}: the x-axis denotes the elapsed time in cycles while the y-axis
+    denotes the $\log_{10}$-scaled clustering coefficient.}
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] We want to evaluate to what degree \SPRAY{} generates
-  clusters in the overlay.  To satisfy the random peer sampling objective it is
-  desired that the network has few clusters, thus has a sufficiently low
-  clustering coefficient.  This is important for various reasons: first: highly
-  clustered networks show poor load-balancing when messages are broadcast as
-  peers have a high chance of receiving a message multiple times through their
-  neighbors; and second: A network consisting of poorly connected clusters is
-  less robust regarding peers failing or simply leaving the overlay to
-  disconnect the graph.
+\item[Objective:] To show that \SPRAY{} converges faster than fixed-size
+  approaches. To show that \SPRAY{} and the state-of-the-art representative
+  (\CYCLON{}) converge to an equivalent network overlay when the latter is
+  optimally configured. To show that both approaches converge to characteristic
+  values of random graphs.
 \item[Description:] The average clustering coefficient $\overline{C}$ measures
   the connectivity of each peer's neighborhood in the network.
   \begin{equation}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
   \end{equation}
-  where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher the
-  coefficient, the more likely the network contains cliques.  The experiments
-  involve 100, 1000, 10000 and 100000 peers.
-\item[Results:] Figure \ref{fig:clustering} shows that \SPRAY{} converges
-  faster than \CYCLON{}.  Furthermore, oversized \CYCLON{} converges to a
-  higher value than \SPRAY while it converges to a lower one when
-  undersized.
-\item[Reasons:] The experiments yield the expected results: \SPRAY{}
-  converges faster as it is not constraint by a fixed, artificial barrier
-  $l$.  On the other hand, \CYCLON{} yields a lower clustering coefficient on
-  convergence when undersized.  This can be explained by the fact that peers in
-  an undersized \CYCLON{} overlay have less connections and thus have a lower
-  probability of forming cliques.  This, however, makes it more vulnerable to
-  node failure and churn.
+  where $C_x$ is the local clustering coefficient of Peer $p_x$.  The runs
+  concern 0.1k, 1k, 10k and 100k peers. The representative of fixed-size
+  approach is \CYCLON{} which is optimally configured for 1k peers. Indeed, its
+  partial views are set to $\ln(1000)\approx 7$. During their exchange, the
+  peers using \CYCLON{} shuffle $3$ out of their $7$ neighbors. Thus, \CYCLON{}
+  is oversized for 0.1k peers and undersized for 10k peers and 100k peers.
+
+  % The higher the coefficient, the more likely the network contains cliques.
+  % To satisfy the random peer sampling objective it is desired that the
+  % network
+  % has
+  % few clusters, thus has a sufficiently low clustering coefficient.  This is
+  % important for various reasons. First, highly clustered networks show poor
+  % load-balancing when messages are broadcast as peers have a high chance of
+  % receiving a message multiple times through their neighbors. Second: a
+  % network
+  % consisting of poorly connected clusters is less robust regarding peers
+  % failing or simply leaving the overlay to disconnect the graph.
+
+\item[Results:] Figure~\ref{fig:clustering} shows that \SPRAY{} converges
+  faster than \CYCLON{}. Furthermore, when the number of peers in the network
+  grows, the convergence speed of \CYCLON{} suffers heavily. On the contrary,
+  \SPRAY{} converges very quickly independently of the network
+  size. Figure~\ref{fig:clustering} also shows that both the approaches
+  converge to a low clustering coefficient which is characteristic of random
+  graphs. Nevertheless, \CYCLON{} and \SPRAY{} do not raise the same values
+  after convergence. Indeed, excepted the number of peers where \CYCLON{} is
+  optimally configured, \SPRAY{}'s values are either below (when \CYCLON{} is
+  oversized) or above (when \CYCLON{} is undersized).  Overall, it shows that
+  \SPRAY{} is
+  \begin{inparaenum}
+  \item faster to converge to a clustering coefficient
+  \item reflecting the needs of the network membership.
+  \end{inparaenum}
+  It impacts both load-balancing and robustness to churn (when peers join and
+  leave the network freely).
+\item[Reasons:] The fact that \CYCLON{} converges slower is due to its partial
+  view and the size of the shuffle. When they are \emph{a priori} configured,
+  they constitute a constraint to the convergence speed.  Next, the clustering
+  coefficient measures how much the neighborhood of each peer is connected to
+  the rest of the network. It directly depends of the partial view size of each
+  peer which, in \CYCLON{}, is fixed. Thus, when the peers number is multiplied
+  by $10$, the clustering coefficient after convergence is divided by $10$. On
+  the other hand, the peers using \SPRAY{} have variable-size partial view
+  which gently reflects the network size with a logarithimic growth. Thus, when
+  the network has 1000 peers, the partial view size adapts to this network
+  size: \TODO{SIZE}. It explains the slightly higher clustering coefficient of
+  \SPRAY{} on this run (i.e. \TODO{SIZE} vs 7).
 \end{asparadesc}
 
 \subsection{Average path length}
