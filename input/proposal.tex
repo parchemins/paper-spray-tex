@@ -324,16 +324,17 @@ sole bridge between two clusters, adding connections is not enough to
 ensure connectedness (more details in
 Section~\ref{subsec:resilience}).
 
-Note that extending the algorithms to handle three-way handshake is not
-difficult: it only requires to keep track of the neighbor from where the
-membership messages arrived, and forward the answer to this neighbor
-accordingly. Also, there are few optimization concerning the establishments of
-connections. For instance, when a peer $p$ starts an exchange with $q$, and $q$
-has $p$ in its partial view, instead of inverting the link between $p$ and $q$,
-and $q$ and $p$, \SPRAY{} does not change them. Another optimization
-concerns a peer having a neighbor multiple times in its partial view. While
-\SPRAY{} keeps such information in its partial view, only one connection per
-neighbor is truly necessary.
+% PAscal: Should be spread among the paper at the right moment... 
+% Note that extending the algorithms to handle three-way handshake is not
+% difficult: it only requires to keep track of the neighbor from where the
+% membership messages arrived, and forward the answer to this neighbor
+% accordingly. Also, there are few optimization concerning the establishments of
+% connections. For instance, when a peer $p$ starts an exchange with $q$, and $q$
+% has $p$ in its partial view, instead of inverting the link between $p$ and $q$,
+% and $q$ and $p$, \SPRAY{} does not change them. Another optimization
+% concerns a peer having a neighbor multiple times in its partial view. While
+% \SPRAY{} keeps such information in its partial view, only one connection per
+% neighbor is truly necessary.
 
 To summarize, \SPRAY{} provides:
 \begin{inparaenum}[(i)]
