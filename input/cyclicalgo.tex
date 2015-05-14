@@ -32,7 +32,9 @@
     \State $sample \leftarrow replace(sample,\,q,\,p)$; \label{line:replace1}
     \State $sendTo(q,\, 'exchange',\, sample)$;
     \State \textbf{let} $sample'\leftarrow receiveFrom(q)$;
-    \State $\mathcal{P} \leftarrow ((\mathcal{P} \setminus sample) \setminus \left\{\langle q,\, age \rangle \right\}) \uplus sample'$;
+    \State $sample \leftarrow replace(sample,\,p,\,q)$;
+    \State $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample) \uplus
+    sample'$;
     \EndFunction
   \endAct
   
@@ -41,6 +43,7 @@
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )$;
     \State $sample' \leftarrow replace(sample',\,o,\,p);$ \label{line:replace2}
     \State $sendTo(o ,\, sample')$;
+    \State $sample' \leftarrow replace(sample',\,p,\,o)$;
     \State $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample') \uplus
     sample$; 
     \EndFunction

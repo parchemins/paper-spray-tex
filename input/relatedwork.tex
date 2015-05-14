@@ -117,6 +117,21 @@ The complexity class of the \SCAMP{} failure rate increases leading to a quick
 degenerating number of connections over time. This behavior endangers the
 network connectedness.
 
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][$p_2$ executes $onSubs(p_1$)]{
+    \input{./input/joiningexampleA.tex}}
+  \hspace{40pt}
+  \subfloat[Figure B][$p_2$ calls $fwdSubs(p_1)$ on its neighbor]{
+    \input{./input/joiningexampleB.tex}}
+  \hspace{40pt}
+  \subfloat[Figure C][$p_{3-6}$ execute $fwdSubs(p_1)$]{
+    \input{./input/joiningexampleC.tex}}
+  \caption{\label{fig:joiningexample}Example of the \SPRAY{}'s joining
+    protocol.}
+\end{figure*}
+
+
 Building an adaptive-by-design random peer sampling that meet WebRTC
 constraints raises the following scientific problem:
 
