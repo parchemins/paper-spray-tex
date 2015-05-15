@@ -94,13 +94,13 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   the rest of the network. It directly depends of the partial view size of each
   peer which, in \CYCLON, is fixed. Thus, when the peers number is multiplied
   by $10$, the clustering coefficient after convergence is divided by $10$. On
-  the other hand, the peers using \SPRAY have variable-size partial view
-  which gently reflects the network size with a logarithimic growth. Thus, when
-  the network has 1000 peers, the partial view size adapts to this network
-  size: \TODO{SIZE}. It explains the slightly higher clustering coefficient of
-  \SPRAY on this run (i.e. \TODO{SIZE} vs 7). By extending the reasoning, it
-  explains the reasons of the \SPRAY lower value when \CYCLON is oversized,
-  and the reasons of the \SPRAY higher value when \CYCLON is undersized.
+  the other hand, the peers using \SPRAY have variable-size partial view which
+  gently reflects the network size with a logarithimic growth. Thus, when the
+  network has 1000 peers, the partial view size adapts to this network size. It
+  explains the slightly lower clustering coefficient of \SPRAY on this run
+  (\SPRAY 7.4 vs \CYCLON 7). By extending the reasoning, it explains the
+  reasons of the \SPRAY lower value when \CYCLON is oversized, and the reasons
+  of the \SPRAY higher value when \CYCLON is undersized.
 \end{asparadesc}
 
 \subsection{Average shortest path length}
@@ -124,14 +124,14 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   reach a peer from another given peer. It basically represents the traveling
   time of any information to reach all the peers at least once. We average the
   path length on a small subset of the network membership and run $100$ times
-  the simulation on \SPRAY to avoid any side effects due to randomness. We
-  also run the simulation on different configurations of \CYCLON targeting
-  different optimal network size.  \CYCLON set with the partial view size of
-  $5$ roughly targets $150$ peers. \CYCLON set with the partial view size of
-  $7$ roughly targets $1100$ peers. \CYCLON set with the partial view size of
-  $9$ roughly targets $8100$ peers. In all these simulations, we perform the
-  measurements after convergence. The checkpoints for the measurements are
-  0.1k, 0.5k, 1k, 5k, 10k, 50k, and 100k peers.
+  the simulation on \SPRAY to avoid any side effects due to randomness. We also
+  run the simulation on different configurations of \CYCLON targeting different
+  optimal network size. \CYCLON set with the partial view size of 7 roughly
+  targets 1.1k peers. \CYCLON set with the partial view size of 9 roughly
+  targets 8.1k peers. \CYCLON set with the partial view size of 11 roughly
+  targets 60k peers. In all these simulations, we perform the measurements
+  after convergence. The checkpoints for the measurements are 0.1k, 0.5k, 1k,
+  5k, 10k, 50k, and 100k peers.
 \item[Results:] Figure~\ref{fig:avgpath} shows that both \CYCLON and \SPRAY
   have an average shortest path length relatively small. Thus, the information
   can disseminate to all the network very quickly. Figure~\ref{fig:avgpath}
@@ -161,31 +161,55 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   \centering
   \includegraphics[width=0.49\textwidth]{img/histo.eps}
   \caption{\label{fig:histo}The in-degree distribution of \CYCLON and
-    \SPRAY.  The x-axis denotes the in-degree in number of nodes while the
-    y-axis indicates the percentage of peers with such in-degree.}
+    \SPRAY. The x-axis denotes the in-degree in number of nodes while the
+    y-axis indicates the percentage of peers with such in-degree. The top
+    figure is dedicated to the runs concerning \CYCLON while the bottom figure
+    concerns \SPRAY.}
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To show that the robustness of \SPRAY scales with the
-  network size. To show that the load is very balanced among peers.
-  % As the degree distribution shows the existence of both, weakly
-  % connected peers as well as strongly connected hubs, it helps to analyze the
-  % robustness of the overlay when failure is present.  Additionally, it
-  % indicates how well-distributed links in the network are which helps to
-  % approximate the resource usage across peers.
-\item[Description:] As the overlay can be represented as a directed graph we
-  distinguish between out-degree which determines to how many other nodes a
-  peer points, and the in-degree which determines from how many other peers a
-  certain peer is referenced.  We concentrate on the in-degree for better
-  comparison as in \CYCLON the out-degree is fixed ($c$).
+\item[Objective:] To show that the robustness of \SPRAY scales with the network
+  size, contrarily to fixed-size partial view approaches. To show that the load
+  balancing is independent of the network size and exposes equity among peers.
+\item[Description:] The in-degree of a peer shows how well this peer is
+  represented in others' partial view. The in-degree distribution of the
+  network can highlight the existence of weakly connected peers and/or strongly
+  connected hubs. It has a direct impact on robustness. In this experiment, the
+  fixed-size partial view approach is \CYCLON{}. It is configured with partial
+  views of size $7$ which is optimal for a network of roughly $1100$ peers.
+  For all the experiments, we perform the in-degree measurements after
+  convergence. The measurements concern networks with 0.1k, 1k, 100k, 500k
+  peers.
 \item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
-  \CYCLON and \SPRAY.  In \CYCLON the number of peers in the overlay
-  has no influence on the degree distribution always as it always gathers
-  around the selected partial view size $c$.  In \SPRAY, however, the
-  degree distribution depends logarithmically on the network size and grows and
-  shrinks with the network.
-\item[Reasons:] \CYCLON's fixed partial view size accounts for its rigid
-  behavior.  In \SPRAY the distribution is much more fluid...
+  \CYCLON and \SPRAY. In the top figure, we observe that the distribution and
+  the degrees of \CYCLON are identical, independently of the network
+  size. Thus, the distribution of 0.1k peers is identical to the 500k one with
+  a mean value of roughly 7 with a strong peak on this value. On the other
+  hand, the bottom figure shows that the distribution of \SPRAY follows average
+  partial view size which follows the network size
+  growth. Figure~\ref{fig:histo} also shows that peers are very gathered around
+  the mean partial view size. For instance, for the run with 500k peers using
+  \SPRAY, the mean value for the in-degree is 13.37 and 88 percents of the
+  peers have an in-degree comprised between 12 and 14 included. It means that
+  the load is well balanced among peers. Since peers are equally important in
+  term of connectedness, the network is robust to failures.
+\item[Reasons:] Once configured, \CYCLON must handle any number of peers in the
+  network with a fixed-size partial view. Proportionally, the number of times
+  that a particular peer is referenced does not change compared to the network
+  size. Indeed, the number of arcs that a new peer brings to network when it
+  joins constitutes that much arcs targeting it after the shuffling
+  rounds. Since the partial view size is constant, the in-degree of peers stays
+  stable. On the other hand, in \SPRAY, each joining peer brings a increasing
+  number of arcs in the network. Thus, the in-degree of each peer grows
+  reflecting the network size. Hence, the distribution in the bottom figure
+  shifts slowly to higher in-degree values as the network size grows.  \SPRAY
+  does not peak on a particular value as \CYCLON because the average partial
+  view size for a particular network size falls inbetween integer values. For
+  instance, if the average partial view size is 6.5, then half of them will
+  have a size of 6 while the other half will have a size of 7. Such network is
+  robust to failure because no peer is more important than other in term of
+  connectedness. Therefore, if some random peer crashes, it will not affect as
+  much the network as if a peer strongly connected crashed.
 \end{asparadesc}
 
 \subsection{Dynamic network}
@@ -193,24 +217,26 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/churn.eps}
-  \caption{\label{fig:churn}\SPRAY under examplatory churn: the x-axis
-    denotes the elapsed time in cylces. The upper graphs y-axis shows the
-    number of total connections in the overlay while the lower graph y-axis
-    shows the variance $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in
-    the network.  $2500$ peers join the network at cycle $0$, $10$, $20$, $30$,
-    $60$ and $70$ while $5000$ peers are removed in cycle $40$ }
+  \caption{\label{fig:churn}\SPRAY in a dynamic network. The x-axis denotes the
+    elapsed time in cycles. The upper graph y-axis shows the number of total
+    connections in the overlay while the lower graph y-axis shows the variance
+    $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.  2.5k
+    peers join the network at cycles $0$, $10$, $20$, and $30$. Then 5k peers
+    leave at cycle $40$. Finally 2.5k peers join at cycles $60$ and $70$. The
+    final network contains 10k members.}
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To highlight that \SPRAY is adaptive, i.e., the total
-  number of connections reflects the network membership. Furthermore, the
-  connections are quickly spread among the members.
-\item[Description:] The first half of the experimentation, $2,500$ peers are
-  added $4$ times successively by intervals of $10$ cycles each. Thus, the
-  network size goes from $0$ to $10,000$ peers in $40$ rounds. Then, half of
-  the network leaves without giving notice ($5,000$ peers). Finally, $2,500$
-  peers join two additional times. The final network size is $10,000$
-  members. The measurements concern
+\item[Objective:] To highlight that \SPRAY is able to adapt to reflect the
+  dynamic changes of membership in the network. To show that the arcs are
+  quickly spread among the members.
+\item[Description:] In this experiment we focus on a dynamic network where
+  peers can join and leave. We also focus on the \SPRAY protocol. The first
+  half of the experimentation, 2.5k peers are added 4 times successively by
+  intervals of 10 cycles each. Thus, the network size goes from 0 to 10k peers
+  in 40 rounds. Then, half of the network leaves without giving notice (5k
+  peers). Finally, 2.5k peers join two additional times. The final network size
+  is 10k members. The measurements concern
   \begin{inparaenum}
   \item the number of connections in the network over cycles,
   \item the variance of the partial view sizes over cycles
@@ -224,25 +250,25 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   number grows to reflect the needs of the new network membership. The
   observation is consistent with the variance measures. Indeed, at each batch
   of insertions, the variance suddenly grows. Then, it exponentially decreases
-  and converges to zero in less than $10$ cycles. The variance is higher when
-  the network size is lower. For instance, the first $2,500$ peers lead to the
-  highest variance. At the $40^{th}$ rounds, half of the peers
-  leave/crash. Around half of the connections are directly removed without
-  disturbing the variance of partial views. The $10$ following cycles show a
-  slight decrease of connections. Then new members are introduced in the
-  network yielding the same results as earlier joinings.
+  and converges to zero in less than 10 cycles. The variance is higher when the
+  network size is lower. For instance, the first 2.5k peers lead to the highest
+  variance. At the $40^{th}$ cycle, half of the peers leave/crash. Around half
+  of the connections are directly removed without disturbing the variance of
+  partial views. The 10 following cycles show a slight decrease of
+  connections. Then new members are introduced in the network yielding the same
+  results as earlier joinings.
 \item[Reasons:] Since the partial views of \SPRAY adapt themselves to the
   network size, the number of connections grows as the network membership
   grows.  The peaks in variance correspond to the joining parts of the
   experiment. The disparity comes from the fact that new peers arrive in the
   network with a small partial view. The peaks are smaller when the network is
   larger. Indeed, the peers - which already were network members before the new
-  arrivals - had a few rounds to exchanges and even up their partial views. As
-  consequence, it lessens the weight of joinings. The removal of $5,000$ peers
-  do not disturb the variance since they are made at random. Thus, no peers
-  suffer more of these removals than others. The slightly decreasing number of
-  connections after the removal is due to peers realizing that some connections
-  are dead, leading to a probabilistic removal
+  arrivals - had a few cycles to exchanges and even up their partial views. As
+  consequence, it lessens the weight of joinings. The removal of 5k peers does
+  not disturb the variance since each crashing/leaving peer is chosen at
+  random. Thus, no peers suffer more of these removals than others. The
+  slightly decreasing number of arcs after the removal is due to peers
+  realizing that some arcs are dead, leading to a probabilistic removal
   (cf. Algorithm~\ref{algo:unreachable}).
 \end{asparadesc}
 
@@ -252,30 +278,26 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/resilience.eps}
-  \caption{\label{fig:resilience}Resilience to massive failure}
+  \caption{\label{fig:resilience}Resilience of \CYCLON and \SPRAY to massive
+    failures. The x-axis denotes the percentage of peers removed at once in a
+    network containing 10k members. The y-axis denotes the number of
+    components over the current network size (after the removals). The
+    measurements concern the weak and strong components which basically means
+    the number clusters in undirected or directed graph respectively.}
 \end{figure}
 
-
-\begin{algorithm}
-\input{input/unsubscriptionalgo.tex}
-\caption{\label{algo:unsubscription}Unsubscription protocol from
-  \SCAMP~\cite{ganesh2003peer}}
-\end{algorithm}
+% \begin{algorithm}
+% \input{input/unsubscriptionalgo.tex}
+% \caption{\label{algo:unsubscription}Unsubscription protocol from
+%   \SCAMP~\cite{ganesh2003peer}}
+% \end{algorithm}
 
 \begin{asparadesc}
-\item[Objective:] 
-\item[Description:] Algorithm~\ref{algo:unsubscription} shows the
-  unsubscription protocol which guarantees connectedness (WITH HIGH PROBA?)
-  upon the assumption that an \emph{in view} $\mathcal{I}$ is maintained
-  (cf. Line~\ref{line:inview}) along with bidirectional connections. The set of
-  peers which have a particular peer in their partial view populate the
-  latter's in view. When a peer leaves, it actively contributes to repair the
-  network by acting like a bridge between its in view $\mathcal{I}$ and its
-  partial view $\mathcal{P}$. As consequence, the neighbors from $\mathcal{I}$
-  add each peer from the leaving peer's partial view in their own partial view.
-  Except for one peer (cf. Line~\ref{line:bridge}), it guarantees that these
-  peers stay connected, i.e., that at least one partial view references them.
-
+\item[Objective:] To show that both \SPRAY and \CYCLON are robust to massive
+  \TODO{random} failures. To highlight that even if the information
+  dissemination fails to reach all peers, the membership protocols are still
+  able to repair the network, until the massive failures is beyond repair.
+\item[Description:] 
 \item[Results:]
 \item[Reasons:]
 \end{asparadesc}
