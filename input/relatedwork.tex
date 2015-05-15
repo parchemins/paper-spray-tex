@@ -18,11 +18,12 @@ connections]{
 \label{sec:relatedwork}
 
 
-WebRTC allows real-time communication from browser-to-browser even with complex
-network settings such as firewall, proxies or Net Address Translation
-(NAT). However, WebRTC does not manage addressing nor routing. To establish a
-connection, the browsers exchange offers and acknowledges through a mediator,
-e.g., mails, dedicated signaling services\footnote{\url{http://peerjs.com/}},
+WebRTC allows real-time peer-to-peer communication between browsers even when 
+complex network systems such as firewalls, proxies or Net Address Translation
+(NAT) are involved. However, WebRTC does not manage addressing nor routing. To
+establish a connection, the browsers exchange offers and acknowledgments
+through a common mediator, e.g., mails, dedicated signaling services
+\footnote{\url{http://peerjs.com/}},
 existing WebRTC connections\footnote{\url{http://ozan.io/p/}} etc. In
 figure~\ref{fig:webrtc}, $p_2$ wants to connect to $p_3$. Therefore, $p_2$
 pushes an offer ticket to a signaling service\footnote{Many signaling services
@@ -34,20 +35,20 @@ connection to $p_2$. This round-trip procedure is called \emph{three-way
 $p_3$ without the mediation of the signaling service. Peer $p_1$ pushes an
 offer ticket to $p_2$.  As $p_2$ is already connected to $p_1$, it forwards the
 offer to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket
-and sends it back to $p_2$. The latter forwards it to $p_1$. On receipt, $p_1$
+and sends it back to $p_2$ who then forwards it to $p_1$. Upon receipt, $p_1$
 establishes a bidirectional connection with $p_3$. Notice that if $p_2$
-crashes during the forwarding process, then connection establishment will fail,
+crashes during the forwarding process, the connection establishment will fail,
 even if an alternative route exists as WebRTC does not manage routing.
 
-Using signaling services and the existing WebRTC connections allows deploying
+Using signaling services and existing WebRTC connections allows deploying
 random peer sampling protocols~\cite{jelasity2004peer} easily on browsers that
 can run on mobile phones or tablets connected to mobile networks. In this
 context, it is crucial to keep the number of connections as low as possible in
-order to limit the traffic and resource consumption.
+order to reduce traffic usage and limit resource consumption.
 
 Random peer sampling protocols~\cite{jelasity2004peer} provide each
 peer with a partial view $\mathcal{P}$ of the network membership
-$\mathcal{N}$. They populate the partial views with the reference of
+$\mathcal{N}$. They populate the partial views with references to
 peers chosen at random among $\mathcal{N}$ following a uniform
 distribution using local knowledge only. Their goal is to converge to
 an overlay network exposing properties similar to random
@@ -59,14 +60,14 @@ management~\cite{voulgaris2005epidemic, jelasity2009tman,
 
 Representatives of random peer sampling
 protocols~\cite{voulgaris2005cyclon, eugster2003lightweight,
-  tolgyeski2009adaptive} use a fixed-size partial view.  Thus, they
+  tolgyeski2009adaptive} use a fixed-size partial view. Therefore, they
 have to know \emph{a priori} the maximum order of magnitude of the
 network size to set their appropriate parameters. These decisions
 cannot be safely retracted afterwards. For this reason, the partial
 views are commonly oversized compared to the actual network
 size. Consequently, it is possible for a browser to maintain 10
-connections with others while only 6 were required. In WebRTC context,
-we need a dynamic peer sampling service able to adapt to number of
+connections with others while only 6 are required. In WebRTC context,
+we need a dynamic peer sampling service able to adapt to the number of
 participants.
 
 Network size estimators can be used to introduce adaptiveness in peer
