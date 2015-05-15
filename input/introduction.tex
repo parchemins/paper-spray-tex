@@ -14,17 +14,17 @@ Unfortunately, WebRTC has several constraints that makes existing peer
 sampling services inefficient or unreliable. First, browsers can run
 on small devices on mobile networks. Hence, keeping the number of
 connections as low as possible is a major requirement. However, peer
-sampling services such as \CYCLON{}~\cite{voulgaris2005cyclon} do not
+sampling services such as \CYCLON~\cite{voulgaris2005cyclon} do not
 adapt the number of connections to the real number of
 participants. For instance, a user must maintain 10 connections with
 other remote browsers when only 6 were enough. On the other hand, the
-peer sampling service \SCAMP{}~\cite{ganesh2003peer} is adaptive but
+peer sampling service \SCAMP~\cite{ganesh2003peer} is adaptive but
 uses random walks to establish its connections that is much more
 costly and likely to fail in the WebRTC context.
 
-In this paper, we introduce \SPRAY{}, a random peer sampling protocol inspired
-by both \CYCLON{}~\cite{voulgaris2005cyclon} and
-\SCAMP{}~\cite{ganesh2003peer}. Compared to the state of art,
+In this paper, we introduce \SPRAY, a random peer sampling protocol inspired
+by both \CYCLON~\cite{voulgaris2005cyclon} and
+\SCAMP~\cite{ganesh2003peer}. Compared to the state of art,
 \begin{inparaenum}[(i)]
 \item it dynamically adapts the neighborhood of each peer. Thus, the number of
   connections grows logarithmically compared to the size of the network.
@@ -33,14 +33,14 @@ by both \CYCLON{}~\cite{voulgaris2005cyclon} and
 \item It converges exponentially fast to a topology exposing properties similar
   to random graphs. Thus, the network becomes quickly resilient to massive
   failures, efficiently disseminates information etc.
-\item In experimental setup, we show the adaptiveness of \SPRAY{} and
-  highlight its efficiency improvement compared to \CYCLON{}, at the cost of a
+\item In experimental setup, we show the adaptiveness of \SPRAY and
+  highlight its efficiency improvement compared to \CYCLON, at the cost of a
   little overhead.
 \end{inparaenum}
 
 The rest of this paper is organized as follow: Section~\ref{sec:relatedwork}
-reviews the related work. Section~\ref{sec:proposal} details the \SPRAY{}
-protocol.  Section~\ref{sec:experiments} shows the properties of \SPRAY{}
+reviews the related work. Section~\ref{sec:proposal} details the \SPRAY
+protocol.  Section~\ref{sec:experiments} shows the properties of \SPRAY
 and compare them to state-of-the-art random peer sampling approaches. We
 conclude and discuss about perspective in Section~\ref{sec:conclusion}.
 
