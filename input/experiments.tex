@@ -296,8 +296,16 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 \item[Objective:] To show that both \SPRAY and \CYCLON are robust to massive
   \TODO{random} failures. To highlight that even if the information
   dissemination fails to reach all peers, the membership protocols are still
-  able to repair the network, until the massive failures is beyond repair.
-\item[Description:] 
+  able to repair the network, until the failure is beyond repair.
+\item[Description:] Counting the strong components in a network allows
+  estimating the area that are reachable by the information dissemination
+  protocols. Counting the weak components in a network allows estimating the
+  point where the network is still in a repairable state, i.e., after some
+  shufflings, the network will converge to an overlay where the information
+  dissemination is able to reach all members again. \CYCLON has a partial view
+  size set to 9. The network contains 10k members. We perform the measurements
+  immediately after the removals. The removals concern a percentage of the
+  peers chosen at random among the 10k members. We remove the batch at once.
 \item[Results:]
 \item[Reasons:]
 \end{asparadesc}
