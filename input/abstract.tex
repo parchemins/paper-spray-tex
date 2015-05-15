@@ -1,16 +1,24 @@
 
 \begin{abstract}
-  Deploying peer sampling services on top of WebRTC allows running large scale
-  distributed applications on a network of browsers. However, WebRTC has
-  several constraints that makes existing peer sampling services inefficient or
-  unreliable.  In this paper, we propose \SPRAY, an adaptive
-  peer-sampling service designed to meet the WebRTC constraints. \SPRAY
-  dynamically adapts the neighborhood of each peer to the network
-  size. Furthermore, it only uses neighbor-to-neighbor interactions to
-  establish the connections and converges exponentially fast to a topology
-  exposing properties similar to random graphs. Experiments demonstrate the
-  adaptiveness of \SPRAY and highlight its efficiency improvement compared
-  to \CYCLON at the cost of a small overhead.
+  The introduction of WebRTC has opened a new playground for
+  large-scale distributed applications consisting of large numbers of
+  directly-communicating web browsers. In this context, gossip-based
+  peer-sampling protocols appear as a particularly promising tool
+  thanks to their inherent ability to build overlay networks that can
+  cope with network dynamics. However, the dynamic nature of
+  browser-to-browser communication combined with the connection
+  establishment procedures that characterize WebRTC make current
+  peer-sampling solutions inefficient or simply unreliable.  In this
+  paper, we address the limitations of current peer-sampling
+  approaches by introducing \SPRAY, a novel peer-sampling protocol
+  designed to meet the constraints introduced by WebRTC. Unlike most
+  recent peer-sampling approaches, \SPRAY has the ability to adapt
+  its operation to networks that can grow or shrink very
+  rapidly. Moreover, by using only neighbor-to-neighbor interactions,
+  it limits the impact of the three-way connection establishment
+  process that characterizes WebRTC. Our experiments demonstrate the
+  ability of  \SPRAY to adapt to dynamic networks and highlight its
+  efficiency improvements with respect to existing protocols. 
 \end{abstract}
 
 \category{H.4}{TODO}{EXAMPLE BELOW}
