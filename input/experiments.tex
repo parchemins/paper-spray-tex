@@ -278,7 +278,7 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/resilience.eps}
-  \caption{\label{fig:resilience}Resilience of \CYCLON and \SPRAY to massive
+  \caption{\label{fig:resilience}Robustness of \CYCLON and \SPRAY to massive
     failures. The x-axis denotes the percentage of peers removed at once in a
     network containing 10k members. The y-axis denotes the number of
     components over the current network size (after the removals). The
@@ -299,15 +299,37 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   able to repair the network, until the failure is beyond repair.
 \item[Description:] Counting the strong components in a network allows
   estimating the area that are reachable by the information dissemination
-  protocols. Counting the weak components in a network allows estimating the
-  point where the network is still in a repairable state, i.e., after some
-  shufflings, the network will converge to an overlay where the information
-  dissemination is able to reach all members again. \CYCLON has a partial view
-  size set to 9. The network contains 10k members. We perform the measurements
+  protocols. For instance, there are 2 strong components if a part of the
+  network can reach another part and the converse being false.  Counting the
+  weak components in a network allows estimating the point where the network is
+  still in a repairable state, i.e., after some shufflings, the network will
+  converge to an overlay where the information dissemination is able to reach
+  all members again. \CYCLON has a partial view size set to 9. The network
+  contains 10k members. We perform the removals after the approaches converged
+  to a stable overlay network. We remove the batch of peers at once, from 25 to
+  95 percents of peers every 5 percents, i.e., 16 runs for each approach. We
+  perform a last measurement at 99 percents. We perform the measurements
   immediately after the removals. The removals concern a percentage of the
-  peers chosen at random among the 10k members. We remove the batch at once.
-\item[Results:]
-\item[Reasons:]
+  peers chosen at random among the 10k members.
+\item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
+  components over the network size after removals. Firstly, the figure shows
+  that both the random peer sampling protocols \SPRAY and \CYCLON suffer from
+  deteriorated behaviour at high removal percentages, \CYCLON being slightly
+  better in this term. Figure~\ref{fig:resilience} shows that the information
+  dissemination (strong components) starts to slowly degrade at 45 percents,
+  and quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience}
+  also shows that the approaches are able to recover from such clustering until
+  high removal rate. Indeed, the weak components start to increase at 70
+  percents. Meaning that some part of the network are completely disjoint and
+  beyond repair.
+\item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY expose
+  very similar results because \CYCLON's configuration targets a network size
+  of 10k peers, while \SPRAY adjusts itself automatically to this network size.
+  Therefore, the arcs number in the approaches are close from being identical
+  (\TODO{SIZE}). \CYCLON is slightly better because, in this case, it has more
+  arcs (due to \SPRAY's randomness) and because it does not have duplicates
+  (\SPRAY contains a small amount of duplicates in the partial view,
+  cf. Section~\ref{subsec:duplicates}).
 \end{asparadesc}
 
 % \subsection{Degeneration}
@@ -354,7 +376,8 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 %   predicted easy for when a link failed due to its random walk nature.
 % \end{asparadesc}
 
-\subsection{Duplicates in Partial Views}
+\subsection{Duplicates in partial views}
+\label{subsec:duplicates}
 
 \begin{figure}
   \centering
