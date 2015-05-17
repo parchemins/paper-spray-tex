@@ -2,9 +2,9 @@
 \label{sec:experiments}
 
 In this section we examine the properties of \SPRAY and compare them to a
-state-of-the-art fixed-size partial view approach, namely \CYCLON. We focus
-on the adaptiveness of \SPRAY. The measurements concern common properties of
-random graphs:
+state-of-the-art fixed-size partial view approach, namely \CYCLON. We focus on
+the adaptiveness of \SPRAY. All the experiements consider directed graphs. The
+measurements concern common properties of random graphs:
 \begin{itemize}
 \item the clustering coefficient: show the convergence speed, how scattered
   are the peers from each other, how close are the peer from partitioning.
@@ -314,7 +314,7 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 \item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
   components over the network size after removals. Firstly, the figure shows
   that both the random peer sampling protocols \SPRAY and \CYCLON suffer from
-  deteriorated behaviour at high removal percentages, \CYCLON being slightly
+  deteriorated behavior at high removal percentages, \CYCLON being slightly
   better in this term. Figure~\ref{fig:resilience} shows that the information
   dissemination (strong components) starts to slowly degrade at 45 percents,
   and quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience}
@@ -329,7 +329,16 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   (\TODO{SIZE}). \CYCLON is slightly better because, in this case, it has more
   arcs (due to \SPRAY's randomness) and because it does not have duplicates
   (\SPRAY contains a small amount of duplicates in the partial view,
-  cf. Section~\ref{subsec:duplicates}).
+  cf. Section~\ref{subsec:duplicates}). It requires a high amount of removals
+  to endanger the information dissemination protocol's ability to reach all
+  peers. Indeed, since all peers are equally important in the network
+  (cf. Figure~\ref{fig:histo}), removing a particular peer does not
+  greatly affect the whole network. The network membership protocol is able to
+  repair the topology later than the information dissemination starts to fail
+  because the direction of arcs is not as important as in the latter. Indeed,
+  \CYCLON and \SPRAY are still able to repair a network until parts of the
+  network become disjoint, i.e., there is no arc between these parts of the
+  network.
 \end{asparadesc}
 
 % \subsection{Degeneration}
