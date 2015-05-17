@@ -602,7 +602,7 @@ Z stroke
 LCb setrgbcolor
 164 2819 M
 currentpoint gsave translate -270 rotate 0 0 moveto
-[ [(Helvetica) 200.0 0.0 true true 0 (% of peers with no duplicates)]
+[ [(Helvetica) 200.0 0.0 true true 0 (% of peers without duplicates)]
 ] -66.7 MCshow
 grestore
 LTb
@@ -645,7 +645,8 @@ LT1
 /Helvetica findfont 200 scalefont setfont
 LCb setrgbcolor
 5936 1003 M
-(\(100*\(1-\(1-exp\(-log\(x\)*\(log\(x\)-1\)/\(2*x\)\)\)\)\)) Rshow
+%(\(100*\(1-\(1-exp\(-log\(x\)*\(log\(x\)-1\)/\(2*x\)\)\)\)\)) Rshow
+(birthday paradox approximation) Rshow
 LT1
 6056 1003 M
 543 0 V

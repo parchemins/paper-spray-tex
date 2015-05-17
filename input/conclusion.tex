@@ -21,21 +21,17 @@ Thus, we expect that decentralized applications (requiring scalable broadcast
 among other) will flourish in the web browsers, while they were previously
 quartered to standalone applications.
 
-Future work includes an analysis of doubles in the \SPRAY's partial views.
-Intuitively, these artifacts do not exist in infinite random graphs. However,
-in small networks, they are much more likely to exist. We intend to measure
-these redundant identities and to what extent they become a threat to the
-random topology.  We also want to extend the adaptive partial views to topology
-managers that rely on random peer sampling protocols such as
-T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. For
-instance, it is possible to build a topology based on preferences. Current
-approaches have a fixed-size view of the most closely related neighbors. Once
-again, it may lead to waste in efficiency. On the other hand, if the view size
-could adapt to the size of a cluster (if the topology creates disjoint
-clusters), it would improve the traffic, robustness, etc. Finally, future work
-includes a Javascript implementation using WebRTC. While experimentation of
-this paper shows the results of Peersim simulations, the real implementation
-would open the gate to emulations, and even real peer-to-peer distributed and
+Future work includes investigations on topology managers such as
+T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. Indeed,
+they traditionally rely on random peer sampling approaches using fixed-size
+partial view. Thus, they maintain a fixed-size view of their most closely
+related neighbors using a ranking function. With \SPRAY, it is possible to
+extend their behaviour to use dynamic partial views. If the view size could
+adapt to the size of a cluster (if the topology creates disjoint clusters), it
+would improve the traffic, robustness, etc. Future work also includes a
+Javascript implementation using WebRTC. While experimentation of this paper
+shows the results of Peersim simulations, the real implementation would open
+the gate to emulations, and even real peer-to-peer distributed and
 decentralized applications.
 
 %%% Local Variables:
