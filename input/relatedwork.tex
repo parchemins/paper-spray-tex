@@ -88,6 +88,22 @@ imply a communication overhead and may have strong assumptions
 (e.g. random graph topology). In WebRTC context, adaptiveness should
 introduce a minimum overhead in peer sampling.
 
+%% figure related to proposal, here to be on top of page
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][$p_2$ executes $onSubs(p_1$)]{
+    \input{./input/joiningexampleA.tex}}
+  \hspace{40pt}
+  \subfloat[Figure B][$p_2$ calls $fwdSubs(p_1)$ on its neighbor]{
+    \input{./input/joiningexampleB.tex}}
+  \hspace{40pt}
+  \subfloat[Figure C][$p_{3-6}$ execute $fwdSubs(p_1)$]{
+    \input{./input/joiningexampleC.tex}}
+  \caption{\label{fig:joiningexample}Example of the \SPRAY's joining
+    protocol.}
+\end{figure*}
+
+
 The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2001scamp,ganesh2003peer} which stands for
 SCalable Membership Protocol. Its interesting property lies in its
@@ -117,21 +133,6 @@ until the subscription travels back. Thus, we obtain:
 The complexity class of the \SCAMP failure rate increases leading to a quick
 degenerating number of connections over time. This behavior endangers the
 network connectedness.
-
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][$p_2$ executes $onSubs(p_1$)]{
-    \input{./input/joiningexampleA.tex}}
-  \hspace{40pt}
-  \subfloat[Figure B][$p_2$ calls $fwdSubs(p_1)$ on its neighbor]{
-    \input{./input/joiningexampleB.tex}}
-  \hspace{40pt}
-  \subfloat[Figure C][$p_{3-6}$ execute $fwdSubs(p_1)$]{
-    \input{./input/joiningexampleC.tex}}
-  \caption{\label{fig:joiningexample}Example of the \SPRAY's joining
-    protocol.}
-\end{figure*}
-
 
 Building an adaptive-by-design random peer sampling that meet WebRTC
 constraints raises the following scientific problem:
