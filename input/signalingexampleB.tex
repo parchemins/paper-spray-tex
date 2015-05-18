@@ -1,16 +1,44 @@
 
-\begin{tikzpicture}
-\matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
-\node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
-\node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
-};
-\path[->]
-  (p1) edge[dashed,bend left] node[fill=white]{1:emit} (p2)
-  (p2) edge[dashed,bend left] node[fill=white,left]{2:emit/p1} (p3)
-  (p3) edge[dashed,bend left] node[fill=white,right]{3:accept/p1} (p2)
-  (p2) edge[dashed,bend left] node[fill=white]{4:accept} (p1)
-  (p1) edge[<->,thick] (p2)
-%  (p1) edge[<->,thick,bend left] (p3)
-  (p2) edge[<->,thick]  (p3);
+\begin{tikzpicture}[scale=1.2]
+
+\newcommand\X{40pt};
+\newcommand\Y{20pt};
+
+\draw(1.5*\X, 0); %% spacing
+\draw(-1.5*\X, 0); %% spacing
+
+\draw[fill=white](0*\X, 0*\Y)
+node{\emph{signaling service}} +(-30pt,-5pt) rectangle +(30pt,5pt);
+
+\small
+\draw[<->, very thick](5-1*\X,-2*\Y)--
+node[anchor=south]{1$\rightarrow$}
+node[anchor=north]{$\leftarrow$4}(-5pt,-3*\Y);
+\draw[<->, very thick](5pt,-3*\Y)--
+node[anchor=south]{2$\rightarrow$}
+node[anchor=north]{$\leftarrow$3}(-5+1*\X,-2*\Y);
+
+\draw[fill=white, very thick]
+(-1*\X,-2*\Y) node{$p_1$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+\draw[fill=white, very thick]
+(0*\X, -3*\Y) node{$p_2$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+\draw[fill=white, very thick]
+(1*\X, -2*\Y) node{$p_3$} +(-5pt,-5pt) rectangle +(5pt,5pt);
 
 \end{tikzpicture}
+
+% \begin{tikzpicture}
+% \matrix (m) [matrix of math nodes,row sep=4em,column sep=4em] {
+% \node(ss)[draw]{signaling}; & \node(p3)[draw]{p3}; \\
+% \node(p1)[draw]{p1}; & \node(p2)[draw]{p2}; \\
+% };
+% \path[->]
+%   (p1) edge[dashed,bend left] node[fill=white]{1:emit} (p2)
+%   (p2) edge[dashed,bend left] node[fill=white,left]{2:emit/p1} (p3)
+%   (p3) edge[dashed,bend left] node[fill=white,right]{3:accept/p1} (p2)
+%   (p2) edge[dashed,bend left] node[fill=white]{4:accept} (p1)
+%   (p1) edge[<->,thick] (p2)
+% %  (p1) edge[<->,thick,bend left] (p3)
+%   (p2) edge[<->,thick]  (p3);
+
+% \end{tikzpicture}
