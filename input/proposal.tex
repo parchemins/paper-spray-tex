@@ -64,6 +64,25 @@ $1+\ln(|\mathcal{N}|)$.
 % directly add it to their partial view. Afterwards, $p_1$ is connected
 % to $p_2$, and all the neighbors of $p_2$ are connected to $p_1$.
 
+\begin{figure*}
+  \centering
+  \subfloat[Figure A]
+  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
+  latter the multiset $\{p_6,\,p_9\}$.]{
+    \input{./input/cyclicexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][Peer $p_1$ receives the $p_6$'s message. 
+  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
+  partial view.]{
+    \input{./input/cyclicexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
+  adds $\{p_2\}$ to its partial view.]{
+    \input{./input/cyclicexampleC.tex}}
+  \caption{\label{fig:cyclicexample}Example of the \SPRAY's shuffling
+    protocol. }
+\end{figure*}
+
 The \SPRAY joining algorithm is presented in
 Algorithm~\ref{algo:joiningalgo}.
 
@@ -86,26 +105,6 @@ neighbors, indifferently of the age. The $onFwdSubs$ event is called
 when a peer receives such forwarded subscription. It adds the peer as
 one of its neighbor with an age set to $0$ meaning that it is a brand
 new reference.
-
-\begin{figure*}
-  \centering
-  \subfloat[Figure A]
-  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
-  latter the multiset $\{p_6,\,p_9\}$.]{
-    \input{./input/cyclicexampleA.tex}}
-  \hspace{10pt}
-  \subfloat[Figure B][Peer $p_1$ receives the $p_6$'s message. 
-  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
-  partial view.]{
-    \input{./input/cyclicexampleB.tex}}
-  \hspace{10pt}
-  \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
-  adds $\{p_2\}$ to its partial view.]{
-    \input{./input/cyclicexampleC.tex}}
-  \caption{\label{fig:cyclicexample}Example of the \SPRAY's shuffling
-    protocol. }
-\end{figure*}
-
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario. In this scenario,
 Peer $p_1$ contacts $p_2$ to join the network composed of $\{p_2$, $p_3$,
@@ -198,6 +197,23 @@ size of network members. It also scatters neighbors in order to remove
 the highly clustered groups which may appear because of the joining
 protocol.
 
+%% figure related to crash/departure, here to be on top of page
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][Peer $p_1$ crashes.]{
+    \input{./input/crashexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][The peer $p_3$, $p_4$, and $p_5$ notice that they
+  cannot reach $p_1$ anymore.]{
+    \input{./input/crashexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][The peer $p_3$ and $p_5$ choose to establish
+  a duplicate with one of their existing neighbor.]{
+    \input{./input/crashexampleC.tex}}
+  \caption{\label{fig:crashexample}Example of \SPRAY's crash/leaving
+    handler. }
+\end{figure*}
+
 Concerning convergence speed of the shuffling algorithm, there exists
 a close relationship between \SPRAY and the proactive aggregation
 protocol introduced
@@ -272,23 +288,6 @@ connections. In this case, it doubles the connection to
 $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and
 run the appropriate procedure. Only $p_3$ doubles one of its
 connection. In total, $5$ connections have been removed.  
-
-%% figure related to crash/departure, here to be on top of page
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][Peer $p_1$ crashes.]{
-    \input{./input/crashexampleA.tex}}
-  \hspace{10pt}
-  \subfloat[Figure B][The peer $p_3$, $p_4$, and $p_5$ notice that they
-  cannot reach $p_1$ anymore.]{
-    \input{./input/crashexampleB.tex}}
-  \hspace{10pt}
-  \subfloat[Figure C][The peer $p_3$ and $p_5$ choose to establish
-  a duplicate with one of their existing neighbor.]{
-    \input{./input/crashexampleC.tex}}
-  \caption{\label{fig:crashexample}Example of \SPRAY's crash/leaving
-    handler. }
-\end{figure*}
 
 The example shows that some peers reestablish connections if they
 detect a dead connection. The probability depends on the partial view
