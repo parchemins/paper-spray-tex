@@ -2,37 +2,52 @@
 \section{Conclusion and perspectives}
 \label{sec:conclusion}
 
-In this paper, we introduced a random peer sampling approach called
-\SPRAY.  This new approach, inspired of two state-of-the-art approaches,
-namely \SCAMP and \CYCLON, provide the best of both worlds:
+WebRTC opened the opportunity to deploy large-scale distributed
+applications on a infrastructure of browsers. This requires to deploy
+adaptative peer-sampling protocols compatible with WebRTC connection
+constraints.
+
+In this paper, we described \SPRAY, an adaptative random peer sampling
+approach designed to fit WebRTC constraints.  \SPRAY provides:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
 \item constant time complexity on connection establishments using solely
   neighbor-to-neighbor interactions,
 \item exponentially fast convergence to a random graph.
 \end{inparaenum}
-As such, \SPRAY constitutes an improvement over state-of-the-art
-approaches in the traditional context of 1-way connection establishments. In
-addition, the improvement becomes crucial in the 3-way handshake connection
-set-up which is increasingly important since recent technologies (e.g. WebRTC)
-allow peer-to-peer connections between modern web browsers. Random peer
-sampling protocols constitute the ground of many decentralized applications.
-Thus, we expect that decentralized applications (requiring scalable broadcast
-among other) will flourish in the web browsers, while they were previously
-quartered to standalone applications.
 
-Future work includes investigations on topology managers such as
-T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. Indeed,
-they traditionally rely on random peer sampling approaches using fixed-size
-partial view. Thus, they maintain a fixed-size view of their most closely
-related neighbors using a ranking function. With \SPRAY, it is possible to
-extend their behaviour to use dynamic partial views. If the view size could
-adapt to the size of a cluster (if the topology creates disjoint clusters), it
-would improve the traffic, robustness, etc. Future work also includes a
-Javascript implementation using WebRTC. While experimentation of this paper
-shows the results of Peersim simulations, the real implementation would open
-the gate to emulations, and even real peer-to-peer distributed and
-decentralized applications.
+% Synthesis of experiments
+In experiments, we demonstrated that \SPRAY gently adapt partial views
+to network size at the price of managing few duplicates in partial
+views. We also demonstrated that \SPRAY remains reliable even with
+massive failures.
+
+% As such, \SPRAY constitutes an improvement over state-of-the-art
+% approaches in the traditional context of 1-way connection establishments. In
+% addition, the improvement becomes crucial in the 3-way handshake connection
+% set-up which is increasingly important since recent technologies (e.g. WebRTC)
+% allow peer-to-peer connections between modern web browsers. Random peer
+% sampling protocols constitute the ground of many decentralized applications.
+% Thus, we expect that decentralized applications (requiring scalable broadcast
+% among other) will flourish in the web browsers, while they were previously
+% quartered to standalone applications.
+
+
+Future work includes a Javascript implementation of \SPRAY. An in
+browser implementation opens the gate to emulations, and even
+real peer-to-peer distributed and decentralized applications.
+
+Future work also includes investigations on topology managers such as
+T-Man~\cite{jelasity2009tman} or
+Vicinity~\cite{voulgaris2005epidemic}. Indeed, they traditionally rely
+on random peer sampling approaches using fixed-size partial
+view. Thus, they maintain a fixed-size view of their most closely
+related neighbors using a ranking function. With \SPRAY, it is
+possible to extend their behaviour to use dynamic partial views. If
+the view size could adapt to the size of a cluster (if the topology
+creates disjoint clusters), it would improve the traffic, robustness,
+etc.
+
 
 %%% Local Variables:
 %%% mode: latex
