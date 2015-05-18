@@ -3,18 +3,25 @@
 \label{sec:proposal}
 
 \SPRAY is an adaptive random peer sampling protocol inspired by
-\SCAMP~\cite{ganesh2003peer} and
-\CYCLON~\cite{voulgaris2005cyclon}. It comprises three parts
-representing the lifecycle of a peer in the network.  Firstly, the
-joining process injects a logarithmically growing number of arcs in
-the network. Hence, the number of arcs scales with the network size.
-Next, each peer runs a periodic process in order to balance the
-partial views both in terms of partial view size, and uniformity of
-the referenced peers within them. Quickly, the overlay network
-converges to a topology exposing properties similar to random
-graphs. Finally, A peer is able to leave at any time without giving
-notice (equivalent to a crash), still the network properties do not
+\SCAMP~\cite{ganesh2003peer} and \CYCLON~\cite{voulgaris2005cyclon}. It
+comprises three parts representing the lifecycle of a peer in the network.
+Firstly, the joining process injects a logarithmically growing number of arcs
+in the network. Hence, the number of arcs scales with the network size.  Next,
+each peer runs a periodic process in order to balance the partial views both in
+terms of partial view size, and uniformity of the referenced peers within
+them. Quickly, the overlay network converges to a topology exposing properties
+similar to random graphs. Finally, A peer is able to leave at any time without
+giving notice (equivalent to a crash), still the network properties do not
 degrade.
+
+The key of adaptiveness consists in keeping a constant global number of arcs
+during the whole protocol. Indeed, unlike \CYCLON, \SPRAY is always on the edge
+of the optimal number of arcs compared to the network size. Since \SPRAY never
+creates additionnal arcs after the joining, any removal is a definitive
+loss. Thus, firstly, \SPRAY's joining adds some arcs to the network. Secondly,
+\SPRAY's shuffling preserves all arcs in the network. Thirdly, \SPRAY's leaving
+cautiously removes some arcs, ideally the number of arcs introduced by the last
+joining peer.
 
 \subsection{Joining}
 
@@ -113,34 +120,11 @@ first condition of our problem statement. The periodic protocol
 described in Section~\ref{subsec:cyclic} will re-balance the partial
 views.
 
-% Although the
-% joining peer is connected to the network, the example shows that the network
-% topology is not ideal after a joining protocol. Indeed, the joining peer only
-% has one neighbor in its partial view, and all the neighbors of this neighbor
-% have the joining peer in their partial view. Consequently, the network is not
-% robust and highly clustered. Churn (when peers can join and leave the network
-% freely) puts the connectedness at risk. To avoid it, \SPRAY{} needs a fast
-% balancing protocol.
-
 \subsection{Shuffling}
 \label{subsec:cyclic}
 
-% Pascal: Redundant...  \SPRAY{} is a random peer sampling protocol. As such,
-% it must constantly renew its arcs to handle the churn.  To ensure this
-% constant shuffling, \SPRAY{} repeats an exchanging procedure during which two
-% peers swap their neighbors. The swapping aims to balance both the size of
-% partial views and the global distribution of peers among them.
-
-
-% A singularity of \SPRAY{} lies in the fact that \emph{the partial views may
-% not have the same size}. Indeed, the protocol uses a multiset as partial view
-% without any predefined boundary on its size. Thus, two peers with different
-% partial view sizes can swap their neighbors, the objective being that both
-% peers become as connected as one another. The global number of arcs and the
-% connectedness must remain unchanged.
-
-Unlike \CYCLON, \SPRAY shuffles partial views of different sizes. It
-converges to the ideal partial view size by averaging their size over
+Unlike \CYCLON, \SPRAY shuffles partial views of different sizes. It converges
+to the ideal partial view size by averaging their size over
 exchanges. Therefore, both peers involved send and integrate
 $\left\lceil|\mathcal{P}| \div 2 \right\rceil$ neighbors from each
 other. However, shuffling has to preserve the number of arcs even if it
