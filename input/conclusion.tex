@@ -2,25 +2,31 @@
 \section{Conclusion and perspectives}
 \label{sec:conclusion}
 
-WebRTC opened the opportunity to deploy large-scale distributed
-applications on a infrastructure of browsers. This requires to deploy
-adaptative peer-sampling protocols compatible with WebRTC connection
-constraints.
+The introduction of WebRTC has opened a new playground for large-scale
+distributed applications consisting of large numbers of directly-communicating
+web browsers. Nevertheless, this requires to deploy adaptative peer-sampling
+protocols compatible with the WebRTC connection constraints.
 
-In this paper, we described \SPRAY, an adaptative random peer sampling
-approach designed to fit WebRTC constraints.  \SPRAY provides:
+In this paper, we described \SPRAY, an adaptative random peer sampling approach
+designed to fit the WebRTC constraints.  \SPRAY provides:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
 \item constant time complexity on connection establishments using solely
   neighbor-to-neighbor interactions,
-\item exponentially fast convergence to a random graph.
+\item an exponentially fast convergence to an overlay network exposing
+  properties similar to random graphs.
 \end{inparaenum}
 
 % Synthesis of experiments
-In experiments, we demonstrated that \SPRAY gently adapt partial views
-to network size at the price of managing few duplicates in partial
-views. We also demonstrated that \SPRAY remains reliable even with
-massive failures.
+In experiments, we demonstrated that \SPRAY gently adapts its partial views to
+the network size at the price of duplicates. Although, the simulations
+supported by theoretical analysis shows that these duplicates stay few in
+number and becomes negligible in large networks. Contrarily to \CYCLON, a
+representative of fixed-size partial view approaches, \SPRAY automatically
+scales to the network size in terms of robustness and efficiency. In
+particular, the average shortest path length scales better, the in-degree
+evolves with the network size, and it converges faster.  We also demonstrated
+that \SPRAY stays robust to massive failures.
 
 % As such, \SPRAY constitutes an improvement over state-of-the-art
 % approaches in the traditional context of 1-way connection establishments. In
@@ -43,11 +49,10 @@ Vicinity~\cite{voulgaris2005epidemic}. Indeed, they traditionally rely
 on random peer sampling approaches using fixed-size partial
 view. Thus, they maintain a fixed-size view of their most closely
 related neighbors using a ranking function. With \SPRAY, it is
-possible to extend their behaviour to use dynamic partial views. If
+possible to extend their behavior to use dynamic partial views. If
 the view size could adapt to the size of a cluster (if the topology
 creates disjoint clusters), it would improve the traffic, robustness,
 etc.
-
 
 %%% Local Variables:
 %%% mode: latex
