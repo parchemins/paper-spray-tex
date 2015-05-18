@@ -32,7 +32,7 @@
   \pas
   \Function{onSubs}{$o$} \hfill \comment{$o: origin$}
     \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
-    {$sendTo(q,\, 'fwdSubs',\, o)$;}
+    {$sendTo(q,\, 'fwdSubs',\, o)$;} \label{line:multicast}
     \EndFunction
     \Statex
     \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
