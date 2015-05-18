@@ -17,7 +17,7 @@ degrade.
 The key of adaptiveness consists in keeping a constant global number of arcs
 during the whole protocol. Indeed, unlike \CYCLON, \SPRAY is always on the edge
 of the optimal number of arcs compared to the network size. Since \SPRAY never
-creates additionnal arcs after the joining, any removal is a definitive
+creates additional arcs after the joining, any removal is a definitive
 loss. Thus, firstly, \SPRAY's joining adds some arcs to the network. Secondly,
 \SPRAY's shuffling preserves all arcs in the network. Thirdly, \SPRAY's leaving
 cautiously removes some arcs, ideally the number of arcs introduced by the last
@@ -60,9 +60,9 @@ describes the \SPRAY's joining protocol. Line~\ref{line:multicast} shows that
 the contacted peer only multicasts the new identity to its
 neighborhood. Afterwards, to limit the risk of connection failures, each
 neighbor immediately adds the joining peer to their own neighborhood. This
-fullfils the second condition of the problem statement.  In total, the number
+fulfills the second condition of the problem statement.  In total, the number
 of arcs in the network increases of $1+\ln(|\mathcal{N}|)$ using only
-neighbor-to-neigbhor interactions.
+neighbor-to-neighbor interactions.
 
 \begin{figure*}
   \centering
@@ -101,28 +101,41 @@ Peer $p_1$ contacts $p_2$ to join the network composed of $\{p_2$, $p_3$,
 $p_4$, $p_5$, $p_6\}$. For simplicity sake, the figure shows only the new arcs
 and the neighborhood of $p_1$ and $p_2$. Peer $p_1$ directly adds $p_2$ in its
 partial view. Peer $p_2$ forwards the identity of $p_1$ to its
-neighborhood. Each of these neighbors adds $p_1$ in their partial view. Five
-connections have been established.
+neighborhood. Each of these neighbors adds $p_1$ in their partial view. In
+total, \SPRAY establishes 5 connections and the network is connected.
 
-The partial view of new node is clearly unbalanced and violates the
-first condition of our problem statement. The periodic protocol
-described in Section~\ref{subsec:cyclic} will re-balance the partial
-views.
+Unfortunately, the partial views of the newest peers are clearly unbalanced and
+violates the first condition of our problem statement. The periodic protocol
+described in Section~\ref{subsec:cyclic} will re-balance the partial views.
 
 \subsection{Shuffling}
 \label{subsec:cyclic}
 
-Unlike \CYCLON, \SPRAY shuffles partial views of different sizes. It converges
-to the ideal partial view size by averaging their size over
-exchanges. Therefore, both peers involved send and integrate
-$\left\lceil|\mathcal{P}| \div 2 \right\rceil$ neighbors from each
-other. However, shuffling has to preserve the number of arcs even if it
-requires to have duplicates in partial views. If the number of arcs decreases
-during the shuffling, the network will eventually be partitioned. In
-Section~\ref{sec:experiments}, we show in experiments that the proportion of
-duplicates remains very low compared to the network size. This proportion
-becomes negligible when the network size grows. \TODO{Explain it with the
-  birthday paradox.}
+Unlike \CYCLON, \SPRAY shuffles partial views of different sizes. The shuffling
+aims to balance the partial view sizes and to randomly mix the neighborhood
+between the peers. Nevertheless, the global number of arcs in the network is
+invariant.
+
+In \SPRAY's shuffling protocol, the involved peers send half their partial view
+to each other. After integration, they both tend to the average of their
+partial views and the sum of their partial views stays unchanged. Although, a
+partial view using a set structure may lose information in the
+operation. Indeed, if one of the involved peer gives a reference to the other
+peer that the latter already know, one of the reference will overwrite the
+other. As consequence, one arc would be permanently lost. Over time, it would
+lead to a degeneration of the network, and eventually to partitions. \SPRAY
+tackles this issue by using a multiset. Using this structure, the peers always
+keep the received references, and always withdraw the given references. Thus,
+the \SPRAY's shuffling protocol never increases nor decreases the arcs count.
+
+This invariant comes at the cost of duplicates. The duplicates correspond to
+multiple occurrences of a particular neighbor in a partial view. They have a
+negative impact on the network properties. Fortunately,
+\begin{inparaenum}[(i)]
+\item they naturally moves in the network over time,
+\item they are not numerous, and
+\item they proportionally become negligible as the network grows.
+\end{inparaenum}
 
 \begin{algorithm}[h]
   \input{./input/cyclicalgo.tex}
@@ -231,41 +244,41 @@ exponentially fast to the global average size. Additionally, we know that each
 cycle decreases their variance in overall system at a rate comprised between
 ${1\div 2}$ and $1\div ({2\sqrt{\text{e}}})$.
 
-The shuffling algorithm provides adaptability at the cost of
-duplicates. Averaging size of partial views over exchanges provides
-exponential convergence speed as expected.
+The shuffling algorithm provides adaptiveness at the cost of
+duplicates. Averaging size of partial views over exchanges provides exponential
+convergence speed as expected.
 
 \subsection{Leaving}
 \label{subsec:leaving}
 
-Using \SPRAY, the peers are free to leave the network without giving
-notice. In that regard, we do not consider the departures and the crashes
-differently.  Without any appropriate reaction, the network may collapse due to
-an over zealous removal of connections. Indeed, when a peer joins the network,
-it injects in it $1+\ln(|\mathcal{N}|)$ connections. Nevertheless, after few
-exchanges, the partial view of the joining peer becomes populated with more
-neighbors. Then, if this peer leaves, it removes $\ln(|\mathcal{N}|)$
-connections from its partial view, and another $\ln(|\mathcal{N}|)$ connections
-from peers which have this peer in their partial view. Therefore, without any
-crash handler, we remove $2\ln(|\mathcal{N}|)$ connections instead of
-$1+\ln(|\mathcal{N}|)$. To alleviate this issue, each peer that detects a crash
-may reestablish a connection with anyone in its neighborhood (which will spread
-in the network over the exchanges). The probability of reestablishing a
-connection is $1-{1\div{|\mathcal{P}|}}$. Since
-${|\mathcal{P}|}\approx \ln(|\mathcal{N}|)$ peers have the crashed peer in
-their partial view, it is likely that all of them will reestablish a
-connection, excepted one. Therefore, when a peer leaves, it approximately
-removes the number of connections it injected when it joined.
+Using \SPRAY, the peers are free to leave the network without giving notice. In
+that regard, we do not consider the departures and the crashes differently.
+Without any appropriate reaction, the network may collapse due to an over
+zealous removal of arcs. Indeed, when a peer joins the network, it injects in
+it $1+\ln(|\mathcal{N}|)$ arcs. Nevertheless, after few exchanges, the partial
+view of the joining peer becomes populated with more neighbors. Then, if this
+peer leaves, it removes $\ln(|\mathcal{N}|)$ arcs from its partial view, and
+another $\ln(|\mathcal{N}|)$ arcs from peers which have this peer in their
+partial view. Therefore, without any crash handler, we remove
+$2\ln(|\mathcal{N}|)$ connections instead of $1+\ln(|\mathcal{N}|)$. To
+alleviate this issue, each peer that detects a crash may reestablish a
+connection with anyone in its neighborhood (which will spread in the network
+over the exchanges). The probability of reestablishing a connection is
+$1-{1\div{|\mathcal{P}|}}$. Since ${|\mathcal{P}|}\approx \ln(|\mathcal{N}|)$
+peers have the crashed peer in their partial view, it is likely that all of
+them will reestablish a connection, excepted one. Therefore, when a peer
+leaves, it approximately removes the number of connections it injected when it
+joined.
 
 \begin{algorithm}[h]
   \input{./input/unreachablealgo.tex}
   \caption{\label{algo:unreachable}The crash/leaving handler of \SPRAY.}
 \end{algorithm}
 
-Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY deals
-with crashes. When the peer $q$ is detected as crashed, a first loop counts the
+Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY deals with
+crashes. When the peer $q$ is detected as crashed, a first loop counts the
 occurrences of this neighbor in the partial view, and removes all of them. The,
-the second loop probabilistically doubles a connection with a known peer. The
+the second loop probabilistically duplicates the reference of a known peer. The
 probability depends of the partial view size before the removals.
 
 Figure~\ref{fig:crashexample} depicts the \SPRAY's crash/leaving
