@@ -36,7 +36,6 @@ measuring the number of duplicates inside the partial view sizes.
 \end{figure*}
 
 
-
 The experiments run on the \PEERSIM
 simulator~\cite{montresor2009peersim}. The code of the random peer sampling
 protocols \CYCLON, \SCAMP, and \SPRAY is available on Github
@@ -180,6 +179,25 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
     concerns \SPRAY.}
 \end{figure}
 
+
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][The x-axis denotes the
+  elapsed time in cycles. The upper graph y-axis shows the number of total
+  connections in the overlay while the lower graph y-axis shows the variance
+  $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.]{
+    \includegraphics[width=0.45\textwidth]{img/churn.eps}}
+  \hspace{10pt}
+  \subfloat[Figure B][The x-axis denotes the
+  elapsed time in cycles. The y-axis denotes the average partial view size.]{
+    \includegraphics[width=0.45\textwidth]{img/avgpv.eps}}
+  \caption{\label{fig:churn}\CYCLON (partial view size configured to 9) and
+    \SPRAY in a dynamic network. 2.5k peers join the network at cycles $0$,
+    $10$, $20$, and $30$. Then 5k peers leave at cycle $40$. Finally 2.5k peers
+    join at cycles $60$ and $70$. The final network contains 10k members.}
+\end{figure*}
+
+
 \begin{asparadesc}
 \item[Objective:] To show that the robustness of \SPRAY scales with the network
   size, contrarily to fixed-size partial view approaches. To show that the load
@@ -227,17 +245,17 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
 
 \subsection{Dynamic network}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.49\textwidth]{img/churn.eps}
-  \caption{\label{fig:churn}\SPRAY in a dynamic network. The x-axis denotes the
-    elapsed time in cycles. The upper graph y-axis shows the number of total
-    connections in the overlay while the lower graph y-axis shows the variance
-    $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.  2.5k
-    peers join the network at cycles $0$, $10$, $20$, and $30$. Then 5k peers
-    leave at cycle $40$. Finally 2.5k peers join at cycles $60$ and $70$. The
-    final network contains 10k members.}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.49\textwidth]{img/churn.eps}
+%   \caption{\label{fig:churn}\SPRAY in a dynamic network. The x-axis denotes the
+%     elapsed time in cycles. The upper graph y-axis shows the number of total
+%     connections in the overlay while the lower graph y-axis shows the variance
+%     $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.  2.5k
+%     peers join the network at cycles $0$, $10$, $20$, and $30$. Then 5k peers
+%     leave at cycle $40$. Finally 2.5k peers join at cycles $60$ and $70$. The
+%     final network contains 10k members.}
+% \end{figure}
 
 \begin{asparadesc}
 \item[Objective:] To highlight that \SPRAY is able to adapt to reflect the
