@@ -49,8 +49,8 @@ instead, uses $p_2$  as temporary signaling service.
 As shown in figure~\ref{fig:webrtc}~(b), Peer $p_1$ pushes an offer ticket to
 $p_2$. As $p_2$ is already connected to $p_3$, it forwards the
 offer to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket
-and sends it back to $p_2$ who then forwards it to $p_1$. Upon receipt, $p_1$
-establishes a bidirectional connection with $p_3$.
+and sends it back to $p_2$ who then forwards it back to $p_1$. Upon receipt, 
+$p_1$ establishes a bidirectional connection with $p_3$.
 Notice that if $p_2$
 crashes during the forwarding process, the connection establishment will fail,
 even if an alternative route exists as WebRTC does not manage routing.
