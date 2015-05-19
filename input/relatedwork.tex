@@ -7,7 +7,8 @@ $p_1$ connects to $p_2$ using the signaling service.
 2: $p_2$ pulls the ticket; 
 3: $p_2$ pushes its response; 
 4: $p_1$: pulls the response and establishes a 
-bidirectional connection with $p_2$. $p_3$ does the same with $p_2$. Figure~\ref{fig:webrtcB} depicts the resulting network.]{
+bidirectional connection with $p_2$. $p_3$ does the same with $p_2$. 
+Figure~\ref{fig:webrtcB} depicts the resulting network.]{
   \input{input/signalingexampleA.tex}}
 \hspace{5pt}
 \subfloat[Figure B][\label{fig:webrtcB}
@@ -131,7 +132,7 @@ illustrated in figure~\ref{fig:webrtc}. It drastically impacts on the
 \SCAMP failure probability of establishing a connection. Indeed, let
 $P_f$ the probability of either the peer or the link between the
 latter and the next peer crashes/disconnects when it holds the
-traveling message, without any possible recovery. Let $P_E$ the
+traveling message, without any possible recovery. Let $P_E$ be the
 probability that a connection establishment cannot be
 completed. Without three-way handshake, $P_E$ is straightforward:
 \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} where $k$
@@ -144,11 +145,11 @@ until the subscription travels back. Thus, we obtain:
                                      \ldots (1-P_f)^2) \nonumber \\
                                    &=1-(1-P_f)^{k^2+3k+2}
 \end{align}
-The complexity class of the \SCAMP failure rate increases leading to a quick
-degenerating number of connections over time. This behavior endangers the
-network connectedness.
+The complexity class of the \SCAMP failure rate increases leading to a quicker
+degeneration of the connection count. This behavior endangers the network
+connectedness.
 
-Building an adaptive-by-design random peer sampling that meet WebRTC
+Building an adaptive-by-design random peer sampling that meets WebRTC
 constraints raises the following scientific problem:
 
 \begin{problem}
@@ -174,15 +175,15 @@ constraints raises the following scientific problem:
   \end{enumerate}
 \end{problem}
 
-The first condition states that partial view size is relative to size of the
+The first condition states that the partial view size is relative to size of the
 network at any time. It also states that partial views grow and shrink
 logarithmically compared to the size of the network. The second condition
 states that each connection establishment requires a constant number of
 intermediary peers. Since this number is constant, connections establishments
-do not depend of the network size. The last condition states that the network
-overlay converges exponentially fast to a topology exposing properties similar
-to random graphs.  \CYCLON and \SCAMP fail to fulfill the first condition
-and the second condition, respectively.
+do not depend on the network size. The last condition states that the network
+overlay converges exponentially fast to a topology that is close to a random 
+graph.  \CYCLON and \SCAMP fail to fulfill the first condition and the second
+condition, respectively.
 
 %%% Local Variables:
 %%% mode: latex
