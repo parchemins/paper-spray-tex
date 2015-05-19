@@ -23,13 +23,19 @@ loss. Thus, firstly, \SPRAY's joining adds some arcs to the network. Secondly,
 cautiously removes some arcs, ideally the number of arcs introduced by the last
 joining peer.
 
-This requirement introduces the main difference of \SPRAY compared to the
-state-of-art approaches. It uses a multiset instead of a set. In \SPRAY, the
-multisets can have different sizes. Yet, they very rapidly converge to a
-roughly identical size. Also, the multisets can contain multiple occurrences of
-a particular neighbor. Yet, these duplicates remain in small number and do not
-endanger the network connectedness. This section shows how \SPRAY manages this
-type of partial view to adapt itself to the network size.
+Keeping global number of arcs constant can force, in some situations,
+shuffling and leaving process to inject \emph{duplicates} in partial
+views i.e. a partial view can contain multiple occurrences of a
+particular neighbor. In this paper, we show that the number of
+duplicates remains low and do not impact the network connectedness.
+
+% This requirement introduces the main difference of \SPRAY compared to the
+% state-of-art approaches. It uses a multiset instead of a set. In \SPRAY, the
+% multisets can have different sizes. Yet, they very rapidly converge to a
+% roughly identical size. Also, the multisets can contain multiple occurrences of
+% a particular neighbor. Yet, these duplicates remain in small number and do not
+% endanger the network connectedness. This section shows how \SPRAY manages this
+% type of partial view to adapt itself to the network size.
 
 \subsection{Joining}
 
@@ -88,13 +94,15 @@ neighbor-to-neighbor interactions.
 \caption{\label{algo:joining}The joining protocol of \SPRAY.}
 \end{algorithm}
 
-The partial view is a multiset of pairs $\langle n,\, age\rangle$ which
-associate to the neighbor $n$ the age $age$.  The $onSubs$ event is called each
-time a peer joins the network. $onSubs$ forwards the identity of the joining
-peer to all neighbors, indifferently of the age. The $onFwdSubs$ event is
-called when a peer receives such forwarded subscription. It adds the peer as
-one of its neighbor with an age set to $0$ meaning that it is a brand new
-reference.
+The partial view is a multiset of pairs $\langle n,\, age\rangle$
+which associate to the neighbor $n$ the age $age$. The multiset allows
+to manage duplicates and $age$ plays the same role than in \CYCLON i.e.
+accelerate convergence by shuffling with oldest neighbors first. The $onSubs$ event
+is called each time a peer joins the network. $onSubs$ forwards the
+identity of the joining peer to all neighbors, indifferently of the
+age. The $onFwdSubs$ event is called when a peer receives such
+forwarded subscription. It adds the peer as one of its neighbor with
+an age set to $0$ meaning that it is a brand new reference.
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario. In this scenario,
 Peer $p_1$ contacts $p_2$ to join the network composed of $\{p_2$, $p_3$,
@@ -146,7 +154,7 @@ Algorithm~\ref{algo:scamplon} shows the \SPRAY protocol running at each
 peer. It is divided between an active thread looping to update the partial
 view, and a passive thread which reacts to an exchange message. The functions
 which are not explicitly defined are the following:
-\begin{itemize}
+\begin{compactitem}
 \item $incrementAge(view)$: increments the age of each elements in the view
   and returns the modified view.
 \item $getOldest(view)$: retrieves the oldest of peers contained in the view.
@@ -155,23 +163,25 @@ which are not explicitly defined are the following:
 \item $replace(view,\,old,\,new)$: replaces in the view all occurrences of
   the $old$ element by the $new$ element and returns the modified view.
 \item $rand()$: generates a random floating number between $0$ and $1$.
-\end{itemize}
+\end{compactitem}
 
 In the active thread, Function $loop$ is called every $\Delta$ time
 $t$. Firstly, the function increments the age of each neighbor in
 $\mathcal{P}$. Then, the oldest peer $q$ is chosen to exchange a subset of its
 partial view. If Peer $q$ cannot be reached (i.e. it crashed/left), the peer
 $p$ executes the crash handling function (cf. Section~\ref{subsec:leaving}) and
-repeats the process until it finds a reachable peer $q$. Peer $p$ selects a
-sample of its partial view, excluding one occurrence of $q$ and including
-itself. The size of this sample is half of its partial view, with at least one
-peer: the initiating peer (cf. Line~\ref{line:samplesize}). The answer of $q$
-contains half of its partial view too. Since peers can appear multiple times in
-$\mathcal{P}$, the exchanging peers may send references to the other peer,
-e.g., Peer $o$'s sample can contain references to $q$. Such sample, without
-further processing, would create self-loop ($q$'s partial view contains
-references to $q$). To alleviate this undesirable behavior, all occurrences of
-the other peer are replaced with the emitting peer
+repeats the process until it finds a reachable peer $q$. Thus, the aging
+process (which is an inheritance from \CYCLON) speeds up the removal of
+crashed/departed peers. Once, it finds a reachable neighbor $q$, Peer $p$
+selects a sample of its partial view, excluding one occurrence of $q$ and
+including itself. The size of this sample is half of its partial view, with at
+least one peer: the initiating peer (cf. Line~\ref{line:samplesize}). The
+answer of $q$ contains half of its partial view too. Since peers can appear
+multiple times in $\mathcal{P}$, the exchanging peers may send references to
+the other peer, e.g., Peer $o$'s sample can contain references to $q$. Such
+sample, without further processing, would create self-loop ($q$'s partial view
+contains references to $q$). To alleviate this undesirable behavior, all
+occurrences of the other peer are replaced with the emitting peer
 (cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them,
 remove the sent sample from their view and add the received sample.
 

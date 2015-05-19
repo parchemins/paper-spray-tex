@@ -58,11 +58,8 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
 % \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To show that \SPRAY converges faster than fixed-size
-  approaches. To show that \SPRAY and the state-of-the-art representative
-  (\CYCLON) converge to an equivalent network overlay when the latter is
-  optimally configured. To show that both approaches converge to values typical
-  of random graphs.
+\item[Objective:] To observe how adaptiveness impacts on clustering and
+  convergence speed.
 \item[Description:] The average clustering coefficient $\overline{C}$ measures
   the connectivity of each peer's neighborhood in the network.
   \begin{equation}
@@ -124,9 +121,8 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
 \label{subsec:avg}
 
 \begin{asparadesc}
-\item[Objective:] To show that the information dissemination is efficient in
-  both \SPRAY and the fixed-size representative \CYCLON. \TODO{To show that
-    \SPRAY scales better than \CYCLON in term of network size.}
+\item[Objective:] To observe how adaptiveness impacts on the average shortest
+  path length, i.e., on the efficiency of information dissemination.
 \item[Description:] The average path length is the average of the shortest path
   length between peers in the graph. It counts the minimum number of hops to
   reach a peer from another given peer. It basically represents the traveling
@@ -171,7 +167,7 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
     network.}
 \end{figure}
 
-\subsection{Partial view size distribution}
+\subsection{In-degree distribution}
 \label{subsec:dist}
 
 \begin{figure}
@@ -204,9 +200,8 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
 
 
 \begin{asparadesc}
-\item[Objective:] To show that the robustness of \SPRAY scales with the network
-  size, contrarily to fixed-size partial view approaches. To show that the load
-  balancing is independent of the network size and exposes equity among peers.
+\item[Objective:] To observe how adaptiveness impacts the in-degree
+  distribution, i.e., the load-balancing among peers.
 \item[Description:] The in-degree of a peer shows how well this peer is
   represented in others' partial view. The in-degree distribution of the
   network can highlight the existence of weakly connected peers and/or strongly
@@ -253,20 +248,18 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
 % \begin{figure}
 %   \centering
 %   \includegraphics[width=0.49\textwidth]{img/churn.eps}
-%   \caption{\label{fig:churn}\SPRAY in a dynamic network. The x-axis denotes the
-%     elapsed time in cycles. The upper graph y-axis shows the number of total
-%     connections in the overlay while the lower graph y-axis shows the variance
-%     $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the network.  2.5k
-%     peers join the network at cycles $0$, $10$, $20$, and $30$. Then 5k peers
-%     leave at cycle $40$. Finally 2.5k peers join at cycles $60$ and $70$. The
-%     final network contains 10k members.}
+%   \caption{\label{fig:churn}\SPRAY in a dynamic network. The x-axis denotes
+%   the elapsed time in cycles. The upper graph y-axis shows the number of
+%   total connections in the overlay while the lower graph y-axis shows the
+%   variance $\sigma^2$ of the partial view sizes $|\mathcal{P}|$ in the
+%   network.  2.5k peers join the network at cycles $0$, $10$, $20$, and
+%   $30$. Then 5k peers leave at cycle $40$. Finally 2.5k peers join at cycles
+%   $60$ and $70$. The final network contains 10k members.}
 % \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To highlight that \SPRAY is able to adapt to reflect the
-  dynamic changes of membership in the network. To show that the arcs are
-  quickly spread among the members. To confirm the relationship between \SPRAY
-  and the proactive aggregation~\cite{jelasity2004epidemic}.
+\item[Objective:] To show the impact of adaptivity when the network size
+  changes over time.
 \item[Description:] In this experiment we focus on a dynamic network where
   peers can join and leave. We also focus on the \SPRAY protocol. The first
   half of the experimentation, 2.5k peers are added 4 times successively by
@@ -330,10 +323,8 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
 % \end{algorithm}
 
 \begin{asparadesc}
-\item[Objective:] To show that both \SPRAY and \CYCLON are robust to massive
-  \TODO{random} failures. To highlight that even if the information
-  dissemination fails to reach all peers, the membership protocols are still
-  able to repair the network, until the failure is beyond repair.
+\item[Objective:] To show that both \SPRAY and \CYCLON are equally robust to
+  massive failures.
 \item[Description:] Counting the strong components in a network allows
   estimating the area that are reachable by the information dissemination
   protocols. For instance, there are 2 strong components if a part of the
@@ -378,50 +369,65 @@ platform\footnote{https://github.com/justayak/peersim-spray}.
   network.
 \end{asparadesc}
 
-% \subsection{Degeneration}
+\subsection{Failures in connection establishment}
 
-% \begin{figure}
-%   \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
-%   \caption{\label{fig:degen}Degeneration of static network} \end{figure}
+\begin{figure}
+  \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
+  \caption{\label{fig:degeneration}\SPRAY and \SCAMP in network subject to
+    failures in the connection establishement. }
+\end{figure}
 
-% \begin{asparadesc}
-% \item[Objective:] \SPRAY{}, especially when using \emph{handshaking}, is
-%   vulnerable to message loss. When messages can be lost, a static \SPRAY{}
-%   overlay where peers neither join nor leave will slowly degenerate.  The
-%   reason for this can be found in Algorithm~\ref{algo:unreachable} where arcs
-%   are potentially lost when a message is lost.  Protocols with fixed partial
-%   view sizes like \CYCLON{} are not prone to this degeneration as they can
-%   easily repair lost arcs.  For this reason, we compare with another adaptive
-%   probabilistic protocol, \SCAMP{}, instead. We adapted \SCAMP{} so that its
-%   lease-mechanism preserves the total number of arcs in the network.  This
-%   experiment focuses on two features: the total number of arcs in the graph
-%   and the number of weak components.
-% \item[Description:] As previously shown, the number of arcs in the network
-%   should be $|\mathcal{N}|\log{|\mathcal{N}|}$ for the overlay to be
-%   robust. A weak component $\mathcal{W}$ of a graph $G$ is a maximum subgraph
-%   where the direction is ignored.  Naturally, we want the number of weak
-%   components $|\mathcal{W}|$ to be $1$, meaning that the whole network is
-%   connected.  When the overlay consists of more than one component, the
-%   network is disconnected.  Unlike with strong component where the direction
-%   is taken into account, \SPRAY{} cannot repair itself when more than one
-%   weak component is present.  The experiment involves handshaking and is
-%   conducted with an overlay consisting of $10,000$ peers over a period of
-%   $100,000$ cycles and a probability of $\frac{1}{1000}$ that a link
-%   fails. \TODO{Moar on calcs}
-% \item[Results:] The x-axis in Figure~\ref{fig:degen} shows the number of
-%   cycles the protocol was executed.  The upper graphs y-axis represents the
-%   total number of arcs in the overlay while the lower graphs y-axis shows the
-%   percentage that weak components make up of the total network:
-%   $\frac{|\mathcal{W}|}{|\mathcal{N}|}$.  We clearly see that \SPRAY{}
-%   degenerates much slower than \SCAMP{} and that it becomes disconnected very
-%   late while \SCAMP{} collapses quickly.
-% \item[Reasons:] As \SCAMP{} must maintain much more links than \SPRAY{} when
-%   establishing a connection it has a higher probability of losing arcs which,
-%   in turn, let it degenerate much quicker.  Furthermore, while in \SPRAY{} we
-%   can easily predict if a link failed or if the node failed and thus we can
-%   stop the degeneration this is not possible in \SCAMP{} as it cannot be
-%   predicted easy for when a link failed due to its random walk nature.
-% \end{asparadesc}
+\begin{asparadesc}
+\item[Objective:] To show that the degeneration of \SCAMP in presence of
+  connection establishement failures quickly endangers the connectedness of the
+  network.
+  % \SPRAY{}, especially when using \emph{handshaking}, is
+  % vulnerable to message loss. When messages can be lost, a static \SPRAY{}
+  % overlay where peers neither join nor leave will slowly degenerate.  The
+  % reason for this can be found in Algorithm~\ref{algo:unreachable} where arcs
+  % are potentially lost when a message is lost.  Protocols with fixed partial
+  % view sizes like \CYCLON{} are not prone to this degeneration as they can
+  % easily repair lost arcs.  For this reason, we compare with another adaptive
+  % probabilistic protocol, \SCAMP{}, instead. We adapted \SCAMP{} so that its
+  % lease-mechanism preserves the total number of arcs in the network.  This
+  % experiment focuses on two features: the total number of arcs in the graph
+  % and the number of weak components.
+\item[Description:] We measure both the arcs count and the number of weak
+  components in the network. The simulations involve \SPRAY and \SCAMP running
+  over 70k cycles. The network intially contains 10k members. The probability
+  that a message fails to arrive to its destination (each hop) is set to
+  $10^-3$. To establish a connection, we use the WebRTC three-way handshake,
+  i.e., the initial peer emits an offer ticket, the arrival peer stamps the
+  ticket, the initial peer finalizes the connection using the stamped ticket
+  (cf. Section~\ref{sec:relatedwork}).
+  % As previously shown, the number of arcs in the
+  % network should be $|\mathcal{N}|\log{|\mathcal{N}|}$ for the overlay to be
+  % robust. A weak component $\mathcal{W}$ of a graph $G$ is a maximum subgraph
+  % where the direction is ignored.  Naturally, we want the number of weak
+  % components $|\mathcal{W}|$ to be $1$, meaning that the whole network is
+  % connected.  When the overlay consists of more than one component, the
+  % network
+  % is disconnected.  Unlike with strong component where the direction is taken
+  % into account, \SPRAY{} cannot repair itself when more than one weak
+  % component
+  % is present.  The experiment involves handshaking and is conducted with an
+  % overlay consisting of $10,000$ peers over a period of $100,000$ cycles and
+  % a
+  % probability of $\frac{1}{1000}$ that a link fails. \TODO{Moar on calcs}
+\item[Results:] The x-axis in Figure~\ref{fig:degen} shows the number of
+  cycles the protocol was executed.  The upper graphs y-axis represents the
+  total number of arcs in the overlay while the lower graphs y-axis shows the
+  percentage that weak components make up of the total network:
+  $\frac{|\mathcal{W}|}{|\mathcal{N}|}$.  We clearly see that \SPRAY{}
+  degenerates much slower than \SCAMP{} and that it becomes disconnected very
+  late while \SCAMP{} collapses quickly.
+\item[Reasons:] As \SCAMP{} must maintain much more links than \SPRAY{} when
+  establishing a connection it has a higher probability of losing arcs which,
+  in turn, let it degenerate much quicker.  Furthermore, while in \SPRAY{} we
+  can easily predict if a link failed or if the node failed and thus we can
+  stop the degeneration this is not possible in \SCAMP{} as it cannot be
+  predicted easy for when a link failed due to its random walk nature.
+\end{asparadesc}
 
 \subsection{Duplicates in partial views}
 \label{subsec:duplicates}
