@@ -162,16 +162,18 @@ $t$. Firstly, the function increments the age of each neighbor in
 $\mathcal{P}$. Then, the oldest peer $q$ is chosen to exchange a subset of its
 partial view. If Peer $q$ cannot be reached (i.e. it crashed/left), the peer
 $p$ executes the crash handling function (cf. Section~\ref{subsec:leaving}) and
-repeats the process until it finds a reachable peer $q$. Peer $p$ selects a
-sample of its partial view, excluding one occurrence of $q$ and including
-itself. The size of this sample is half of its partial view, with at least one
-peer: the initiating peer (cf. Line~\ref{line:samplesize}). The answer of $q$
-contains half of its partial view too. Since peers can appear multiple times in
-$\mathcal{P}$, the exchanging peers may send references to the other peer,
-e.g., Peer $o$'s sample can contain references to $q$. Such sample, without
-further processing, would create self-loop ($q$'s partial view contains
-references to $q$). To alleviate this undesirable behavior, all occurrences of
-the other peer are replaced with the emitting peer
+repeats the process until it finds a reachable peer $q$. Thus, the aging
+process (which is an inheritance from \CYCLON) speeds up the removal of
+crashed/departed peers. Once, it finds a reachable neighbor $q$, Peer $p$
+selects a sample of its partial view, excluding one occurrence of $q$ and
+including itself. The size of this sample is half of its partial view, with at
+least one peer: the initiating peer (cf. Line~\ref{line:samplesize}). The
+answer of $q$ contains half of its partial view too. Since peers can appear
+multiple times in $\mathcal{P}$, the exchanging peers may send references to
+the other peer, e.g., Peer $o$'s sample can contain references to $q$. Such
+sample, without further processing, would create self-loop ($q$'s partial view
+contains references to $q$). To alleviate this undesirable behavior, all
+occurrences of the other peer are replaced with the emitting peer
 (cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them,
 remove the sent sample from their view and add the received sample.
 
