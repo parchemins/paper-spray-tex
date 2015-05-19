@@ -7,11 +7,11 @@ network management~\cite{jelasity2007gossip}. Recently,
 WebRTC\footnote{\url{http://www.webrtc.org/}} opened the opportunity to deploy
 large scale distributed applications on browsers that can run on laptops,
 desktops, tablets or mobile phones. Among others, it drastically simplifies the
-deployment of large distributed applications even with complex network settings
-such as firewall, proxies or Net Address Translation (NAT).
+deployment of large distributed applications even with complex network systems
+such as firewalls, proxies or Net Address Translation (NAT) invovled.
 
 Unfortunately, WebRTC has several constraints that make existing peer
-sampling services inefficient or unreliable. First, browsers can run
+sampling services inefficient or unreliable. Browsers can run
 on small devices in mobile networks. Hence, keeping the number of
 connections as low as possible is a major requirement. However, peer
 sampling services such as \CYCLON~\cite{voulgaris2005cyclon} do not
@@ -31,18 +31,18 @@ by both \CYCLON~\cite{voulgaris2005cyclon} and
 \item It only uses neighbor-to-neighbor interactions to establish the
   connections. Thus, the connections are established in constant time.
 \item It converges exponentially fast to a topology exposing properties similar
-  to random graphs. Thus, the network becomes quickly resilient to massive
-  failures, efficiently disseminates information etc.
-\item In experimental setup, we show the adaptiveness of \SPRAY and
-  highlight its efficiency improvement compared to \CYCLON, at the cost of a
+  to those of random graphs. Thus, the network becomes quickly resilient to
+  massive failures, efficiently disseminates information etc.
+\item In an experimental setup we show the adaptiveness of \SPRAY and
+  highlight its efficiency improvement compared to \CYCLON at the cost of
   little overhead.
 \end{inparaenum}
 
-The rest of this paper is organized as follow: Section~\ref{sec:relatedwork}
+The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
 reviews the related work. Section~\ref{sec:proposal} details the \SPRAY
-protocol.  Section~\ref{sec:experiments} shows the properties of \SPRAY
-and compare them to state-of-the-art random peer sampling approaches. We
-conclude and discuss about perspective in Section~\ref{sec:conclusion}.
+protocol. Section~\ref{sec:experiments} shows the properties of \SPRAY
+and compares them to state-of-the-art random peer sampling approaches. We
+conclude and discuss about the perspective in Section~\ref{sec:conclusion}.
 
 %%% Local Variables:
 %%% mode: latex
