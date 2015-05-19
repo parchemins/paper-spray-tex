@@ -31,24 +31,27 @@ composed of 3 members.]{
 
 
 WebRTC allows real-time peer-to-peer communication between browsers even when 
-complex network systems such as firewalls, proxies or Net Address Translation
+complex network settings such as firewalls, proxies or Net Address Translation
 (NAT) are involved. However, WebRTC does not manage addressing nor routing. To
 establish a connection, the browsers exchange offers and acknowledgments
 through a common mediator, e.g., mails, dedicated signaling services
 \footnote{\url{http://peerjs.com/}},
 existing WebRTC connections\footnote{\url{http://ozan.io/p/}} etc. In
-figure~\ref{fig:webrtc}, $p_2$ wants to connect to $p_3$. Therefore, $p_2$
-pushes an offer ticket to a signaling service\footnote{Many signaling services
-  can exist}. Peer $p_3$ pulls the offers, stamps it and pushes it back to the
-signaling service. Finally, $p_2$ pulls the stamped ticket and establishes a
-bidirectional connection with $p_3$.  Identically, $p_1$ establishes a
-connection to $p_2$. This round-trip procedure is called \emph{three-way
-  handshake}. At this point, Peer $p_1$ is able to establish a connection to
-$p_3$ without the mediation of the signaling service. Peer $p_1$ pushes an
-offer ticket to $p_2$.  As $p_2$ is already connected to $p_1$, it forwards the
+figure~\ref{fig:webrtc}, $p_1$ wants to connect to $p_2$. Therefore, $p_1$
+pushes an offer ticket to a shared signaling service\footnote{Many signaling
+services can exist}. Peer $p_2$ pulls the offer, stamps it and pushes it back to
+the signaling service. Finally, $p_1$ pulls the stamped ticket and establishes a
+bidirectional connection with $p_2$.  Identically, $p_3$ establishes a
+connection to $p_2$. We refer to this round-trip procedure as 
+\emph{three-way handshake}. At this point, Peer $p_1$ is able to establish a 
+connection to $p_3$ without the mediation of the former signaling service,
+instead, $p_2$ functions as temporary signaling service for the two other peers.
+Peer $p_1$ pushes an offer ticket to $p_2$.
+As $p_2$ is already connected to $p_1$, it forwards the
 offer to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket
 and sends it back to $p_2$ who then forwards it to $p_1$. Upon receipt, $p_1$
-establishes a bidirectional connection with $p_3$. Notice that if $p_2$
+establishes a bidirectional connection with $p_3$.
+Notice that if $p_2$
 crashes during the forwarding process, the connection establishment will fail,
 even if an alternative route exists as WebRTC does not manage routing.
 
