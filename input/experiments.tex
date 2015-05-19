@@ -1,28 +1,33 @@
 \section{Experimentation}
 \label{sec:experiments}
 
-In this section we examine the properties of \SPRAY and compare them to a
-state-of-the-art fixed-size partial view approach, namely \CYCLON. We focus on
-the adaptiveness of \SPRAY. All the experiements consider directed graphs. The
-measurements concern common properties of random graphs:
-\begin{itemize}
-\item the clustering coefficient: show the convergence speed, how scattered
-  are the peers from each other, how close are the peer from partitioning.
-\item the average shortest path length: show the efficiency of information
-  dissemination.
-\item the distribution of the incoming arcs: show how much the peers appear
-  in the others' partial view.
-\end{itemize}
-Then, in a more dynamic context, the measurements concern:
-\begin{itemize}
-\item the arcs count: show the adaptiveness to the network size.
-\item the variance of the partial view size: show the convergence speed under
-  network dynamic change.
-\item the number of connected components: show the robustness to massive
-  failures, show where the network is beyond self-repairing.
-\end{itemize}
-Finally, the experiments highlight the small overhead of our approach by
-measuring the number of duplicates inside the partial view sizes.
+In this section we evaluate how adaptivity of \SPRAY impact common
+metrics of peer sampling performances including clustering
+coefficient, average shortest path length, in-degree distribution, arc
+counts, connected components. We use \CYCLON as baseline with a fixed
+size view. We expect similar behavior when network size is optimal for
+\CYCLON. We expect \SPRAY to save ressources when \CYCLON is
+oversized. We expect \SPRAY to be more robust when \CYCLON is
+undersized. Finally, we expect \SPRAY to keep number of duplicates in
+partial view very low.
+
+
+% \begin{inparablank}
+% \item \emph{clustering coefficient:} Show the convergence speed, how scattered
+%   are the peers from each other, how close are the peer from partitioning.
+% \item \emph{average shortest path length:} show the efficiency of information
+%   dissemination.
+% \item \emph{distribution of the incoming arcs:} show how much the peers appear
+%   in the others' partial view.
+% \item \emph{arcs counts} show the adaptiveness to the network size.
+% \item \emph{variance of the partial view size:} show the convergence speed under
+%   network dynamic change.
+% \item \emph{number of connected components:} show the robustness to massive
+%   failures, show where the network is beyond self-repairing.
+% \end{inparablank}
+
+% Finally, the experiments highlight the small overhead of our approach by
+% measuring the number of duplicates inside the partial view sizes.
 
 \begin{figure*}
   \centering
@@ -39,7 +44,7 @@ measuring the number of duplicates inside the partial view sizes.
 The experiments run on the \PEERSIM
 simulator~\cite{montresor2009peersim}. The code of the random peer sampling
 protocols \CYCLON, \SCAMP, and \SPRAY is available on Github
-platform~\footnote{https://github.com/justayak/peersim-spray}.
+platform\footnote{https://github.com/justayak/peersim-spray}.
 
 \subsection{Clustering coefficient}
 \label{subsec:cluster}
@@ -107,7 +112,7 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   peer which, in \CYCLON, is fixed. Thus, when the peers number is multiplied
   by $10$, the clustering coefficient after convergence is divided by $10$. On
   the other hand, the peers using \SPRAY have variable-size partial view which
-  gently reflects the network size with a logarithimic growth. Thus, when the
+  gently reflects the network size with a logarithmic growth. Thus, when the
   network has 1000 peers, the partial view size adapts to this network size. It
   explains the slightly lower clustering coefficient of \SPRAY on this run
   (\SPRAY 7.4 vs \CYCLON 7). By extending the reasoning, it explains the
@@ -235,7 +240,7 @@ platform~\footnote{https://github.com/justayak/peersim-spray}.
   reflecting the network size. Hence, the distribution in the bottom figure
   shifts slowly to higher in-degree values as the network size grows.  \SPRAY
   does not peak on a particular value as \CYCLON because the average partial
-  view size for a particular network size falls inbetween integer values. For
+  view size for a particular network size falls in-between integer values. For
   instance, if the average partial view size is 6.5, then half of them will
   have a size of 6 while the other half will have a size of 7. Such network is
   robust to failure because no peer is more important than other in term of
