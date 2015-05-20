@@ -96,7 +96,7 @@ neighbor-to-neighbor interactions.
 
 The partial view is a multiset of pairs $\langle n,\, age\rangle$
 which associate to the neighbor $n$ the age $age$. The multiset allows
-to manage duplicates and $age$ plays the same role than in \CYCLON i.e.
+managing duplicates and $age$ plays the same role than in \CYCLON i.e.
 accelerate convergence by shuffling with oldest neighbors first. The $onSubs$ event
 is called each time a peer joins the network. $onSubs$ forwards the
 identity of the joining peer to all neighbors, indifferently of the
@@ -140,7 +140,7 @@ This invariant comes at the cost of duplicates. The duplicates correspond to
 multiple occurrences of a particular neighbor in a partial view. They have a
 negative impact on the network properties. Fortunately,
 \begin{inparaenum}[(i)]
-\item they naturally moves in the network over time,
+\item they naturally move in the network over time,
 \item they are not numerous, and
 \item they proportionally become negligible as the network grows.
 \end{inparaenum}
@@ -183,7 +183,7 @@ sample, without further processing, would create self-loop ($q$'s partial view
 contains references to $q$). To alleviate this undesirable behavior, all
 occurrences of the other peer are replaced with the emitting peer
 (cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them,
-remove the sent sample from their view and add the received sample.
+remove the sample they sent from their view and add the received sample.
 
 Figure~\ref{fig:cyclicexample} depicts the \SPRAY's cyclic
 procedure. This scenario follows from Figure~\ref{fig:joiningexample}:
