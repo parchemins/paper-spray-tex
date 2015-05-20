@@ -2,13 +2,16 @@
 \section{Conclusion and perspectives}
 \label{sec:conclusion}
 
-The introduction of WebRTC has opened a new playground for large-scale
-distributed applications consisting of large numbers of directly-communicating
-web browsers. Nevertheless, this requires to deploy adaptative peer-sampling
-protocols compatible with the WebRTC connection constraints.
+WebRTC opened a new playground for large-scale distributed
+applications deployed on a network of browsers. Browsers as
+infrastructure makes large-scale distributed applications easy to
+deploy for end-users. As a core component of many large-scale
+distributed applications, we pointed out limitations of current
+peer-sampling protocols in term of adaptivity or reliability for a
+deployment on top of WebRTC. 
 
-In this paper, we described \SPRAY, an adaptative random peer sampling approach
-designed to fit the WebRTC constraints.  \SPRAY provides:
+In this paper, we described \SPRAY, an adaptative random peer sampling
+approach designed to fit the WebRTC constraints.  \SPRAY provides:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
 \item constant time complexity on connection establishments using solely
@@ -18,15 +21,18 @@ designed to fit the WebRTC constraints.  \SPRAY provides:
 \end{inparaenum}
 
 % Synthesis of experiments
-In experiments, we demonstrated that \SPRAY gently adapts its partial views to
-the network size at the price of duplicates. Although, the simulations
-supported by theoretical analysis shows that these duplicates stay few in
-number and becomes negligible in large networks. Contrarily to \CYCLON, a
-representative of fixed-size partial view approaches, \SPRAY automatically
-scales to the network size in terms of robustness and efficiency. In
-particular, the average shortest path length scales better, the in-degree
-evolves with the network size, and it converges faster.  We also demonstrated
-that \SPRAY stays robust to massive failures.
+In experiments, we demonstrated how \SPRAY adaptivity improve random
+peer sampling performances when network size is changing. In
+particular, the average shortest path length scales better, the
+in-degree evolves with the network size, and it converges faster.  We
+also demonstrated that \SPRAY stays robust to massive failures. \SPRAY
+and \CYCLON are quite similar when the network size is optimal for
+\CYCLON. However, \SPRAY saves connections when \CYCLON is oversized
+and is more robust when \CYCLON is undersized. This adaptivity comes
+at the price of duplicates in partial views. Although, the simulations
+supported by theoretical analysis shows that these duplicates stay few
+in number and becomes negligible in large networks.
+
 
 % As such, \SPRAY constitutes an improvement over state-of-the-art
 % approaches in the traditional context of 1-way connection establishments. In

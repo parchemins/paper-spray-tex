@@ -19,8 +19,9 @@ $p_1$ connects to $p_3$ using $p_2$ as mediator.
 4: $p_2$ forwards it to the emitter $p_1$ which connects to $p_3$.]{
   \input{input/signalingexampleB.tex}}
 \hspace{5pt}
-\subfloat[Figure C][The resulting network overlay: a fully connected network
-composed of 3 members.]{
+\subfloat[Figure C][\label{fig:webrtcC}
+The resulting network overlay: a fully connected network composed of
+3 members.]{
   \input{input/signalingexampleC.tex}}
 \caption{\label{fig:webrtc}Creating an overlay network on top of WebRTC.}
 \end{figure*}
@@ -30,30 +31,29 @@ composed of 3 members.]{
 \label{sec:relatedwork}
 
 
-WebRTC allows real-time peer-to-peer communication between browsers even when 
+WebRTC allows real-time peer-to-peer communication between browsers even when
 complex network settings such as firewalls, proxies or Net Address Translation
 (NAT) are involved. However, WebRTC does not manage addressing nor routing. To
 establish a connection, the browsers exchange offers and acknowledgments
 through a common mediator, e.g., mails, dedicated signaling services
-\footnote{\url{http://peerjs.com/}},
-existing WebRTC connections\footnote{\url{http://ozan.io/p/}} etc. In
-figure~\ref{fig:webrtc}~(a), $p_1$ wants to connect to $p_2$. Therefore, $p_1$
+\footnote{\url{http://peerjs.com/}}, existing WebRTC
+connections\footnote{\url{http://ozan.io/p/}} etc. In
+Figure~\ref{fig:webrtcA}, $p_1$ wants to connect to $p_2$. Therefore, $p_1$
 pushes an offer ticket to a shared signaling service\footnote{Many signaling
-services can exist}. Peer $p_2$ pulls the offer, stamps it and pushes it back to
-the signaling service. Finally, $p_1$ pulls the stamped ticket and establishes a
-bidirectional connection with $p_2$.  Identically, $p_3$ establishes a
-connection to $p_2$. We refer to this round-trip procedure as 
-\emph{three-way handshake}. At this point, Peer $p_1$ is able to establish a 
+  services can exist}. Peer $p_2$ pulls the offer, stamps it and pushes it back
+to the signaling service. Finally, $p_1$ pulls the stamped ticket and
+establishes a bidirectional connection with $p_2$.  Identically, $p_3$
+establishes a connection to $p_2$. We refer to the round-trip procedure as
+\emph{three-way handshake}. At this point, Peer $p_1$ is able to establish a
 connection to $p_3$ without the mediation of the former signaling service, and,
-instead, uses $p_2$  as temporary signaling service.
-As shown in figure~\ref{fig:webrtc}~(b), Peer $p_1$ pushes an offer ticket to
-$p_2$. As $p_2$ is already connected to $p_3$, it forwards the
-offer to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket
-and sends it back to $p_2$ who then forwards it back to $p_1$. Upon receipt, 
-$p_1$ establishes a bidirectional connection with $p_3$.
-Notice that if $p_2$
-crashes during the forwarding process, the connection establishment will fail,
-even if an alternative route exists as WebRTC does not manage routing.
+instead, uses $p_2$ as temporary signaling service.  As shown in
+Figure~\ref{fig:webrtcB}, Peer $p_1$ pushes an offer ticket to $p_2$. As
+$p_2$ is already connected to $p_3$, it forwards the offer to $p_3$ and
+registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket and sends it back
+to $p_2$ who then forwards it back to $p_1$. Upon receipt, $p_1$ establishes a
+bidirectional connection with $p_3$.  Notice that if $p_2$ crashes during the
+forwarding process, the connection establishment will fail, even if an
+alternative route exists as WebRTC does not manage routing.
 
 Using signaling services and existing WebRTC connections allows deploying
 random peer sampling protocols~\cite{jelasity2004peer} easily on browsers that
@@ -82,7 +82,7 @@ accordingly. These decisions cannot be safely retracted afterwards. For this
 reason, the partial views are commonly oversized compared to the actual network
 size. Consequently, it possibly maintains 7 connections in the browser despite
 requiring only 4. And the following moment, it still maintains 7 connections
-while 10 are needed. In the WebRTC context, we need a dynamic peer sampling
+while 10 are needed. In WebRTC context, we need a dynamic peer sampling
 service able to adapt to the dynamic variation of the number of participants.
 
 Network size estimators can introduce adaptiveness in peer sampling. These
@@ -98,10 +98,10 @@ approaches either use
   which use aggregations that converge over exchanges to a value which depends
   of the network size.
 \end{inparaenum}
-Unfortunately, while they can be very precise in their estimate, they
-imply a communication overhead and may have strong assumptions
-(e.g. random graph topology). In WebRTC context, adaptiveness should
-introduce a minimum overhead in peer sampling.
+Unfortunately, while they can be very precise in their estimate, they imply a
+communication overhead and may have strong assumptions (e.g. random graph
+topology). In WebRTC context, adaptiveness should introduce a minimum overhead
+in peer sampling.
 
 %% figure related to proposal, here to be on top of page
 \begin{figure*}
@@ -121,61 +121,56 @@ introduce a minimum overhead in peer sampling.
     protocol.}
 \end{figure*}
 
-
 The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2001scamp,ganesh2003peer}. Its interesting property lies in
 its logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
-suffers from other flaws. In particular, it systematically performs random
-walks to establish its connections. In the WebRTC context, each random walk
-must be traveled back to finalize the connection establishment as illustrated
-in figure~\ref{fig:webrtc}. It drastically impacts on the \SCAMP failure
-probability of establishing a connection. Indeed, let $P_f$ the probability of
-either the peer or the link between the latter and the next peer
-crashes/disconnects when it holds the traveling message, without any possible
+suffers from other flaws. In particular, it systematically disseminates the
+connections at random. Thus, the originating peer can be at several hops away
+from the arrival peer.  In WebRTC context, each random dissemination path must
+be traveled back to finalize the connection establishment, as illustrated in
+figure~\ref{fig:webrtc}. It drastically impacts on the \SCAMP failure
+probability of establishing a connection.  Let $P_f$ the probability that an
+element of the dissemination path (either a peer or a connection)
+crashes/leaves during a hop of the three-way handshake, without any possible
 recovery. Let $P_E$ be the probability that a connection establishment cannot
 be completed. Without three-way handshake, $P_E$ is straightforward:
-\begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} where $k$
-is the number of hops before the end of the random walk with a minimum of $2$
-hops. On the other hand, in the handshaking context, the message must travel
-back to its origin in order to be completed. As consequence, when a
-subscription travels through a peer or a link, they are not allowed to fail
-until the subscription travels back. Thus, we obtain:
+\begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation}
+corresponding to the probability that each element (arc and peer) in the path
+of size $k+1$ stays alive during their part of the dissemination (i.e., they
+are allowed to crash the rest). In WebRTC context, the offer ticket must travel
+back to its emitter. As consequence, the elements of the random dissemination
+path are not allowed to fail until the stamped ticket travels back. We obtain:
 \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
                                      \ldots (1-P_f)^2) \nonumber \\
                                    &=1-(1-P_f)^{k^2+3k+2}
 \end{align}
-The complexity class of the \SCAMP failure rate increases leading to a quicker
+In other terms, the first chosen arc and peer in the path must stay alive
+$2k+2$ hops, the second chosen arc and peer must stay alive $2k$ hops etc.  The
+complexity class of the \SCAMP failure rate increases leading to a quicker
 degeneration of the connection count. This behavior endangers the network
-connectedness.
+connectedness, as depicted in Section~\ref{subsec:degeneration}.
 
 Building an adaptive-by-design random peer sampling that meets WebRTC
 constraints raises the following scientific problem:
-
 \begin{problem}
-  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the
-  network membership at that given time $t$ and let $\mathcal{P}_x^t$
-  be the partial view of peer $p_x \in \mathcal{N}^t$.  A
-  cost-efficient random peer sampling should provide the following
-  best-case properties:
+  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
+  membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial
+  view of peer $p_x \in \mathcal{N}^t$.  A cost-efficient random peer sampling
+  should provide the following best-case properties:
   \begin{enumerate}
-  \item  \begin{center}
-    Partial view size: \hfill
+  \item Partial view size: \hfill
     $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \Theta (\ln
-    |\mathcal{N}^t|)$
-  \end{center}
-  
-\item \begin{center}
-    Connection establishment: \hfill $O(1)$
-  \end{center} 
-%%\item  \begin{center}
-%%    Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
-%%  \end{center}
+    |\mathcal{N}^t|)$      
+  \item Connection establishment: \hfill $O(1)$
+    %% \item  \begin{center}
+    %%     Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
+    %%   \end{center}
   \end{enumerate}
 \end{problem}
 
-The first condition states that the partial view size is relative to size of
-the network at any time. It also states that partial views grow and shrink
+The first condition states that the partial view size is relative to the size
+of the network at any time. It also states that partial views grow and shrink
 logarithmically compared to the size of the network. The second condition
 states that each connection establishment requires a constant number of
 intermediary peers. Since this number is constant, connections establishments
@@ -183,8 +178,10 @@ do not depend on the network size.
 %% The last condition states that the network
 %% overlay converges exponentially fast to a topology that is close to a random
 %% graph.
-\CYCLON and \SCAMP fail to fulfill the first condition and the second
-condition, respectively.
+lpbcast, Newscast and \CYCLON fail to meet the first condition of the problem
+statement since they do not adapt their views to the network size. \SCAMP fails
+to meet the second condition of the problem statement since each connection
+implies an unsafe random dissemination protocol.
 
 %%% Local Variables:
 %%% mode: latex
