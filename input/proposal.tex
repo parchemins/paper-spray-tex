@@ -126,24 +126,19 @@ invariant.
 
 In \SPRAY's shuffling protocol, the involved peers send half their partial view
 to each other. After integration, they both tend to the average of their
-partial views and the sum of their partial views stays unchanged. Although, a
-partial view using a set structure may lose information in the
-operation. Indeed, if one of the involved peer gives a reference to the other
-peer that the latter already know, one of the reference will overwrite the
-other. As consequence, one arc would be permanently lost. Over time, it would
-lead to a degeneration of the network, and eventually to partitions. \SPRAY
-tackles this issue by using a multiset. Using this structure, the peers always
-keep the received references, and always withdraw the given references. Thus,
+partial views and the sum of their partial views stays unchanged. In order to keep number of arcs invariant, \SPRAY uses a multiset to store partial views. If a peer receives a reference it already knows, it stores it as a duplicate to by incrementing the corresponding multiset entry. Thus,
 the \SPRAY's shuffling protocol never increases nor decreases the arcs count.
 
-This invariant comes at the cost of duplicates. The duplicates correspond to
-multiple occurrences of a particular neighbor in a partial view. They have a
-negative impact on the network properties. Fortunately,
-\begin{inparaenum}[(i)]
-\item they naturally move in the network over time,
-\item they are not numerous, and
-\item they proportionally become negligible as the network grows.
-\end{inparaenum}
+%partial view using a set structure may lose information in the
+%operation. Indeed, if one of the involved peer gives a reference to the other
+%peer that the latter already know, one of the reference will overwrite the
+%other. As consequence, one arc would be permanently lost. Over time, it would
+%lead to a degeneration of the network, and eventually to partitions. \SPRAY
+%tackles this issue by using a multiset. Using this structure, the peers always
+%keep the received references, and always withdraw the given references. 
+
+If duplicates have negative impact on the network properties, most of them will disappear after shuffling and proportionally become negligible as the network grows (see Section~\ref{subsec:duplicates}). 
+
 
 \begin{algorithm}[h]
   \input{./input/cyclicalgo.tex}

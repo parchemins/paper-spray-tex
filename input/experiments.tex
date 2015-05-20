@@ -6,8 +6,7 @@ of peer sampling performances including clustering coefficient, average
 shortest path length, in-degree distribution, arc count, connected
 components. We use \CYCLON as baseline with a fixed-size view for experiments
 relative to adaptivity. We expect similar behavior when network size is optimal
-for \CYCLON. We expect \SPRAY to save resources when \CYCLON is oversized. We
-expect \SPRAY to be more robust when \CYCLON is undersized. Finally, we expect
+for \CYCLON. We expect that \SPRAY saves resources when \CYCLON is oversized. Also, \SPRAY should be more robust when \CYCLON is undersized. Finally, we expect
 \SPRAY to keep number of duplicates in partial view very low. We use \SCAMP as
 baseline for experiments relative to connection failures. We expect \SPRAY to
 tolerate connection failures.  We do not use \SCAMP for experiments relative to
@@ -284,7 +283,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   grows.  The peaks in variance correspond to the joining parts of the
   experiment. The disparity comes from the fact that new peers arrive in the
   network with a small partial view. The peaks are smaller when the network is
-  larger. Indeed, the peers - which already were network members before the new
+  larger. Indeed, the peers - which were already network members before the new
   arrivals - had a few cycles to exchanges and even up their partial views. As
   consequence, it lessens the weight of joinings. The removal of 500 peers does
   not disturb the variance since each crashing/leaving peer is chosen at
@@ -428,12 +427,12 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
     works properly when there is no connection failures. Available at
     \url{https://github.com/justayak/peersim-spray}}, and \SPRAY, running over
   70k cycles. The network initially contains 10k members. The probability that
-  a message fails to arrive to its destination (each hop) is set to $10^-3$. To
+  a message fails to arrive to its destination (each hop) is set to $10^{-3}$. To
   establish a connection, we use the WebRTC three-way handshake, i.e., the
   initial peer emits an offer ticket, the arrival peer stamps the ticket, the
   initial peer finalizes the connection using the stamped ticket
   (cf. Section~\ref{sec:relatedwork}).
-\item[Results:] Figure~\ref{fig:degeneration} is comprised of two parts. The
+\item[Results:] Figure~\ref{fig:degeneration} has two parts. The
   top figure shows the arc count of the random peer samplings while the bottom
   figure shows the weak components of the network.  First, we observe that, as
   expected, the arc count of \CYCLON and \SPRAY stays constant over cycles: 90k
@@ -463,8 +462,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   connections spread in the network will establish.  Since it does not, the
   peer eventually becomes disconnected. Also, when its neighbors execute the
   periodic protocol, they delete their reference in its partial view. In such
-  case, the peer becomes disconnected.  Hence the quick degeneration of the
-  \SCAMP arc count. Hence the quick partitioning of the network.
+  case, the peer becomes disconnected and partitions quickly appears.
 \end{asparadesc}
 
 
