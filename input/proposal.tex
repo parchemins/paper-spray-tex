@@ -189,7 +189,7 @@ Figure~\ref{fig:cyclicexample} depicts the \SPRAY's cyclic
 procedure. This scenario follows from Figure~\ref{fig:joiningexample}:
 Peer $p_1$ just joined the network. Peer $p_6$ initiates an exchange
 with $p_1$ (the oldest among the $p_6$'s partial view). It randomly
-chooses $\left\lceil{|\mathcal{P}_6|\div 2}\right\rceil-1 = 1$ peer
+chooses $\left\lceil{|\mathcal{P}_6|\div 2}\right\rceil = 1$ peer
 among its neighborhood. In this case, it picks $p_9$ from
 $\{p_9,\,p_8,\,p_7\}$.  It sends the chosen peer plus its own identity
 to Peer $p_1$. In response, the latter picks
@@ -227,12 +227,11 @@ protocol.
     handler. }
 \end{figure*}
 
-Concerning convergence speed of the shuffling algorithm, there exists
-a close relationship between \SPRAY and the proactive aggregation
-protocol introduced
-in~\cite{jelasity2004epidemic,montresor2004robust}. The latter states
-that, under the assumption of a peer sampling sufficiently random, the
-mean value $\mu$ and the variance $\sigma^2$ at a given cycle $i$ are:
+Concerning convergence time of the shuffling algorithm, there exists a close
+relationship between \SPRAY and the proactive aggregation protocol introduced
+in~\cite{jelasity2004epidemic,montresor2004robust}. It states that, under the
+assumption of a peer sampling sufficiently random, the mean value $\mu$ and the
+variance $\sigma^2$ at a given cycle $i$ are:
 \begin{center}
   $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
   \hfill
@@ -258,7 +257,7 @@ The shuffling algorithm provides adaptiveness at the cost of
 duplicates. Averaging size of partial views over exchanges provides exponential
 convergence speed as expected.
 
-\subsection{Leaving}
+\subsection{Leaving and crashes}
 \label{subsec:leaving}
 
 Using \SPRAY, the peers are free to leave the network without giving notice. In
@@ -282,67 +281,65 @@ joined.
 
 \begin{algorithm}[h]
   \input{./input/unreachablealgo.tex}
-  \caption{\label{algo:unreachable}The crash/leaving handler of \SPRAY.}
+  \caption{\label{algo:unreachable}The crash/departure handler of \SPRAY.}
 \end{algorithm}
 
 Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY deals with
-crashes. When the peer $q$ is detected as crashed, a first loop counts the
+departures and crashes.  Function $onPeerDown$ shows the reaction of \SPRAY
+when the peer $q$ is detected as crashed/departed. A first loop counts the
 occurrences of this neighbor in the partial view, and removes all of them. The,
 the second loop probabilistically duplicates the reference of a known peer. The
 probability depends of the partial view size before the removals.
 
-Figure~\ref{fig:crashexample} depicts the \SPRAY's crash/leaving
-handler. The scenario follows from prior examples after few other
-exchanges. Peer $p_1$ leaves the network without giving notice. With
-it, $7$ connections are down. Peers $p_3$, $p_4$, and $p_5$ have the
-crashed/left peer in their partial view. Peer $p_5$ has
-$1-{1\div{|\mathcal{P}_5|}}={2\div{3}}$ chance to replace the dead
-connections. In this case, it doubles the connection to
-$p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and
-run the appropriate procedure. Only $p_3$ doubles one of its
-connection. In total, $5$ connections have been removed.  
+Figure~\ref{fig:crashexample} depicts the \SPRAY's crash/leaving handler. The
+scenario follows from prior examples after few other exchanges. Peer $p_1$
+leaves the network without giving notice. With it, $7$ connections are
+down. Peers $p_3$, $p_4$, and $p_5$ have the crashed/left peer in their partial
+view. Peer $p_5$ has $1-{1\div{|\mathcal{P}_5|}}={2\div{3}}$ chance to replace
+the dead connections. In this case, it duplicates the connection to
+$p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
+appropriate operation. Only $p_3$ duplicates one of its connection. In total,
+$5$ connections have been removed.
 
-The example shows that some peers reestablish connections if they
-detect a dead connection. The probability depends on the partial view
-size of each of these peer. In average, one of these peer will likely
-remove the connection while the other peers will double one of their
-existing connections. In this case, Peer $p_1$ injected $5$
-connections when it joined. It removes $7-2 =5 $ connections when it
-leaves. The global number of connections remains logarithmic compared
-to the number of members in the network. Nevertheless, we can see that
-connectedness is not entirely guaranteed (only with the high
-probability implied by random graphs). Indeed, if Peer $p_1$ is the
-sole bridge between two clusters, adding connections is not enough to
-ensure connectedness (more details in
-Section~\ref{subsec:resilience}).
+The example shows that some peers reestablish connections if they detect a dead
+connection. The probability depends on the partial view size of each of these
+peer. In average, one of these peer will likely remove the arc while the other
+peers will duplicate one of their existing arcs. In this case, Peer $p_1$
+injected $5$ connections when it joined. It removes $7-2 =5 $ connections when
+it leaves. The global number of connections remains logarithmic compared to the
+number of members in the network. Nevertheless, we can see that connectedness
+is not entirely guaranteed (only with the high probability implied by random
+graphs). Indeed, if Peer $p_1$ is the sole bridge between two clusters, adding
+arcs is not enough to ensure connectedness.
 
-% PAscal: Should be spread among the paper at the right moment... 
-% Note that extending the algorithms to handle three-way handshake is not
-% difficult: it only requires to keep track of the neighbor from where the
-% membership messages arrived, and forward the answer to this neighbor
-% accordingly. Also, there are few optimization concerning the establishments of
-% connections. For instance, when a peer $p$ starts an exchange with $q$, and $q$
-% has $p$ in its partial view, instead of inverting the link between $p$ and $q$,
-% and $q$ and $p$, \SPRAY{} does not change them. Another optimization
-% concerns a peer having a neighbor multiple times in its partial view. While
-% \SPRAY{} keeps such information in its partial view, only one connection per
-% neighbor is truly necessary.
+Algorithm~\ref{algo:unreachable} also shows that \SPRAY distinguishes peer
+crashes and arc crashes. Indeed, Function $onArcDown$ deals with connection
+establishments failures. In this function, the failing arc is systematically
+replaced with a duplicate. Therefore, the arc count stays invariant even in
+presence of connection establishment failures. The distinction between the
+functions $onPeerDown$ and $onArcDown$ is necessary because the former is
+supposed to remove a small arc quantity over departures, contrarily to the
+latter. Without this small removal, the global arc count would grow unbounded
+with network turnover.
 
-To summarize, \SPRAY provides:
-\begin{inparaenum}[(i)]
-\item a logarithmically increasing partial view size compared to the global
-  network size,
-\item a constant complexity to establish the connections,
-\item an exponentially fast convergence to a random graph.
-\end{inparaenum}
-Providing these three properties, \SPRAY improves the state-of-the-art
-approaches~\cite{ganesh2001scamp,voulgaris2005cyclon} in the traditional
-connection set-up. Furthermore, the improvement becomes crucial in the context
-of three-way handshake connection set-up.  The latter becomes increasingly
-important with the appearance of technologies allowing peer-to-peer within
-modern web browsers.  The next section aims to demonstrate experimentally the
-behavior of \SPRAY. In particular, it aims to highlight the aforementioned
-properties.
+In WebRTC context, \SPRAY calls the $onArcDown$ function when a connection
+establishement fails. \SPRAY calls the $onPeerDown$ function when the
+connection was established once but the neighbor is not responding.
+
+% To summarize, \SPRAY provides:
+% \begin{inparaenum}[(i)]
+% \item a logarithmically increasing partial view size compared to the global
+%   network size,
+% \item a connections establishement.
+% %%\item an exponentially fast convergence to a random graph.
+% \end{inparaenum}
+% Providing both these properties, \SPRAY improves the state-of-the-art
+% approaches in the traditional connection set-up. Furthermore, the improvement
+% becomes crucial in the context of three-way handshake connection set-up.  The
+% latter becomes increasingly important with the appearance of technologies
+% allowing peer-to-peer within modern web browsers.  The next section aims to
+% demonstrate experimentally the behavior of \SPRAY. In particular, it aims to
+% highlight the aforementioned properties.
 
 
 %%% Local Variables:

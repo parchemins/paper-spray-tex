@@ -1,14 +1,19 @@
 \section{Experimentation}
 \label{sec:experiments}
 
-In this section we evaluate how adaptiveness of \SPRAY impacts common metrics
-of peer sampling performances including clustering coefficient, average
-shortest path length, in-degree distribution, arc count, connected
-components. We use \CYCLON as baseline with a fixed-size view. We expect
-similar behavior when network size is optimal for \CYCLON. We expect \SPRAY to
-save resources when \CYCLON is oversized. We expect \SPRAY to be more robust
-when \CYCLON is undersized. Finally, we expect \SPRAY to keep number of
-duplicates in partial view very low.
+In this section, we evaluate how adaptiveness of \SPRAY impacts common
+metrics of peer sampling performances including clustering
+coefficient, average shortest path length, in-degree distribution, arc
+count, connected components. We use \CYCLON as baseline with a
+fixed-size view for experiments relative to adaptivity. We expect
+similar behavior when network size is optimal for \CYCLON. We expect
+\SPRAY to save resources when \CYCLON is oversized. We expect \SPRAY
+to be more robust when \CYCLON is undersized. Finally, we expect
+\SPRAY to keep number of duplicates in partial view very low. We use
+\SCAMP as baseline for experiments relative to connection failures. We
+expect \SPRAY to tolerate connection failures. We do not use \SCAMP
+for experiments relative to adaptivity as SCAMP fails to maintain a
+random graph in WebRTC context.
 
 
 % \begin{inparablank}
@@ -422,6 +427,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 
 \subsection{Failures in connection establishment}
+\label{subsec:degeneration}
 
 \begin{figure}
   \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
