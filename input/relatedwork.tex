@@ -137,10 +137,11 @@ recovery. Let $P_E$ be the probability that a connection establishment cannot
 be completed. Without three-way handshake, $P_E$ is straightforward:
 \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation}
 corresponding to the probability that each element (arc and peer) in the path
-of size $k+1$ stays alive during their part of the dissemination (i.e., they
-are allowed to crash the rest). In WebRTC context, the offer ticket must travel
-back to its emitter. As consequence, the elements of the random dissemination
-path are not allowed to fail until the stamped ticket travels back. We obtain:
+of size $k+1$ stays alive during their part of the dissemination (i.e.,
+otherwise, they are allowed to crash/leave). In WebRTC context, the offer
+ticket must travel back to its emitter. As consequence, the elements of the
+random dissemination path are not allowed to fail until the stamped ticket
+travels back. We obtain:
 \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
                                      \ldots (1-P_f)^2) \nonumber \\
                                    &=1-(1-P_f)^{k^2+3k+2}

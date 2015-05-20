@@ -15,7 +15,7 @@
 \newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
 
 \begin{algorithmic}[1]
-    \Function{onUnreachable}{$q$} \hfill \comment{$q$: crashed peer}  
+  \Function{onPeerDown}{$q$} \hfill \comment{$q$: crashed/departed peer}  
   \State \textbf{let} $occ \leftarrow 0$;
 
   \For{\textbf{each} $\langle n,\,age\rangle \in \mathcal{P}$}
@@ -26,7 +26,8 @@
   \EndIf
   \EndFor
 
-  \For{$i\leftarrow 0$ \textbf{to} $occ$} \hfill \comment{probabilistic adding}
+  \For{$i\leftarrow 0$ \textbf{to} $occ$} 
+  \hfill \comment{probabilistically duplicates}
   \If{($rand()>{1\over{|\mathcal{P}|+occ}}$)}
   \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
   \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
@@ -36,4 +37,15 @@
   \EndFor
   
   \EndFunction
+  \Statex
+  \Function{onArcDown}{$q,\,age$}
+  \hfill \comment{$q$: arrival of the arc down}  
+  \State $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle q,\,age\rangle \}$;
+  \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
+  \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
+  \State $\mathcal{P} \leftarrow \mathcal{P} \uplus
+  \left\{\langle n,\, 0\rangle\right\}$;
+  \hfill \comment{systematically duplicates}
+  \EndFunction
+
 \end{algorithmic}
