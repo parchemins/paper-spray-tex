@@ -2,41 +2,41 @@
 \section{Introduction}
 
 Peer sampling service is a fundamental mechanism for many large-scale
-distributed applications including information dissemination, aggregation and
-network management~\cite{jelasity2007gossip}. Recently,
+distributed applications including information
+dissemination~\cite{eugster2003lightweight, tolgyeski2009adaptive},
+aggregation~\cite{jelasity2004epidemic} and network
+management~\cite{jelasity2009tman, voulgaris2005epidemic}. Recently,
 WebRTC\footnote{\url{http://www.webrtc.org/}} opened the opportunity to deploy
-large scale distributed applications on brow\-sers that can run on laptops,
-desktops and mobile devices. Among others, WebRTC drastically simplifies
-the deployment of large-scale distributed applications even within complex
-network systems that utilize firewalls, proxies and Net Address Translation
-(NAT).
+large scale distributed applications on browsers that can run on laptops,
+desktops and mobile devices. Among others, WebRTC drastically simplifies the
+deployment of large-scale distributed applications even within complex network
+systems that utilize firewalls, proxies and Net Address Translation (NAT).
 
-Unfortunately, WebRTC has several constraints that make existing peer
-sampling services inefficient or unreliable. Brow\-sers can run
-on small devices in mobile networks. Hence, keeping the number of
-connections as low as possible is a major requirement. However, peer
-sampling services such as \CYCLON~\cite{voulgaris2005cyclon} do not
-adapt the number of connections to the real number of
-participants. For instance, a user must maintain 10 connections with
-other remote browsers when only 6 are enough. On the other hand, the
-peer sampling service \SCAMP~\cite{ganesh2003peer} is adaptive but
-uses random walks to establish connections which is much more
-costly and likely to fail in the WebRTC context.
+Unfortunately, WebRTC has several constraints that make existing peer sampling
+services inefficient or unreliable. Brow\-sers can run on small devices in
+mobile networks. Hence, keeping the number of connections as low as possible is
+a major requirement. However, peer sampling services such as
+\CYCLON~\cite{voulgaris2005cyclon} do not adapt the number of connections to
+the real number of participants. For instance, a user must maintain 10
+connections with other remote browsers when only 6 are enough. On the other
+hand, the peer sampling service \SCAMP~\cite{ganesh2003peer} is adaptive but
+uses random dissemination paths to establish connections which is much more
+costly and likely to fail in WebRTC context.
 
-In this paper, we introduce \SPRAY, a random peer sampling protocol inspired
-by both \CYCLON~\cite{voulgaris2005cyclon} and
-\SCAMP~\cite{ganesh2003peer}. Compared to the state of art,
+In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
+both \SCAMP~\cite{ganesh2003peer}
+and \CYCLON~\cite{voulgaris2005cyclon}. Compared to the state of art,
 \begin{inparaenum}[(i)]
 \item \SPRAY dynamically adapts the neighborhood of each peer. Thus, the number
   of connections grows logarithmically compared to the size of the network.
 \item \SPRAY only uses neighbor-to-neighbor interactions to establish
   connections. Thus, the connections are established in constant time.
-\item \SPRAY converges exponentially fast to a topology exposing properties
-  similar to random graphs. Thus, the network becomes quickly resilient to
-  massive failures, efficiently disseminates information etc.
+\item \SPRAY quickly converges to a topology exposing properties similar to
+  those of random graphs. Thus, the network becomes robust to massive failures,
+  efficiently disseminates information etc.
 \item In the experimental setup, we show the adaptiveness of \SPRAY and
-  highlight its efficiency improvement compared to \CYCLON, at the cost of
-  little overhead.
+  highlight its efficiency improvement compared to \CYCLON and \SCAMP, at the
+  cost of little overhead.
 \end{inparaenum}
 
 The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}

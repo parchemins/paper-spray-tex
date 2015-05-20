@@ -2,7 +2,7 @@
 \section{Spray}
 \label{sec:proposal}
 
-\SPRAY is an adaptive random peer sampling protocol inspired by
+\SPRAY is an adaptive-by-design random peer sampling protocol inspired by
 \SCAMP~\cite{ganesh2003peer} and \CYCLON~\cite{voulgaris2005cyclon}. It
 comprises three parts representing the lifecycle of a peer in the network.
 Firstly, the joining process injects a logarithmically growing number of arcs
@@ -10,11 +10,11 @@ in the network. Hence, the number of arcs scales with the network size.  Next,
 each peer runs a periodic process in order to balance the partial views both in
 terms of partial view size, and uniformity of the referenced peers within
 them. Quickly, the overlay network converges to a topology exposing properties
-similar to random graphs. Finally, A peer is able to leave at any time without
-giving notice (equivalent to a crash), still the network properties do not
-degrade.
+similar to those of random graphs. Finally, A peer is able to leave at any time
+without giving notice (equivalent to a crash), still the network properties do
+not degrade.
 
-The key of adaptiveness consists in keeping a constant global number of arcs
+The key of adaptiveness consists in keeping a consistent global number of arcs
 during the whole protocol. Indeed, unlike \CYCLON, \SPRAY is always on the edge
 of the optimal number of arcs compared to the network size. Since \SPRAY never
 creates additional arcs after the joining, any removal is a definitive
@@ -23,38 +23,13 @@ loss. Thus, firstly, \SPRAY's joining adds some arcs to the network. Secondly,
 cautiously removes some arcs, ideally the number of arcs introduced by the last
 joining peer.
 
-Keeping global number of arcs constant can force, in some situations,
-shuffling and leaving process to inject \emph{duplicates} in partial
-views i.e. a partial view can contain multiple occurrences of a
-particular neighbor. In this paper, we show that the number of
-duplicates remains low and do not impact the network connectedness.
-
-% This requirement introduces the main difference of \SPRAY compared to the
-% state-of-art approaches. It uses a multiset instead of a set. In \SPRAY, the
-% multisets can have different sizes. Yet, they very rapidly converge to a
-% roughly identical size. Also, the multisets can contain multiple occurrences of
-% a particular neighbor. Yet, these duplicates remain in small number and do not
-% endanger the network connectedness. This section shows how \SPRAY manages this
-% type of partial view to adapt itself to the network size.
+Occasionally, keeping the global number of arcs constant forces the shuffling
+and the leaving processes to create \emph{duplicates} in partial views. Thus,
+partial view may contain multiple occurrences of a particular neighbor. In this
+paper, we show that the number of duplicates remains low and do not impact the
+network connectedness.
 
 \subsection{Joining}
-
-%%%%%%%%%%%%%%%%%%%%%%
-%% moved to the related work so it appears at top of page 
-%%%%%%%%%%%%%%%%%%%%%
-% \begin{figure*}
-%   \centering
-%   \subfloat[Figure A][$p_2$ executes $onSubs(p_1$)]{
-%     \input{./input/joiningexampleA.tex}}
-%   \hspace{40pt}
-%   \subfloat[Figure B][$p_2$ calls $fwdSubs(p_1)$ on its neighbor]{
-%     \input{./input/joiningexampleB.tex}}
-%   \hspace{40pt}
-%   \subfloat[Figure C][$p_{3-6}$ execute $fwdSubs(p_1)$]{
-%     \input{./input/joiningexampleC.tex}}
-%   \caption{\label{fig:joiningexample}Example of the \SPRAY{}'s joining
-%     protocol.}
-% \end{figure*}
 
 The \SPRAY's joining algorithm is the sole part of the protocol where the
 global number of arcs in the network can increase. To meet the first
@@ -114,7 +89,7 @@ total, \SPRAY establishes 5 connections and the network is connected.
 
 Unfortunately, the partial views of the newest peers are clearly unbalanced and
 violates the first condition of our problem statement. The periodic protocol
-described in Section~\ref{subsec:cyclic} will re-balance the partial views.
+described in the next section will re-balance the partial views.
 
 \subsection{Shuffling}
 \label{subsec:cyclic}
@@ -124,18 +99,13 @@ aims to balance the partial view sizes and to randomly mix the neighborhood
 between the peers. Nevertheless, the global number of arcs in the network is
 invariant.
 
-In \SPRAY's shuffling protocol, the involved peers send half their partial view
-to each other. After integration, they both tend to the average of their
-partial views and the sum of their partial views stays unchanged. In order to keep number of arcs invariant, \SPRAY uses a multiset to store partial views. If a peer receives a reference it already knows, it stores it as a duplicate to by incrementing the corresponding multiset entry. Thus,
-the \SPRAY's shuffling protocol never increases nor decreases the arcs count.
-
-%partial view using a set structure may lose information in the
-%operation. Indeed, if one of the involved peer gives a reference to the other
-%peer that the latter already know, one of the reference will overwrite the
-%other. As consequence, one arc would be permanently lost. Over time, it would
-%lead to a degeneration of the network, and eventually to partitions. \SPRAY
-%tackles this issue by using a multiset. Using this structure, the peers always
-%keep the received references, and always withdraw the given references. 
+In \SPRAY's shuffling protocol, the involved peers send half of their partial
+view to each other. After integration, they both tend to the average of their
+partial views and the sum of their partial views stays unchanged. In order to
+keep the arc number invariant, the partial views of \SPRAY are multisets. If a
+peer receives an already known reference, it still stores it, yet as a
+duplicate. Thus, the \SPRAY's shuffling protocol never increases nor decreases
+the arcs count.
 
 If duplicates have negative impact on the network properties, most of them
 disappear after shuffling and they proportionally become negligible as the
@@ -178,7 +148,7 @@ the other peer, e.g., Peer $o$'s sample can contain references to $q$. Such
 sample, without further processing, would create self-loop ($q$'s partial view
 contains references to $q$). To alleviate this undesirable behavior, all
 occurrences of the other peer are replaced with the emitting peer
-(cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them,
+(cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them
 remove the sample they sent from their view and add the received sample.
 
 Figure~\ref{fig:cyclicexample} depicts the \SPRAY's cyclic
@@ -320,7 +290,7 @@ with network turnover.
 
 In WebRTC context, \SPRAY calls the $onArcDown$ function when a connection
 establishement fails. \SPRAY calls the $onPeerDown$ function when the
-connection was established once but the neighbor is not responding.
+connection was established once but the neighbor is not responding anymore.
 
 % To summarize, \SPRAY provides:
 % \begin{inparaenum}[(i)]
