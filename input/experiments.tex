@@ -1,37 +1,17 @@
 \section{Experimentation}
 \label{sec:experiments}
 
-In this section, we evaluate how adaptiveness of \SPRAY impacts common
-metrics of peer sampling performances including clustering
-coefficient, average shortest path length, in-degree distribution, arc
-count, connected components. We use \CYCLON as baseline with a
-fixed-size view for experiments relative to adaptivity. We expect
-similar behavior when network size is optimal for \CYCLON. We expect
-\SPRAY to save resources when \CYCLON is oversized. We expect \SPRAY
-to be more robust when \CYCLON is undersized. Finally, we expect
-\SPRAY to keep number of duplicates in partial view very low. We use
-\SCAMP as baseline for experiments relative to connection failures. We
-expect \SPRAY to tolerate connection failures. We do not use \SCAMP
-for experiments relative to adaptivity as SCAMP fails to maintain a
-random graph in WebRTC context.
-
-
-% \begin{inparablank}
-% \item \emph{clustering coefficient:} Show the convergence speed, how scattered
-%   are the peers from each other, how close are the peer from partitioning.
-% \item \emph{average shortest path length:} show the efficiency of information
-%   dissemination.
-% \item \emph{distribution of the incoming arcs:} show how much the peers appear
-%   in the others' partial view.
-% \item \emph{arcs counts} show the adaptiveness to the network size.
-% \item \emph{variance of the partial view size:} show the convergence speed under
-%   network dynamic change.
-% \item \emph{number of connected components:} show the robustness to massive
-%   failures, show where the network is beyond self-repairing.
-% \end{inparablank}
-
-% Finally, the experiments highlight the small overhead of our approach by
-% measuring the number of duplicates inside the partial view sizes.
+In this section, we evaluate how adaptiveness of \SPRAY impacts common metrics
+of peer sampling performances including clustering coefficient, average
+shortest path length, in-degree distribution, arc count, connected
+components. We use \CYCLON as baseline with a fixed-size view for experiments
+relative to adaptivity. We expect similar behavior when network size is optimal
+for \CYCLON. We expect \SPRAY to save resources when \CYCLON is oversized. We
+expect \SPRAY to be more robust when \CYCLON is undersized. Finally, we expect
+\SPRAY to keep number of duplicates in partial view very low. We use \SCAMP as
+baseline for experiments relative to connection failures. We expect \SPRAY to
+tolerate connection failures.  We do not use \SCAMP for experiments relative to
+adaptivity since SCAMP fails to maintain a random graph in WebRTC context.
 
 \begin{figure*}
   \centering
@@ -431,61 +411,60 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \begin{figure}
   \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
-  \caption{\label{fig:degeneration}\SPRAY and \SCAMP in network subject to
-    failures in the connection establishments. The x-axis denotes the elapsed
-    time in cycles ($10^3$-scaled). The y-axis of the top figure denotes the
-    global number of arcs ($10^3$-scaled). The y-axis of the bottom figure
-    denotes the ratio of weak components over the current network size.}
+  \caption{\label{fig:degeneration}\CYCLON, \SCAMP, and \SPRAY in network
+    subject to failures in the connection establishments. The x-axis denotes
+    the elapsed time in cycles ($10^3$-scaled). The y-axis of the top figure
+    denotes the global number of arcs ($10^3$-scaled). The y-axis of the bottom
+    figure denotes the ratio of weak components over the current network size.}
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To show that the degeneration of \SCAMP in presence of
-  failures in the connection establishments quickly endangers the connectedness
-  of the network.
+\item[Objective:] To show that \SPRAY does not suffer from failures in
+  connection establishments, contrarily to \SCAMP.
 \item[Description:] We measure both the arcs count and the number of weak
-  components in the network. The simulations involve \SPRAY and
-  \SCAMP\footnote{A modified version of \SCAMP whose periodic protocol works
-    properly when there is no connection failures. Available at
-    \url{https://github.com/justayak/peersim-spray}} running over 70k
-  cycles. The network initially contains 10k members. The probability that a
-  message fails to arrive to its destination (each hop) is set to $10^-3$. To
+  components in the network. The simulations involve \CYCLON configured with
+  partial view containing 9 neighbors (targeting a network of roughly 8100
+  peers), \SCAMP\footnote{A modified version of \SCAMP whose periodic protocol
+    works properly when there is no connection failures. Available at
+    \url{https://github.com/justayak/peersim-spray}}, and \SPRAY, running over
+  70k cycles. The network initially contains 10k members. The probability that
+  a message fails to arrive to its destination (each hop) is set to $10^-3$. To
   establish a connection, we use the WebRTC three-way handshake, i.e., the
   initial peer emits an offer ticket, the arrival peer stamps the ticket, the
   initial peer finalizes the connection using the stamped ticket
   (cf. Section~\ref{sec:relatedwork}).
 \item[Results:] Figure~\ref{fig:degeneration} is comprised of two parts. The
-  top figure shows the arc count of both random peer samplings while the bottom
-  figure shows the weak components of the network. Both \SPRAY and \SCAMP
-  degenerate over time. The top figure shows that they both starts
-  approximately at the same values. However, the \SCAMP's arc count decreases
-  very rapidly. The bottom figure depicting the weak components (i.e. the
-  number of fully disjoint part) shows that parts of \SCAMP network directly
-  disconnect from each other. On the other hand, \SPRAY becomes disconnected at
-  the very end only, when the number of connections is not sufficient to ensure
-  any connectedness.
-\item[Reasons:] Each connection establishment of \SCAMP relies on a random
-  walk.  Each hop of this random walk is an opportunity of failure. Since there
-  is no routing in such network, the only way for a stamped ticket to come back
-  to its emitter is the path it traveled in the first place. Hence, all peers
-  belonging to the path must stay alive until the stamped ticket comes back in
-  order to consistently forward it. Thus, the probability to fail to establish
-  a connection depends of the length of the random walk which is generally much
-  higher than a neighbor-to-neigbhor connection establishments (as in \SPRAY
-  or \CYCLON). Hence the quick degeneration of the \SCAMP arc
-  count. Furthermore the network using \SCAMP becomes quickly partitioned
-  \begin{inparaenum}
-  \item because its arc count decreases and
-  \item because its periodic protocol is not cautious.
-  \end{inparaenum}
-  Indeed, it immediately cuts the incoming arcs of the involved peer and
-  assumes that the new connections spread in the network will establish.  When
-  it does not, the peer becomes disconnected. When its neighbors execute the
-  periodic protocol, they delete their reference in its partial view. The peer
-  becomes disconnected. The second observation concerns \SPRAY: it degenerates
-  too. Indeed, \SPRAY does not differentiate a crashed peer from a dead arc. It
-  always applies the probabilistic removal described in
-  Section~\ref{subsec:leaving}. It worth noting that in the WebRTC context, we
-  can distinguish these two cases. Therefore, it does not constitute an issue.
+  top figure shows the arc count of the random peer samplings while the bottom
+  figure shows the weak components of the network.  First, we observe that, as
+  expected, the arc count of \CYCLON and \SPRAY stays constant over cycles: 90k
+  and 93k arcs for \CYCLON and \SPRAY respectively. Second, we observe that
+  \SCAMP suffers from the failures on connection establishments. It directly
+  impacts on the connectedness of the network represented by the weak
+  components ratio. The network of \SCAMP quickly degrades.
+\item[Reasons:] The arc count of both \CYCLON and \SPRAY remains constant over
+  time but for different reasons. In \CYCLON, the shuffling protocol makes sure
+  that the partial view is filled to its maximum. Thus, when it uses a not
+  successfully established connection to perform an exchange, it simply
+  discards the connection, knowing that the next exchange is likely to overfill
+  its partial view. In \SPRAY, when a connection fails to establish and the
+  protocol tries to use it for an exchange, it will replace this arc with
+  another known reference. Thus, the arc count stays constant and the shuffling
+  protocol makes sure that duplicates disappear over time (the arc moves to
+  another peer where it is not a duplicate). In \SCAMP, the connections are
+  much more likely to fail than in the aforementioned protocols. Indeed,
+  contrarily to these latter, \SCAMP does not cautiously establish connections
+  with the neighbors of its neighbors.  Each hop of its ticket dissemination is
+  an opportunity of failure. Since there is no routing in such network, the
+  only way for a stamped ticket to come back to its emitter is the path it
+  traveled in the first place. Hence, all peers belonging to the path must stay
+  alive until the stamped ticket comes back in order to consistently forward
+  it.  Furthermore, its periodic protocol starts with an immediate cutting of
+  the incoming arcs of the initiating peer because it assumes that the new
+  connections spread in the network will establish.  Since it does not, the
+  peer eventually becomes disconnected. Also, when its neighbors execute the
+  periodic protocol, they delete their reference in its partial view. In such
+  case, the peer becomes disconnected.  Hence the quick degeneration of the
+  \SCAMP arc count. Hence the quick partitioning of the network.
 \end{asparadesc}
 
 
