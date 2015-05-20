@@ -94,15 +94,15 @@ neighbor-to-neighbor interactions.
 \caption{\label{algo:joining}The joining protocol of \SPRAY.}
 \end{algorithm}
 
-The partial view is a multiset of pairs $\langle n,\, age\rangle$
-which associate to the neighbor $n$ the age $age$. The multiset allows
-managing duplicates and $age$ plays the same role than in \CYCLON i.e.
-accelerate convergence by shuffling with oldest neighbors first. The $onSubs$ event
-is called each time a peer joins the network. $onSubs$ forwards the
-identity of the joining peer to all neighbors, indifferently of the
-age. The $onFwdSubs$ event is called when a peer receives such
-forwarded subscription. It adds the peer as one of its neighbor with
-an age set to $0$ meaning that it is a brand new reference.
+The partial view is a multiset of pairs $\langle n,\, age\rangle$ which
+associate to the neighbor $n$ the age $age$. The multiset allows managing
+duplicates and $age$ plays the same role than in \CYCLON i.e.  it accelerates
+the removal of crashed/departed peers by shuffling with the oldest neighbors
+first.  The $onSubs$ event is called each time a peer joins the
+network. $onSubs$ forwards the identity of the joining peer to all neighbors,
+indifferently of the age. The $onFwdSubs$ event is called when a peer receives
+such forwarded subscription. It adds the peer as one of its neighbor with an
+age set to $0$ meaning that it is a brand new reference.
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario. In this scenario,
 Peer $p_1$ contacts $p_2$ to join the network composed of $\{p_2$, $p_3$,
@@ -137,8 +137,9 @@ the \SPRAY's shuffling protocol never increases nor decreases the arcs count.
 %tackles this issue by using a multiset. Using this structure, the peers always
 %keep the received references, and always withdraw the given references. 
 
-If duplicates have negative impact on the network properties, most of them will disappear after shuffling and proportionally become negligible as the network grows (see Section~\ref{subsec:duplicates}). 
-
+If duplicates have negative impact on the network properties, most of them
+disappear after shuffling and they proportionally become negligible as the
+network grows (see Section~\ref{subsec:duplicates}).
 
 \begin{algorithm}[h]
   \input{./input/cyclicalgo.tex}
@@ -249,8 +250,8 @@ cycle decreases their variance in overall system at a rate comprised between
 ${1\div 2}$ and $1\div ({2\sqrt{\text{e}}})$.
 
 The shuffling algorithm provides adaptiveness at the cost of
-duplicates. Averaging size of partial views over exchanges provides exponential
-convergence speed as expected.
+duplicates. Averaging the partial view sizes over exchanges provides a quick
+convergence to a network topology where the partial views are balanced.
 
 \subsection{Leaving and crashes}
 \label{subsec:leaving}
