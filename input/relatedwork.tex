@@ -80,11 +80,15 @@ partial view~\cite{jelasity2007gossip} are
 lpbcast~\cite{eugster2003lightweight}, Newscast~\cite{tolgyeski2009adaptive},
 and \CYCLON~\cite{voulgaris2005cyclon}. They have to know \emph{a priori} the
 maximum network size to set their parameters
-accordingly. These decisions cannot be safely retracted afterwards. For this
-reason, the partial views are commonly oversized compared to the actual network
-size. Consequently, it possibly maintains 7 connections in the browser despite
-requiring only 4, while, in the following moment, it still maintains 7 connections
-while 10 would be needed. When WebRTC is involved, we need a dynamic peer sampling
+accordingly. These decisions cannot be safely retracted afterwards.
+
+This inflexibility makes it possible to maintains 7 connections in the browser
+despite requiring only 4, while, in the following moment, it still maintains 7
+connections while 10 would be needed.
+\CYCLON's partial views are commonly oversized compared to the actual network
+size to prevent having too few connections per peer,
+which, consequently, introduces overhead.
+When WebRTC is involved, we need a dynamic peer sampling
 service that is able to adapt to the dynamic number of participants.
 
 Network size estimators can introduce adaptiveness in peer sampling. These
