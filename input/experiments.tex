@@ -68,26 +68,29 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \end{inparaenum}
   This impacts both load-balancing and robustness to churn (when peers
   join and leave the network freely).
-\item[Reasons:] \CYCLON starts with a lower clustering coefficient because each
-  peer performs random walks to advertise themselves in the network. Hence, the
-  starting overlay is already slightly balanced when the simulation starts the
-  shufflings. On the other hand, a newcomer peer in \SPRAY only advertises
-  itself to the neighborhood of its contact peer. Therefore, the network
-  overlay starts strongly unbalanced, independently of the network size. Still,
-  \CYCLON converges slower than \SPRAY because of its fixed-size partial view
-  and the size of the shuffle. When they are \emph{a priori} configured, they
-  constitute a constraint to the convergence speed.  The clustering coefficient
-  measures how much the neighborhood of each peer is connected to the rest of
-  the network. It directly depends of the partial view size of each peer which,
-  in \CYCLON, is fixed. Thus, when the peers number is multiplied by $10$, the
-  clustering coefficient after convergence is divided by $10$. On the other
-  hand, the peers using \SPRAY have variable-size partial views which gently
-  reflect the network size with a logarithmic growth. Thus, when the network
-  has 1k peers, the partial view size adapts to this network size. It
-  explains the slightly lower clustering coefficient of \SPRAY on this run
-  (\SPRAY 7.4 vs \CYCLON 7). By extending the reasoning, it explains why \SPRAY
-  yields lower values when \CYCLON is oversized, and why it yields higher values
-  when \CYCLON is undersized.
+\item[Reasons:] \CYCLON starts with a lower clustering coefficient
+  because each peer performs random walks to advertise themselves in
+  the network. Hence, the starting overlay is already slightly
+  balanced when the simulation starts the shufflings. On the other
+  hand, a newcomer peer in \SPRAY only advertises itself to the
+  neighborhood of its contact peer. Therefore, the network overlay
+  starts strongly unbalanced, independently of the network
+  size. Still, \CYCLON converges more slowly than \SPRAY because of
+  its fixed-size partial view and the size of the shuffle. When they
+  are \emph{a priori} configured, they constitute a constraint to the
+  convergence speed.  The clustering coefficient measures how much the
+  neighborhood of each peer is connected to the rest of the
+  network. It directly depends of the partial view size of each peer
+  which, in \CYCLON, is fixed. Thus, when the peers number is
+  multiplied by $10$, the clustering coefficient after convergence is
+  divided by $10$. On the other hand, the peers using \SPRAY have
+  variable-size partial views that carefully reflect the network size
+  with a logarithmic growth. Thus, when the network has 1k peers, the
+  partial view size adapts to this network size. This explains the
+  slightly lower clustering coefficient of \SPRAY on this run (\SPRAY
+  7.4 vs \CYCLON 7). By extending the reasoning, this also explains
+  why \SPRAY yields lower values when \CYCLON is oversized, and why it
+  yields higher values when \CYCLON is undersized.
 \end{asparadesc}
 
 \subsection{Average shortest path length}
