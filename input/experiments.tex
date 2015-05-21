@@ -16,10 +16,10 @@ connection failures.
 \begin{figure*}
   \centering
   \subfloat[Figure A][Clustering coefficient of \CYCLON.]{
-    \includegraphics[width=0.45\textwidth]{img/cycloncluster.eps}}
+    \includegraphics[width=0.48\textwidth]{img/cycloncluster.eps}}
   \hspace{10pt}
   \subfloat[Figure B][Clustering coefficient of \SPRAY.]{
-    \includegraphics[width=0.45\textwidth]{img/spraycluster.eps}}
+    \includegraphics[width=0.48\textwidth]{img/spraycluster.eps}}
   \caption{\label{fig:clustering}The x-axis denotes the elapsed time in cycles
     while the y-axis denotes the $\log_{10}$-scaled clustering coefficient.}
 \end{figure*}
@@ -33,13 +33,6 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \subsection{Clustering coefficient}
 \label{subsec:cluster}
 
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=0.49\textwidth]{img/cycloncluster.eps}
-%   \caption{\label{fig:clustering}The clustering coefficient of \CYCLON and
-%     \SPRAY: the x-axis denotes the elapsed time in cycles while the y-axis
-%     denotes the $\log_{10}$-scaled clustering coefficient.}
-% \end{figure}
 
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts on clustering and
@@ -90,9 +83,9 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   reflect the network size with a logarithmic growth. Thus, when the network
   has 1000 peers, the partial view size adapts to this network size. It
   explains the slightly lower clustering coefficient of \SPRAY on this run
-  (\SPRAY 7.4 vs \CYCLON 7). By extending the reasoning, it explains why
-  \SPRAY yields lower values when \CYCLON is oversized, and why it yields higher
-  value when \CYCLON is undersized.
+  (\SPRAY 7.4 vs \CYCLON 7). By extending the reasoning, it explains why \SPRAY
+  yields lower values when \CYCLON is oversized, and why it yields higher value
+  when \CYCLON is undersized.
 \end{asparadesc}
 
 \subsection{Average shortest path length}
@@ -139,10 +132,10 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/avgpath.eps}
-  \caption{\label{fig:avgpath}The average shortest path in \SPRAY and
-    \CYCLON. The x-axis denotes the $\log_{10}$-scaled number of peers in the
-    network while the y-axis denotes the average shortest path length of the
-    network.}
+  \caption{\label{fig:avgpath}The average shortest path length of \SPRAY and
+    \CYCLON. The x-axis denotes the number of peers in the network on a
+    $\log_{10}$ scale (from 100 to 100k peers) while the y-axis denotes the
+    average shortest path length of the network.}
 \end{figure}
 
 \subsection{In-degree distribution}
@@ -165,11 +158,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   elapsed time in cycles. The upper graph y-axis shows the number of total
   connections in the overlay while the lower graph y-axis shows the variance
   $\sigma^2$ of the partial view sizes in the network.]{
-    \includegraphics[width=0.45\textwidth]{img/churn.eps}}
+    \includegraphics[width=0.48\textwidth]{img/churn.eps}}
   \hspace{10pt}
   \subfloat[Figure B][\label{fig:churnB}The x-axis denotes the
   elapsed time in cycles. The y-axis denotes the average partial view size.]{
-    \includegraphics[width=0.45\textwidth]{img/avgpv.eps}}
+    \includegraphics[width=0.48\textwidth]{img/avgpv.eps}}
   \caption{\label{fig:churn}\CYCLON (partial view size configured to 9) and
     \SPRAY in a dynamic network. 2.5k peers join the network at cycles $0$,
     $10$, $20$, and $30$. Then 5k peers leave at cycle $40$. Finally 2.5k peers
