@@ -3,16 +3,16 @@
 
 In this section, we evaluate how adaptiveness of \SPRAY impacts common
 metrics of peer sampling performance including clustering coefficient,
-average shortest path length, in-degree distribution, arc count,
-connected components. We use \CYCLON as baseline with a fixed-size
+average shortest path length, in-degree distribution, arc count, and
+connected components. We use \CYCLON as a baseline with a fixed-size
 view for experiments relative to adaptiveness. We expect similar
-behavior when network size is optimal for \CYCLON. We expect that
-\SPRAY saves resources when \CYCLON is oversized. Also, \SPRAY should
-be more robust when \CYCLON is undersized. Finally, we expect \SPRAY
-to keep a negligible number of duplicates in its partial views. We use
-\SCAMP as baseline for experiments relative to connection
-failures. Contrarily to \SCAMP, we expect \SPRAY to tolerate
-connection failures.
+behaviors when the network size is optimal for \CYCLON. We expect
+\SPRAY to save resources when \CYCLON is oversized. Also, \SPRAY
+should be more robust when \CYCLON is undersized. Finally, we expect
+\SPRAY to keep a negligible number of duplicates in its partial
+views. We use \SCAMP as a baseline for experiments relative to
+connection failures. Unlike \SCAMP, we expect \SPRAY to
+tolerate connection failures.
 
 \begin{figure*}
   \centering
