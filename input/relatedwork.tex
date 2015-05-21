@@ -45,8 +45,8 @@ to the signaling service. Finally, $p_1$ pulls the stamped ticket and
 establishes a bidirectional connection with $p_2$.  Identically, $p_3$
 establishes a connection to $p_2$. We refer to the round-trip procedure as
 \emph{three-way handshake}. At this point, Peer $p_1$ is able to establish a
-connection to $p_3$ without the mediation of the former signaling service, and,
-instead, uses $p_2$ as temporary signaling service.  As shown in
+connection to $p_3$ without the mediation of the former signaling service.
+Instead, it uses $p_2$ as temporary signaling service.  As shown in
 Figure~\ref{fig:webrtcB}, Peer $p_1$ pushes an offer ticket to $p_2$. As
 $p_2$ is already connected to $p_3$, it forwards the offer to $p_3$ and
 registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket and sends it back
@@ -55,18 +55,20 @@ bidirectional connection with $p_3$.  Notice that if $p_2$ crashes during the
 forwarding process, the connection establishment will fail, even if an
 alternative route exists as WebRTC does not manage routing.
 
-Using signaling services and existing WebRTC connections allows deploying
-random peer sampling protocols~\cite{jelasity2004peer} easily on browsers that
-can run on mobile phones or tablets connected to mobile networks. In this
-context, it is crucial to keep the number of connections as low as possible in
-order to reduce traffic usage and limit resource consumption.
+Using signaling services and existing WebRTC connections allows easy
+deployment of random peer sampling protocols~\cite{jelasity2004peer} in
+browsers that can run on mobile phones or tablets connected to mobile
+networks. In this context, it is crucial to keep the number of connections as
+low as possible in order to reduce traffic usage and limit resource
+consumption.
 
-Random peer sampling protocols~\cite{jelasity2004peer} provide each
+Random peer sampling protocols~\cite{jelasity2004peer, jelasity2007gossip} 
+provide each
 peer with a partial view $\mathcal{P}$ of the network membership
 $\mathcal{N}$. They populate the partial views with references to
 peers chosen at random among $\mathcal{N}$ following a uniform
 distribution using local knowledge only. Their goal is to converge to
-an overlay network exposing properties similar to random
+an overlay network exposing properties similar to those of random
 graphs~\cite{erdos1959random}. They efficiently provide connectedness,
 robustness, messages dissemination etc. A wide variety of gossip-based
 protocols use random peer sampling (e.g. topology
@@ -129,19 +131,19 @@ suffers from other flaws. In particular, it systematically disseminates the
 connections at random. Thus, the originating peer can be at several hops away
 from the arrival peer. In WebRTC, each random dissemination path must
 be traveled back to finalize the connection establishment, as illustrated in
-figure~\ref{fig:webrtc}. This drastically impacts \SCAMP`s failure
-probability of establishing connections. Let $P_f$ be the probability that an
+Figure~\ref{fig:webrtc}. This drastically impacts on the \SCAMP failure
+probability of establishing a connection.  Let $P_f$ be the probability that an
 element of the dissemination path (either a peer or a connection)
 crashes or leaves during a hop of the three-way handshake, without any possible
 recovery. Let $P_E$ be the probability that a connection establishment cannot
 be completed. Without three-way handshake, $P_E$ is straightforward:
-\begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation}
-corresponds to the probability that each element (arc and peer) in the path
-of size $k+1$ stays alive during their part of the dissemination (i.e.,
-otherwise, they are allowed to crash or leave). In the context of WebRTC,
-the offer ticket must travel back to its emitter. As consequence, the elements
-of the random dissemination path are not allowed to fail until the stamped 
-ticket travels back. We obtain:
+\begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
+corresponds to the probability that each element (arc and peer) in the path of
+size $k+1$ stays alive during their part of the dissemination (i.e., otherwise,
+they are allowed to crash or leave). In the context of WebRTC, the offer ticket must
+travel back to its emitter. As consequence, the elements of the random
+dissemination path are not allowed to fail until the stamped ticket travels
+back. We obtain:
 \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
                                      \ldots (1-P_f)^2) \nonumber \\
                                    &=1-(1-P_f)^{k^2+3k+2}
