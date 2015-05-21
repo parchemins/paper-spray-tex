@@ -77,13 +77,13 @@ The representatives of random peer sampling protocols using a fixed-size
 partial view~\cite{jelasity2007gossip} are
 lpbcast~\cite{eugster2003lightweight}, Newscast~\cite{tolgyeski2009adaptive},
 and \CYCLON~\cite{voulgaris2005cyclon}. They have to know \emph{a priori} the
-maximum order of magnitude of the network size to set their parameters
+maximum network size to set their parameters
 accordingly. These decisions cannot be safely retracted afterwards. For this
 reason, the partial views are commonly oversized compared to the actual network
 size. Consequently, it possibly maintains 7 connections in the browser despite
-requiring only 4. And the following moment, it still maintains 7 connections
-while 10 are needed. In WebRTC context, we need a dynamic peer sampling
-service able to adapt to the dynamic variation of the number of participants.
+requiring only 4, while, in the following moment, it still maintains 7 connections
+while 10 would be needed. When WebRTC is involved, we need a dynamic peer sampling
+service that is able to adapt to the dynamic number of participants.
 
 Network size estimators can introduce adaptiveness in peer sampling. These
 approaches either use
@@ -96,12 +96,12 @@ approaches either use
   size using the collisions,
 \item averaging techniques~\cite{jelasity2004epidemic, blasa2011symmetric}
   which use aggregations that converge over exchanges to a value which depends
-  of the network size.
+  on the network size.
 \end{inparaenum}
-Unfortunately, while they can be very precise in their estimate, they imply a
+Unfortunately, while they can be very precise in their estimation, they imply a
 communication overhead and may have strong assumptions (e.g. random graph
-topology). In WebRTC context, adaptiveness should introduce a minimum overhead
-in peer sampling.
+topology). However, adaptiveness should introduce a minimum overhead
+to peer sampling in WebRTC applications.
 
 %% figure related to proposal, here to be on top of page
 \begin{figure*}
@@ -127,21 +127,21 @@ its logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
 suffers from other flaws. In particular, it systematically disseminates the
 connections at random. Thus, the originating peer can be at several hops away
-from the arrival peer.  In WebRTC context, each random dissemination path must
+from the arrival peer. In WebRTC, each random dissemination path must
 be traveled back to finalize the connection establishment, as illustrated in
-figure~\ref{fig:webrtc}. It drastically impacts on the \SCAMP failure
-probability of establishing a connection.  Let $P_f$ the probability that an
+figure~\ref{fig:webrtc}. This drastically impacts \SCAMP`s failure
+probability of establishing connections. Let $P_f$ be the probability that an
 element of the dissemination path (either a peer or a connection)
-crashes/leaves during a hop of the three-way handshake, without any possible
+crashes or leaves during a hop of the three-way handshake, without any possible
 recovery. Let $P_E$ be the probability that a connection establishment cannot
 be completed. Without three-way handshake, $P_E$ is straightforward:
 \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation}
-corresponding to the probability that each element (arc and peer) in the path
+corresponds to the probability that each element (arc and peer) in the path
 of size $k+1$ stays alive during their part of the dissemination (i.e.,
-otherwise, they are allowed to crash/leave). In WebRTC context, the offer
-ticket must travel back to its emitter. As consequence, the elements of the
-random dissemination path are not allowed to fail until the stamped ticket
-travels back. We obtain:
+otherwise, they are allowed to crash or leave). In the context of WebRTC,
+the offer ticket must travel back to its emitter. As consequence, the elements
+of the random dissemination path are not allowed to fail until the stamped 
+ticket travels back. We obtain:
 \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
                                      \ldots (1-P_f)^2) \nonumber \\
                                    &=1-(1-P_f)^{k^2+3k+2}
@@ -174,7 +174,7 @@ The first condition states that the partial view size is relative to the size
 of the network at any time. It also states that partial views grow and shrink
 logarithmically compared to the size of the network. The second condition
 states that each connection establishment requires a constant number of
-intermediary peers. Since this number is constant, connections establishments
+intermediary peers. Since this number is constant, connection establishments
 do not depend on the network size.
 %% The last condition states that the network
 %% overlay converges exponentially fast to a topology that is close to a random
