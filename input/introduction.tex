@@ -1,16 +1,18 @@
 
 \section{Introduction}
 
-Peer sampling service is a fundamental mechanism for many large-scale
-distributed applications including information
-dissemination~\cite{eugster2003lightweight, tolgyeski2009adaptive},
-aggregation~\cite{jelasity2004epidemic} and network
-management~\cite{jelasity2009tman, voulgaris2005epidemic}. Recently,
-WebRTC\footnote{\url{http://www.webrtc.org/}} opened the opportunity to deploy
-large scale distributed applications on browsers that can run on laptops,
-desktops and mobile devices. Among others, WebRTC drastically simplifies the
-deployment of large-scale distributed applications even within complex network
-systems that utilize firewalls, proxies and Net Address Translation (NAT).
+Peer sampling constitutes a fundamental mechanism for many large-scale
+distributed applications both on the
+cloud~\cite{DeCandia:2007:DAH:1323293.1294281} and in a peer-to-peer
+setting. Services such as dissemination~\cite{eugster2003lightweight,
+  tolgyeski2009adaptive}, aggregation~\cite{jelasity2004epidemic} and
+network management~\cite{jelasity2009tman, voulgaris2005epidemic} have
+been based on peer sampling and the recent introduction of
+WebRTC\footnote{\url{http://www.webrtc.org/}} opens the opportunity to
+deploy such applications on browsers that can run on laptops, desktops
+and mobile devices. In this context, WebRTC drastically simplifies
+deployment even within complex network systems that utilize firewalls,
+proxies and Net Address Translation (NAT).
 
 Unfortunately, WebRTC has several constraints that make existing peer sampling
 services inefficient or unreliable. Brow\-sers can run on small devices in
