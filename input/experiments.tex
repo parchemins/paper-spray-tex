@@ -43,30 +43,31 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \begin{equation}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
   \end{equation}
-  where $C_x$ is the local clustering coefficient of Peer $p_x$.  The runs
-  concern 0.1k, 1k, 10k and 100k peers. The representative of fixed-size
-  approach is \CYCLON which is optimally configured for 1k peers. Indeed, its
-  partial views are set to $\ln(1000)\approx 7$ neighbors. During their
-  exchange, the peers using \CYCLON shuffle $3$ out of their $7$
-  neighbors. Thus, \CYCLON is oversized for 0.1k peers and undersized for 10k
-  peers and 100k peers.
-\item[Results:] Figure~\ref{fig:clustering} shows that \CYCLON starts with a
-  lower clustering coefficients than \SPRAY. Still, \SPRAY converges faster
-  than \CYCLON. Furthermore, when the number of peers in the network grows, the
-  convergence time of \CYCLON suffers heavily. On the contrary, \SPRAY
-  converges very quickly independently of the network
-  size. Figure~\ref{fig:clustering} also shows that both approaches
-  converge to a low clustering coefficient which is characteristic of random
-  graphs. Nevertheless, \CYCLON and \SPRAY do not raise the same values after
-  convergence. Indeed, excepted the number of peers where \CYCLON is optimally
-  configured, \SPRAY's values are either below (when \CYCLON is oversized) or
-  above (when \CYCLON is undersized).  Overall, it shows that \SPRAY is
+  where $C_x$ is the local clustering coefficient of Peer $p_x$.  The
+  runs concern 0.1k, 1k, 10k and 100k peers. The representative of
+  fixed-size approach is \CYCLON which is optimally configured for 1k
+  peers: its partial views are set to $\ln(1000)\approx 7$
+  neighbors. During gossip exchanges, the peers using \CYCLON shuffle
+  $3$ out of their $7$ neighbors. Thus, \CYCLON is oversized for 0.1k
+  peers and undersized for 10k peers and 100k peers.
+\item[Results:] Figure~\ref{fig:clustering} shows that \CYCLON starts
+  with a lower clustering coefficients than \SPRAY. Still, \SPRAY
+  converges faster than \CYCLON. Furthermore, when the number of peers
+  in the network grows, the convergence time of \CYCLON suffers
+  heavily. On the contrary, \SPRAY converges very quickly
+  independently of the network size. Figure~\ref{fig:clustering} also
+  shows that both approaches converge to a low clustering coefficient
+  which is characteristic of random graphs. Nevertheless, \CYCLON and
+  \SPRAY do not reach the same values after convergence. Except when
+  \CYCLON is optimally configured, \SPRAY's values are either below
+  (when \CYCLON is oversized) or above (when \CYCLON is undersized).
+  Overall, this shows that \SPRAY is
   \begin{inparaenum}
   \item faster to converge to a stable clustering coefficient
   \item reflecting the needs of the network membership.
   \end{inparaenum}
-  It impacts both load-balancing and robustness to churn (when peers join and
-  leave the network freely).
+  This impacts both load-balancing and robustness to churn (when peers
+  join and leave the network freely).
 \item[Reasons:] \CYCLON starts with a lower clustering coefficient because each
   peer performs random walks to advertise themselves in the network. Hence, the
   starting overlay is already slightly balanced when the simulation starts the
