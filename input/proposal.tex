@@ -253,9 +253,10 @@ joined.
 Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY deals with
 departures and crashes.  Function $onPeerDown$ shows the reaction of \SPRAY
 when the peer $q$ is detected as crashed or departed. A first loop counts the
-occurrences of this neighbor in the partial view, and removes all of them. Then,
-the second loop probabilistically duplicates the reference of a known peer. The
-probability depends of the partial view size before the removals.
+occurrences of this neighbor in the partial view, and removes all of
+them. Then, the second loop probabilistically duplicates the reference of a
+known peer. The probability depends of the partial view size before the
+removals.
 
 Figure~\ref{fig:crashexample} depicts the \SPRAY's crash/leaving handler. The
 scenario follows from prior examples after few other exchanges. Peer $p_1$
