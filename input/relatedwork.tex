@@ -70,7 +70,7 @@ peers chosen at random among $\mathcal{N}$ following a uniform
 distribution using local knowledge only. Their goal is to converge to
 an overlay network exposing properties similar to those of random
 graphs~\cite{erdos1959random}. They efficiently provide connectedness,
-robustness, messages dissemination etc. A wide variety of gossip-based
+robustness, information dissemination etc. A wide variety of gossip-based
 protocols use random peer sampling (e.g. topology
 management~\cite{voulgaris2005epidemic, jelasity2009tman,
   dabek2004vivaldi}).
@@ -127,21 +127,21 @@ The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2001scamp,ganesh2003peer}. Its interesting property lies in
 its logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
-suffers from other flaws. In particular, it systematically disseminates the
+suffers from other drawbacks. In particular, it systematically disseminates the
 connections at random. Thus, the originating peer can be at several hops away
-from the arrival peer. In WebRTC, each random dissemination path must
-be traveled back to finalize the connection establishment, as illustrated in
-Figure~\ref{fig:webrtc}. This drastically impacts on the \SCAMP failure
+from the arrival peer. In WebRTC, each random dissemination path must be
+traveled back to finalize the connection establishment, as illustrated in
+Figure~\ref{fig:webrtc}. This drastically impacts the \SCAMP failure
 probability of establishing a connection.  Let $P_f$ be the probability that an
-element of the dissemination path (either a peer or a connection)
-crashes or leaves during a hop of the three-way handshake, without any possible
+element of the dissemination path (either a peer or a connection) crashes or
+leaves during a hop of the three-way handshake, without any possible
 recovery. Let $P_E$ be the probability that a connection establishment cannot
 be completed. Without three-way handshake, $P_E$ is straightforward:
 \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
 corresponds to the probability that each element (arc and peer) in the path of
 size $k+1$ stays alive during their part of the dissemination (i.e., otherwise,
 they are allowed to crash or leave). In the context of WebRTC, the offer ticket must
-travel back to its emitter. As consequence, the elements of the random
+travel back to its emitter. As a consequence, the elements of the random
 dissemination path are not allowed to fail until the stamped ticket travels
 back. We obtain:
 \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
