@@ -226,24 +226,26 @@ convergence to a network topology where the partial views are balanced.
 \subsection{Leaving and crashing}
 \label{subsec:leaving}
 
-Using \SPRAY, the peers are free to leave the network without giving notice. In
-that regard, we do not handle departures and crashes differently.
-Without any appropriate reaction, the network may collapse due to an over
-zealous removal of arcs. Indeed, when a peer joins the network, it injects
-$1+\ln(|\mathcal{N}|)$ arcs. Nevertheless, after few exchanges, the partial
-view of the joining peer becomes populated with more neighbors. Then, if this
-peer leaves, it removes $\ln(|\mathcal{N}|)$ arcs from its partial view, and
-another $\ln(|\mathcal{N}|)$ arcs from peers which have this peer in their
-partial view. Therefore, without any crash handler, we remove
-$2\ln(|\mathcal{N}|)$ connections instead of $1+\ln(|\mathcal{N}|)$. To
-alleviate this issue, each peer that detects a crash may reestablish a
-connection with anyone in its neighborhood (which will spread in the network
-over the exchanges). The probability of reestablishing a connection is
-$1-{1\div{|\mathcal{P}|}}$. Since ${|\mathcal{P}|}\approx \ln(|\mathcal{N}|)$
-peers have the crashed peer in their partial view, it is likely that all of
-them will reestablish a connection, excepted one. Therefore, when a peer
-leaves, it approximately removes the number of connections it injected when it
-joined.
+In \SPRAY, peers can leave the network without notice. We make no
+distinction between node departures and crashes, but the protocol must
+react to both of them. Without such a reaction, the network could
+collapse due to an over zealous removal of arcs. When a peer joins the
+network, it injects $1+\ln(|\mathcal{N}|)$ arcs. Nevertheless, after
+few exchanges, the partial view of the joining peer becomes populated
+with more neighbors. Then, if this peer leaves, it removes
+$\ln(|\mathcal{N}|)$ arcs from its partial view, and another
+$\ln(|\mathcal{N}|)$ arcs from peers which have this peer in their
+partial views. Therefore, without any crash handler, we remove
+$2\ln(|\mathcal{N}|)$ connections instead of
+$1+\ln(|\mathcal{N}|)$. To alleviate this issue, each peer that
+detects a crash may reestablish a connection with anyone in its
+neighborhood (which will spread in the network over the
+exchanges). The probability of reestablishing a connection is
+$1-{1\div{|\mathcal{P}|}}$. Since ${|\mathcal{P}|}\approx
+\ln(|\mathcal{N}|)$ peers have the crashed peer in their partial view,
+it is likely that all of them will reestablish a connection, except
+one. Therefore, when a peer leaves, it approximately removes the
+number of connections it injected when it joined.
 
 \begin{algorithm}[h]
   \input{./input/unreachablealgo.tex}
@@ -268,16 +270,17 @@ $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
 appropriate operation. Only $p_3$ duplicates one of its connection. In total,
 $5$ connections have been removed.
 
-The example shows that some peers reestablish connections if they detect a dead
-connection. The probability depends on the partial view size of each of these
-peer. In average, one of these peers will likely remove the arc while the other
-peers will duplicate one of their existing arcs. In this case, Peer $p_1$
-injected $5$ connections when it joined. It removes $7-2 =5 $ connections when
-it leaves. The global number of connections remains logarithmic compared to the
-number of members in the network. Nevertheless, we can see that connectedness
-is not entirely guaranteed (only with the high probability implied by random
-graphs). Indeed, if Peer $p_1$ is the sole bridge between two clusters, adding
-arcs is not enough to ensure connectedness.
+The example shows that some peers reestablish connections if they
+detect a dead connection. The probability depends on the partial view
+size of each of these peer. On average, one of these peers will likely
+remove the arc while the other peers will duplicate one of their
+existing arcs. In this case, Peer $p_1$ injected $5$ connections when
+it joined. It removes $7-2 =5 $ connections when it leaves. The global
+number of connections remains logarithmic with respect to the number
+peers in the network. Nevertheless, we can see that connectedness is
+not entirely guaranteed (only with the high probability implied by
+random graphs). Indeed, if Peer $p_1$ is the sole bridge between two
+clusters, adding arcs is not enough to ensure connectedness.
 
 Algorithm~\ref{algo:unreachable} also shows that \SPRAY distinguishes peer
 crashes and arc crashes. Indeed, Function $onArcDown$ deals with connection
