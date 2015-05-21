@@ -25,13 +25,13 @@ joining peer.
 
 Occasionally, keeping the global number of arcs constant forces the shuffling
 and the leaving processes to create \emph{duplicates} in partial views. Thus,
-partial view may contain multiple occurrences of a particular neighbor. In this
+a partial view may contain multiple occurrences of a particular neighbor. In this
 paper, we show that the number of duplicates remains low and do not impact the
 network connectedness.
 
 \subsection{Joining}
 
-The \SPRAY's joining algorithm is the only part of the protocol where the
+\SPRAY's joining algorithm is the only part of the protocol where the
 global number of arcs in the network can increase. To meet the first
 requirement of the problem statement, this number of arcs must grow
 logarithmically compared to the network size. As in \SCAMP, we assume that
@@ -71,7 +71,7 @@ neighbor-to-neighbor interactions.
 
 The partial view is a multiset of pairs $\langle n,\, age\rangle$ which
 associate to the neighbor $n$ with the age $age$. The multiset allows managing
-duplicates and $age$ plays the same role than in \CYCLON i.e.  it accelerates
+duplicates and $age$ plays the same role as in \CYCLON i.e.  it accelerates
 the removal of crashed/departed peers by shuffling with the oldest neighbors
 first. The $onSubs$ event is called each time a peer joins the
 network. $onSubs$ forwards the identity of the joining peer to all neighbors,
