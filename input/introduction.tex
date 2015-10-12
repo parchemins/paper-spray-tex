@@ -18,12 +18,13 @@ Unfortunately, WebRTC has several constraints that make existing peer sampling
 services inefficient or unreliable. Brow\-sers can run on small devices in
 mobile networks. Hence, keeping the number of connections as low as possible is
 a major requirement. However, peer sampling services such as
-\CYCLON~\cite{voulgaris2005cyclon} do not adapt the number of connections to
-the real number of participants. For instance, a user must maintain 10
-connections with other remote browsers when only 6 are enough. On the other
-hand, the peer sampling service \SCAMP~\cite{ganesh2003peer} is adaptive but
-uses random dissemination paths to establish connections which is much more
-costly and likely to fail in the WebRTC context.
+\CYCLON~\cite{voulgaris2005cyclon} do not adapt the number of connections to the
+real number of participants. For instance, a user must maintain 10 connections
+with other remote browsers when only 6 are enough. It becomes crucial when these
+connections are actively used to broadcast messages. On the other hand, the peer
+sampling service \SCAMP~\cite{ganesh2003peer} is adaptive but uses random
+dissemination paths to establish connections which is much more costly and
+likely to fail in the WebRTC context.
 
 In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
 both \SCAMP~\cite{ganesh2003peer}
@@ -35,11 +36,18 @@ and \CYCLON~\cite{voulgaris2005cyclon}. Compared to the state of art,
   connections. Thus, the connections are established in constant time.
 \item \SPRAY quickly converges to a topology exposing properties similar to
   those of a random graph. Thus, the network becomes robust to massive
-  failures, efficiently disseminates information etc.
+  failures, quickly disseminates information etc.
 \item In the experimental setup, we show the adaptiveness of \SPRAY and
   highlight its efficiency improvement compared to \CYCLON and \SCAMP, at the
   cost of little overhead.
 \end{inparaenum}
+
+In turns, information dissemination protocols built on top of \SPRAY also become
+adaptive. We highlight this behavior using a decentralized collaborative
+real-time editor\footnote{https://github.com/Chat-Wane/CRATE} directly
+accessible in web browsers. As expected, the experiments running on Grid'5000
+and involving uptill 600 editors confirm the scalability and efficiency of the
+gossip protocol.
 
 The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
 reviews the related work. Section~\ref{sec:proposal}

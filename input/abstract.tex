@@ -1,24 +1,22 @@
 
 \begin{abstract}
-  The introduction of WebRTC has opened a new playground for
-  large-scale distributed applications consisting of large numbers of
-  directly-communicating web browsers. In this context, gossip-based
-  peer-sampling protocols appear as a particularly promising tool
-  thanks to their inherent ability to build overlay networks that can
-  cope with network dynamics. However, the dynamic nature of
-  browser-to-browser communication combined with the connection
-  establishment procedures that characterize WebRTC make current
-  peer-sampling solutions inefficient or simply unreliable.  In this
-  paper, we address the limitations of current peer-sampling
-  approaches by introducing \SPRAY, a novel peer-sampling protocol
-  designed to avoid the constraints introduced by WebRTC. Unlike most
-  recent peer-sampling approaches, \SPRAY has the ability to adapt
-  its operation to networks that can grow or shrink very
-  rapidly. Moreover, by using only neighbor-to-neighbor interactions,
-  it limits the impact of the three-way connection establishment
-  process that characterizes WebRTC. Our experiments demonstrate the
-  ability of  \SPRAY to adapt to dynamic networks and highlight its
-  efficiency improvements with respect to existing protocols. 
+  The introduction of WebRTC has opened a new playground for large-scale
+  distributed applications consisting of large numbers of directly-communicating
+  web browsers. In this context, gossip-based peer-sampling protocols appear as
+  a particularly promising tool thanks to their inherent ability to build
+  overlay networks that can cope with network dynamics. However, the dynamic
+  nature of browser-to-browser communication combined with the connection
+  establishment procedures that characterize WebRTC make current peer-sampling
+  solutions inefficient or simply unreliable.  In this paper, we address the
+  limitations of current peer-sampling approaches by introducing \SPRAY, a novel
+  peer-sampling protocol designed to avoid the constraints introduced by
+  WebRTC. Unlike most recent peer-sampling approaches, \SPRAY has the ability to
+  adapt its operation to networks that can grow or shrink very rapidly. In
+  turns, gossiping on top of \SPRAY also becomes adaptive. Our experiments
+  demonstrate the ability of \SPRAY to adapt to dynamic networks and highlight
+  its efficiency improvements with respect to existing protocols. We highlight
+  the improvement over gossiping using experiments involving uptill 600
+  decentralized real-time editors in browsers.
 \end{abstract}
 
 %%%%\category{C.2.1}{Computer Systems Organization}{Computer-Communication Networks}[Network Architecture and Design]
