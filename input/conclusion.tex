@@ -16,23 +16,23 @@ sampling approach designed to fit the WebRTC constraints.  \SPRAY provides:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
 \item constant time complexity on connection establishments using solely
-  neighbor-to-neighbor interactions,
+  neighbor-to-neighbor interactions.
 % \item an exponentially fast convergence to an overlay network exposing
 %   properties similar to random graphs.
 \end{inparaenum}
+\TODO{Impact on gossiping.}
+
 
 % Synthesis of experiments
 In experiments, we demonstrated how \SPRAY adaptiveness improves random peer
 sampling performances when network size is changing. In particular, the average
-shortest path length scales better, the in-degree evolves with the network
-size, and it converges faster.  We also demonstrated that \SPRAY stays robust
-to massive failures. \SPRAY and \CYCLON are quite similar when the network size
-is optimal for \CYCLON. However, \SPRAY saves connections when \CYCLON is
-oversized and is more robust when \CYCLON is undersized. Adaptiveness comes at
-the price of duplicates in the partial views. However, the simulations
-supported by theoretical analysis shows that the number of duplicates remains
-very low and becomes negligible in large networks.
+shortest path length scales better, the in-degree evolves with the network size,
+and it converges faster.  We also demonstrated that \SPRAY stays robust to
+massive failures. Adaptiveness comes at the price of duplicates in the partial
+views. However, the simulations supported by theoretical analysis shows that the
+number of duplicates remains very low and becomes negligible in large networks.
 
+\TODO{On \CRATE.}
 
 % As such, \SPRAY constitutes an improvement over state-of-the-art
 % approaches in the traditional context of 1-way connection establishments. In
@@ -45,20 +45,16 @@ very low and becomes negligible in large networks.
 % quartered to standalone applications.
 
 
-Future work includes a Javascript implementation of \SPRAY. An in-browser
-implementation opens the gate to emulations, and even real peer-to-peer
-distributed and decentralized applications.
+% Future work includes a Javascript implementation of \SPRAY. An in-browser
+% implementation opens the gate to emulations, and even real peer-to-peer
+% distributed and decentralized applications.
 
 Future work also includes investigations on topology managers such as
-T-Man~\cite{jelasity2009tman} or
-Vicinity~\cite{voulgaris2005epidemic}. Indeed, they traditionally rely
-on random peer sampling approaches using fixed-size partial
-view. Thus, they maintain a fixed-size view of their most closely
-related neighbors using a ranking function. With \SPRAY, it is
-possible to extend their behavior to use dynamic partial views. If
-the view size could adapt to the size of a cluster (e.g. if the topology
-creates disjoint clusters), it would improve the traffic, robustness,
-etc.
+T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. Indeed,
+they traditionally rely on random peer sampling approaches using fixed-size
+partial view. Thus, they maintain a fixed-size view of their most closely
+related neighbors using a ranking function. With \SPRAY, we could extend their
+behavior to use dynamic partial views.
 
 %%% Local Variables:
 %%% mode: latex
