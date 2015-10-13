@@ -40,10 +40,9 @@
 \newcommand{\CRATE}[0]{\textsc{Crate}\xspace}
 \newcommand{\PEERSIM}[0]{\textsc{PeerSim}\xspace}
 
-\newcounter{example}
-\setcounter{example}{0}
-\newcommand{\EXAMPLE}[0]{\stepcounter{example}\the\value{example}}
-\newtheorem{definition}{Definition}
+\setlength{\belowcaptionskip}{-10pt} %% reduce spacing below figures
+\setlength{\intextsep}{7pt} %% reduce spacing on top/bottom of algorithms
+
 \newtheorem{problem}{Problem Statement}
 %paralist
 \renewcommand*\descriptionlabel[1]{%
@@ -57,7 +56,7 @@
 
 \begin{document}
 
-\title{SPRAY: an Adaptive Gossiping Protocol for Browsers}
+\title{Spray: an Adaptive Gossiping Protocol for Browsers}
 
 \numberofauthors{5}
 \author{
