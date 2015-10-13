@@ -7,8 +7,9 @@ $p_1$ connects to $p_2$ using the signaling service.
 2: $p_2$ pulls the ticket; 
 3: $p_2$ pushes its response; 
 4: $p_1$: pulls the response and establishes a 
-bidirectional connection with $p_2$. $p_3$ does the same with $p_2$. 
-Figure~\ref{fig:webrtcB} depicts the resulting network.]{
+connection with $p_2$. $p_3$ does the same with $p_2$. 
+%%Figure~\ref{fig:webrtcB} depicts the resulting network.
+]{
   \input{input/signalingexampleA.tex}}
 \hspace{5pt}
 \subfloat[Figure B][\label{fig:webrtcB}
@@ -156,7 +157,7 @@ In other terms, the first chosen arc and peer in the path must stay alive
 $2k+2$ hops, the second chosen arc and peer must stay alive $2k$ hops etc.  The
 complexity class of the \SCAMP failure rate increases leading to a quicker
 degeneration of the connection count. This behavior endangers the network
-connectedness, as depicted in Section~\ref{subsec:degeneration}.
+connectedness.%%, as depicted in Section~\ref{subsec:degeneration}.
 
 Building an adaptive-by-design random peer sampling that meets WebRTC
 constraints raises the following scientific problem:

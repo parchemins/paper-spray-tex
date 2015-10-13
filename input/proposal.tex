@@ -31,19 +31,19 @@ network connectedness.
 
 \subsection{Joining}
 
-\SPRAY's joining algorithm is the only part of the protocol where the
-global number of arcs in the network can increase. To meet the first
-requirement of the problem statement, this number of arcs must grow
-logarithmically compared to the network size. As in \SCAMP, we assume that
-peers meet this constraint. Therefore, each of them uses this knowledge to
-propagate the identity of the joining peer. Algorithm~\ref{algo:joining}
-describes \SPRAY's joining protocol. Line~\ref{line:multicast} shows that
-the contacted peer only multicasts the new identity to its
-neighborhood. Afterwards, to limit the risk of connection failures, each
-neighbor immediately adds the joining peer to their own neighborhood. This
-fulfills the second condition of the problem statement.  In total, the number
-of arcs in the network increases of $1+\ln(|\mathcal{N}|)$ using only
-neighbor-to-neighbor interactions.
+\SPRAY's joining algorithm is the only part of the protocol where the global
+number of arcs in the network can increase. To meet the first requirement of the
+problem statement, this number of arcs must grow logarithmically compared to the
+network size. As in \SCAMP, we assume that peers meet this
+constraint. Therefore, each of them uses this knowledge to propagate the
+identity of the joining peer. Algorithm~\ref{algo:joining} describes \SPRAY's
+joining protocol. Line~\ref{line:multicast} shows that the contacted peer only
+multicasts the new identity to its neighborhood. Afterwards, to limit the risk
+of connection failures, each neighbor immediately adds the joining peer to their
+own neighborhood. This fulfills the second condition of the problem statement.
+In total, the number of arcs in the network increases of $1+\ln(|\mathcal{N}|)$
+using only neighbor-to-neighbor interactions which leads to
+$|\mathcal{N}|\ln(|\mathcal{N}|)$ arcs globally.
 
 \begin{figure*}
   \centering
@@ -109,7 +109,7 @@ the arcs count.
 
 If duplicates have negative impact on the network properties, most of them
 disappear after shuffling and they proportionally become negligible as the
-network grows (see Section~\ref{subsec:duplicates}).
+network grows (cf. Figure~\ref{fig:duplicates}).
 
 \begin{algorithm}[h]
   \input{./input/cyclicalgo.tex}
@@ -295,6 +295,26 @@ with network turnover.
 In the context of WebRTC, \SPRAY calls the $onArcDown$ function when a connection
 establishement fails. \SPRAY calls the $onPeerDown$ function when the
 connection was established once but the neighbor is not responding anymore.
+
+\subsection{Gossiping}
+
+The gossiping protocol relies on the membership protocol to disseminate
+information in a scalable way. Algorithm~\ref{algo:gossiping} shows the simple
+functionning of this protocol. When a peer emits a message, it sends it to its
+neighborhood. Each peer receiving such messages forwards it to its neighborhood
+too. Messages transitively reach all peers of the network.
+
+\begin{algorithm}[h]
+  \input{./input/gossipingalgo.tex}
+  \caption{\label{algo:gossiping}A simple gossiping protocol.}
+\end{algorithm}
+
+Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
+and since the latter grows logarithmically compared to the network size, the
+communication complexity of an application is upper-bounded by
+$\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
+message.  To scale, applications are in charge of keeping $m$ under a sublinear
+upper bound (cf. Section~\ref{subsec:editor}).
 
 % To summarize, \SPRAY provides:
 % \begin{inparaenum}[(i)]
