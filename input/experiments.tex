@@ -1,7 +1,15 @@
 \section{Experimentation}
 \label{sec:experiments}
 
-In this section, we evaluate how adaptiveness of \SPRAY impacts common metrics
+In this section, we highlight the improvements brought to gossiping protocols on
+a real-life use case concerning decentralized collaborative editing in browsers.
+These experiments run on Grid'5000 testbed and involve uptill 600 browsers
+simultaneously writing a document. We expect a traffic logarithmically scaling
+compared to the network size, along with a polylogarithmic growth brought by the
+application itself. The real-time editor called \CRATE is hosted on the Github
+platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
+
+In a second time, we evaluate how adaptiveness of \SPRAY impacts common metrics
 of peer sampling performance including clustering coefficient, average shortest
 path length, in-degree distribution, arc count, and connected components. We use
 \CYCLON as a baseline with a fixed-size view for experiments relative to
@@ -13,19 +21,81 @@ experiments run on the \PEERSIM simulator~\cite{montresor2009peersim}. The code
 of the random peer sampling protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
-In a second time, we highlight the improvements brought to gossiping protocols
-on a real-life use case concerning decentralized collaborative editing in
-browsers.  These experiments run on Grid'5000 testbed and involve uptill 600
-browsers simultaneously writing a document. We expect a traffic logarithmically
-scaling compared to the network size, along with a polylogarithmic growth
-brought by the application itself. The real-time editor called \CRATE is hosted
-on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
-
 % We use \SCAMP as a baseline for experiments relative to
 % connection failures. Unlike \SCAMP, we expect \SPRAY to
 % tolerate connection failures.
 
+\subsection{Decentralized collaborative editor}
+\label{subsec:editor}
+
+Distributed real-time editors such as Google Docs, or Etherpad allow users
+distributed in space and organizations to collaborate easily with only web
+browsers. Yet, main stream editors rely on central servers with issues in
+privacy, single point of failure and scalability.  Decentralized editors settle
+privacy problems but scalability issues remain.  
+% None of existing algorithms
+% provide satisfying complexities in both communication and space.  In this paper,
+% we propose 
+\CRATE is a working decentralized real-time editor that supports large number of
+users working on large documents. In particular, \CRATE achieves a sublinearly
+upper-bounded communication complexity in
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
+$\ln(|\mathcal{N}|)$ the contribution of \SPRAY. Using \SPRAY, \CRATE can be
+easily deployed on a network of browsers using WebRTC.
+
+% We evaluate \CRATE on large-scale experiments in the Grid'5000 testbed involving
+% uptill 600 participants. As expected, we observe a logarithmic progression of
+% the generated traffic according to the size of the shared document and the
+% number of participants.
+
+% \begin{figure*}
+%   \centering
+%   \subfloat[Figure A][\label{fig:partialview}Average partial view size.]{
+%     \includegraphics[width=0.48\textwidth]{img/partialview.eps}}
+%   \hspace{10pt}
+%   \subfloat[Figure B][\label{fig:traffic} Average traffic per second.]{
+%     \includegraphics[width=0.48\textwidth]{img/traffic.eps}}
+%   \caption{Distributed collaborative editors in Grid'5000 testbed.}
+% \end{figure*}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/traffic.eps}
+  \caption{Average traffic per second.}
+\end{figure}
+
+\begin{asparadesc}
+\item [Objective:] To show the logarithmic multiplicative factor coming from
+  \SPRAY's neighborhood over the traffic of an application truly running in
+  browsers.
+\item [Description:] During a run, peers dynamically modify their
+  neighborhood. Each peer periodically reports its neighborhood size. Then, we
+  average all these values and measure the variance. The variance defines how
+  spread are the values; a small value means a balanced load among members. Runs
+  comprise from 101 members to 601 members with 100 members increments, i.e., 6
+  different runs.  The first member creates the editing session which is
+  progressively joined by the other writers (1 joiner per 5 seconds). Each
+  member starts sharing the document as soon as its joining. Hence, outsiders
+  can join the network through one of them chosen at random. Once all peers have
+  joined the editing session, they start inserting characters in the
+  document. The insertion rate is 100 insertions per second uniformly
+  distributed among peers.
+\item [Results:] Figure~\ref{fig:partialview} shows the average partial view
+  size and variance of each experiment along with the theoretical expectation
+  ($\ln(|\mathcal{N}|)$). Figure~\ref{fig:traffic} shows the average traffic
+  generated by editors during the experiment.  \TODO{As figure~\ref{fig:churn}
+    suggests, \CYCLON which is generally oversized to accommodate with any
+    network size, would have an identical traffic for any of the experiments.}
+\item [Reasons:]
+\end{asparadesc}
+
+
 \subsection{Spray's properties}
+
+The rest of this experimentation section aims to highlight different properties
+of \SPRAY through simulations.
+
+\paragraph{Clustering and convergence time}
 
 \begin{figure}
   \centering
@@ -34,8 +104,8 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To observe how adaptiveness impacts on \textbf{clustering} and
-  \textbf{convergence time}.
+\item[Objective:] To observe how adaptiveness impacts clustering and convergence
+  time.
 \item[Description:] The average clustering coefficient $\overline{C}$ measures
   the connectivity of each peer's neighborhood in the network.
   \begin{equation}
@@ -85,7 +155,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   is undersized.
 \end{asparadesc}
 
-\ \\
+\paragraph{Information dissemination}
 
 \begin{figure}
   \centering
@@ -94,8 +164,8 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To observe how adaptiveness impacts on the average shortest
-  path length, i.e., on the \textbf{speed of information dissemination}.
+\item[Objective:] To observe how adaptiveness impacts the average shortest path
+  length, i.e., the speed of information dissemination.
 \item[Description:] The average path length is the average of the shortest path
   length between peers in the graph. It counts the minimum number of hops to
   reach a peer from another given peer. It basically represents the traveling
@@ -128,7 +198,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   because it follows the optimal value.
 \end{asparadesc}
 
-\ \\
+\paragraph{Load-balancing}
 
 \begin{figure}
   \centering
@@ -149,7 +219,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts the in-degree
-  distribution, i.e., the \textbf{load-balancing} among peers.
+  distribution, i.e., the load-balancing among peers.
 \item[Description:] The in-degree of a peer shows how well it is represented in
   others' partial view. The in-degree distribution of the network highlights the
   existence of weakly connected peers and strongly connected hubs. It directly
@@ -190,7 +260,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   network as much as if a strongly connected peer crashed.
 \end{asparadesc}
 
-\ \\
+\paragraph{Adaptive partial views}
 
 \begin{figure}
   \centering
@@ -200,7 +270,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 
 \begin{asparadesc}
 \item[Objective:] To show the impact of adaptiveness over partial view size when
-  the network size \textbf{grows and shrinks} over time.
+  the network size grows and shrinks over time.
 \item[Description:] In this experiment we focus on a dynamic network where peers
   can join and leave.  \CYCLON's configuration targets ~8k peers. It is
   oversized compared the network size during the simulation (maximum 1k
@@ -226,7 +296,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   dead, leading to a probabilistic removal (cf. Algorithm~\ref{algo:unreachable}).
 \end{asparadesc}
 
-\ \\
+\paragraph{Robustness}
 
 \begin{figure}
   \centering
@@ -235,7 +305,7 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To show that \SPRAY is \textbf{robust} to massive failures.
+\item[Objective:] To show that \SPRAY is robust to massive failures.
 \item[Description:] Counting the strong components in a network allows
   estimating the areas reachable by the information dissemination protocols. For
   instance, there are 2 strong components if a part of the network can reach
@@ -279,17 +349,17 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   become disjoint, i.e., there is no arc between these parts of the network.
 \end{asparadesc}
 
+\paragraph{Duplicates}
+
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/duplicates.eps}
   \caption{\label{fig:duplicates}Duplicates in networks of different size.}
 \end{figure}
 
-\ \\
-
 \begin{asparadesc} 
-\item[Objective:] To show that a small proportion of peers contain
-  \textbf{duplicates} in their partial view.
+\item[Objective:] To show that a small proportion of peers contains duplicates
+  in their partial view.
 \item[Description:] Using \SCAMP as random peer sampling protocol, we measure
   the amount of peers which have a partial view containing at least one
   duplicated reference. We perform the measurements on networks containing
@@ -371,64 +441,6 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 %   periodic protocol, they delete their reference in its partial view. In such
 %   case, the peer becomes disconnected and partitions quickly appear.
 % \end{asparadesc}
-
-\subsection{Decentralized collaborative editor}
-\label{subsec:editor}
-
-Distributed real-time editors such as Google Docs, or Etherpad allow users
-distributed in space and organizations to collaborate easily with only web
-browsers. Yet, main stream editors rely on central servers with issues in
-privacy, single point of failure and scalability.  Decentralized editors settle
-privacy problems but scalability issues remain.  
-% None of existing algorithms
-% provide satisfying complexities in both communication and space.  In this paper,
-% we propose 
-\CRATE is a working decentralized real-time editor that supports large number of
-users working on large documents. In particular, \CRATE achieves a sublinearly
-upper-bounded communication complexity in
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
-$\ln(|\mathcal{N}|)$ the contribution of \SPRAY. Using \SPRAY, \CRATE can be
-easily deployed on a network of browsers using WebRTC.
-
-% We evaluate \CRATE on large-scale experiments in the Grid'5000 testbed involving
-% uptill 600 participants. As expected, we observe a logarithmic progression of
-% the generated traffic according to the size of the shared document and the
-% number of participants.
-
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][\label{fig:partialview}Average partial view size.]{
-    \includegraphics[width=0.48\textwidth]{img/partialview.eps}}
-  \hspace{10pt}
-  \subfloat[Figure B][\label{fig:traffic} Average traffic per second.]{
-    \includegraphics[width=0.48\textwidth]{img/traffic.eps}}
-  \caption{Distributed collaborative editors in Grid'5000 testbed.}
-\end{figure*}
-
-\begin{asparadesc}
-\item [Objective:] To show the logarithmic multiplicative factor coming from
-  \SPRAY's neighborhood over the traffic of an application truly running in
-  browsers.
-\item [Description:] During a run, peers dynamically modify their
-  neighborhood. Each peer periodically reports its neighborhood size. Then, we
-  average all these values and measure the variance. The variance defines how
-  spread are the values; a small value means a balanced load among members. Runs
-  comprise from 101 members to 601 members with 100 members increments, i.e., 6
-  different runs.  The first member creates the editing session which is
-  progressively joined by the other writers (1 joiner per 5 seconds). Each
-  member starts sharing the document as soon as its joining. Hence, outsiders
-  can join the network through one of them chosen at random. Once all peers have
-  joined the editing session, they start inserting characters in the
-  document. The insertion rate is 100 insertions per second uniformly
-  distributed among peers.
-\item [Results:] Figure~\ref{fig:partialview} shows the average partial view
-  size and variance of each experiment along with the theoretical expectation
-  ($\ln(|\mathcal{N}|)$). Figure~\ref{fig:traffic} shows the average traffic
-  generated by editors during the experiment.  \TODO{As figure~\ref{fig:churn}
-    suggests, \CYCLON which is generally oversized to accommodate with any
-    network size, would have an identical traffic for any of the experiments.}
-\item [Reasons:]
-\end{asparadesc}
 
 % \begin{asparadesc}
 % \item [Objective:] To show the evolution of the average neighborhood size of
