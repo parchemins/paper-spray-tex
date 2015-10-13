@@ -13,8 +13,6 @@ experiments run on the \PEERSIM simulator~\cite{montresor2009peersim}. The code
 of the random peer sampling protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
-
-
 In a second time, we highlight the improvements brought to gossiping protocols
 on a real-life use case concerning decentralized collaborative editing in
 browsers.  These experiments run on Grid'5000 testbed and involve uptill 600
@@ -27,14 +25,13 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 % connection failures. Unlike \SCAMP, we expect \SPRAY to
 % tolerate connection failures.
 
+\subsection{Spray's properties}
+
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/simple.eps}
-  \caption{\label{fig:avgpath}Clustering coefficient.}
+  \caption{\label{fig:clustering}Clustering coefficient.}
 \end{figure}
-
-
-\subsection{Spray's properties}
 
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts on \textbf{clustering} and
@@ -44,19 +41,18 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   \begin{equation}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
   \end{equation}
-  where $C_x$ is the local clustering coefficient of Peer $p_x$.  The
-  runs concern 0.1k, 1k, 10k and 100k peers. The representative of
-  fixed-size approach is \CYCLON which is optimally configured for 1k
-  peers: its partial views are set to $\ln(1000)\approx 7$
-  neighbors. During gossip exchanges, the peers using \CYCLON shuffle
-  $3$ out of their $7$ neighbors. Thus, \CYCLON is oversized for 0.1k
-  peers and undersized for 10k peers and 100k peers.
+  where $C_x$ is the local clustering coefficient of Peer $p_x$.  The runs
+  concern 0.1k, 1k, 10k and 100k peers. The representative of fixed-size
+  approach is \CYCLON which is optimally configured for 1k peers:
+  $\ln(1000)\approx 7$ neighbors. During exchanges, the peers using \CYCLON
+  shuffle $3$ out of their $7$ neighbors. \CYCLON is oversized for 0.1k peers
+  and undersized for 10k peers and 100k peers.
 \item[Results:] Figure~\ref{fig:clustering} shows that \CYCLON starts
   with a lower clustering coefficients than \SPRAY. Still, \SPRAY
   converges faster than \CYCLON. Furthermore, when the number of peers
   in the network grows, the convergence time of \CYCLON suffers
   heavily. On the contrary, \SPRAY converges very quickly
-  independently of the network size. Figure~\ref{fig:clustering} also
+  regardless of the network size. Figure~\ref{fig:clustering} also
   shows that both approaches converge to a low clustering coefficient
   which is characteristic of random graphs. Nevertheless, \CYCLON and
   \SPRAY do not reach the same values after convergence. Except when
@@ -67,31 +63,26 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   \item faster to converge to a stable clustering coefficient
   \item reflecting the needs of the network membership.
   \end{inparaenum}
-  This impacts both load-balancing and robustness to churn (when peers
-  join and leave the network freely).
-\item[Reasons:] \CYCLON starts with a lower clustering coefficient
-  because each peer performs random walks to advertise themselves in
-  the network. Hence, the starting overlay is already slightly
-  balanced when the simulation starts the shufflings. On the other
-  hand, a newcomer peer in \SPRAY only advertises itself to the
-  neighborhood of its contact peer. Therefore, the network overlay
-  starts strongly unbalanced, independently of the network
-  size. Still, \CYCLON converges more slowly than \SPRAY because of
-  its fixed-size partial view and the size of the shuffle. When they
-  are \emph{a priori} configured, they constitute a constraint to the
-  convergence speed.  The clustering coefficient measures how much the
-  neighborhood of each peer is connected to the rest of the
-  network. It directly depends of the partial view size of each peer
-  which, in \CYCLON, is fixed. Thus, when the peers number is
-  multiplied by $10$, the clustering coefficient after convergence is
-  divided by $10$. On the other hand, the peers using \SPRAY have
-  variable-size partial views that carefully reflect the network size
-  with a logarithmic growth. Thus, when the network has 1k peers, the
-  partial view size adapts to this network size. This explains the
-  slightly lower clustering coefficient of \SPRAY on this run (\SPRAY
-  7.4 vs \CYCLON 7). By extending the reasoning, this also explains
-  why \SPRAY yields lower values when \CYCLON is oversized, and why it
-  yields higher values when \CYCLON is undersized.
+\item[Reasons:] \CYCLON starts with a lower clustering coefficient because each
+  peer performs random walks to advertise themselves in the network. Hence, the
+  starting overlay is already slightly balanced when the simulation starts the
+  shufflings. On the other hand, a newcomer peer in \SPRAY only advertises
+  itself to the neighborhood of its contact peer. Therefore, the network overlay
+  starts strongly unbalanced, independently of the network size. Still, \CYCLON
+  converges slower than \SPRAY because of its fixed-size partial view and the
+  size of the shuffle. When they are \emph{a priori} configured, they constitute
+  a constraint to the convergence speed.  The clustering coefficient measures
+  how much the neighborhood of each peer is connected to the rest of the
+  network. It directly depends of the partial view size of each peer which, in
+  \CYCLON, is fixed. Thus, when the peers number is multiplied by $10$, the
+  clustering coefficient after convergence is divided by $10$. On the other
+  hand, the peers using \SPRAY have variable-size partial views that reflect the
+  network size with a logarithmic growth. Thus, when the network has 1k peers,
+  the partial view size adapts to this network size. This explains the slightly
+  lower clustering coefficient of \SPRAY on this run (\SPRAY 7.4 vs \CYCLON
+  7). By extending the reasoning, this also explains why \SPRAY yields lower
+  values when \CYCLON is oversized, and why it yields higher values when \CYCLON
+  is undersized.
 \end{asparadesc}
 
 \ \\
@@ -104,48 +95,46 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts on the average shortest
-  path length, i.e., on the \textbf{efficiency of information dissemination}.
+  path length, i.e., on the \textbf{speed of information dissemination}.
 \item[Description:] The average path length is the average of the shortest path
   length between peers in the graph. It counts the minimum number of hops to
   reach a peer from another given peer. It basically represents the traveling
   time of any information to reach all the peers at least once. We average the
-  path length on a small subset of the network membership and run $100$ times
-  the simulation on \SPRAY to avoid any side effects due to randomness. We also
-  run the simulation on different configurations of \CYCLON targeting different
-  optimal network size. \CYCLON set with the partial view size of 7 roughly
-  targets 1.1k peers. \CYCLON set with the partial view size of 9 roughly
-  targets 8.1k peers. \CYCLON set with the partial view size of 11 roughly
-  targets 60k peers. In all these simulations, we perform the measurements
-  after convergence. The checkpoints for the measurements are 0.1k, 0.5k, 1k,
-  5k, 10k, 50k, and 100k peers.
-\item[Results:] Figure~\ref{fig:avgpath} shows that both \CYCLON and \SPRAY
-  have an average shortest path length relatively small. Thus, the information
-  can disseminate to all the network very quickly. Figure~\ref{fig:avgpath}
-  also shows that, each run of \CYCLON taken alone can be divided in three
-  parts compared to \SPRAY. First, an oversized \CYCLON disseminates the
-  information faster than \SPRAY. Then, \SPRAY and \CYCLON are equivalent
-  where the latter is optimally configured. Finally, \SPRAY yields better
-  results. Yet, overall, \SPRAY scales better than \CYCLON since the
-  gradient of the former is lower than any configuration of the latter one.
+  path length on a subset of the network membership. We run $100$ times the
+  simulation on \SPRAY to avoid any side effects due to randomness. We also run
+  the simulation on different configurations of \CYCLON targeting different
+  optimal network size. \CYCLON with 7 neighbors targets ~1k peers. \CYCLON with
+  9 neighbors targets ~8k peers. \CYCLON with 11 neighbors targets ~60k
+  peers. We perform the measurements after convergence. The checkpoints for the
+  measurements are 0.1k, 0.5k, 1k, 5k, 10k, 50k, and 100k peers.
+\item[Results:] Figure~\ref{fig:avgpath} shows that both \CYCLON and \SPRAY have
+  an average shortest path length relatively small. Thus, information reaches
+  all peers very rapidly. Figure~\ref{fig:avgpath} also shows that each run of
+  \CYCLON taken alone can be divided in three parts compared to \SPRAY. First,
+  an oversized \CYCLON disseminates the information faster than \SPRAY. Then,
+  \SPRAY and \CYCLON are equivalent where the latter is optimally
+  configured. Finally, \SPRAY yields better results. Overall, \SPRAY scales
+  better than \CYCLON since the gradient of the former is lower than any
+  configuration of the latter.
 \item[Reasons:] We perform all the measurements after convergence where the
   network overlay is closely related to random graphs. In such graph, the
-  diameter and average shortest path length stay relatively small, as the
-  resulting values shown in Figure~\ref{fig:avgpath}. The second observation
-  concerns each \CYCLON configuration compared alone with \SPRAY. While an
-  oversized \CYCLON is much better connected into the graph and thus yields a
-  lower average path length than \SPRAY, as soon as it is undersized, \SPRAY
-  is, thanks to larger partial views, better connected into the graph.
-  Consequently, it yields the shorter average path length. \SPRAY scales better
-  than any configuration of \CYCLON because it always follows the optimal
-  value.
+  diameter and average shortest path length are small, hence the results of
+  Figure~\ref{fig:avgpath}. The second observation concerns each \CYCLON
+  configuration compared alone with \SPRAY. While an oversized \CYCLON is much
+  better connected into the graph and thus yields a lower average path length
+  than \SPRAY, as soon as it is undersized, \SPRAY is, thanks to larger partial
+  views, better connected into the graph.  Consequently, it yields the shorter
+  average path length. \SPRAY scales better than any configuration of \CYCLON
+  because it follows the optimal value.
 \end{asparadesc}
+
+\ \\
 
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/histo.eps}
   \caption{\label{fig:histo}In-degree distribution.}
 \end{figure}
-
 
 % \begin{figure*}
 %   \centering
@@ -158,27 +147,17 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 %     \includegraphics[width=0.48\textwidth]{img/avgpv.eps}}
 % \end{figure*}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.49\textwidth]{img/avgpv.eps}
-  \caption{\label{fig:churnB}Average partial view size with churn.}
-\end{figure}
-
-
-\ \\
-
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts the in-degree
   distribution, i.e., the \textbf{load-balancing} among peers.
-\item[Description:] The in-degree of a peer shows how well this peer is
-  represented in others' partial view. The in-degree distribution of the
-  network can highlight the existence of weakly connected peers and strongly
-  connected hubs. It has a direct impact on robustness. In this experiment, the
-  fixed-size partial view approach is \CYCLON{}. It is configured with partial
-  views of size $7$ which is optimal for a network of roughly $1100$ peers.
-  For all the experiments, we perform the in-degree measurements after
-  convergence. The measurements concern networks with 0.1k, 1k, 100k, 500k
-  peers.
+\item[Description:] The in-degree of a peer shows how well it is represented in
+  others' partial view. The in-degree distribution of the network highlights the
+  existence of weakly connected peers and strongly connected hubs. It directly
+  impacts on robustness. In this experiment, the fixed-size partial view
+  approach is \CYCLON{}. It is configured with partial views of size $7$ which
+  targets a network ~1k peers.  For all the experiments, we perform the
+  in-degree measurements after convergence. The measurements concern networks
+  with 0.1k, 1k, 100k, 500k peers.
 \item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
   \CYCLON and \SPRAY. In the top figure, we observe that the distribution and
   the degrees of \CYCLON are identical, independently of the network
@@ -204,73 +183,50 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   shifts slowly to higher in-degree values as the network size grows.  \SPRAY
   does not peak on a particular value as \CYCLON because the average partial
   view size for a particular network size falls in-between integer values. For
-  instance, if the average partial view size is 6.5, then half of them will
-  have a size of 6 while the other half will have a size of 7. Such network is
-  robust to failure because no peer is more important than other in term of
-  connectedness. Therefore, if some random peer crashes, it will not affect
-  the network as much as if a strongly connected peer crashed.
+  instance, if the average partial view size is 6.5, then half of them have a
+  size of 6 while the other half have a size of 7. Such network is robust to
+  failure because no peer is more important than others in term of
+  connectedness. Therefore, if some random peer crashes, it will not affect the
+  network as much as if a strongly connected peer crashed.
 \end{asparadesc}
 
 \ \\
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/avgpv.eps}
+  \caption{\label{fig:churn}Average partial view size with churn.}
+\end{figure}
+
 \begin{asparadesc}
-\item[Objective:] To show the impact of adaptiveness when the network size
-  changes over time.
-\item[Description:] In this experiment we focus on a dynamic network where
-  peers can join and leave. The runs involve \CYCLON and \SPRAY. \CYCLON's
-  configuration targets roughly 8.1k peers. Thus, it is oversized compared the
-  network size during the simulation (maximum 1k peers). During the first half
-  of the experimentation, 250 peers are added 4 times successively by intervals
-  of 10 cycles each. Thus, the network size goes from 0 to 1k peers in 40
-  rounds. Then, half of the network leaves without giving notice (500
-  peers). Finally, 250 peers join two additional times. The final network
-  contains 1k members. The measurements concern
-  \begin{inparaenum}
-  \item the number of connections in the network over cycles,
-  \item the variance of the partial view sizes over cycles
-    (cf. Section~\ref{subsec:cyclic}),
-  \item the average partial view size of peers.
-  \end{inparaenum}
-\item[Results:] Figure~\ref{fig:churn} shows the result of the experiment. The
-  x-axis represents the cycles (i.e. the arbitrary unit time frame). The top
-  part of Figure~\ref{fig:churnA} shows the number of connections established
-  in the network (scale $\times 10^3$) while its bottom part shows the variance
-  in the partial view size of the members. Concerning \SPRAY, we can see that
-  at each batch of joining, the connection number grows to reflect the needs
-  of the new network membership. The observation is consistent with the
-  variance measures. Indeed, at each batch of insertions, the variance suddenly
-  grows. Then, it exponentially decreases and converges to zero in less than 10
-  cycles. The variance is higher when the network size is lower. For instance,
-  the first 250 peers lead to the highest variance. At the $40^{th}$ cycle,
-  half of the peers leave/crash. Approximately half of the connections are directly
-  removed without disturbing the variance of partial views. The 10 following
-  cycles show a slight decrease of arcs. Then new members are introduced in the
-  network yielding the same results as the earlier joins. \CYCLON exposes an
-  identical behavior. Nevertheless, the number of arcs is invariably higher
-  than the \SPRAY one (from 1000 to 2500 additional
-  connections). Figure~\ref{fig:churnB} shows the average partial view size of
+\item[Objective:] To show the impact of adaptiveness over partial view size when
+  the network size \textbf{grows and shrinks} over time.
+\item[Description:] In this experiment we focus on a dynamic network where peers
+  can join and leave.  \CYCLON's configuration targets ~8k peers. It is
+  oversized compared the network size during the simulation (maximum 1k
+  peers). During the first half of the experimentation, 250 peers are added 4
+  times successively by intervals of 10 cycles each. Thus, the network size goes
+  from 0 to 1k peers in 40 rounds. Then, half of the network leaves without
+  giving notice (500 peers). Finally, 250 peers join two additional times. The
+  final network contains 1k members. The measurements concern the average
+  partial view size.
+\item[Results:] Figure~\ref{fig:churn} shows the average partial view size of
   \SPRAY and \CYCLON. As expected, \CYCLON immediately converges to the
   configured partial view size (9 neighbors). On the other hand, \SPRAY's
   partial views logarithmically grow while the network grows. When the removals
   occur at cycle 40, the peers using \CYCLON remove the dead arcs while
   refilling their partial view until they reach the configured partial view
   size. \SPRAY only remove the arcs to reflect the departed peers. At the end,
-  the \SPRAY partial views contain in average 6.6 neighbors (recall,
+  the \SPRAY partial views contain in average 6.6 neighbors (recall
   $\ln(1000)\approx 6.9$).
-\item[Reasons:] Since the partial views of \SPRAY adapt themselves to the
-  network size, the number of connections grows as the network membership
-  grows.  The peaks in variance correspond to the joining parts of the
-  experiment. The disparity comes from the fact that new peers arrive in the
-  network with a small partial view. The peaks are smaller when the network is
-  larger. Indeed, the peers - which were already network members before the new
-  arrivals - had a few cycles to exchanges and even out their partial views. As
-  consequence, it lessens the weight of joinings. The removal of 500 peers does
-  not disturb the variance since each crashing/leaving peer is chosen at
-  random. Thus, no peers suffer more of these removals than others. The
-  slightly decreasing number of arcs after the removal is due to peers
-  realizing that some arcs are dead, leading to a probabilistic removal
-  (cf. Algorithm~\ref{algo:unreachable}). 
+\item[Reasons:] Since each peer injects a logarithmically growing number of
+  arcs, the average partial view size grows as more peers joins the network.
+  The removal of 500 peers implies a decreasing slope. The slightly decreasing
+  number of arcs after the removal is due to peers realizing that some arcs are
+  dead, leading to a probabilistic removal (cf. Algorithm~\ref{algo:unreachable}).
 \end{asparadesc}
+
+\ \\
 
 \begin{figure}
   \centering
@@ -278,28 +234,25 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
   \caption{\label{fig:resilience}Robustness to massive failures.}
 \end{figure}
 
-\ \\
-
 \begin{asparadesc}
-\item[Objective:] To show that both \SPRAY and \CYCLON are equally
-  \textbf{robust to massive failures}.
+\item[Objective:] To show that \SPRAY is \textbf{robust to massive failures}.
 \item[Description:] Counting the strong components in a network allows
-  estimating the area that are reachable by the information dissemination
-  protocols. For instance, there are 2 strong components if a part of the
-  network can reach another part and the converse being false.  Counting the
-  weak components in a network allows estimating the point where the network is
-  still in a repairable state, i.e., after some shufflings, the network will
-  converge to an overlay where the information dissemination is able to reach
-  all members again. \CYCLON has a partial view size set to 9. The network
-  contains 10k members. We perform the removals after the approaches converged
-  to a stable overlay network. We remove the batch of peers at once, from 25 to
-  95 percents of peers every 5 percents, i.e., 16 runs for each approach. We
-  perform a last measurement at 99 percents. We perform the measurements
-  immediately after the removals. The removals concern a percentage of the
-  peers chosen at random among the 10k members.
+  estimating the areas reachable by the information dissemination protocols. For
+  instance, there are 2 strong components if a part of the network can reach
+  another part and the converse being false.  Counting the weak components
+  allows estimating the point until which the network is still in a repairable
+  state, i.e., after some shufflings, the network converge to an overlay where
+  the information dissemination is able to reach all peers again. \CYCLON has 9
+  neighbors which targets ~9k peers. The network contains 10k members. We
+  perform the removals after the approaches converged to a stable overlay
+  network. We remove the batch of peers at once, from 25 to 95 percents of peers
+  every 5 percents, i.e., 16 runs for each approach. We perform a last
+  measurement at 99 percents. We measures the components immediately after
+  removals. Removals concern a percentage of the peers chosen at random among
+  the 10k members.
 \item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
   components over the network size after removals. First, the figure shows
-  that both the random peer sampling protocols, \SPRAY and \CYCLON, suffer from
+  that both the random peer sampling protocols \SPRAY and \CYCLON suffer from
   deteriorated behavior at high removal percentages, \CYCLON being slightly
   better in this term. Figure~\ref{fig:resilience} shows that the information
   dissemination (strong components) starts to slowly degrade at 45 percents,
@@ -350,15 +303,14 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
     \exp({-\ln(|\mathcal{N}|)*(\ln(|\mathcal{N}|)-1)\over{2*|\mathcal{N}|}}))
   \end{equation}
 \item[Results:] Figure~\ref{fig:duplicates} shows the proportion of peers using
-  a partial view containing duplicates. As we can observe, there always exist
+  a partial view containing duplicates. We observe that there always exist
   partial views with at least one duplicate. The proportion is more important
-  when the network size is small (e.g. 5 percents for 0.1k peers), and it
-  becomes a minor overhead when the network size is larger (e.g. less than 1
-  percent for 10k peers). The birthday paradox approximation seems to follow
-  very closely the experimental results. It empirically confirms that there
-  exist a relation between the duplicates and the birthday paradox. The
-  proportion of peers without duplicates tends to 100 percents as the network
-  size grows.
+  when the network size is small (e.g. 5 percents for 0.1k peers). It becomes a
+  minor overhead when the network size is larger (e.g. less than 1 percent for
+  10k peers). The birthday paradox approximation seems to follow very closely
+  the experimental results. It empirically confirms that there exists a relation
+  between the duplicates and the birthday paradox. The proportion of peers
+  without duplicates tends to 100 percents as the network size grows.
 \item[Reasons:] As the network grows, the chances of a particular peer to have
   at least twice the reference to another peer becomes smaller. Indeed, while
   the network grows linearly, the number of references to a particular peer
@@ -420,111 +372,133 @@ on the Github platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
 %   case, the peer becomes disconnected and partitions quickly appear.
 % \end{asparadesc}
 
-\subsection{Distributed collaborative editor}
+\subsection{Decentralized collaborative editor}
 \label{subsec:editor}
+
+Distributed real-time editors such as Google Docs, or Etherpad allow users
+distributed in space and organizations to collaborate easily with only web
+browsers. Yet, main stream editors rely on central servers with issues in
+privacy, single point of failure and scalability.  Decentralized editors settle
+privacy problems but scalability issues remain.  
+% None of existing algorithms
+% provide satisfying complexities in both communication and space.  In this paper,
+% we propose 
+\CRATE is a working decentralized real-time editor that supports large number of
+users working on large documents. In particular, \CRATE achieves a sublinearly
+upper-bounded communication complexity in
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
+$m$ the membership size including both readers and writers. Thanks to \SPRAY,
+\CRATE can be easily deployed on a network of browsers using WebRTC.
+
+% We evaluate \CRATE on large-scale experiments in the Grid'5000 testbed involving
+% uptill 600 participants. As expected, we observe a logarithmic progression of
+% the generated traffic according to the size of the shared document and the
+% number of participants.
+
 
 \begin{figure*}
   \centering
-  \subfloat[Figure A][\label{fig:partialview}Average neighborhood size of 
-  each peer over the global network size.]{
+  \subfloat[Figure A][\label{fig:partialview}Average partial view size.]{
     \includegraphics[width=0.48\textwidth]{img/partialview.eps}}
   \hspace{10pt}
-  \subfloat[Figure B][\label{fig:traffic} Average traffic per second at 
-  each peer during the experiments.]{
+  \subfloat[Figure B][\label{fig:traffic} Average traffic per second.]{
     \includegraphics[width=0.48\textwidth]{img/traffic.eps}}
   \caption{Distributed collaborative editors in Grid'5000 testbed.}
 \end{figure*}
 
 \begin{asparadesc}
-\item [Objective:] To show the evolution of the average neighborhood size of
-  members of an editing session. The \SPRAY protocol aims to provide a
-  logarithmically scaling neighborhood compared to the global network
-  size. Furthermore, the protocol builds a dynamic network where the load is
-  balanced among members.
-\item [Description:] During a run, peers dynamically modify their
-  neighborhood. Each peer periodically reports its neighborhood size. Then, we
-  average all these values and measure the variance. The average value defines
-  how connected is a member to the network, impacting (among other) on the
-  information dissemination efficiency. The variance defines how spread are the
-  values; a small value means a good load balancing among members. Runs comprise
-  from 101 members to 601 members with 100 members increments, i.e., 6 different
-  runs.  The first member creates the editing session which is progressively
-  joined by the other writers (1 joiner per 5 seconds). Each member starts
-  sharing the document as soon as its joining. Hence, outsiders can join the
-  network through one of them chosen at random.
-\item [Results:] Figure~\ref{fig:partialview} shows the results of this
-  experiment. The figure displays the network size on the x-axis and the average
-  neighborhood size on the y-axis. It shows the average value of each experiment
-  along with the theoretical expectation: a natural logarithm on the global
-  network size. Each average value also carries the variance measurement. As
-  expected, we observe that the average neighborhood size grows logarithmically
-  compared to the size of the network despite being scattered around the
-  theoretical curve. Figure~\ref{fig:partialview} also shows that the variance
-  is small around the average values. Thus, members have an even neighborhood
-  size. In other terms, the load is well-balanced among members when they need
-  to disseminate information to the whole network. At the opposite of
-  centralized solutions, it builds a topology where no member is more important
-  than another in term of connectivity. As such, the network is more resilient
-  to random crashes or unexpected departures.
-\item [Reasons:] When an outsider wants to join the editing session, it picks a
-  random sharer as first contact. \SPRAY assumes that the neighborhood size of
-  this particular member is already logarithmic compared to the network
-  size. Therefore, it uses this assumption to create additional connections that
-  increase logarithmically in number. Yet, the averages neighborhood size does
-  not follow exactly the theoretical expectation curve. Indeed, the number of
-  neighbors of each member strongly depends of the first contact. However, the
-  specific average value is not necessarily reached, especially considering
-  that, while the theoretical expectation is a floating number, the neighborhood
-  size belongs to the integers. This fact also impacts the variance. Indeed, the
-  \SPRAY protocol exchanges the neighborhood of member over time. During the
-  exchanges, it aims to balance the neighborhood size of each peer. Yet, the
-  average value may not be an integer value. Therefore, the neighborhood size of
-  the members constantly fluctuates around the average value.
+\item [Objective:] To show the influence of \SPRAY's neighborhood over the
+  traffic of an application truly running in browsers.
 \end{asparadesc}
 
-\ \\
+% \begin{asparadesc}
+% \item [Objective:] To show the evolution of the average neighborhood size of
+%   members of an editing session. The \SPRAY protocol aims to provide a
+%   logarithmically scaling neighborhood compared to the global network
+%   size. Furthermore, the protocol builds a dynamic network where the load is
+%   balanced among members.
+% \item [Description:] During a run, peers dynamically modify their
+%   neighborhood. Each peer periodically reports its neighborhood size. Then, we
+%   average all these values and measure the variance. The average value defines
+%   how connected is a member to the network, impacting (among other) on the
+%   information dissemination efficiency. The variance defines how spread are the
+%   values; a small value means a good load balancing among members. Runs comprise
+%   from 101 members to 601 members with 100 members increments, i.e., 6 different
+%   runs.  The first member creates the editing session which is progressively
+%   joined by the other writers (1 joiner per 5 seconds). Each member starts
+%   sharing the document as soon as its joining. Hence, outsiders can join the
+%   network through one of them chosen at random.
+% \item [Results:] Figure~\ref{fig:partialview} shows the results of this
+%   experiment. The figure displays the network size on the x-axis and the average
+%   neighborhood size on the y-axis. It shows the average value of each experiment
+%   along with the theoretical expectation: a natural logarithm on the global
+%   network size. Each average value also carries the variance measurement. As
+%   expected, we observe that the average neighborhood size grows logarithmically
+%   compared to the size of the network despite being scattered around the
+%   theoretical curve. Figure~\ref{fig:partialview} also shows that the variance
+%   is small around the average values. Thus, members have an even neighborhood
+%   size. In other terms, the load is well-balanced among members when they need
+%   to disseminate information to the whole network. At the opposite of
+%   centralized solutions, it builds a topology where no member is more important
+%   than another in term of connectivity. As such, the network is more resilient
+%   to random crashes or unexpected departures.
+% \item [Reasons:] When an outsider wants to join the editing session, it picks a
+%   random sharer as first contact. \SPRAY assumes that the neighborhood size of
+%   this particular member is already logarithmic compared to the network
+%   size. Therefore, it uses this assumption to create additional connections that
+%   increase logarithmically in number. Yet, the averages neighborhood size does
+%   not follow exactly the theoretical expectation curve. Indeed, the number of
+%   neighbors of each member strongly depends of the first contact. However, the
+%   specific average value is not necessarily reached, especially considering
+%   that, while the theoretical expectation is a floating number, the neighborhood
+%   size belongs to the integers. This fact also impacts the variance. Indeed, the
+%   \SPRAY protocol exchanges the neighborhood of member over time. During the
+%   exchanges, it aims to balance the neighborhood size of each peer. Yet, the
+%   average value may not be an integer value. Therefore, the neighborhood size of
+%   the members constantly fluctuates around the average value.
+% \end{asparadesc}
 
-\begin{asparadesc}
-\item [Objective:] To show that both the identifier size and neighborhood size
-  impact the traffic. Since the former grows polylogarithmically, and the latter
-  grows logarithmically, we expect the traffic to scale in terms of number of
-  users and number of operations.
-\item [Description:] As for prior experiments, this experimentation concerns
-  networks from 101 members to 601 members, each coauthoring a document of over
-  a million of characters by repeatedly inserting new characters at the end of
-  the document. Figure~\ref{fig:partialview} displays the average neighborhood
-  size of members of each run. Figure~\ref{fig:identifiers} displays the
-  identifiers size of each run. This experiment measure average traffic of
-  members in Megabyte per second. For the recall, 100 operations are performed
-  per second uniformly distributed among participants.
-\item [Results:] Figure~\ref{fig:traffic} shows the result of this experiment.
-  The x-axis denotes the experiment progression. The y-axis shows the average
-  outgoing traffic generated by members (in Megabyte per second). As expected,
-  we observe three results:
-  \begin{inparaenum}[(i)]
-  \item It confirms the results of both prior experiments about the neighborhood
-    size (i.e., a logarithmically growing/shrinking neighborhood size compared
-    to the network size), and the size of identifiers (i.e. a
-    polylogarithmic growth compared to the size of the document).
-  \item Being adaptive, the \SPRAY membership protocol grants the ability to
-    disseminate information scaling with the network dimension.
-  \item The growth of identifiers constitutes an important part of the traffic
-    as well.
-  \end{inparaenum}
-  Hence, \CRATE scales in terms of number of users and number of operations.
-\item [Reasons:] When an outsider joins the network, it injects a number of
-  connections roughly logarithmic compared to the current network size. When it
-  generates an operation, it sends its result to its neighborhood. Since this
-  result (i.e. the identifier) grows polylogarithmically compared to the
-  document size, and since the neighborhood grows logarithmically compared to
-  the network size, it multiplies the polylogarithm with the logarithm. When a
-  member receives such operation, and it receives it for the first time, it
-  sends it to its neighborhood. Therefore, for each operation performed by any
-  member, the rest of the members will send the result of the operation to all
-  their respective neighborhood once. As such, the network load is balanced
-  among users. Furthermore, it scales in number of editing session members and
-  document size.
-\end{asparadesc}
+% \begin{asparadesc}
+% \item [Objective:] To show that both the identifier size and neighborhood size
+%   impact the traffic. Since the former grows polylogarithmically, and the latter
+%   grows logarithmically, we expect the traffic to scale in terms of number of
+%   users and number of operations.
+% \item [Description:] As for prior experiments, this experimentation concerns
+%   networks from 101 members to 601 members, each coauthoring a document of over
+%   a million of characters by repeatedly inserting new characters at the end of
+%   the document. Figure~\ref{fig:partialview} displays the average neighborhood
+%   size of members of each run. Figure~\ref{fig:identifiers} displays the
+%   identifiers size of each run. This experiment measure average traffic of
+%   members in Megabyte per second. For the recall, 100 operations are performed
+%   per second uniformly distributed among participants.
+% \item [Results:] Figure~\ref{fig:traffic} shows the result of this experiment.
+%   The x-axis denotes the experiment progression. The y-axis shows the average
+%   outgoing traffic generated by members (in Megabyte per second). As expected,
+%   we observe three results:
+%   \begin{inparaenum}[(i)]
+%   \item It confirms the results of both prior experiments about the neighborhood
+%     size (i.e., a logarithmically growing/shrinking neighborhood size compared
+%     to the network size), and the size of identifiers (i.e. a
+%     polylogarithmic growth compared to the size of the document).
+%   \item Being adaptive, the \SPRAY membership protocol grants the ability to
+%     disseminate information scaling with the network dimension.
+%   \item The growth of identifiers constitutes an important part of the traffic
+%     as well.
+%   \end{inparaenum}
+%   Hence, \CRATE scales in terms of number of users and number of operations.
+% \item [Reasons:] When an outsider joins the network, it injects a number of
+%   connections roughly logarithmic compared to the current network size. When it
+%   generates an operation, it sends its result to its neighborhood. Since this
+%   result (i.e. the identifier) grows polylogarithmically compared to the
+%   document size, and since the neighborhood grows logarithmically compared to
+%   the network size, it multiplies the polylogarithm with the logarithm. When a
+%   member receives such operation, and it receives it for the first time, it
+%   sends it to its neighborhood. Therefore, for each operation performed by any
+%   member, the rest of the members will send the result of the operation to all
+%   their respective neighborhood once. As such, the network load is balanced
+%   among users. Furthermore, it scales in number of editing session members and
+%   document size.
+% \end{asparadesc}
 
 %%% Local Variables:
 %%% mode: latex
