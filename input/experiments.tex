@@ -4,10 +4,11 @@
 In this section, we highlight the improvements brought to gossiping protocols on
 a real-life use case concerning decentralized collaborative editing in browsers.
 These experiments run on Grid'5000 testbed and involve uptill 600 browsers
-simultaneously writing a document. We expect a traffic logarithmically scaling
-compared to the network size, along with a polylogarithmic growth brought by the
-application itself. The real-time editor called \CRATE is hosted on the Github
-platform\footnote{\url{http://chat-wane.github.io/CRATE/}}.
+simultaneously writing a document. Using \SPRAY, we expect a traffic
+logarithmically scaling compared to the network size, along with a
+polylogarithmic growth brought by the application itself. The real-time editor
+called \CRATE is hosted on the Github
+platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 In a second time, we evaluate how adaptiveness of \SPRAY impacts common metrics
 of peer sampling performance including clustering coefficient, average shortest
@@ -28,65 +29,81 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \subsection{Decentralized collaborative editor}
 \label{subsec:editor}
 
-Distributed real-time editors such as Google Docs, or Etherpad allow users
-distributed in space and organizations to collaborate easily with only web
-browsers. Yet, main stream editors rely on central servers with issues in
-privacy, single point of failure and scalability.  Decentralized editors settle
-privacy problems but scalability issues remain.  
-% None of existing algorithms
-% provide satisfying complexities in both communication and space.  In this paper,
-% we propose 
-\CRATE is a working decentralized real-time editor that supports large number of
-users working on large documents. In particular, \CRATE achieves a sublinearly
-upper-bounded communication complexity in
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
-$\ln(|\mathcal{N}|)$ the contribution of \SPRAY. Using \SPRAY, \CRATE can be
-easily deployed on a network of browsers using WebRTC.
+Google Docs made real-time editing in browsers easy for millions of
+users. However, Google mediates real-time editing sessions with central servers
+raising issues on privacy, censorship, economic intelligence. It also raises
+scalability issues in term of number of participants.  Despite that small groups
+currently constitute the main range of users, events such as massive online
+lectures, TV shows, conferences gather larger groups.  Google Docs supports
+large groups but only the first fifty users can edit, next users have their
+rights limited to document reading.  \TODO{We think that real-time editors
+  should allow editing at anytime and anywhere, whatever the number of
+  participants.}  Real-time editing sessions can be highly dynamic; even if only
+few authors are editing a document simultaneously, the editing session includes
+a much larger group of potential writers. In this paper we focus on building a
+real-time editor that supports privacy and that adapts \TODO{gently} from small
+groups to large groups.
 
-% We evaluate \CRATE on large-scale experiments in the Grid'5000 testbed involving
-% uptill 600 participants. As expected, we observe a logarithmic progression of
-% the generated traffic according to the size of the shared document and the
-% number of participants.
+Decentralized real-time editors~\cite{oster2006data, sun1998operational,
+  sun2009contextbased} do not require intermediate servers and by the same solve
+privacy issues. However, scalability issues remain.  Addressing scalability
+requires finding a good trade-off between communication, space and time
+complexities. Among others, achieving a sublinear communication complexity is
+crucial for supporting large groups.
 
-% \begin{figure*}
-%   \centering
-%   \subfloat[Figure A][\label{fig:partialview}Average partial view size.]{
-%     \includegraphics[width=0.48\textwidth]{img/partialview.eps}}
-%   \hspace{10pt}
-%   \subfloat[Figure B][\label{fig:traffic} Average traffic per second.]{
-%     \includegraphics[width=0.48\textwidth]{img/traffic.eps}}
-%   \caption{Distributed collaborative editors in Grid'5000 testbed.}
-% \end{figure*}
+Communication complexity depends on both diffusion of messages, and the content
+of messages. For the former, and thanks to \SPRAY, \CRATE builds a network of
+browsers where each browsers is able to communicate with a logarithmically
+scaling number of browsers compared to the global network size. For the later,
+\CRATE uses a Conflict-free Replicated Data Type (CRDT) for sequences in order
+to guarantee eventually consistent documents, i.e., documents converge to an
+identical state. CRDTs approaches allocates an identifier to each element of the
+sequence representing the document. Using the allocation function \LSEQ, \CRATE
+is able to keep the space of these identifiers under a polylogarithmic bound
+compared to the document size. Hence, a communication complexity in
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
+
+%%Using such decentralized collaborative editor, we created real-time editing
+%%session on the Grid'5000 testbed involving uptill 600 browsers.
+
+\ \\
 
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/traffic.eps}
-  \caption{Average traffic per second.}
+  \caption{\label{fig:traffic}Average traffic per second.}
 \end{figure}
 
 \begin{asparadesc}
-\item [Objective:] To show the logarithmic multiplicative factor coming from
-  \SPRAY's neighborhood over the traffic of an application truly running in
-  browsers.
-\item [Description:] During a run, peers dynamically modify their
-  neighborhood. Each peer periodically reports its neighborhood size. Then, we
-  average all these values and measure the variance. The variance defines how
-  spread are the values; a small value means a balanced load among members. Runs
-  comprise from 101 members to 601 members with 100 members increments, i.e., 6
-  different runs.  The first member creates the editing session which is
-  progressively joined by the other writers (1 joiner per 5 seconds). Each
-  member starts sharing the document as soon as its joining. Hence, outsiders
-  can join the network through one of them chosen at random. Once all peers have
-  joined the editing session, they start inserting characters in the
-  document. The insertion rate is 100 insertions per second uniformly
-  distributed among peers.
-\item [Results:] Figure~\ref{fig:partialview} shows the average partial view
-  size and variance of each experiment along with the theoretical expectation
-  ($\ln(|\mathcal{N}|)$). Figure~\ref{fig:traffic} shows the average traffic
-  generated by editors during the experiment.  \TODO{As figure~\ref{fig:churn}
-    suggests, \CYCLON which is generally oversized to accommodate with any
-    network size, would have an identical traffic for any of the experiments.}
-\item [Reasons:]
+\item [Objective:] To show the influence of \SPRAY's adaptiveness over the
+  traffic generated by decentralized editors running on a network of browsers.
+\item [Description:] Experiments run on Grid'5000 where machines host 5 browsers
+  each. Browsers open \CRATE and connect to an editing session through a
+  signaling server.  Runs comprise from 101 browsers to 601 browsers with 100
+  browsers increments, i.e., 6 different runs.  The first editor creates the
+  editing session which is progressively joined by the other writers (1 joiner
+  per 5 seconds). Each member starts sharing the access to the editing session
+  as soon as it joins it. Hence, outsiders join the network through one of them
+  chosen at random. Once all peers have joined the editing session, they start
+  inserting characters in the document. The insertion rate is 100 insertions per
+  second uniformly distributed among peers. Each experiment runs during 8 hours
+  of which 7 hours are dedicated to editing. The document size reaches millions
+  of characters.
+\item [Results:] Figure~\ref{fig:traffic} shows the average traffic per second
+  of members involved in the editing session. Legend shows the average partial
+  view and the variance associated with each run. As expected, we observe a
+  logarithmic multiplicative factor coming from the information dissemination
+  (cf. Section~\ref{subsec:gossiping}). 101 browsers have an average traffic per
+  second lower than 601 browsers because the average partial view size of the
+  former is lower.  On the opposite, using \CYCLON, the traffic would have been
+  the same for all runs. Since it commonly overestimates partial views to
+  accommodate with any network size, the traffic would have been higher.
+\item [Reasons:] Information dissemination uses the neighborhood to broadcast
+  message. Each member receives and forwards each message which transitively
+  reach all members. Thus, the traffic depends of the message multiplied by the
+  number of neighbors logarithmically scaling thanks to \SPRAY. The growth
+  during each run corresponds to the polylogarithmic growth of identifiers from
+  the application.
 \end{asparadesc}
 
 
