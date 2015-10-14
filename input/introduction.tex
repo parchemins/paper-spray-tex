@@ -15,7 +15,7 @@ deployment even within complex network systems that utilize firewalls,
 proxies and Net Address Translation (NAT).
 
 Unfortunately, WebRTC has several constraints that make existing peer sampling
-services inefficient or unreliable. Brow\-sers can run on small devices in
+services inefficient or unreliable. Browsers can run on small devices in
 mobile networks. Hence, keeping the number of connections as low as possible is
 a major requirement. However, peer sampling services such as
 \CYCLON~\cite{voulgaris2005cyclon} do not adapt the number of connections to the
@@ -38,16 +38,16 @@ and \CYCLON~\cite{voulgaris2005cyclon}. Compared to the state of art,
   those of a random graph. Thus, the network becomes robust to massive
   failures, quickly disseminates information etc.
 \item In the experimental setup, we show the adaptiveness of \SPRAY and
-  highlight its efficiency improvement compared to \CYCLON and \SCAMP, at the
-  cost of little overhead.
+  highlight its efficiency improvement at the cost of little overhead, compared
+  to a representative of not adaptive approaches, namely \CYCLON.
 \end{inparaenum}
 
-In turns, information dissemination protocols built on top of \SPRAY also become
-adaptive. We highlight this behavior using a decentralized collaborative
-real-time editor\footnote{\url{https://github.com/Chat-Wane/CRATE}} directly
-accessible in web browsers. As expected, the experiments running on Grid'5000
-and involving uptill 600 editors confirm the scalability and efficiency of the
-gossip protocol.
+To highlight the improvement brought by \SPRAY we built \CRATE, a real-time
+decentralized editors directly running in web
+browsers\footnote{\url{https://github.com/Chat-Wane/CRATE}}. This real-life use
+case shows that information dissemination benefits from the adaptiveness of
+\SPRAY. The experiments running on Grid'5000 and involving uptill 600 editors
+confirm scalability and efficiency.
 
 The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
 reviews the related work. Section~\ref{sec:proposal}
