@@ -63,6 +63,39 @@ is able to keep the space of these identifiers under a polylogarithmic bound
 compared to the document size. Hence, a communication complexity in
 $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
 
+% \begin{figure}
+%   \centering
+%   \input{input/architecture.tex}
+%   \caption{\label{fig:architecture}\CRATE's architecture comprises 4 layers.}
+% \end{figure}
+
+%%Figure~\ref{fig:architecture} depicts
+\CRATE's architecture comprises four layers:
+\begin{inparaenum}[(i)]
+\item communication: includes the editing session membership mechanism and the
+  information dissemination protocols.
+\item causality: includes the causality tracking structure that guarantees a
+  delivery order of operations reflecting a form of causality.
+\item sequence structure: includes the structure that guarantees a global
+  total order among elements of the sequence.
+\item graphical user interface: includes the editor as a graphical entity that
+  users can interact with inside web browsers.
+\end{inparaenum}
+%%The left part of the figure depicts the common process chain:
+The process chain is the following: when the user performs an operation on the
+document, the operation is applied to the shared sequence which creates an \LSEQ
+identifier. Then it decorates the result of the operation with causality
+tracking metadata. Finally, \CRATE broadcasts it using the neighborhood provided
+by the \SPRAY random peer sampling protocol.  Conversely, when \CRATE receives a
+broadcast message, it checks if the operation is causally ready to be
+delivered. Once the condition is verified, it applies the operation to the
+shared sequence which notifies the graphical user interface of the changes. 
+
+% The right part of the figure corresponds to the catch up strategy where a member
+% may have missed operations due to dropped messages, or simply because the user
+% worked on offline mode for a while. Therefore, it regularly asks to its
+% neighborhood the missing operations using the differences of version vectors.
+
 %%Using such decentralized collaborative editor, we created real-time editing
 %%session on the Grid'5000 testbed involving uptill 600 browsers.
 

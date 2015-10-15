@@ -23,7 +23,7 @@
   \Function{receiveBroadcast}{$m$} \hfill \comment{$m: message$}
   \If {$\neg alreadyReceived(m)$}
   \State $deliver(m)$;
-  \State $broadcast(m)$;
+  \State $broadcast(m)$; \hfill \comment{rebroadcast}
   \EndIf
   \EndFunction
   

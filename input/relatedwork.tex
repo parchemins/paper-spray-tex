@@ -133,31 +133,34 @@ The sole representative of adaptive-by-design random peer sampling is
 its logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
 suffers from other drawbacks. In particular, it systematically disseminates the
-connections at random. Thus, the originating peer can be several hops away
-from the arrival peer. In WebRTC, each random dissemination path must be
-traveled back to finalize the connection establishment, as illustrated in
-Figure~\ref{fig:webrtc}. This drastically impacts the \SCAMP failure
-probability of establishing a connection.  Let $P_f$ be the probability that an
-element of the dissemination path (either a peer or a connection) crashes or
-leaves during a hop of the three-way handshake, without any possible
-recovery. Let $P_E$ be the probability that a connection establishment cannot
-be completed. Without three-way handshake, $P_E$ is straightforward:
-\begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
-corresponds to the probability that each element (arc and peer) in the path of
-size $k+1$ stays alive during their part of the dissemination (i.e., otherwise,
-they are allowed to crash or leave). In the context of WebRTC, the offer ticket must
-travel back to its emitter. As a consequence, the elements of the random
-dissemination path are not allowed to fail until the stamped ticket travels
-back. We obtain:
-\begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
-                                     \ldots (1-P_f)^2) \nonumber \\
-                                   &=1-(1-P_f)^{k^2+3k+2}
-\end{align}
-In other terms, the first chosen arc and peer in the path must stay alive
-$2k+2$ hops, the second chosen arc and peer must stay alive $2k$ hops etc.  The
-complexity class of the \SCAMP failure rate increases leading to a quicker
-degeneration of the connection count. This behavior endangers the network
-connectedness.%%, as depicted in Section~\ref{subsec:degeneration}.
+connections at random. Thus, the originating peer can be several hops away from
+the arrival peer. In WebRTC, each random dissemination path must be traveled
+back to finalize the connection establishment, as illustrated in
+Figure~\ref{fig:webrtc}. This drastically impacts the \SCAMP failure probability
+of establishing a connection. In turns, the number of connections quickly
+decreases eventually leading to partitioning.
+
+%  Let $P_f$ be the probability that an
+% element of the dissemination path (either a peer or a connection) crashes or
+% leaves during a hop of the three-way handshake, without any possible
+% recovery. Let $P_E$ be the probability that a connection establishment cannot
+% be completed. Without three-way handshake, $P_E$ is straightforward:
+% \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
+% corresponds to the probability that each element (arc and peer) in the path of
+% size $k+1$ stays alive during their part of the dissemination (i.e., otherwise,
+% they are allowed to crash or leave). In the context of WebRTC, the offer ticket must
+% travel back to its emitter. As a consequence, the elements of the random
+% dissemination path are not allowed to fail until the stamped ticket travels
+% back. We obtain:
+% \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
+%                                      \ldots (1-P_f)^2) \nonumber \\
+%                                    &=1-(1-P_f)^{k^2+3k+2}
+% \end{align}
+% In other terms, the first chosen arc and peer in the path must stay alive
+% $2k+2$ hops, the second chosen arc and peer must stay alive $2k$ hops etc.  The
+% complexity class of the \SCAMP failure rate increases leading to a quicker
+% degeneration of the connection count. This behavior endangers the network
+% connectedness.%%, as depicted in Section~\ref{subsec:degeneration}.
 
 Building an adaptive-by-design random peer sampling that meets WebRTC
 constraints raises the following scientific problem:
