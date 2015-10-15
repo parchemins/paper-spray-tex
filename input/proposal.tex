@@ -296,28 +296,6 @@ In the context of WebRTC, \SPRAY calls the $onArcDown$ function when a connectio
 establishement fails. \SPRAY calls the $onPeerDown$ function when the
 connection was established once but the neighbor is not responding anymore.
 
-\subsection{Epidemic dissemination}
-\label{subsec:gossiping}
-
-Epidemic dissemination~\cite{birman1999bimodal,demers1987epidemic} (or
-gossiping) relies on the membership protocol to propagate messages in a scalable
-way to all members (broadcast). Algorithm~\ref{algo:gossiping} shows the simple
-functionning of this protocol. When a peer emits a message, it sends it to its
-neighborhood. Each peer receiving such messages forwards it to its neighborhood
-too. Messages transitively reach all peers of the network.
-
-\begin{algorithm}[h]
-  \input{./input/gossipingalgo.tex}
-  \caption{\label{algo:gossiping}Epidemic dissemination protocol.}
-\end{algorithm}
-
-Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
-and since the latter grows logarithmically compared to the network size, the
-communication complexity of an application is upper-bounded by
-$\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
-message.  To scale, applications are in charge of keeping $m$ under a sublinear
-upper bound (cf. Section~\ref{subsec:editor}).
-
 % To summarize, \SPRAY provides:
 % \begin{inparaenum}[(i)]
 % \item a logarithmically increasing partial view size compared to the global

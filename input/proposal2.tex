@@ -1,0 +1,90 @@
+
+%\section{Use case: CRATE}
+\section{Use case: real-time editing}
+
+%%\subsection{Decentralized collaborative editor}
+%%\label{subsec:editor}
+
+Google Docs made real-time editing in browsers easy for millions of
+users. However, Google mediates real-time editing sessions with central servers
+raising issues on privacy, censorship, economic intelligence. It also raises
+scalability issues in term of number of participants.  Despite that small groups
+currently constitute the main range of users, events such as massive online
+lectures, TV shows, conferences gather larger groups.  Google Docs supports
+large groups but only the first fifty users can edit, next users have their
+rights limited to document reading. In addition, real-time editing sessions can
+be highly dynamic; even if only few authors are editing a document
+simultaneously, the editing session includes a much larger group of potential
+writers. We think that real-time editors should allow editing at anytime and
+anywhere, whatever the number of participants, without third party.
+
+Decentralized real-time editors~\cite{oster2006data, sun1998operational,
+  sun2009contextbased} do not require intermediate servers and by the same solve
+privacy issues. However, scalability issues remain.  Addressing scalability
+requires finding a good trade-off between communication, space and time
+complexities. Among others, achieving a sublinear communication complexity is
+crucial for supporting large groups.  It depends on both diffusion of messages,
+and the content of messages.
+
+In this paper, we introduce \CRATE as a distributed and decentralized
+CollaboRATive Editor. Thanks to \SPRAY, \CRATE builds a network of browsers
+where each browsers is able to communicate with a logarithmically scaling number
+of browsers compared to the global network size.  \CRATE uses a Conflict-free
+Replicated Data Type~\cite{shapiro2011conflict, shapiro2011comprehensive} (CRDT)
+for sequences in order to guarantee eventually consistent documents, i.e.,
+documents converge to an identical state~\cite{bailis2013eventual}. CRDTs
+approaches allocates an identifier to each element of the sequence representing
+the document. Using the allocation function \LSEQ~\cite{nedelec2013lseq}, \CRATE
+is able to keep the space of these identifiers under a polylogarithmic bound
+compared to the document size. Hence, a communication complexity in
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
+
+\CRATE's architecture comprises four layers:
+\begin{inparaenum}[(i)]
+\item communication: includes the editing session membership mechanism and the
+  information dissemination protocols.
+\item causality: includes the causality tracking
+  structure~\cite{malkhi2007concise} that guarantees that the delivery of the
+  removal of an element never precedes its insertion.
+\item sequence structure: includes the structure that guarantees a global
+  total order among elements of the sequence.
+\item graphical user interface: includes the editor as a graphical entity that
+  users can interact with inside web browsers.
+\end{inparaenum}
+%%The left part of the figure depicts the common process chain:
+The process chain is the following: when users perform an operation on the
+document, the operation is applied to the shared sequence which creates an \LSEQ
+identifier. Then it decorates the result of the operation with causality
+tracking metadata. Finally, \CRATE broadcasts it using the neighborhood provided
+by \SPRAY.  Conversely, when \CRATE receives a broadcast message, it checks if
+the operation is causally ready to be delivered. Once the condition is verified,
+it applies the operation to the shared sequence which notifies the graphical
+user interface of the changes.
+
+The rest of this section details the main components of \CRATE and their
+respective contributions to complexities.
+
+\subsection{Scalable data structure for sequences}
+
+\subsection{Epidemic dissemination}
+\label{subsec:gossiping}
+
+Epidemic dissemination~\cite{birman1999bimodal,demers1987epidemic} (or
+gossiping) relies on the membership protocol to propagate messages in a scalable
+way to all members (broadcast). Algorithm~\ref{algo:gossiping} shows the simple
+functionning of this protocol. When a peer emits a message, it sends it to its
+neighborhood. Each peer receiving such messages forwards it to its neighborhood
+too. Messages transitively reach all peers of the network.
+
+\begin{algorithm}[h]
+  \input{./input/gossipingalgo.tex}
+  \caption{\label{algo:gossiping}Epidemic dissemination protocol.}
+\end{algorithm}
+
+Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
+and since the latter grows logarithmically compared to the network size, the
+communication complexity of an application is upper-bounded by
+$\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
+message. \TODO{To scale, applications are in charge of keeping $m$ under a sublinear
+upper bound}.
+

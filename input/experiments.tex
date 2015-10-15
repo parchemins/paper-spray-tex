@@ -6,8 +6,8 @@ a real-life use case concerning decentralized collaborative editing in browsers.
 These experiments run on Grid'5000 testbed and involve uptill 600 browsers
 simultaneously writing a document. Using \SPRAY, we expect a traffic
 logarithmically scaling compared to the network size, along with a
-polylogarithmic growth brought by the application itself. The real-time editor
-called \CRATE is hosted on the Github
+polylogarithmic growth brought by the real-time editor itself. The code of
+\CRATE is hosted on the Github
 platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 In a second time, we evaluate how adaptiveness of \SPRAY impacts common metrics
@@ -26,42 +26,6 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 % connection failures. Unlike \SCAMP, we expect \SPRAY to
 % tolerate connection failures.
 
-\subsection{Decentralized collaborative editor}
-\label{subsec:editor}
-
-Google Docs made real-time editing in browsers easy for millions of
-users. However, Google mediates real-time editing sessions with central servers
-raising issues on privacy, censorship, economic intelligence. It also raises
-scalability issues in term of number of participants.  Despite that small groups
-currently constitute the main range of users, events such as massive online
-lectures, TV shows, conferences gather larger groups.  Google Docs supports
-large groups but only the first fifty users can edit, next users have their
-rights limited to document reading. In addition, real-time editing sessions can
-be highly dynamic; even if only few authors are editing a document
-simultaneously, the editing session includes a much larger group of potential
-writers. We think that real-time editors should allow editing at anytime and
-anywhere, whatever the number of participants, \TODO{without third party}.
-
-Decentralized real-time editors~\cite{oster2006data, sun1998operational,
-  sun2009contextbased} do not require intermediate servers and by the same solve
-privacy issues. However, scalability issues remain.  Addressing scalability
-requires finding a good trade-off between communication, space and time
-complexities. Among others, achieving a sublinear communication complexity is
-crucial for supporting large groups.
-
-Communication complexity depends on both diffusion of messages, and the content
-of messages. For the former, and thanks to \SPRAY, \CRATE builds a network of
-browsers where each browsers is able to communicate with a logarithmically
-scaling number of browsers compared to the global network size. For the later,
-\CRATE uses a Conflict-free Replicated Data Type~\cite{shapiro2011conflict,
-  shapiro2011comprehensive} (CRDT) for sequences in order to guarantee
-eventually consistent documents, i.e., documents converge to an identical
-state~\cite{bailis2013eventual}. CRDTs approaches allocates an identifier to
-each element of the sequence representing the document. Using the allocation
-function \LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the space of these
-identifiers under a polylogarithmic bound compared to the document size. Hence,
-a communication complexity in $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where
-$d$ is the document size.
 
 % \begin{figure}
 %   \centering
@@ -70,27 +34,6 @@ $d$ is the document size.
 % \end{figure}
 
 %%Figure~\ref{fig:architecture} depicts
-\CRATE's architecture comprises four layers:
-\begin{inparaenum}[(i)]
-\item communication: includes the editing session membership mechanism and the
-  information dissemination protocols.
-\item causality: includes the causality tracking
-  structure~\cite{malkhi2007concise} that guarantees that the delivery of the
-  removal of an element never precedes its insertion.
-\item sequence structure: includes the structure that guarantees a global
-  total order among elements of the sequence.
-\item graphical user interface: includes the editor as a graphical entity that
-  users can interact with inside web browsers.
-\end{inparaenum}
-%%The left part of the figure depicts the common process chain:
-The process chain is the following: when users perform an operation on the
-document, the operation is applied to the shared sequence which creates an \LSEQ
-identifier. Then it decorates the result of the operation with causality
-tracking metadata. Finally, \CRATE broadcasts it using the neighborhood provided
-by \SPRAY.  Conversely, when \CRATE receives a broadcast message, it checks if
-the operation is causally ready to be delivered. Once the condition is verified,
-it applies the operation to the shared sequence which notifies the graphical
-user interface of the changes.
 
 % The right part of the figure corresponds to the catch up strategy where a member
 % may have missed operations due to dropped messages, or simply because the user
@@ -100,7 +43,8 @@ user interface of the changes.
 %%Using such decentralized collaborative editor, we created real-time editing
 %%session on the Grid'5000 testbed involving uptill 600 browsers.
 
-\ \\
+
+\paragraph{CRATE on network of browsers}
 
 \begin{figure}
   \centering
@@ -146,10 +90,10 @@ user interface of the changes.
 \end{asparadesc}
 
 
-\subsection{Spray's properties}
+%%\subsection{Spray's properties}
 
-The rest of this experimentation section aims to highlight different properties
-of \SPRAY through large scale simulations.
+%%The rest of this experimentation section aims to highlight different properties
+%%of \SPRAY through large scale simulations.
 
 \paragraph{Clustering and convergence time}
 
