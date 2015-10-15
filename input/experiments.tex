@@ -36,13 +36,11 @@ scalability issues in term of number of participants.  Despite that small groups
 currently constitute the main range of users, events such as massive online
 lectures, TV shows, conferences gather larger groups.  Google Docs supports
 large groups but only the first fifty users can edit, next users have their
-rights limited to document reading.  \TODO{We think that real-time editors
-  should allow editing at anytime and anywhere, whatever the number of
-  participants.}  Real-time editing sessions can be highly dynamic; even if only
-few authors are editing a document simultaneously, the editing session includes
-a much larger group of potential writers. In this paper we focus on building a
-real-time editor that supports privacy and that adapts \TODO{gently} from small
-groups to large groups.
+rights limited to document reading. In addition, real-time editing sessions can
+be highly dynamic; even if only few authors are editing a document
+simultaneously, the editing session includes a much larger group of potential
+writers. We think that real-time editors should allow editing at anytime and
+anywhere, whatever the number of participants, \TODO{without third party}.
 
 Decentralized real-time editors~\cite{oster2006data, sun1998operational,
   sun2009contextbased} do not require intermediate servers and by the same solve
@@ -55,13 +53,15 @@ Communication complexity depends on both diffusion of messages, and the content
 of messages. For the former, and thanks to \SPRAY, \CRATE builds a network of
 browsers where each browsers is able to communicate with a logarithmically
 scaling number of browsers compared to the global network size. For the later,
-\CRATE uses a Conflict-free Replicated Data Type (CRDT) for sequences in order
-to guarantee eventually consistent documents, i.e., documents converge to an
-identical state. CRDTs approaches allocates an identifier to each element of the
-sequence representing the document. Using the allocation function \LSEQ, \CRATE
-is able to keep the space of these identifiers under a polylogarithmic bound
-compared to the document size. Hence, a communication complexity in
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
+\CRATE uses a Conflict-free Replicated Data Type~\cite{shapiro2011conflict,
+  shapiro2011comprehensive} (CRDT) for sequences in order to guarantee
+eventually consistent documents, i.e., documents converge to an identical
+state~\cite{bailis2013eventual}. CRDTs approaches allocates an identifier to
+each element of the sequence representing the document. Using the allocation
+function \LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the space of these
+identifiers under a polylogarithmic bound compared to the document size. Hence,
+a communication complexity in $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where
+$d$ is the document size.
 
 % \begin{figure}
 %   \centering
@@ -74,22 +74,23 @@ $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
 \begin{inparaenum}[(i)]
 \item communication: includes the editing session membership mechanism and the
   information dissemination protocols.
-\item causality: includes the causality tracking structure that guarantees a
-  delivery order of operations reflecting a form of causality.
+\item causality: includes the causality tracking
+  structure~\cite{malkhi2007concise} that guarantees that the delivery of the
+  removal of an element never precedes its insertion.
 \item sequence structure: includes the structure that guarantees a global
   total order among elements of the sequence.
 \item graphical user interface: includes the editor as a graphical entity that
   users can interact with inside web browsers.
 \end{inparaenum}
 %%The left part of the figure depicts the common process chain:
-The process chain is the following: when the user performs an operation on the
+The process chain is the following: when users perform an operation on the
 document, the operation is applied to the shared sequence which creates an \LSEQ
 identifier. Then it decorates the result of the operation with causality
 tracking metadata. Finally, \CRATE broadcasts it using the neighborhood provided
-by the \SPRAY random peer sampling protocol.  Conversely, when \CRATE receives a
-broadcast message, it checks if the operation is causally ready to be
-delivered. Once the condition is verified, it applies the operation to the
-shared sequence which notifies the graphical user interface of the changes. 
+by \SPRAY.  Conversely, when \CRATE receives a broadcast message, it checks if
+the operation is causally ready to be delivered. Once the condition is verified,
+it applies the operation to the shared sequence which notifies the graphical
+user interface of the changes.
 
 % The right part of the figure corresponds to the catch up strategy where a member
 % may have missed operations due to dropped messages, or simply because the user
@@ -128,11 +129,16 @@ shared sequence which notifies the graphical user interface of the changes.
   logarithmic multiplicative factor coming from the information dissemination
   (cf. Section~\ref{subsec:gossiping}). 101 browsers have an average traffic per
   second lower than 601 browsers because the average partial view size of the
-  former is lower.  On the opposite, using \CYCLON, the traffic would have been
-  the same for all runs. Since it commonly overestimates partial views to
-  accommodate with any network size, the traffic would have been higher.
-\item [Reasons:] Information dissemination uses the neighborhood to broadcast
-  message. Each member receives and forwards each message which transitively
+  former is lower.  On the opposite, it worth noting that using \CYCLON, the
+  traffic would have been the same for all runs. Since it commonly overestimates
+  partial views to accommodate with any network size, the traffic would have
+  been higher. Figure~\ref{fig:traffic} also shows that the average partial view
+  size follows the natural logarithmic expectation with small error due to
+  randomness. Figure~\ref{fig:traffic} finally shows that the variance remains
+  small which indicates that the network of browsers reached a state where
+  neighborhood size are balanced.
+\item [Reasons:] Information dissemination uses neighborhoods to broadcast
+  messages. Each member receives and forwards each message which transitively
   reach all members. Thus, the traffic depends of the message multiplied by the
   number of neighbors logarithmically scaling thanks to \SPRAY. The growth
   during each run corresponds to the polylogarithmic growth of identifiers from
@@ -143,7 +149,7 @@ shared sequence which notifies the graphical user interface of the changes.
 \subsection{Spray's properties}
 
 The rest of this experimentation section aims to highlight different properties
-of \SPRAY through simulations.
+of \SPRAY through large scale simulations.
 
 \paragraph{Clustering and convergence time}
 
