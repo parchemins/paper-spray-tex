@@ -26,18 +26,19 @@ complexities. Among others, achieving a sublinear communication complexity is
 crucial for supporting large groups.  It depends on both diffusion of messages,
 and the content of messages.
 
-In this paper, we introduce \CRATE as a distributed and decentralized
-CollaboRATive Editor. Thanks to \SPRAY, \CRATE builds a network of browsers
-where each browsers is able to communicate with a logarithmically scaling number
-of browsers compared to the global network size.  \CRATE uses a Conflict-free
-Replicated Data Type~\cite{shapiro2011conflict, shapiro2011comprehensive} (CRDT)
-for sequences in order to guarantee eventually consistent documents, i.e.,
-documents converge to an identical state~\cite{bailis2013eventual}. CRDTs
-approaches allocates an identifier to each element of the sequence representing
-the document. Using the allocation function \LSEQ~\cite{nedelec2013lseq}, \CRATE
-is able to keep the space of these identifiers under a polylogarithmic bound
-compared to the document size. Hence, a communication complexity in
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
+In this paper, \TODO{Motivation with spray} we introduce \CRATE as a distributed
+and decentralized CollaboRATive Editor. Thanks to \SPRAY, \CRATE builds a
+network of browsers where each browsers is able to communicate with a
+logarithmically scaling number of browsers compared to the global network size.
+\CRATE uses a Conflict-free Replicated Data Type~\cite{shapiro2011conflict,
+  shapiro2011comprehensive} (CRDT) for sequences in order to guarantee
+eventually consistent documents, i.e., documents converge to an identical
+state~\cite{bailis2013eventual}. CRDTs approaches allocates an identifier to
+each element of the sequence representing the document. Using the allocation
+function \LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the space of these
+identifiers under a polylogarithmic bound compared to the document size. Hence,
+a communication complexity in $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where
+$d$ is the document size.
 
 \CRATE's architecture comprises four layers:
 \begin{inparaenum}[(i)]
@@ -66,6 +67,27 @@ respective contributions to complexities.
 
 \subsection{Scalable data structure for sequences}
 
+Real-time distributed collaborative editors consider multiple participants, each
+hosting a copy of a shared sequence of characters. A participant updates at any
+time its local copy by inserting or deleting a character. Then, the operation is
+eventually delivered to all other members. Finally, delivered operations are
+re-executed~\cite{saito2005optimistic}. Consistency requires that all members
+eventually converge to an identical state, i.e., when the system is idle, all
+copies become similar.
+
+Conflict-free replicated data types (CRDTs) for
+sequences~\cite{shapiro2011conflict, shapiro2011comprehensive} provide two
+commutative operations to update documents: \emph{insert} and \emph{delete}.
+They use totally ordered, unique, and immutable identifiers associated to each
+character to guarantee consistent copies of the document. Nevertheless, they
+require storing these identifiers. In this paper, we focus on variable-size
+identifiers. Thus, identifiers are lists determined at generation.
+
+To generate its identifiers, \CRATE uses \LSEQ~\cite{nedelec2013lseq}, an
+allocation function that provides identifiers enjoying a polylogarithmic upper
+bound $\mathcal{O}((\log d)^2)$ on space complexity compared to the document
+size $d$.
+
 \subsection{Epidemic dissemination}
 \label{subsec:gossiping}
 
@@ -88,3 +110,8 @@ $\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
 message. \TODO{To scale, applications are in charge of keeping $m$ under a sublinear
 upper bound}.
 
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End:
