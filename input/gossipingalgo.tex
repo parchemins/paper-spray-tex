@@ -21,7 +21,7 @@
     \EndFunction
     \Statex
   \Function{receiveBroadcast}{$m$} \hfill \comment{$m: message$}
-  \If {$\neg alreadyReceived(m)$}
+  \If {$\neg alreadyReceived(m)$} \label{line:alreadyreceived}
   \State $deliver(m)$;
   \State $broadcast(m)$; \hfill \comment{rebroadcast}
   \EndIf

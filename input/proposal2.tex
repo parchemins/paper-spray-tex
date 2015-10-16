@@ -53,7 +53,7 @@ $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
   \centering
   \input{input/architecture.tex}
   \caption{\label{fig:architecture}\CRATE's architecture comprises 4
-    layers. \TODO{remove anti-entropy.}}
+    layers.}
 \end{figure}
 
 
@@ -91,7 +91,7 @@ respective contributions to complexities.
 Epidemic dissemination~\cite{birman1999bimodal,demers1987epidemic} (or
 gossiping) relies on the membership protocol to propagate messages in a scalable
 way to all members (broadcast). Algorithm~\ref{algo:gossiping} shows the simple
-functionning of this protocol. When a peer emits a message, it sends it to its
+functioning of this protocol. When a peer emits a message, it sends it to its
 neighborhood. Each peer receiving such messages forwards it to its neighborhood
 too. Messages transitively reach all peers of the network.
 
@@ -106,6 +106,17 @@ communication complexity of an application is upper-bounded by
 $\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
 message. To scale, applications are in charge of keeping $m$ under a sublinear
 upper bound.
+
+% \subsection{Causality tracking}
+
+% The role of causality tracking is twofold:
+% \begin{inparaenum}
+% \item guarantee the one time delivery and forwarding of broadcast messages
+%   (cf. Line~\ref{line:alreadyreceived} of Algorithm~\ref{algo:gossiping}),
+% \item guarantee that the removal of an element never precedes its insertion.
+% \end{inparaenum}
+% \CRATE uses a version vector with exceptions~\cite{malkhi2007concise}
+
 
 \subsection{Scalable data structure for sequences}
 
