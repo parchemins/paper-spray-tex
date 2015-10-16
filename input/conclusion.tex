@@ -2,8 +2,8 @@
 \section{Conclusion and perspectives}
 \label{sec:conclusion}
 
-\TODO{A lot to change. Includes perspective with security, maybe problems of
-  merging etc.}
+%%\TODO{A lot to change. Includes perspective with security, maybe problems of
+%%  merging etc.}
 
 WebRTC opened a new playground for large-scale distributed applications
 deployed on a network of browsers. Browsers as infrastructure ease the
@@ -20,34 +20,20 @@ sampling approach designed to fit the WebRTC constraints.  \SPRAY provides:
 % \item an exponentially fast convergence to an overlay network exposing
 %   properties similar to random graphs.
 \end{inparaenum}
-\TODO{Impact on gossiping.}
-
-
-% Synthesis of experiments
 In experiments, we demonstrated how \SPRAY adaptiveness improves random peer
 sampling performances when network size is changing. In particular, the average
 shortest path length scales better, the in-degree evolves with the network size,
-and it converges faster.  We also demonstrated that \SPRAY stays robust to
-massive failures. Adaptiveness comes at the price of duplicates in the partial
-views. However, the simulations supported by theoretical analysis shows that the
-number of duplicates remains very low and becomes negligible in large networks.
+and it converges faster.  Adaptiveness comes at the price of duplicates in the
+partial views. However, our simulations supported by theoretical analysis show
+that the number of duplicates remains very low and becomes negligible in large
+networks.
 
-\TODO{On \CRATE.}
-
-% As such, \SPRAY constitutes an improvement over state-of-the-art
-% approaches in the traditional context of 1-way connection establishments. In
-% addition, the improvement becomes crucial in the 3-way handshake connection
-% set-up which is increasingly important since recent technologies (e.g. WebRTC)
-% allow peer-to-peer connections between modern web browsers. Random peer
-% sampling protocols constitute the ground of many decentralized applications.
-% Thus, we expect that decentralized applications (requiring scalable broadcast
-% among other) will flourish in the web browsers, while they were previously
-% quartered to standalone applications.
-
-
-% Future work includes a Javascript implementation of \SPRAY. An in-browser
-% implementation opens the gate to emulations, and even real peer-to-peer
-% distributed and decentralized applications.
+To highlight the improvement brought by such protocol, we built \CRATE, a
+decentralized collaborative editor directly accessible in web browsers. We
+launched experiments involving uptill 600 browsers showing that message
+dissemination highly benefits from adaptive neigbhorhoods. It allows building
+scalable decentralized applications easily accessible, and which does not
+require knowing the range of users nor their number.
 
 Future work also includes investigations on topology managers such as
 T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. Indeed,

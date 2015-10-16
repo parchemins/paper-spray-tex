@@ -12,6 +12,7 @@
 % deploy such applications on web browsers.
 % that can run on laptops, desktops and mobile devices.
 
+<<<<<<< HEAD
 WebRTC\footnote{\url{http://www.webrtc.org/}} drastically simplified
 the setup browser-to-browser connections even within complex network
 environment involving firewalls, proxies, Net Address Translation
@@ -25,23 +26,36 @@ WebRTC connections with other remote browsers when only 6 are
 enough. This makes a big difference when these connections are
 actively used to broadcast messages generating oversized traffic on
 the network.
+=======
+Unfortunately, WebRTC has several constraints that make existing peer sampling
+services inefficient or unreliable. Browsers can run on small devices in mobile
+networks. Hence, keeping the number of connections as low as possible is a major
+requirement. It becomes crucial when these connections are actively used to
+broadcast messages. Yet, peer sampling services such as
+\CYCLON~\cite{voulgaris2005cyclon} do not adapt their operation to the real
+network size. \TODO{Even less, considering the dynamicity of web applications
+  users}. \SCAMP~\cite{ganesh2003peer} is an adaptive peer sampling service but
+it becomes costly and unreliable in WebRTC context. To build applications
+running on networks of browsers, we need a reliable peer sampling service
+scaling to small groups, large groups, and groups of fluctuating size.
+>>>>>>> 65c3b4ba9ff9ee69836e27a5f8b64297ffdf9b27
 
 In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
 both \SCAMP~\cite{ganesh2003peer}
-and \CYCLON~\cite{voulgaris2005cyclon}. Compared to the state of art,
+and \CYCLON~\cite{voulgaris2005cyclon}. \TODO{Compared to the state-of-the-art},
 \begin{inparaenum}[(i)]
 \item \SPRAY dynamically adapts the neighborhood of each peer. Thus, the number
-  of connections grows logarithmically compared to the size of the network.
+  of connections is logarithmically scaling to the network size.
 \item \SPRAY only uses neighbor-to-neighbor interactions to establish
   connections. Thus, the connections are established in constant time.
 \item \SPRAY quickly converges to a topology exposing properties similar to
-  those of a random graph. Thus, the network becomes robust to massive
-  failures, quickly disseminates information etc.
+  those of random graphs. Thus, the network becomes robust to massive failures,
+  quickly disseminates information etc.
 \item Experiments show the adaptiveness of \SPRAY and highlight its efficiency
-  improvement at the cost of little overhead, compared to a representative of
-  not adaptive approaches, namely \CYCLON.
+  improvement at the cost of little overhead.
 \end{inparaenum}
 
+<<<<<<< HEAD
 To highlight the improvement brought by \SPRAY we built \CRATE, a
 real-time decentralized editor directly running in web
 browsers\footnote{\url{http://chat-wane.github.io/CRATE/}} on laptops,
@@ -59,6 +73,20 @@ state-of-the-art. Section~\ref{sec:use-case} details our experiment
 with \CRATE a real-time collaborative editor running in browsers. We
 conclude and discuss about the perspective in
 Section~\ref{sec:conclusion}.
+=======
+To highlight the improvement brought by \SPRAY we built \CRATE, a real-time
+decentralized editor directly running in web
+browsers\footnote{\url{http://chat-wane.github.io/CRATE/}}. This real-life use
+case shows that \TODO{information dissemination} highly benefits from the
+adaptiveness of \SPRAY. The experiments running on Grid'5000 and involving
+uptill 600 editors confirm \TODO{scalability and efficiency}.
+
+The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
+reviews related work. Section~\ref{sec:proposal} details the \SPRAY protocol and
+compares it to state-of-the-art. Section~\ref{sec:proposal2} provides a
+real-life use case about real-time decentralized editing in browsers. We
+conclude and discuss about the perspective in Section~\ref{sec:conclusion}.
+>>>>>>> 65c3b4ba9ff9ee69836e27a5f8b64297ffdf9b27
 
 %%% Local Variables:
 %%% mode: latex

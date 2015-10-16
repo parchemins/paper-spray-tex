@@ -1,9 +1,12 @@
 
-%\section{Use case: CRATE}
 \section{Use case: real-time editing}
+<<<<<<< HEAD
 \label{sec:use-case}
 %%\subsection{Decentralized collaborative editor}
 %%\label{subsec:editor}
+=======
+\label{sec:proposal2}
+>>>>>>> 65c3b4ba9ff9ee69836e27a5f8b64297ffdf9b27
 
 Google Docs made real-time editing in browsers easy for millions of
 users. However, Google mediates real-time editing sessions with central servers
@@ -44,9 +47,11 @@ that guarantees eventually consistent documents, i.e., documents converge to an
 identical state~\cite{bailis2013eventual}. It allocates an identifier to each
 element of the sequence representing the document. Using the allocation function
 \LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the space of these
-identifiers under a polylogarithmic bound compared to the document size. Hence,
-a communication complexity in $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where
-$d$ is the document size.
+identifiers under a polylogarithmic bound compared to the document size.
+
+As consequence, the communication complexity of \CRATE is upper-bounded by
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
+$|\mathcal{N}|$ is the editing session size.
 
 \subsection{Architecture}
 
@@ -126,18 +131,27 @@ re-executed~\cite{saito2005optimistic}. Consistency requires that all members
 eventually converge to an identical state, i.e., when the system is idle, all
 copies become similar.
 
-The sequence data structure Conflict-free replicated data types (CRDTs) for
-sequences~\cite{shapiro2011conflict, shapiro2011comprehensive} provide two
-commutative operations to update documents: \emph{insert} and \emph{delete}.
-They use totally ordered, unique, and immutable identifiers associated to each
-character to guarantee consistent copies of the document. Nevertheless, they
-require storing these identifiers. In this paper, we focus on variable-size
-identifiers. Thus, identifiers are lists determined at generation.
+\CRATE uses a sequence data structure that belongs to the class of Conflict-free
+Replicated Data Types (CRDTs)~\cite{shapiro2011conflict,
+  shapiro2011comprehensive}. It provides two commutative operations to update
+documents: \emph{insert} and \emph{delete}.  They use totally ordered, unique,
+and immutable identifiers associated to each character to guarantee consistent
+copies of the document. Nevertheless, they require storing these identifiers. In
+this paper, we focus on variable-size identifiers~\cite{preguica2009commutative,
+  weiss2009logoot}. Thus, identifiers are lists determined at generation.
 
 To generate its identifiers, \CRATE uses \LSEQ~\cite{nedelec2013lseq}, an
 allocation function that provides identifiers enjoying a polylogarithmic upper
 bound $\mathcal{O}((\log d)^2)$ on space complexity compared to the document
-size $d$.
+size $d$. \TODO{Indeed, identifiers can be factorized into a tree structure where they
+represent a path to their character. \LSEQ uses an exponential tree, i.e., a
+tree where each element has twice as much children as its parent. Considering a
+path [$l_1.l_2\ldots l_k$], $k$ being the depth of the element in the tree,
+$l_k$ requires 1 additionnal bit to encode than $l_{k-1}$. As consequence,
+identifiers reflect the document size.}
+
+
+
 
 %%% Local Variables:
 %%% mode: latex
