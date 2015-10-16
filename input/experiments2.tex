@@ -2,9 +2,9 @@
 \subsection{Experimentation}
 \label{subsec:experiments2}
 
-In this section, we highlight the improvements brought to gossiping protocols on
-a real-life use case concerning decentralized collaborative editing in browsers.
-These experiments run on Grid'5000 testbed and involve uptill 600 browsers
+We highlight the improvements brought to gossiping protocols on a real-life use
+case concerning decentralized collaborative editing in browsers.  These
+experiments run on Grid'5000 testbed and involve uptill 600 browsers
 simultaneously writing a document. Using \SPRAY, we expect a traffic
 logarithmically scaling compared to the network size, along with a
 polylogarithmic growth brought by the real-time editor itself. The code of
@@ -44,15 +44,21 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
   former is lower.  On the opposite, it worth noting that using \CYCLON, the
   traffic would have been the same for all runs. Since it commonly overestimates
   partial views to accommodate with any network size, the traffic would have
-  been higher. Figure~\ref{fig:traffic} also shows that the average partial view
-  size follows the natural logarithmic expectation with small error due to
-  randomness. Figure~\ref{fig:traffic} finally shows that the variance remains
-  small which indicates that the network of browsers reached a state where
-  neighborhood size are balanced.
+  been higher (cf. Figure~\ref{fig:churn}).  Figure~\ref{fig:traffic} also shows
+  that the average partial view size follows the natural logarithmic expectation
+  with small error due to randomness. Figure~\ref{fig:traffic} finally shows
+  that the variance remains small which indicates that the network of browsers
+  reached a state where neighborhood size are balanced.
 \item [Reasons:] Information dissemination uses neighborhoods to broadcast
   messages. Each member receives and forwards each message which transitively
   reach all members. Thus, the traffic depends of the message multiplied by the
   number of neighbors logarithmically scaling thanks to \SPRAY. The growth
   during each run corresponds to the polylogarithmic growth of identifiers from
-  the application.
+  the application. Indeed, identifiers allocated by \TODO{\LSEQ are lists of
+    Integers [$l_1.l_2\ldots l_k$] where $k$ is the size of the identifier. With
+    incoming characters arriving, the size of the identifiers grows and the
+    Integer range as well. Therefore, $l_k$ takes 1 additionnal bit to encode
+    than $l_{k-1}$, leading to twice additionnal possible identifiers.}  Small
+  identifiers reflect small documents. Large identifiers reflect large
+  documents. At the end, documents store millions of characters.
 \end{asparadesc}
