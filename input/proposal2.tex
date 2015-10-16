@@ -37,15 +37,16 @@ state-of-the-art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon}, \SPRAY
 allows the diffusion cost to adapt to the network size. Thus, small networks do
 not pay the price of large networks.
 
-As for the content of messages, \CRATE uses a Conflict-free Replicated Data
-Type~\cite{shapiro2011conflict, shapiro2011comprehensive} (CRDT) for sequences
-in order to guarantee eventually consistent documents, i.e., documents converge
-to an identical state~\cite{bailis2013eventual}. CRDTs approaches allocates an
-identifier to each element of the sequence representing the document. Using the
-allocation function \LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the
-space of these identifiers under a polylogarithmic bound compared to the
-document size. Hence, a communication complexity in
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
+As for the content of messages, \CRATE uses a sequence data structure
+% Conflict-free Replicated Data
+%Type~\cite{shapiro2011conflict, shapiro2011comprehensive} (CRDT) for sequences
+that guarantees eventually consistent documents, i.e., documents converge to an
+identical state~\cite{bailis2013eventual}. It allocates an identifier to each
+element of the sequence representing the document. Using the allocation function
+\LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the space of these
+identifiers under a polylogarithmic bound compared to the document size. Hence,
+a communication complexity in $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where
+$d$ is the document size.
 
 \subsection{Architecture}
 
@@ -55,8 +56,6 @@ $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size.
   \caption{\label{fig:architecture}\CRATE's architecture comprises 4
     layers.}
 \end{figure}
-
-
 
 Figure~\ref{fig:architecture} depicts \CRATE's architecture which comprises four
 layers:
@@ -71,7 +70,6 @@ layers:
 \item graphical user interface: includes the editor as a graphical entity that
   users can interact with inside web browsers.
 \end{inparaenum}
-%%The left part of the figure depicts the common process chain:
 Figure~\ref{fig:architecture} also depicts the process chain of \CRATE: when
 users perform an operation on the document, the operation is applied to the
 shared sequence which creates an \LSEQ identifier. Then it decorates the result
@@ -81,8 +79,8 @@ broadcast message, it checks if the operation is causally ready to be
 delivered. Once the condition is verified, it applies the operation to the
 shared sequence which notifies the graphical user interface of the changes.
 
-The rest of this section details the main components of \CRATE and their
-respective contributions to complexities.
+%% The rest of this section details the main components of \CRATE and their
+%% respective contributions to complexities.
 
 
 \subsection{Epidemic dissemination}
@@ -118,7 +116,7 @@ upper bound.
 % \CRATE uses a version vector with exceptions~\cite{malkhi2007concise}
 
 
-\subsection{Scalable data structure for sequences}
+\subsection{A scalable sequence data structure}
 
 Real-time distributed collaborative editors consider multiple participants, each
 hosting a copy of a shared sequence of characters. A participant updates at any
@@ -128,7 +126,7 @@ re-executed~\cite{saito2005optimistic}. Consistency requires that all members
 eventually converge to an identical state, i.e., when the system is idle, all
 copies become similar.
 
-Conflict-free replicated data types (CRDTs) for
+The sequence data structure Conflict-free replicated data types (CRDTs) for
 sequences~\cite{shapiro2011conflict, shapiro2011comprehensive} provide two
 commutative operations to update documents: \emph{insert} and \emph{delete}.
 They use totally ordered, unique, and immutable identifiers associated to each
