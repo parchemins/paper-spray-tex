@@ -4,50 +4,62 @@
 %%\subsection{Decentralized collaborative editor}
 %%\label{subsec:editor}
 
-Google Docs made real-time editing in browsers easy for millions of
-users. However, Google mediates real-time editing sessions with central servers
-raising issues on privacy, censorship, economic intelligence. It also raises
-scalability issues in term of number of participants.  Despite that small groups
-currently constitute the main range of users, events such as massive online
-lectures, TV shows, conferences gather larger groups.  Google Docs supports
-large groups but only the first fifty users can edit, next users have their
-rights limited to document reading. In addition, real-time editing sessions can
-be highly dynamic; even if only few authors are editing a document
-simultaneously, the editing session includes a much larger group of potential
-writers. We think that real-time editors should allow editing at anytime and
-anywhere, whatever the number of participants, without third party.
 
-Decentralized real-time editors~\cite{oster2006data, sun1998operational,
-  sun2009contextbased} do not require intermediate servers and by the same solve
-privacy issues. However, scalability issues remain.  Addressing scalability
-requires finding a good trade-off between communication, space and time
-complexities. Among others, achieving a sublinear communication complexity is
-crucial for supporting large groups.  It depends on both diffusion of messages,
-and the content of messages.
+% Google Docs made real-time editing in browsers easy for millions of
+% users. However, Google mediates real-time editing sessions with central servers
+% raising issues on privacy, censorship, economic intelligence. It also raises
+% scalability issues in term of number of participants.  Despite that small groups
+% currently constitute the main range of users, events such as massive online
+% lectures, TV shows, conferences gather larger groups.  Google Docs supports
+% large groups but only the first fifty users can edit, next users have their
+% rights limited to document reading. In addition, real-time editing sessions can
+% be highly dynamic; even if only few authors are editing a document
+% simultaneously, the editing session includes a much larger group of potential
+% writers. We think that real-time editors should allow editing at anytime and
+% anywhere, whatever the number of participants, without third party.
 
-In this paper, we introduce \CRATE as a distributed and decentralized
-CollaboRATive Editor. It aims to highlight the benefits brought by \SPRAY on
-messages diffusion. Thanks to \SPRAY, \CRATE builds a network of browsers where
-each browsers is able to communicate with a logarithmically scaling number of
-browsers compared to the global network size. Each change performed on documents
-transits neighborhoods to reach all members in a scalable
+% Decentralized real-time editors~\cite{oster2006data, sun1998operational,
+%   sun2009contextbased} do not require intermediate servers and by the same solve
+% privacy issues. However, scalability issues remain.  Addressing scalability
+% requires finding a good trade-off between communication, space and time
+% complexities. Among others, achieving a sublinear communication complexity is
+% crucial for supporting large groups.  It depends on both diffusion of messages,
+% and the content of messages.
+
+In order to demonstrate the performances of \SPRAY in a real scenario,
+we introduce \CRATE as a distributed and decentralized CollaboRATive
+Editor. Thanks to \SPRAY, \CRATE builds a network of
+browsers where each browsers is able to communicate with a
+logarithmically scaling number of browsers compared to the global
+network size. Each change performed on documents transits
+neighborhoods to reach all members in a scalable
 way~\cite{birman1999bimodal}. Contrarily to
-state-of-the-art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon}, \SPRAY
-allows the diffusion cost to adapt to the network size. Thus, small networks do
-not pay the price of large networks.
+state-of-the-art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon},
+\SPRAY allows the diffusion cost to adapt to the network size. Thus,
+small networks do not pay the price of large networks.
 
 As for the content of messages, \CRATE uses a sequence data structure
-% Conflict-free Replicated Data
-%Type~\cite{shapiro2011conflict, shapiro2011comprehensive} (CRDT) for sequences
-that guarantees eventually consistent documents, i.e., documents converge to an
-identical state~\cite{bailis2013eventual}. It allocates an identifier to each
-element of the sequence representing the document. Using the allocation function
-\LSEQ~\cite{nedelec2013lseq}, \CRATE is able to keep the space of these
-identifiers under a polylogarithmic bound compared to the document size.
+that guarantees eventually consistent documents, i.e., documents
+converge to an identical state~\cite{bailis2013eventual}. It allocates
+an identifier to each element of the sequence representing the
+document. Using the allocation function \LSEQ~\cite{nedelec2013lseq},
+\CRATE is able to keep the space of these identifiers under a
+polylogarithmic bound compared to the document size.
 
-As consequence, the communication complexity of \CRATE is upper-bounded by
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
-$|\mathcal{N}|$ is the editing session size.
+As consequence, the communication complexity of \CRATE is
+upper-bounded by $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$
+is the document size and $|\mathcal{N}|$ is the editing session size.
+
+Compared to Google docs, CRATE is decentralized and better preserve
+privacy. It also supports support any number of participants where
+google doc allows only the first fifty users to edit in
+real-time. Next users have their rights limited to document reading.
+To resume, CRATE is real-time editor that allow editing anytime and
+anywhere, whatever the number of participants, without third party. It
+can be used for small groups but also with events such as massive online
+ lectures, TV shows, conferences that gather larger groups. Transitions
+ between small groups and large groups is supported transparently
+ thanks to \SPRAY and \LSEQ.
 
 \subsection{Architecture}
 
