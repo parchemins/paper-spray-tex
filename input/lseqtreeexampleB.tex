@@ -1,0 +1,100 @@
+\begin{tikzpicture}[scale=1.1]
+
+\newcommand\Y{-45}
+\newcommand\ADDY{-8}
+
+  \scriptsize
+  \draw[dashed] (340pt,10pt) node[anchor=north west]{maximum arity}  -- (340pt,3*\Y pt);
+  \draw[dashed] (390pt,0 pt)  --(330pt,0 pt);
+  \draw[dashed] (390pt,\Y pt) -- (330pt,\Y pt);
+  \draw[dashed] (390pt,2*\Y pt) -- (330pt,2*\Y pt);
+  \draw[dashed] (390pt,3*\Y pt) -- (330pt,3*\Y pt);
+
+  \draw (340pt,0.5*\Y pt)
+  node[anchor=west, align=center]{$32$};
+  \draw (340pt,1.5*\Y pt)
+  node[anchor=west, align=center]{$64$};
+  \draw (340pt,2.5*\Y pt)
+  node[anchor=west, align=center]{$128$};
+
+  \begin{scope}[shift={(90pt,0pt)}]
+\begin{scope}[shift={(160pt,0pt)}]
+  \draw[->,dashed](50pt,3*\Y + 10 pt)--node[anchor=north]{insertion order}
+  (-50pt,3*\Y + 10 pt);
+  %% node to node
+  \scriptsize
+  \draw[thick] (0pt,0pt) -- node[anchor=south east]{0} (-70pt,\Y pt);
+  \draw[thick] (0pt,0pt) -- node[anchor=east]{1} (50pt, \Y pt); %% Y
+  \draw[thick] (-70pt, \Y pt) -- node[anchor=north]{57} (30pt, 2 * \Y pt); %% T
+  \draw[thick] (-70pt, \Y pt) -- node[anchor=north]{56} (10pt, 2 * \Y pt); %% R
+  \draw[thick] (-70pt, \Y pt) -- node[anchor=north]{53}(-10pt, 2 * \Y pt);%% E
+  \draw[thick] (-70pt, \Y pt) -- node[anchor=north]{48}(-30pt,2 * \Y pt); %% W
+  \draw[thick] (-70pt, \Y pt) -- node[anchor=east]{44}(-50pt,2 * \Y pt); %% Q
+  \draw[dashed, thick] (0pt,0pt) -- node[anchor=south west]{32} (70pt,\Y pt);
+
+  %% node to element
+  \draw[->] ( 50pt, \Y pt) -- ( 50pt, \ADDY + \Y pt); %% Y
+  \draw[->] ( 30pt, 2* \Y pt) -- ( 30pt, \ADDY + 2 *\Y pt); %% T
+  \draw[->] ( 10pt, 2 *\Y pt) -- ( 10pt, \ADDY + 2 *\Y pt); %% R
+  \draw[->] (-10pt, 2 *\Y pt) -- (-10pt, \ADDY + 2 *\Y pt); %% E
+  \draw[->] (-30pt, 2 *\Y pt) -- (-30pt, \ADDY + 2 *\Y pt); %% W
+  \draw[->] (-50pt, 2 *\Y pt) -- (-50pt, \ADDY + 2 *\Y pt); %% Q
+
+  %% element to desambiguator
+  \draw[->,densely dashdotted]
+  ( 50pt, \ADDY + \Y pt) -- ( 50pt,2.75*\ADDY+\Y pt); %% Y
+  \draw[->,densely dashdotted]
+  ( 30pt, \ADDY + 2* \Y pt) -- ( 30pt,2.75*\ADDY+ 2* \Y pt); %% T
+  \draw[->,densely dashdotted]
+  ( 10pt, \ADDY + 2* \Y pt) -- ( 10pt,2.75*\ADDY+ 2* \Y pt); %% R
+  \draw[->,densely dashdotted]
+  ( -10pt, \ADDY + 2 *\Y pt) -- (-10pt,2.75*\ADDY+ 2* \Y pt); %% E
+  \draw[->,densely dashdotted]
+  ( -30pt, \ADDY + 2 *\Y pt) -- (-30pt,2.75*\ADDY+ 2*\Y pt); %% W
+  \draw[->,densely dashdotted]
+  ( -50pt, \ADDY + 2* \Y pt) -- (-50pt,2.75*\ADDY+ 2*\Y pt); %% Q
+
+  %% node
+  \draw[fill=black] (0pt,0pt) circle (1pt); %% rooot
+  \draw[fill=white] ( 50pt, \Y pt) circle (1pt); %% Y
+  \draw[fill=white] (-70pt, \Y pt) circle (1pt); %% 0
+  \draw[fill=white] ( 30 pt, 2 * \Y pt) circle (1pt); %% T
+  \draw[fill=white] ( 10 pt, 2 * \Y pt) circle (1pt); %% R
+  \draw[fill=white] (-10 pt, 2 * \Y pt) circle (1pt); %% E
+  \draw[fill=white] (-30 pt, 2 * \Y pt) circle (1pt); %% W
+  \draw[fill=white] (-50 pt, 2 * \Y pt) circle (1pt); %% Q
+  \draw[fill=black] ( 70pt, \Y pt) circle (1pt);
+
+
+  %% elements
+  \draw[fill=white] ( 50pt, -4 + \ADDY + \Y pt)
+  node{\textbf{Y}} +(-4pt,-4pt) rectangle +(4pt,4pt) ; %% Y
+  \draw[fill=white] ( 30pt, -4 + \ADDY +  2 *\Y pt)
+  node{\textbf{T}} +(-4pt,-4pt) rectangle +(4pt,4pt) ; %% T
+  \draw[fill=white] ( 10pt, -4 + \ADDY +  2* \Y pt)
+  node{\textbf{R}} +(-4pt,-4pt) rectangle +(4pt,4pt) ; %% R
+  \draw[fill=white] (-10pt, -4 + \ADDY + 2 *\Y pt)
+  node{\textbf{E}} +(-4pt,-4pt) rectangle +(4pt,4pt) ; %% E
+  \draw[fill=white] (-30pt, -4 + \ADDY + 2 * \Y pt)
+  node{\textbf{W}} +(-4pt,-4pt) rectangle +(4pt,4pt) ; %% W
+  \draw[fill=white] (-50pt, -4 + \ADDY + 2 *\Y pt)
+  node{\textbf{Q}} +(-4pt,-4pt) rectangle +(4pt,4pt) ; %% Q
+
+  %% desambiguator
+  \draw[fill=gray!20]( 50pt, -2.5 + 2.75 * \ADDY + \Y pt)
+  +(-2.5pt,-2.5pt) rectangle +(2.5pt,2.5pt);
+  \draw[fill=gray!20]( 30pt, -2.5 + 2.75 * \ADDY +2 *\Y pt)
+  +(-2.5pt,-2.5pt) rectangle +(2.5pt,2.5pt);
+  \draw[fill=gray!20]( 10pt, -2.5 + 2.75 * \ADDY +2*\Y pt)
+  +(-2.5pt,-2.5pt) rectangle +(2.5pt,2.5pt);
+  \draw[fill=gray!20](-10pt, -2.5 + 2.75 * \ADDY +2*\Y pt )
+  +(-2.5pt,-2.5pt) rectangle +(2.5pt,2.5pt);
+  \draw[fill=gray!20](-30pt, -2.5 + 2.75 * \ADDY +2*\Y pt)
+  +(-2.5pt,-2.5pt) rectangle +(2.5pt,2.5pt);
+  \draw[fill=gray!20](-50pt, -2.5 + 2.75 * \ADDY +2*\Y pt) 
+  +(-2.5pt,-2.5pt) rectangle +(2.5pt,2.5pt);
+
+\end{scope}
+\end{scope}
+
+\end{tikzpicture}

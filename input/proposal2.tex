@@ -1,30 +1,6 @@
 
 \section{Use case: real-time editing}
 \label{sec:use-case}
-%%\subsection{Decentralized collaborative editor}
-%%\label{subsec:editor}
-
-
-% Google Docs made real-time editing in browsers easy for millions of
-% users. However, Google mediates real-time editing sessions with central servers
-% raising issues on privacy, censorship, economic intelligence. It also raises
-% scalability issues in term of number of participants.  Despite that small groups
-% currently constitute the main range of users, events such as massive online
-% lectures, TV shows, conferences gather larger groups.  Google Docs supports
-% large groups but only the first fifty users can edit, next users have their
-% rights limited to document reading. In addition, real-time editing sessions can
-% be highly dynamic; even if only few authors are editing a document
-% simultaneously, the editing session includes a much larger group of potential
-% writers. We think that real-time editors should allow editing at anytime and
-% anywhere, whatever the number of participants, without third party.
-
-% Decentralized real-time editors~\cite{oster2006data, sun1998operational,
-%   sun2009contextbased} do not require intermediate servers and by the same solve
-% privacy issues. However, scalability issues remain.  Addressing scalability
-% requires finding a good trade-off between communication, space and time
-% complexities. Among others, achieving a sublinear communication complexity is
-% crucial for supporting large groups.  It depends on both diffusion of messages,
-% and the content of messages.
 
 In order to demonstrate the performances of \SPRAY in a real scenario,
 we introduce \CRATE as a distributed and decentralized CollaboRATive
@@ -50,16 +26,15 @@ As consequence, the communication complexity of \CRATE is
 upper-bounded by $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$
 is the document size and $|\mathcal{N}|$ is the editing session size.
 
-Compared to Google docs, CRATE is decentralized and better preserve
-privacy. It also supports support any number of participants where
-google doc allows only the first fifty users to edit in
-real-time. Next users have their rights limited to document reading.
-To resume, CRATE is real-time editor that allow editing anytime and
-anywhere, whatever the number of participants, without third party. It
-can be used for small groups but also with events such as massive online
- lectures, TV shows, conferences that gather larger groups. Transitions
- between small groups and large groups is supported transparently
- thanks to \SPRAY and \LSEQ.
+Compared to Google Docs, \CRATE is decentralized and preserves privacy. It also
+supports any number of participants where Google Docs allows only the first
+fifty users to edit in real-time. Next users have their rights limited to
+document reading.  To summarize, \CRATE is real-time editor that allows editing
+anytime and anywhere, whatever the number of participants, without third
+party. It can be used for small groups but also during events such as massive
+online lectures, TV shows, conferences that gather larger groups. Transitions
+between small groups and large groups is supported transparently thanks to
+\SPRAY and \LSEQ.
 
 \subsection{Architecture}
 
@@ -151,15 +126,26 @@ this paper, we focus on variable-size identifiers~\cite{preguica2009commutative,
 To generate its identifiers, \CRATE uses \LSEQ~\cite{nedelec2013lseq}, an
 allocation function that provides identifiers enjoying a polylogarithmic upper
 bound $\mathcal{O}((\log d)^2)$ on space complexity compared to the document
-size $d$. \TODO{Indeed, identifiers can be factorized into a tree structure where they
-represent a path to their character. \LSEQ uses an exponential tree, i.e., a
-tree where each element has twice as much children as its parent. Considering a
-path [$l_1.l_2\ldots l_k$], $k$ being the depth of the element in the tree,
-$l_k$ requires 1 additionnal bit to encode than $l_{k-1}$. As consequence,
-identifiers reflect the document size.}
+size $d$. 
 
+\begin{figure}
+  \centering
+  \input{./input/lseqtreeexampleB.tex}
+  \caption{\label{fig:lseqexample}\LSEQ data structure representing QWERTY.}
+\end{figure}
 
-
+\LSEQ factorizes identifiers into a tree structure. Each identifier is a path
+leading to its character. A lexicographic total order among paths allows
+retrieving the sequence of characters. Figure~\ref{fig:lseqexample} shows a data
+structure example that represents the sequence QWERTY inserted backward, i.e.,
+the Y, then W, etc. We observe that \LSEQ uses an exponential tree where each
+element has twice as many children as its parent. Here, the path of Character Q
+is the concatenation of Integers [0.44] which requires
+$\log_2(32)+\log_2(64)=11$ bits to encode. It takes less and less space to
+encode more and more identifiers. \CRATE sends the path along with uniqueness
+markers and the character to all its neighbors where they will be both
+integrated and forwarded. All member sends it once to their logarithmically
+scaling neighborhood.
 
 %%% Local Variables:
 %%% mode: latex
