@@ -44,11 +44,13 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
   former is lower.  On the opposite, it is worth noting that using \CYCLON, the
   traffic would have been the same for all runs. Since it commonly overestimates
   partial views to accommodate with any network size, the traffic would have
-  been higher (cf. Figure~\ref{fig:churn}).  Figure~\ref{fig:traffic} also shows
-  that the average partial view size follows the natural logarithmic expectation
-  with small error due to randomness. Figure~\ref{fig:traffic} finally shows
-  that the variance remains small which indicates that the network of browsers
-  reached a state where neighborhood size are balanced.
+  been higher (cf. Figure~\ref{fig:churn}). As we observe, even small partial
+  view size differences make significative differences when they are used for
+  messages dissemination.  Figure~\ref{fig:traffic} also shows that the average
+  partial view size follows the natural logarithmic expectation with small error
+  due to randomness. Figure~\ref{fig:traffic} finally shows that the variance
+  remains small which indicates that the network of browsers reached a state
+  where neighborhood size are balanced.
 \item [Reasons:] Information dissemination uses neighborhoods to broadcast
   messages. Each member receives and forwards each message which transitively
   reach all members. Thus, the traffic depends of the message multiplied by the
