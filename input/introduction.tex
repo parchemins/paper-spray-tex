@@ -12,41 +12,46 @@
 % deploy such applications on web browsers.
 % that can run on laptops, desktops and mobile devices.
 
-WebRTC\footnote{\url{http://www.webrtc.org/}} made browser-to-browser
-connections easy even within complex network environments that involve firewalls,
-proxies, Net Address Translation (NAT) and mobile networks. WebRTC opens a new
-playground to deploy large-scale distributed applications running in browsers
-with browser-to-browser connection only. Peer sampling protocols such as
-\CYCLON~\cite{voulgaris2005cyclon} can be used to maintain browsers connected.
-However, \CYCLON does not adapt to networks that grow or shrink.
-For instance,
-\TODO{a mobile phone user might maintain 10 WebRTC connections with other
-  remote browsers when only 6 would be enough}. The difference is significant when
-these connections are actively used to broadcast messages \TODO{generating
-  oversized traffic on the network}.
+WebRTC\footnote{\url{http://www.webrtc.org/}} makes browser-to-browser
+communication easy even within complex network environments that
+involve firewalls, proxies, Net Address Translation (NAT) and mobile
+networks. As a result, it opens the door to a new generation of
+large-scale distributed applications that exploit only
+browser-to-browser connections. Among the basic building blocks for
+such distributed applications, we find gossip-based peer-sampling
+protocols such as \CYCLON~\cite{voulgaris2005cyclon}, which can build
+and maintain reliable overlay networks in dynamic environments.
+However, \CYCLON does not effectively adapt to networks that grow or
+shrink and forces nodes to maintain unnecessary connections.  For
+instance, it might require a mobile phone to maintain 10 WebRTC
+connections with other remote browsers when only 6 would be
+enough. This yields unnecessary network traffic, particularly when
+applications employ these connections to broadcast messages.
 
-In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
-both \SCAMP~\cite{ganesh2003peer}
-and \CYCLON~\cite{voulgaris2005cyclon}. \TODO{Compared to the state-of-the-art},
+In this paper, we introduce \SPRAY, a random-peer-sam\-pling protocol
+inspired by both \SCAMP~\cite{ganesh2003peer} and
+\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state of the
+art in several ways. 
 \begin{inparaenum}[(i)]
-\item \SPRAY dynamically adapts the neighborhood of each peer. Thus, the number
-  of connections is logarithmically scaling to the network size.
-\item \SPRAY only uses neighbor-to-neighbor interactions to establish
-  connections. Thus, the connections are established in constant time.
-\item \SPRAY quickly converges to a topology exposing properties similar to
-  those of random graphs. Thus, the network becomes robust to massive failures,
-  quickly disseminates information etc.
-\item Experiments show the adaptiveness of \SPRAY and highlight its efficiency
-  improvement at the cost of little overhead.
+\item It dynamically adapts the neighborhood of each peer. Thus, the
+  number of connections scales logarithmically with the network size.
+\item It only uses neighbor-to-neighbor interactions to establish
+  connections. Thus, the process takes constant time.
+\item It quickly converges to a topology with properties similar to
+  those of random graphs. Thus, the network becomes robust to massive
+  failures, quickly disseminates information etc.
+\item Experiments show the flexibility of \SPRAY and highlight its
+  efficiency improvement at the cost of little overhead.
 \end{inparaenum}
 
-To highlight the improvement brought by \SPRAY we built \CRATE, a
-real-time decentralized editor directly running in web
-browsers\footnote{\url{http://chat-wane.github.io/CRATE/}} \TODO{on laptops,
-tablets and mobile phones}. The experiments run on Grid'5000
-involved up till 600 editors and demonstrated that \SPRAY significantly
-reduces the network traffic according to the number of
-participants. 
+To demonstrate the effectiveness of \SPRAY, we also introduce \CRATE,
+a real-time decentralized editor directly running in web
+browsers\footnote{\url{http://chat-wane.github.io/CRATE/}}: \TODO{on
+  laptops, tablets, or mobile phones}. We experiment with \CRATE by
+deploying 600 editors on Grid'5000. Our results demonstrate that
+\SPRAY significantly reduces network traffic with respect to a
+standard peer-sampling protocol, and adapts to the number
+of participants.
 
 The rest of this paper is organized as follows:
 Section~\ref{sec:relatedwork} reviews the related
