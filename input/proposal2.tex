@@ -2,13 +2,13 @@
 \section{Use case: real-time editing}
 \label{sec:use-case}
 
-In order to demonstrate the performances of \SPRAY in a real scenario,
+In order to demonstrate the performance of \SPRAY in a real scenario,
 we introduce \CRATE as a distributed and decentralized CollaboRATive
 Editor. Thanks to \SPRAY, \CRATE builds a network of
 browsers where each browsers is able to communicate with a
 logarithmically scaling number of browsers compared to the global
 network size. Each change performed on documents transits
-neighborhoods to reach all members in a scalable
+neighbors to reach all members in a scalable
 way~\cite{birman1999bimodal}. Contrarily to
 state-of-the-art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon},
 \SPRAY allows the diffusion cost to adapt to the network size. Thus,
@@ -28,7 +28,7 @@ is the document size and $|\mathcal{N}|$ is the editing session size.
 
 Compared to Google Docs, \CRATE is decentralized and preserves privacy. It also
 supports any number of participants where Google Docs allows only the first
-fifty users to edit in real-time. Next users have their rights limited to
+fifty users to edit in real-time. Additional users have their rights limited to
 document reading.  To summarize, \CRATE is real-time editor that allows editing
 anytime and anywhere, whatever the number of participants, without third
 party. It can be used for small groups but also during events such as massive
