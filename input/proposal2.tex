@@ -3,38 +3,60 @@
 \label{sec:use-case}
 
 In order to demonstrate the performance of \SPRAY in a real scenario,
-we introduce \CRATE as a distributed and decentralized CollaboRATive
-Editor. Thanks to \SPRAY, \CRATE builds a network of
-browsers where each browsers is able to communicate with a
-logarithmically scaling number of browsers compared to the global
-network size. Each change performed on documents transits
-neighbors to reach all members in a scalable
+we introduce \CRATE, a real-time editor that allows editing anytime
+and anywhere, whatever the number of participants, without third
+party. It can be used for small groups but also during events such as
+massive online lectures, TV shows, conferences that gather larger
+groups. Transitions between small groups and large groups is supported
+transparently thanks to \SPRAY. Distributed real-time editing is a
+pertinent context for \SPRAY; groups size are changing quickly and any
+participant broadcasts anytime to all other participants.
+
+\CRATE builds a network of browsers where each browsers is able to
+communicate with a logarithmically scaling number of browsers compared
+to the global network size. Each change performed on documents
+transits neighbors to reach all members in a scalable
 way~\cite{birman1999bimodal}. Contrarily to
 state-of-the-art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon},
 \SPRAY allows the diffusion cost to adapt to the network size. Thus,
 small networks do not pay the price of large networks.
 
-As for the content of messages, \CRATE uses a sequence data structure
-that guarantees eventually consistent documents, i.e., documents
-converge to an identical state~\cite{bailis2013eventual}. It allocates
-an identifier to each element of the sequence representing the
-document. Using the allocation function \LSEQ~\cite{nedelec2013lseq},
-\CRATE is able to keep the space of these identifiers under a
-polylogarithmic bound compared to the document size.
+Real-time distributed collaborative editors consider multiple participants, each
+hosting a copy of a shared sequence of characters. A participant updates at any
+time its local copy by inserting or deleting a character. Then, the operation is
+eventually delivered to all other members. Finally, delivered operations are
+re-executed~\cite{saito2005optimistic}. Consistency requires that all members
+eventually converge to an identical state, i.e., when the system is idle, all
+copies become similar~\cite{bailis2013eventual}.
 
-As consequence, the communication complexity of \CRATE is
-upper-bounded by $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$
-is the document size and $|\mathcal{N}|$ is the editing session size.
+\CRATE uses a sequence data structure that belongs to the class of Conflict-free
+Replicated Data Types (CRDTs)~\cite{shapiro2011conflict,
+  shapiro2011comprehensive}. It provides two commutative operations to update
+documents: \emph{insert} and \emph{delete}.  They use totally ordered, unique,
+and immutable identifiers associated to each character to guarantee consistent
+copies of the document. % Nevertheless, they require storing these identifiers. In
+% this paper, we focus on variable-size identifiers~\cite{preguica2009commutative,
+%   weiss2009logoot}. Thus, identifiers are lists determined at generation.
 
-Compared to Google Docs, \CRATE is decentralized and preserves privacy. It also
-supports any number of participants where Google Docs allows only the first
-fifty users to edit in real-time. Additional users have their rights limited to
-document reading.  To summarize, \CRATE is real-time editor that allows editing
-anytime and anywhere, whatever the number of participants, without third
-party. It can be used for small groups but also during events such as massive
-online lectures, TV shows, conferences that gather larger groups. Transitions
-between small groups and large groups is supported transparently thanks to
-\SPRAY and \LSEQ.
+% As for the content of messages, \CRATE uses a sequence data structure
+% that guarantees eventually consistent documents, i.e., documents
+% converge to an identical statew. It allocates
+% an identifier to each element of the sequence representing the
+% document.
+
+\CRATE uses the allocation function \LSEQ~\cite{nedelec2013lseq} to
+keep the space of these identifiers under a polylogarithmic bound
+compared to the document size. As consequence, the communication
+complexity of \CRATE is upper-bounded by
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document
+size and $|\mathcal{N}|$ is the editing session size. To summerize,
+each time a participant types a character, it broadcasts this character
+plus an identifier to the editing session.
+
+Compared to Google Docs, \CRATE is decentralized and preserves
+privacy. It also supports any number of participants where Google Docs
+allows only the first fifty users to edit in real-time. Additional
+users have their rights limited to document reading.
 
 \subsection{Architecture}
 
@@ -108,22 +130,22 @@ upper bound.
 
 \subsection{A scalable sequence data structure}
 
-Real-time distributed collaborative editors consider multiple participants, each
-hosting a copy of a shared sequence of characters. A participant updates at any
-time its local copy by inserting or deleting a character. Then, the operation is
-eventually delivered to all other members. Finally, delivered operations are
-re-executed~\cite{saito2005optimistic}. Consistency requires that all members
-eventually converge to an identical state, i.e., when the system is idle, all
-copies become similar.
+% Real-time distributed collaborative editors consider multiple participants, each
+% hosting a copy of a shared sequence of characters. A participant updates at any
+% time its local copy by inserting or deleting a character. Then, the operation is
+% eventually delivered to all other members. Finally, delivered operations are
+% re-executed~\cite{saito2005optimistic}. Consistency requires that all members
+% eventually converge to an identical state, i.e., when the system is idle, all
+% copies become similar.
 
-\CRATE uses a sequence data structure that belongs to the class of Conflict-free
-Replicated Data Types (CRDTs)~\cite{shapiro2011conflict,
-  shapiro2011comprehensive}. It provides two commutative operations to update
-documents: \emph{insert} and \emph{delete}.  They use totally ordered, unique,
-and immutable identifiers associated to each character to guarantee consistent
-copies of the document. Nevertheless, they require storing these identifiers. In
-this paper, we focus on variable-size identifiers~\cite{preguica2009commutative,
-  weiss2009logoot}. Thus, identifiers are lists determined at generation.
+% \CRATE uses a sequence data structure that belongs to the class of Conflict-free
+% Replicated Data Types (CRDTs)~\cite{shapiro2011conflict,
+%   shapiro2011comprehensive}. It provides two commutative operations to update
+% documents: \emph{insert} and \emph{delete}.  They use totally ordered, unique,
+% and immutable identifiers associated to each character to guarantee consistent
+% copies of the document. Nevertheless, they require storing these identifiers. In
+% this paper, we focus on variable-size identifiers~\cite{preguica2009commutative,
+%   weiss2009logoot}. Thus, identifiers are lists determined at generation.
 
 To generate its identifiers, \CRATE uses \LSEQ~\cite{nedelec2013lseq}, an
 allocation function that provides identifiers enjoying a polylogarithmic upper
