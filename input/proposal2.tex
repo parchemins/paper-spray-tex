@@ -76,15 +76,17 @@ shared sequence which notifies the graphical user interface of the changes.
 
 Epidemic dissemination~\cite{birman1999bimodal,demers1987epidemic} (or
 gossiping) relies on the membership protocol to propagate messages in a scalable
-way to all members (broadcast). Algorithm~\ref{algo:gossiping} shows the simple
-functioning of this protocol. When a peer emits a message, it sends it to its
-neighborhood. Each peer receiving such messages forwards it to its neighborhood
-too. Messages transitively reach all peers of the network.
+way to all members (broadcast).
 
 \begin{algorithm}[h]
   \input{./input/gossipingalgo.tex}
   \caption{\label{algo:gossiping}Epidemic dissemination protocol.}
 \end{algorithm}
+
+Algorithm~\ref{algo:gossiping} shows the simple functioning of this
+protocol. When a peer emits a message, it sends it to its neighborhood. Each
+peer receiving such messages forwards it to its neighborhood too. Messages
+transitively reach all peers of the network.
 
 Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
 and since the latter grows logarithmically compared to the network size, the

@@ -1,21 +1,19 @@
 
 \begin{abstract}
   The introduction of WebRTC has opened a new playground for large-scale
-  distributed applications running in web browsers. Peer sampling protocols
-  can be used to maintain connectivity between devices. However, they do not adapt to 
-  networks that
-  can grow or shrink very rapidly. As a result, traffic can be \TODO{oversized}.
+  distributed applications running in web browsers. Peer sampling protocols can
+  be used to maintain connectivity between devices. However, they do not adapt
+  to networks that can grow or shrink.  As a result, traffic can be oversized.
   In this paper, we address the limitations of current peer sampling approaches
   by introducing \SPRAY, a novel adaptive peer sampling protocol that maintains
-  local \TODO{routing} tables that logarithmically scale with the total
-  number of \TODO{participants}. Our experiments demonstrate the ability of
-  \SPRAY to adapt to dynamic networks, reducing the number of WebRTC connections
-  needed to maintain browsers connected. To validate our proposal, we built a
-  real-time decentralized editor running in browsers \TODO{on laptops, tablets
-    and mobile phones}. We ran experiments involving up to 600
-  communicating web browsers. The results demonstrate that \SPRAY significantly
-  reduces the network traffic according to the number of participants and saves
-  bandwidth.
+  local neighborhood tables that logarithmically scale with the total number of
+  network members. Our experiments demonstrate the ability of \SPRAY to
+  adapt to dynamic networks, reducing the number of WebRTC connections needed to
+  maintain browsers connected. To validate our proposal, we built a real-time
+  decentralized editor running in browsers, thus on laptops, tablets and mobile
+  phones. We ran experiments involving up to 600 communicating web browsers. The
+  results demonstrate that \SPRAY significantly reduces the network traffic
+  according to the number of participants and saves bandwidth.
 \end{abstract}
 
 

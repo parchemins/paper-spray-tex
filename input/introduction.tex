@@ -18,19 +18,19 @@ involve firewalls, proxies, Net Address Translation (NAT) and mobile
 networks. As a result, it opens the door to a new generation of
 large-scale distributed applications that exploit only
 browser-to-browser connections. Among the basic building blocks for
-such distributed applications, we find gossip-based peer-sampling
+such distributed applications, we find gossip-based peer sampling
 protocols such as \CYCLON~\cite{voulgaris2005cyclon}, which can build
 and maintain reliable overlay networks in dynamic environments.
 However, \CYCLON does not effectively adapt to networks that grow or
-shrink and forces nodes to maintain unnecessary connections.  For
+shrink and forces peers to maintain unnecessary connections.  For
 instance, it might require a mobile phone to maintain 10 WebRTC
 connections with other remote browsers when only 6 would be
 enough. This yields unnecessary network traffic, particularly when
 applications employ these connections to broadcast messages.
 
-In this paper, we introduce \SPRAY, a random-peer-sam\-pling protocol
+In this paper, we introduce \SPRAY, a random peer sampling protocol
 inspired by both \SCAMP~\cite{ganesh2003peer} and
-\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state of the
+\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state-of-the-
 art in several ways. 
 \begin{inparaenum}[(i)]
 \item It dynamically adapts the neighborhood of each peer. Thus, the
@@ -46,11 +46,11 @@ art in several ways.
 
 To demonstrate the effectiveness of \SPRAY, we also introduce \CRATE,
 a real-time decentralized editor directly running in web
-browsers\footnote{\url{http://chat-wane.github.io/CRATE/}}: \TODO{on
-  laptops, tablets, or mobile phones}. We experiment with \CRATE by
+browsers\footnote{\url{http://chat-wane.github.io/CRATE/}}, thus on
+  laptops, tablets, or mobile phones. We experiment with \CRATE by
 deploying 600 editors on Grid'5000. Our results demonstrate that
 \SPRAY significantly reduces network traffic with respect to a
-standard peer-sampling protocol, and adapts to the number
+standard peer sampling protocol, and adapts to the number
 of participants.
 
 The rest of this paper is organized as follows:
