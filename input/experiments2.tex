@@ -58,13 +58,13 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
   overall. Figure~\ref{fig:traffic} finally shows that the variance remains
   small which indicates that the network of browsers reached a state where
   neighborhood size are balanced, hence, where the traffic is balanced.
-\item [Reasons:] Information dissemination uses neighborhoods to broadcast
-  messages. Each member receives and forwards each message which transitively
-  reach all members. Thus, the traffic depends of the message multiplied by the
-  number of neighbors logarithmically scaling thanks to \SPRAY. The growth
-  during each run corresponds to the polylogarithmic growth of identifiers from
-  the editors. The document size increases over time, the depth of the \LSEQ
-  tree representing the document increases accordingly. Nevertheless, since the
+\item [Reasons:] Broadcast uses neighborhoods to disseminate messages. Each
+  member receives and forwards each operation which transitively reaches all
+  members. Thus, the traffic depends of messages size multiplied by
+  neighborhoods size logarithmically scaling thanks to \SPRAY. The growth during
+  each run corresponds to the polylogarithmic growth of identifiers from the
+  editors. The document size increases over time, the depth of the \LSEQ tree
+  representing the document increases accordingly. Nevertheless, since the
   maximum arity of the tree increases over levels, the more the document grows
   the less the tree grows.
 \end{asparadesc}
