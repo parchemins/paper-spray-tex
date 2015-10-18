@@ -45,7 +45,7 @@ the risk of connection failures, each neighbor immediately adds the
 joining peer to their own neighborhood. This fulfills the second
 condition of the problem statement.  In total, the number of arcs in
 the network increases of $1+\ln(|\mathcal{N}|)$ using only
-neighbor-to-neighbor interactions which leads to a total number of
+neighbor-to-neighbor interactions, which leads to a total number of
 $|\mathcal{N}|\ln(|\mathcal{N}|)$ arcs.
 
 \begin{figure*}
@@ -91,7 +91,7 @@ neighborhood. Each of these neighbors adds $p_1$ in their partial view. In
 total, \SPRAY establishes 5 connections and the network is connected.
 
 Unfortunately, the partial views of the newest peers are clearly unbalanced and
-violates the first condition of our problem statement. The periodic protocol
+violate the first condition of our problem statement. The periodic protocol
 described in the next section will re-balance the partial views.
 
 \subsection{Shuffling}
@@ -126,35 +126,40 @@ which are not explicitly defined are the following:
 \begin{compactitem}
 \item $incrementAge(view)$: increments the age of each elements in the view
   and returns the modified view.
-\item $getOldest(view)$: retrieves the oldest of peers contained in the view.
+\item $getOldest(view)$: retrieves the oldest peer contained in the view.
 \item $getSample(view, \, size)$: returns a sample of the view containing
   $size$ elements.
-\item $replace(view,\,old,\,new)$: replaces in the view all occurrences of
-  the $old$ element by the $new$ element and returns the modified view.
-\item $rand()$: generates a random floating number between $0$ and $1$.
+\item $replace(view,\,old,\,new)$: replaces all the occurrences of the
+  $old$ element in the view by the $new$ element and returns the
+  modified view.
+\item $rand()$: generates a random floating-point number between $0$ and $1$.
 \end{compactitem}
 
-In the active thread, Function $loop$ is called every $\Delta$ time
-$t$. First, the function increments the age of each neighbor in
-$\mathcal{P}$. Then, the oldest peer $q$ is chosen to exchange a subset of its
-partial view. If Peer $q$ cannot be reached (i.e. it crashed/left), the peer
-$p$ executes the crash handling function (cf. Section~\ref{subsec:leaving}) and
-repeats the process until it finds a reachable peer $q$. Thus, the aging
-process (which is an inheritance from \CYCLON) speeds up the removal of
-crashed or departed peers. Once it finds a reachable neighbor $q$, Peer $p$
-selects a sample of its partial view, excluding one occurrence of $q$ and
-including itself. The size of this sample is half of its partial view, with at
-least one peer: the initiating peer (cf. Line~\ref{line:samplesize}). The
-answer of $q$ contains half of its partial view. Since peers can appear
-multiple times in $\mathcal{P}$, the exchanging peers may send references to
-the other peer, e.g., Peer $o$'s sample can contain references to $q$. Such
-sample, without further processing, would create self-loop ($q$'s partial view
-contains references to $q$). To alleviate this undesirable behavior, all
-occurrences of the other peer are replaced with the emitting peer
-(cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them
-remove the sample they sent from their view and add the received sample.
+In the active thread, Function $loop$ is called every $\Delta t$ time
+units. First, the function increments the age of each neighbor in
+$\mathcal{P}$. Then, it chooses the oldest peer $q$ to exchange a
+subset of its partial view. If Peer $q$ cannot be reached (i.e. it
+crashed/left), peer $p$ executes the crash-handling function
+(cf. Section~\ref{subsec:leaving}) and repeats the process until it
+finds a reachable peer $q$. Thus, the aging process (which is an
+inheritance from \CYCLON) speeds up the removal of crashed or departed
+peers. Once it finds a reachable neighbor $q$, Peer $p$ selects a
+sample of its partial view, excluding one occurrence of $q$ and
+including itself. The size of this sample is half of its partial view,
+with at least one peer: the initiating peer
+(cf. Line~\ref{line:samplesize}). The answer of $q$ contains half of
+its partial view. Since peers can appear multiple times in
+$\mathcal{P}$, the exchanging peers may send references to the other
+peer, e.g., Peer $o$'s sample can contain references to $q$. Such
+sample, without further processing, would create self-loop ($q$'s
+partial view contains references to $q$). To alleviate this
+undesirable behavior, all occurrences of the other peer are replaced
+with the emitting peer
+(cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both
+of them remove the sample they sent from their view and add the
+received sample.
 
-Figure~\ref{fig:cyclicexample} depicts \SPRAY's cyclic
+Figure~\ref{fig:cyclicexample} depicts \SPRAY's shuffling
 procedure. This scenario follows from Figure~\ref{fig:joiningexample}:
 Peer $p_1$ just joined the network. Peer $p_6$ initiates an exchange
 with $p_1$ (the oldest among the $p_6$'s partial view). It randomly
@@ -166,9 +171,9 @@ $\left\lceil{|\mathcal{P}_1|\div 2}\right\rceil = 1$ peer from its
 partial view. It sends back its sole neighbor $p_2$ and directly adds
 the received neighbor to its partial view. After receipt, Peer $p_6$
 removes the sent neighbors from its partial view, removes an
-occurrence of $p_1$, and adds the received peer from $p_1$. The peers
-$\{p_6,\,p_9\}$ compose the $p_1$'s partial view. The peers
-$\{p_2,\,p_7,\,p_8\}$ compose the $p_6$'s partial view.
+occurrence of $p_1$, and adds the received peer from $p_1$. Peers
+$\{p_6,\,p_9\}$ compose $p_1$'s partial view. Peers
+$\{p_2,\,p_7,\,p_8\}$ compose that of $p_6$.
 
 The example shows that, at first, the initiating peer has $4$ peers in
 its partial view, while the receiving peer has only $1$ peer.
@@ -196,31 +201,35 @@ protocol.
     handler. }
 \end{figure*}
 
-Concerning convergence time of the shuffling algorithm, there exists a close
-relationship between \SPRAY and the proactive aggregation protocol introduced
-in~\cite{jelasity2004epidemic,montresor2004robust}. It states that, under the
-assumption of a peer sampling sufficiently random, the mean value $\mu$ and the
-variance $\sigma^2$ at a given cycle $i$ are:
+Concerning the convergence time of the shuffling algorithm, there
+exists a close relationship between \SPRAY and the proactive
+aggregation protocol introduced
+in~\cite{jelasity2004epidemic,montresor2004robust}. Given a
+distribution of values associated with peers, and under the assumption
+of a sufficiently random peer sampling, such an aggregation protocol
+yields the following mean, $\mu$, and variance, $\sigma^2$, at cycle
+$i$;
 \begin{center}
   $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
   \hfill
   $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
   (a_{i,\,x} - \mu_i)^2$
 \end{center}
-where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The estimated
-variance must converge to $0$ over cycles. In other terms, the values tends to
-be the same over cycles. In the \SPRAY case, the value $a_{i,\,x}$ is the
-partial view size of Peer $p_x$ at cycle $i$. Indeed, each exchange from Peer
-$p_1$ to Peer $p_2$ is an aggregation resulting to:
+where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The
+estimated variance must converge to $0$ over cycles. In other terms,
+the values tends to be the same over cycles. In the \SPRAY case, the
+value $a_{i,\,x}$ is the partial view size of Peer $p_x$ at cycle
+$i$. Indeed, each exchange from Peer $p_1$ to Peer $p_2$ is an
+aggregation resulting to:
 $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{(|\mathcal{P}_1| +
-  |\mathcal{P}_2|) \div 2}$.
-Furthermore, at each cycle, each peer is involved in the exchange protocol at
-least once (they initiate one), and in the best case 1+Poisson(1) (they
-initiate one and, in average, each peer receives another one). This relation
-being established, we know that \SPRAY's partial view sizes converge
-exponentially fast to the global average size. Additionally, we know that each
-cycle decreases their variance in overall system at a rate comprised between
-${1\div 2}$ and $1\div ({2\sqrt{\text{e}}})$.
+  |\mathcal{P}_2|) \div 2}$.  Furthermore, at each cycle, each peer is
+involved in the exchange protocol at least once (they initiate one),
+and in the best case 1+Poisson(1) (they initiate one and, in average,
+each peer receives another one). This relation being established, we
+know that \SPRAY's partial view sizes converge exponentially fast to
+the global average size. Additionally, we know that each cycle
+decreases their variance in the overall system at a rate comprised
+between ${1\div 2}$ and $1\div ({2\sqrt{\text{e}}})$.
 
 The shuffling algorithm provides adaptiveness at the cost of
 duplicates. Averaging the partial view sizes over exchanges provides a quick
@@ -260,10 +269,10 @@ departures and crashes.  Function $onPeerDown$ shows the reaction of \SPRAY
 when the peer $q$ is detected as crashed or departed. A first loop counts the
 occurrences of this neighbor in the partial view, and removes all of
 them. Then, the second loop probabilistically duplicates the reference of a
-known peer. The probability depends of the partial view size before the
+known peer. The probability depends on the partial view size before the
 removals.
 
-Figure~\ref{fig:crashexample} depicts the \SPRAY's crash/leaving handler. The
+Figure~\ref{fig:crashexample} depicts \SPRAY's crash/leaving handler. The
 scenario follows from prior examples after few other exchanges. Peer $p_1$
 leaves the network without giving notice. With it, $7$ connections are
 down. Peers $p_3$, $p_4$, and $p_5$ have the crashed/left peer in their partial
