@@ -4,22 +4,22 @@
 
 In order to demonstrate the performance of \SPRAY in a real scenario,
 we introduce \CRATE, a real-time editor that allows editing anytime
-and anywhere, whatever the number of participants, without third
+and anywhere, whatever the number of participants, without any third
 party. It can be used for small groups but also during events such as
 massive online lectures, TV shows, conferences that gather larger
 groups. Transitions between small groups and large groups is supported
 transparently thanks to \SPRAY. Distributed real-time editing is a
-pertinent context for \SPRAY; groups size are changing quickly and any
+pertinent context for \SPRAY; group sizes change quickly and any
 participant broadcasts anytime to all other participants.
 
 \CRATE builds a network of browsers where each browsers is able to
 communicate with a logarithmically scaling number of browsers compared
 to the global network size. Each change performed on documents
-transits neighbors to reach all members in a scalable
-way~\cite{birman1999bimodal}. Contrarily to
-state-of-the-art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon},
-\SPRAY allows the diffusion cost to adapt to the network size. Thus,
-small networks do not pay the price of large networks.
+transits through neighbors and reaches all members in a scalable
+way~\cite{birman1999bimodal}. Unlike the state of the
+art~\cite{tolgyeski2009adaptive, voulgaris2005cyclon}, \SPRAY allows
+the diffusion cost to adapt to the network size. Thus, small networks
+do not pay the price of large networks.
 
 Real-time distributed collaborative editors consider multiple participants, each
 hosting a copy of a shared sequence of characters. A participant updates at any
@@ -33,7 +33,7 @@ copies become similar~\cite{bailis2013eventual}.
 Replicated Data Types (CRDTs)~\cite{shapiro2011conflict,
   shapiro2011comprehensive}. It provides two commutative operations to update
 documents: \emph{insert} and \emph{delete}.  They use totally ordered, unique,
-and immutable identifiers associated to each character to guarantee consistent
+and immutable identifiers associated with each character to guarantee consistent
 copies of the document. % Nevertheless, they require storing these identifiers. In
 % this paper, we focus on variable-size identifiers~\cite{preguica2009commutative,
 %   weiss2009logoot}. Thus, identifiers are lists determined at generation.
@@ -48,8 +48,8 @@ copies of the document. % Nevertheless, they require storing these identifiers. 
 space of these identifiers under a polylogarithmic bound compared to the
 document size. As consequence, its upper bound on communication complexity is
 $\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
-$|\mathcal{N}|$ is the editing session size. To summerize, each time a
-participant types a character, it broadcasts this character plus an identifier
+$|\mathcal{N}|$ is the editing session size. To summarize, each time a
+participant types a character, \CRATE broadcasts this character plus an identifier
 to the editing session.
 
 Compared to Google Docs, \CRATE is decentralized and preserves
@@ -76,17 +76,17 @@ layers:
   removal of an element never precedes its insertion.
 \item sequence structure: includes the structure that guarantees a global
   total order among elements of the sequence.
-\item graphical user interface: includes the editor as a graphical entity that
-  users can interact with inside web browsers.
+\item graphical user interface: includes the editor as a graphical
+  entity that users can interact with, inside their web browsers.
 \end{inparaenum}
 Figure~\ref{fig:architecture} also depicts the process chain of \CRATE: when
 users perform an operation on the document, the operation is applied to the
 shared sequence which creates an \LSEQ identifier. Then it decorates the result
-of the operation with causality tracking metadata. Finally, \CRATE broadcasts it
+of the operation with causality-tracking metadata. Finally, \CRATE broadcasts it
 using the neighborhood provided by \SPRAY.  Conversely, when \CRATE receives a
 broadcast message, it checks if the operation is causally ready to be
 delivered. Once the condition is verified, it applies the operation to the
-shared sequence which notifies the graphical user interface of the changes.
+shared sequence, which notifies the graphical user interface of the changes.
 
 %% The rest of this section details the main components of \CRATE and their
 %% respective contributions to complexities.
@@ -98,7 +98,7 @@ shared sequence which notifies the graphical user interface of the changes.
 Epidemic dissemination~\cite{birman1999bimodal,demers1987epidemic} (or
 gossiping) relies on the membership protocol to propagate messages in a scalable
 way to all members (broadcast).
-Algorithm~\ref{algo:gossiping} shows the simple functioning of this
+Algorithm~\ref{algo:gossiping} shows the simple behavior of this
 protocol. When a peer emits a message, it sends it to its neighborhood. Each
 peer receiving such messages forwards it to its neighborhood too. Messages
 transitively reach all peers of the network.
@@ -156,18 +156,19 @@ size $d$.
   \caption{\label{fig:lseqexample}\LSEQ data structure representing QWERTY.}
 \end{figure}
 
-\LSEQ factorizes identifiers into a tree structure. Each identifier is a path
-leading to its character. A lexicographic total order among paths allows
-retrieving the sequence of characters. Figure~\ref{fig:lseqexample} shows a data
-structure example that represents the sequence QWERTY inserted backward, i.e.,
-the Y, then W, etc. We observe that \LSEQ uses an exponential tree where each
-element has twice as many children as its parent. Here, the path of Character Q
-is the concatenation of Integers [0.44] which requires
-$\log_2(32)+\log_2(64)=11$ bits to encode. It takes less and less space to
-encode more and more identifiers. \CRATE sends the path along with uniqueness
-markers and the character to all its neighbors where they will be both
-integrated and forwarded. All member sends it once to their logarithmically
-scaling neighborhood.
+\LSEQ factorizes identifiers into a tree structure. Each identifier is
+a path leading to its character. A lexicographic total order among
+paths allows retrieving the sequence of
+characters. Figure~\ref{fig:lseqexample} shows a data-structure
+example that represents the sequence QWERTY inserted backward, i.e.,
+the Y, then W, etc. We observe that \LSEQ uses an exponential tree
+where each element has twice as many children as its parent. Here, the
+path of Character Q is the concatenation of Integers [0.44] which
+requires $\log_2(32)+\log_2(64)=11$ bits to encode. It takes less and
+less space to encode more and more identifiers. \CRATE sends the path
+along with uniqueness markers and the character to all its neighbors
+where they will be both integrated and forwarded. All members send it
+once to their logarithmically scaling neighborhood.
 
 %%% Local Variables:
 %%% mode: latex
