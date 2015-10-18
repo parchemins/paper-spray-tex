@@ -44,14 +44,13 @@ copies of the document. % Nevertheless, they require storing these identifiers. 
 % an identifier to each element of the sequence representing the
 % document.
 
-\CRATE uses the allocation function \LSEQ~\cite{nedelec2013lseq} to
-keep the space of these identifiers under a polylogarithmic bound
-compared to the document size. As consequence, the communication
-complexity of \CRATE is upper-bounded by
-$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document
-size and $|\mathcal{N}|$ is the editing session size. To summerize,
-each time a participant types a character, it broadcasts this character
-plus an identifier to the editing session.
+\CRATE uses the allocation function \LSEQ~\cite{nedelec2013lseq} to keep the
+space of these identifiers under a polylogarithmic bound compared to the
+document size. As consequence, its upper bound on communication complexity is
+$\mathcal{O}((\log d)^2\ln(|\mathcal{N}|))$ where $d$ is the document size and
+$|\mathcal{N}|$ is the editing session size. To summerize, each time a
+participant types a character, it broadcasts this character plus an identifier
+to the editing session.
 
 Compared to Google Docs, \CRATE is decentralized and preserves
 privacy. It also supports any number of participants where Google Docs
@@ -99,16 +98,15 @@ shared sequence which notifies the graphical user interface of the changes.
 Epidemic dissemination~\cite{birman1999bimodal,demers1987epidemic} (or
 gossiping) relies on the membership protocol to propagate messages in a scalable
 way to all members (broadcast).
+Algorithm~\ref{algo:gossiping} shows the simple functioning of this
+protocol. When a peer emits a message, it sends it to its neighborhood. Each
+peer receiving such messages forwards it to its neighborhood too. Messages
+transitively reach all peers of the network.
 
 \begin{algorithm}[h]
   \input{./input/gossipingalgo.tex}
   \caption{\label{algo:gossiping}Epidemic dissemination protocol.}
 \end{algorithm}
-
-Algorithm~\ref{algo:gossiping} shows the simple functioning of this
-protocol. When a peer emits a message, it sends it to its neighborhood. Each
-peer receiving such messages forwards it to its neighborhood too. Messages
-transitively reach all peers of the network.
 
 Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
 and since the latter grows logarithmically compared to the network size, the

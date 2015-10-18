@@ -48,9 +48,10 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
   view size differences make significative differences when they are used for
   messages dissemination.  Figure~\ref{fig:traffic} also shows that the average
   partial view size follows the natural logarithmic expectation with small error
-  due to randomness. Figure~\ref{fig:traffic} finally shows that the variance
-  remains small which indicates that the network of browsers reached a state
-  where neighborhood size are balanced.
+  due to randomness. For instance, the run involving 101 browsers has an higher
+  average partial view than 601 browsers. Figure~\ref{fig:traffic} finally shows
+  that the variance remains small which indicates that the network of browsers
+  reached a state where neighborhood size are balanced.
 \item [Reasons:] Information dissemination uses neighborhoods to broadcast
   messages. Each member receives and forwards each message which transitively
   reach all members. Thus, the traffic depends of the message multiplied by the
