@@ -12,21 +12,19 @@
 % deploy such applications on web browsers.
 % that can run on laptops, desktops and mobile devices.
 
-WebRTC\footnote{\url{http://www.webrtc.org/}} makes browser-to-browser
-communication easy even within complex network environments that
-involve firewalls, proxies, Net Address Translation (NAT) and mobile
-networks. As a result, it opens the door to a new generation of
-large-scale distributed applications that exploit only
-browser-to-browser connections. Among the basic building blocks for
-such distributed applications, we find gossip-based peer sampling
-protocols such as \CYCLON~\cite{voulgaris2005cyclon}, which can build
-and maintain reliable overlay networks in dynamic environments.
-However, \CYCLON does not effectively adapt to networks that grow or
-shrink and forces peers to maintain unnecessary connections.  For
-instance, it might require a mobile phone to maintain 10 WebRTC
-connections with other remote browsers when only 6 would be
-enough. This yields unnecessary network traffic, particularly when
-applications employ these connections to broadcast messages.
+WebRTC~\cite{webrtc} makes browser-to-browser communication easy even within
+complex network environments that involve firewalls, proxies, Net Address
+Translation (NAT) and mobile networks. As a result, it opens the door to a new
+generation of large-scale distributed applications that exploit only
+browser-to-browser connections. Among the basic building blocks for such
+distributed applications, we find gossip-based peer sampling protocols such as
+\CYCLON~\cite{voulgaris2005cyclon}, which can build and maintain reliable
+overlay networks in dynamic environments.  However, \CYCLON does not effectively
+adapt to networks that grow or shrink and forces peers to maintain unnecessary
+connections.  For instance, it might require a mobile phone to maintain 10
+WebRTC connections with other remote browsers when only 6 would be enough. This
+yields unnecessary network traffic, particularly when applications employ these
+connections to broadcast messages.
 
 In this paper, we introduce \SPRAY, a random peer sampling protocol
 inspired by both \SCAMP~\cite{ganesh2003peer} and
