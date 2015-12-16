@@ -1,4 +1,4 @@
-\documentclass[conference]{sig-alternate}
+\documentclass[10pt,conference,compsocconf,letterpaper]{IEEEtran}
 %%\documentclass{article} %% hevea
 %%\usepackage[utf8]{inputenc} %% hevea
 
@@ -7,9 +7,9 @@
 %% url
 \usepackage{url}
 %% maths
-%%\usepackage[cmex10]{amsmath}
+\usepackage{amsmath}
 %%\usepackage{amsfonts}
-%%\usepackage{amssymb}
+\usepackage{amssymb}
 %%\usepackage{amsthm}
 %% algorithms
 \usepackage{algorithm}
@@ -62,42 +62,58 @@
 
 \begin{document}
 
-\title{An Adaptive Protocol for Building Networks of Browsers}
+\title{An Adaptive Protocol\\for Building Networks of Browsers}
 
-\numberofauthors{5}
-\author{
-\alignauthor
-Brice N{\'e}delec\\
-\affaddr{Universit{\'e} de Nantes, LINA}
-%\affaddr{2 rue de la Houssini{\`e}re}\\
-%\affaddr{Nantes, FRANCE}\\
-\email{brice.nedelec{@}univ-nantes.fr}
-\alignauthor
-Julian Tanke\\
-\affaddr{Universit{\'e} de Nantes, LINA}
-%\affaddr{2 rue de la Houssini{\`e}re}\\
-%\affaddr{Nantes, FRANCE}\\
-\email{julian.tanke{@}fu-berlin.de}
-\and
-\alignauthor
-Davide Frey\\
-\affaddr{INRIA Bretagne-Atlantique}
-%%\affaddr{Campus Universitaire de Beaulieu}\\
-%\affaddr{Rennes, FRANCE}\\
-\email{davide.frey@inria.fr}
-\alignauthor
-Pascal Molli\\
-\affaddr{Universit{\'e} de Nantes, LINA}
-% \affaddr{2 rue de la Houssini{\`e}re}\\
-% \affaddr{Nantes, FRANCE}\\
-\email{pascal.molli{@}univ-nantes.fr}
-\alignauthor
-Achour Mostefaoui\\
-\affaddr{Universit{\'e} de Nantes, LINA}
-% \affaddr{2 rue de la Houssini{\`e}re}\\
-% \affaddr{Nantes, FRANCE}\\
-\email{achour.mostefaoui{@}univ-nantes.fr}
-}
+\author{\IEEEauthorblockN{N{\'e}delec Brice\IEEEauthorrefmark{1},
+Julian Tanke\IEEEauthorrefmark{2},
+Davide Frey\IEEEauthorrefmark{3},
+Pascal Molli\IEEEauthorrefmark{1},
+Achour Mostefaoui\IEEEauthorrefmark{1}}
+\IEEEauthorblockA{\IEEEauthorrefmark{1}
+  Universit{\'e} de Nantes, LINA\\
+  2 rue de la Houssini{\`e}re, Nantes, France\\
+  Email: \url{firstname.lastname@univ-nantes.fr}}%
+\IEEEauthorblockA{\IEEEauthorrefmark{2}
+  Email: \url{julian.tanke@fu-berlin.de}}%
+\IEEEauthorblockA{\IEEEauthorrefmark{3}
+  INRIA Bretagne-Atlantique\\
+  Campus Universitaire de Beaulieu, Rennes, France\\
+  Email: \url{davide.frey@inria.fr}}}
+
+% \numberofauthors{5}
+% \author{
+% \alignauthor
+% Brice N{\'e}delec\\
+% \affaddr{Universit{\'e} de Nantes, LINA}
+% %\affaddr{2 rue de la Houssini{\`e}re}\\
+% %\affaddr{Nantes, FRANCE}\\
+% \email{brice.nedelec{@}univ-nantes.fr}
+% \alignauthor
+% Julian Tanke\\
+% \affaddr{Universit{\'e} de Nantes, LINA}
+% %\affaddr{2 rue de la Houssini{\`e}re}\\
+% %\affaddr{Nantes, FRANCE}\\
+% \email{julian.tanke{@}fu-berlin.de}
+% \and
+% \alignauthor
+% Davide Frey\\
+% \affaddr{INRIA Bretagne-Atlantique}
+% %%\affaddr{Campus Universitaire de Beaulieu}\\
+% %\affaddr{Rennes, FRANCE}\\
+% \email{davide.frey@inria.fr}
+% \alignauthor
+% Pascal Molli\\
+% \affaddr{Universit{\'e} de Nantes, LINA}
+% % \affaddr{2 rue de la Houssini{\`e}re}\\
+% % \affaddr{Nantes, FRANCE}\\
+% \email{pascal.molli{@}univ-nantes.fr}
+% \alignauthor
+% Achour Mostefaoui\\
+% \affaddr{Universit{\'e} de Nantes, LINA}
+% % \affaddr{2 rue de la Houssini{\`e}re}\\
+% % \affaddr{Nantes, FRANCE}\\
+% \email{achour.mostefaoui{@}univ-nantes.fr}
+% }
 \date{}
 
 \maketitle
