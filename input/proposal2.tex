@@ -9,12 +9,11 @@ of participants, without any third party. Compared to trending Cloud-based
 editors such as Google Docs~\cite{nichols1995high}, it alleviates privacy and
 scalability issues while remaining easy to use.  It can be used for small groups
 but also during events such as massive online lectures, TV shows, conferences
-that gather larger groups. For instance, the order of magnitude of online
-lectures reaches thousands of students simultaneously (\REF). Transitions
-between small groups and large groups is supported transparently thanks to
-\SPRAY. Distributed real-time editing is a pertinent context for \SPRAY; group
-sizes change quickly and any participant broadcasts anytime to all other
-participants.
+that gather larger groups. For instance, online lectures reach thousands of
+students. Transitions between small groups and large groups is
+supported transparently thanks to \SPRAY. Distributed real-time editing is a
+pertinent context for \SPRAY; group sizes change quickly and any participant
+broadcasts anytime to all other participants.
 
 \CRATE builds a network of browsers where each browsers is able to communicate
 with a logarithmically scaling number of browsers compared to the global network
@@ -26,7 +25,7 @@ not pay the price of large networks.
 
 \subsection{Functionning}
 
-To provide availability and responsivness of documents, collaborative editors
+To provide availability and responsiveness of documents, collaborative editors
 consider multiple authors, each hosting a replica of their shared
 document~\cite{saito2005optimistic}.  On updates, the local replica is directly
 modified. Then, each update is propagated to all the editing session where it is
@@ -55,7 +54,7 @@ under acceptable growth: a polylogarithmic upper-bound on their space complexity
 compared to the document size ($\mathcal{O}((\log |document|)^2)$).
 
 An identifier is a list $[\ell_1.\ell_2\ldots\ell_k]$ where $k$ is the
-identifier depth. A total order amongst identifiers allows retrieving the
+identifier depth. A total order among identifiers allows retrieving the
 sequence of characters. To encode such total order, the structure uses a simple
 lexicographic order comparing
 \begin{inparaenum}[(i)]
@@ -82,7 +81,7 @@ observe that \LSEQ factorizes identifiers under an exponential tree
 representation. Indeed, as the depth of the tree grows, the number of potential
 children doubles. When the first insertion of Character 'Y' arrives, it
 allocates a path between the virtual adjacent identifiers paths [0] and
-[32]. Here it choses the path [1] which is unfortunate since other insertions
+[32]. Here it chooses the path [1] which is unfortunate since other insertions
 arrive preceding this character. Since there is no room for more paths at the
 first level between the virtual beginning boundary and the path of Character Y,
 the depth of the tree must grow. The new identifier is allocated between [0.0]

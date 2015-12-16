@@ -13,7 +13,7 @@ is undersized. Finally, we expect \SPRAY to keep a negligible number
 of duplicates in its partial views. The experiments run on the
 \PEERSIM simulator~\cite{montresor2009peersim}. The code of the random
 peer sampling protocols is available on the Github
-platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
+platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 
 % We use \SCAMP as a baseline for experiments relative to
 % connection failures. Unlike \SCAMP, we expect \SPRAY to
@@ -37,16 +37,17 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %%of \SPRAY through large scale simulations.
 
 %\vspace{-7pt}
-\paragraph{Clustering and convergence time}
+%%\paragraph{Clustering and convergence time}
 
 \begin{asparadesc}
+\item[\textbf{Clustering and convergence time}]
 \item[Objective:] To observe how adaptiveness impacts clustering and convergence
   time.
 \item[Description:] The average local clustering coefficient $\overline{C}$ measures
   the connectivity of each peer's neighborhood in the network.
-  \begin{equation}
+  \begin{equation*}
     \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
-  \end{equation}
+  \end{equation*}
   where $C_x$ is the local clustering coefficient of Peer $p_x$.  The
   runs concern 0.1k, 1k, 10k and 100k peers. The representative of the
   fixed-size approach is \CYCLON which is optimally configured for 1k
@@ -103,15 +104,10 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 
 %\vspace{-7pt}
-\paragraph{Information dissemination}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.49\textwidth]{img/avgpath.eps}
-  \caption{\label{fig:avgpath}Average shortest path length.}
-\end{figure}
+%%\paragraph{Information dissemination}
 
 \begin{asparadesc}
+\item[\textbf{Information dissemination}]
 \item[Objective:] To observe how adaptiveness impacts the average shortest path
   length, i.e., the speed of information dissemination.
 \item[Description:] The average path length is the average of the
@@ -149,14 +145,15 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   because it follows the optimal value.
 \end{asparadesc}
 
-%%\vspace{-7pt}
-\paragraph{Load-balancing}
-
 \begin{figure}
   \centering
-  \includegraphics[width=0.49\textwidth]{img/histo.eps}
-  \caption{\label{fig:histo}In-degree distribution.}
+  \includegraphics[width=0.49\textwidth]{img/avgpath.eps}
+  \caption{\label{fig:avgpath}Average shortest path length.}
 \end{figure}
+
+%%\vspace{-7pt}
+%%\paragraph{Load-balancing}
+
 
 % \begin{figure*}
 %   \centering
@@ -170,6 +167,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 % \end{figure*}
 
 \begin{asparadesc}
+\item[\textbf{Load-balancing}]
 \item[Objective:] To observe how adaptiveness impacts the in-degree
   distribution, i.e., the load-balancing among peers.
 \item[Description:] The in-degree of a peer shows how well it is represented in
@@ -212,16 +210,17 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   network as much as if a strongly connected peer crashed.
 \end{asparadesc}
 
-%%\vspace{-7pt}
-\paragraph{Adaptive partial views}
-
 \begin{figure}
   \centering
-  \includegraphics[width=0.49\textwidth]{img/avgpv.eps}
-  \caption{\label{fig:churn}Average partial view size with churn.}
+  \includegraphics[width=0.49\textwidth]{img/histo.eps}
+  \caption{\label{fig:histo}In-degree distribution.}
 \end{figure}
 
+%%\vspace{-7pt}
+%%\paragraph{Adaptive partial views}
+
 \begin{asparadesc}
+\item[\textbf{Adpative partial views}]
 \item[Objective:] To show the impact of adaptiveness over partial view size when
   the network size grows and shrinks over time.
 \item[Description:] In this experiment we focus on a dynamic network where peers
@@ -248,6 +247,12 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   number of arcs after the removal is due to peers realizing that some arcs are
   dead, leading to a probabilistic removal (cf. Algorithm~\ref{algo:unreachable}).
 \end{asparadesc}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/avgpv.eps}
+  \caption{\label{fig:churn}Average partial view size with churn.}
+\end{figure}
 
 % \vspace{-7pt}
 % \paragraph{Robustness}
@@ -304,9 +309,10 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 % \end{asparadesc}
 
 %%\vspace{-7pt}
-\paragraph{Duplicates}
+%%\paragraph{Duplicates}
 
 \begin{asparadesc} 
+\item[\textbf{Duplicates}]
 \item[Objective:] To show that a small proportion of peers contains duplicates
   in their partial view.
 \item[Description:] Using \SPRAY as random peer sampling protocol, we measure
@@ -316,11 +322,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   after convergence. We put this in relation with a theoretical approximation
   from the birthday paradox. The probability of a peer to not have duplicates
   is approximately:
-  \begin{equation}
+  \begin{equation*}
     1- 
     (1-
     \exp({-\ln(|\mathcal{N}|)*(\ln(|\mathcal{N}|)-1)\over{2*|\mathcal{N}|}}))
-  \end{equation}
+  \end{equation*}
 \item[Results:] Figure~\ref{fig:duplicates} shows the proportion of peers using
   a partial view containing duplicates. We observe that there always exist
   partial views with at least one duplicate. The proportion is more important
