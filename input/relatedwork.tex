@@ -37,22 +37,30 @@ complex network settings such as firewalls, proxies or Net Address Translation
 (NAT) are involved. However, WebRTC does not manage addressing nor routing. To
 establish a connection, the browsers exchange offers and acknowledgments through
 a common mediator, e.g., mails, dedicated signaling services~\cite{peerjs},
-existing WebRTC connections~\cite{p} etc. In Figure~\ref{fig:webrtcA}, $p_1$
-wants to connect to $p_2$. Therefore, $p_1$ pushes an offer ticket to a shared
-signaling service. It is worth noting that many signaling services can
-exist. Peer $p_2$ pulls the offer, stamps it and pushes it back to the signaling
-service. Finally, $p_1$ pulls the stamped ticket and establishes a bidirectional
-connection with $p_2$.  Identically, $p_3$ establishes a connection to $p_2$. We
-refer to the round-trip procedure as \emph{three-way handshake}. At this point,
-Peer $p_1$ is able to establish a connection to $p_3$ without the mediation of
-the former signaling service.  Instead, it uses $p_2$ as temporary signaling
-service.  As shown in Figure~\ref{fig:webrtcB}, Peer $p_1$ pushes an offer
-ticket to $p_2$. As $p_2$ is already connected to $p_3$, it forwards the offer
-to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket and
-sends it back to $p_2$ who then forwards it back to $p_1$. Upon receipt, $p_1$
-establishes a bidirectional connection with $p_3$.  Notice that if $p_2$ crashes
-during the forwarding process, the connection establishment will fail, even if
-an alternative route exists as WebRTC does not manage routing.
+existing WebRTC connections~\cite{p} etc. Figure~\ref{fig:webrtcA} describes the
+very first connection of one peer $p_1$ with another
+$p_2$. Figure~\ref{fig:webrtcB} shows that $p_3$ is able to use $p_2$ as
+mediator instead of the signaling service. Figure~\ref{fig:webrtcC} shows the
+resulting network. Notice that if $p_2$ crashes during the forwarding process,
+the connection establishment will fail, even if an alternative route exists as
+WebRTC does not manage routing.
+
+% In Figure~\ref{fig:webrtcA}, $p_1$
+% wants to connect to $p_2$. Therefore, $p_1$ pushes an offer ticket to a shared
+% signaling service. It is worth noting that many signaling services can
+% exist. Peer $p_2$ pulls the offer, stamps it and pushes it back to the signaling
+% service. Finally, $p_1$ pulls the stamped ticket and establishes a bidirectional
+% connection with $p_2$.  Identically, $p_3$ establishes a connection to $p_2$. We
+% refer to the round-trip procedure as \emph{three-way handshake}. At this point,
+% Peer $p_1$ is able to establish a connection to $p_3$ without the mediation of
+% the former signaling service.  Instead, it uses $p_2$ as temporary signaling
+% service.  As shown in Figure~\ref{fig:webrtcB}, Peer $p_1$ pushes an offer
+% ticket to $p_2$. As $p_2$ is already connected to $p_3$, it forwards the offer
+% to $p_3$ and registers $p_1$ as the emitter. Peer $p_3$ stamps the ticket and
+% sends it back to $p_2$ who then forwards it back to $p_1$. Upon receipt, $p_1$
+% establishes a bidirectional connection with $p_3$.  Notice that if $p_2$ crashes
+% during the forwarding process, the connection establishment will fail, even if
+% an alternative route exists as WebRTC does not manage routing.
 
 Using signaling services and existing WebRTC connections allows easy
 deployment of random peer sampling protocols~\cite{jelasity2004peer} in
@@ -61,18 +69,16 @@ networks. In this context, it is crucial to keep the number of connections as
 low as possible in order to reduce traffic usage and limit resource
 consumption.
 
-Random peer sampling protocols~\cite{jelasity2004peer, jelasity2007gossip} 
-provide each
-peer with a partial view $\mathcal{P}$ of the network membership
-$\mathcal{N}$. They populate the partial views with references to
-peers chosen at random among $\mathcal{N}$ following a uniform
-distribution using local knowledge only. Their goal is to converge to
-an overlay network exposing properties similar to those of random
-graphs~\cite{erdos1959random}. They efficiently provide connectedness,
-robustness, information dissemination etc. A wide variety of gossip-based
-protocols use random peer sampling (e.g. topology
+Random peer sampling protocols~\cite{jelasity2004peer, jelasity2007gossip}
+provide each peer with a partial view $\mathcal{P}$ of the network membership
+$\mathcal{N}$. They populate the partial views with references to peers chosen
+at random among $\mathcal{N}$ following a uniform distribution using local
+knowledge only. Their goal is to converge to an overlay network exposing
+properties similar to those of random graphs~\cite{erdos1959random}. They
+efficiently provide connectedness, robustness, information dissemination etc. A
+wide variety of gossip-based protocols use random peer sampling (e.g. topology
 management~\cite{voulgaris2005epidemic, jelasity2009tman,
-  dabek2004vivaldi}).
+  dabek2004vivaldi}). \TODO{Including optimisation.}
 
 The representatives of random peer sampling protocols using a fixed-size
 partial view~\cite{jelasity2007gossip} are
