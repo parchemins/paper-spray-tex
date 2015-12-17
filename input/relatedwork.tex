@@ -76,43 +76,42 @@ at random among $\mathcal{N}$ following a uniform distribution using local
 knowledge only. Their goal is to converge to an overlay network exposing
 properties similar to those of random graphs~\cite{erdos1959random}. They
 efficiently provide connectedness, robustness, information dissemination etc. A
-wide variety of gossip-based protocols use random peer sampling (e.g. topology
-management~\cite{voulgaris2005epidemic, jelasity2009tman,
-  dabek2004vivaldi}). \TODO{Including optimisation.}
+wide variety of gossip-based protocols use random peer sampling at their
+core. For instance, topology optimization protocols~\cite{voulgaris2005epidemic,
+  jelasity2009tman} aim to improve criteria such as localization, latency,
+preferences etc.
 
-The representatives of random peer sampling protocols using a fixed-size
-partial view~\cite{jelasity2007gossip} are
-lpbcast~\cite{eugster2003lightweight}, Newscast~\cite{tolgyeski2009adaptive},
-and \CYCLON~\cite{voulgaris2005cyclon}. They have to know \emph{a priori} the
-maximum network size to set their parameters
-accordingly. These decisions cannot be safely retracted afterwards.
+The representatives of random peer sampling protocols using a fixed-size partial
+view are Lpbcast~\cite{eugster2003lightweight},
+HyParView\cite{leitao2007hyparview} Newscast~\cite{tolgyeski2009adaptive}, and
+\CYCLON~\cite{voulgaris2005cyclon}. They have to know \emph{a priori} the
+maximum network size to set their parameters accordingly. These decisions cannot
+be safely retracted afterwards.
 
 This inflexibility makes it possible to maintains 7 connections in the browser
 despite requiring only 4, while, in the following moment, it still maintains 7
-connections while 10 would be needed.
-\CYCLON's partial views are commonly oversized compared to the actual network
-size to prevent having too few connections per peer,
-which, consequently, introduces overhead.
-When WebRTC is involved, we need a dynamic peer sampling
-service that is able to adapt to the dynamic number of participants.
+connections while 10 would be needed.  \CYCLON's partial views are commonly
+oversized compared to the actual network size to prevent having too few
+connections per peer, which, consequently, introduces overhead.  When WebRTC is
+involved, we need a dynamic peer sampling service that is able to adapt to the
+dynamic number of participants.
 
 Network size estimators can introduce adaptiveness in peer sampling. These
 approaches either use
 \begin{inparaenum}[(i)]
-\item sampling techniques~\cite{mane05network, ganesh2007peer,
-    kostoulas2007active} which analyze a network subset and deduce the network
-  size using probabilistic functions,
-\item sketching techniques~\cite{flajolet2008hyperloglog, baquero2012extrema}
+\item sampling techniques~\cite{ganesh2007peer} which analyze a network subset
+  and deduce the network size using probabilistic functions,
+\item sketching techniques~\cite{baquero2012extrema}
   which use hashing to compress the high amount of data and deduce the network
   size using the collisions,
-\item averaging techniques~\cite{jelasity2004epidemic, blasa2011symmetric}
+\item averaging techniques~\cite{jelasity2004epidemic}
   which use aggregations that converge over exchanges to a value which depends
   on the network size.
 \end{inparaenum}
-Unfortunately, while they can be very precise in their estimation, they imply a
+Unfortunately, while they can be accurate in their estimation, they imply a
 communication overhead and may have strong assumptions (e.g. random graph
-topology). However, adaptiveness should introduce a minimum overhead
-to peer sampling in WebRTC applications.
+topology). However, adaptiveness should introduce a minimum overhead to peer
+sampling in WebRTC applications.
 
 %% figure related to proposal, here to be on top of page
 \begin{figure*}
@@ -133,16 +132,16 @@ to peer sampling in WebRTC applications.
 \end{figure*}
 
 The sole representative of adaptive-by-design random peer sampling is
-\SCAMP~\cite{ganesh2001scamp,ganesh2003peer}. Its interesting property lies in
+\SCAMP~\cite{ganesh2003peer}. Its interesting property lies in
 its logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
 suffers from other drawbacks. In particular, it systematically disseminates the
 connections at random. Thus, the originating peer can be several hops away from
 the arrival peer. In WebRTC, each random dissemination path must be traveled
-back to finalize the connection establishment, as illustrated in
-Figure~\ref{fig:webrtc}. This drastically impacts the \SCAMP failure probability
-of establishing a connection. In turns, the number of connections quickly
-decreases eventually leading to partitioning.
+back to finalize the connection establishment
+(cf. Figure~\ref{fig:webrtc}). This drastically impacts the \SCAMP failure
+probability of establishing a connection. In turns, the number of connections
+quickly decreases eventually leading to partitioning.
 
 %  Let $P_f$ be the probability that an
 % element of the dissemination path (either a peer or a connection) crashes or
@@ -193,10 +192,10 @@ do not depend on the network size.
 %% The last condition states that the network
 %% overlay converges exponentially fast to a topology that is close to a random
 %% graph.
-Lpbcast, Newscast and \CYCLON fail to meet the first condition of the problem
-statement since they do not adapt their views to the network size. \SCAMP fails
-to meet the second condition of the problem statement since each connection
-implies an unsafe random dissemination protocol.
+Lpbcast, HyParView, Newscast, and \CYCLON fail to meet the first condition of
+the problem statement since they do not adapt their views to the network
+size. \SCAMP fails to meet the second condition of the problem statement since
+each connection implies an unsafe random dissemination protocol.
 
 %%% Local Variables:
 %%% mode: latex

@@ -5,16 +5,15 @@
 %%\TODO{A lot to change. Includes perspective with security, maybe problems of
 %%  merging etc.}
 
-WebRTC opened a new playground for large-scale distributed
-applications deployed on a network of browsers. Browsers as an
-infrastructure ease the deployment of large-scale distributed
-applications for end-users. Yet, WebRTC exacerbates the limitations,
-in term of adaptiveness and reliability, of a core component of many
-large-scale distributed applications: peer-sampling protocols.
+% WebRTC opened a new playground for large-scale distributed
+% applications deployed on a network of browsers. Browsers as an
+% infrastructure ease the deployment of large-scale distributed
+% applications for end-users. Yet, WebRTC exacerbates the limitations,
+% in term of adaptiveness and reliability, of a core component of many
+% large-scale distributed applications: peer-sampling protocols.
 
-In this paper, we described \SPRAY, an adaptive-by-design
-random-peer-sampling approach designed to fit WebRTC's constraints.
-\SPRAY provides:
+In this paper, we described \SPRAY, an adaptive-by-design random peer sampling
+approach designed to fit WebRTC's constraints.  \SPRAY provides:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
 \item constant time complexity on connection establishments using solely
@@ -22,30 +21,32 @@ random-peer-sampling approach designed to fit WebRTC's constraints.
 % \item an exponentially fast convergence to an overlay network exposing
 %   properties similar to random graphs.
 \end{inparaenum}
-Our experiments demonstrate how \SPRAY's adaptiveness improves the
-performance of random peer sampling when the size of the network
-changes. In particular, the average shortest path length scales
-better, the in-degree evolves with the network size, and it converges
-faster.  Adaptiveness comes at the price of duplicates in the partial
-views. However, our simulations supported by theoretical analysis show
-that the number of duplicates remains very low and becomes negligible
-in large networks.
+Our experiments demonstrate how \SPRAY's adaptiveness improves the performance
+of random peer sampling when the size of the network changes. In particular, the
+average shortest path length scales better, the in-degree evolves with the
+network size, and it converges faster.  Adaptiveness comes at the price of
+duplicates in the partial views. However, our simulations supported by
+theoretical analysis show that the number of duplicates remains very low and
+becomes negligible in large networks.
 
-To highlight the improvement brought by such protocol, we built
-\CRATE, a decentralized collaborative editor directly accessible in
-web browsers. We launched experiments involving up to 600 browsers
-showing that message dissemination highly benefits from adaptive
-neigbhorhoods. \SPRAY makes building scalable decentralized
-applications easy and accessible, without requiring knowledge about
-the range of users or their number.
+To highlight the improvement brought by such protocol, we built \CRATE, a
+decentralized collaborative editor directly accessible in web browsers. We
+launched experiments involving up to 600 browsers showing that message
+dissemination highly benefits from adaptive neighborhoods. \SPRAY makes building
+scalable decentralized applications easy and accessible, without requiring
+knowledge about the range of users or their number. As for broadcast, many
+topology optimizations (about localization, latency, preferences etc.) rely on
+random peer sampling protocol, e.g., the generic algorithms
+T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. \SPRAY
+allows such protocols to extend their behavior to dynamic neighborhood views.
 
-Future work includes investigations on topology managers such as
-T-Man~\cite{jelasity2009tman} or
-Vicinity~\cite{voulgaris2005epidemic}. Indeed, they traditionally rely
-on random peer sampling approaches using fixed-size partial
-view. Thus, they maintain a fixed-size view of their most closely
-related neighbors using a ranking function. With \SPRAY, we could
-extend their behavior to use dynamic partial views.
+% Future work includes investigations on topology managers such as
+% T-Man~\cite{jelasity2009tman} or
+% Vicinity~\cite{voulgaris2005epidemic}. Indeed, they traditionally rely
+% on random peer sampling approaches using fixed-size partial
+% view. Thus, they maintain a fixed-size view of their most closely
+% related neighbors using a ranking function. With \SPRAY, we could
+% extend their behavior to use dynamic partial views.
 
 %%% Local Variables:
 %%% mode: latex

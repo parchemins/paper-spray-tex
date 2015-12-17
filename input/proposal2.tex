@@ -6,14 +6,14 @@ In order to demonstrate the performance of \SPRAY with a real scenario, we
 introduce \CRATE \footnote{\url{https://github.com/Chat-Wane/CRATE}}, a
 real-time editor that allows editing anytime and anywhere, whatever the number
 of participants, without any third party. Compared to trending Cloud-based
-editors such as Google Docs~\cite{nichols1995high}, it alleviates privacy and
-scalability issues while remaining easy to use.  It can be used for small groups
-but also during events such as massive online lectures, TV shows, conferences
-that gather larger groups. For instance, online lectures reach thousands of
-students. Transitions between small groups and large groups is
-supported transparently thanks to \SPRAY. Distributed real-time editing is a
-pertinent context for \SPRAY; group sizes change quickly and any participant
-broadcasts anytime to all other participants.
+editors such as Google Docs, it alleviates privacy and scalability issues while
+remaining easy to use.  It can be used for small groups but also during events
+such as massive online lectures, TV shows, conferences that gather larger
+groups. For instance, online lecture sessions reach thousands of
+students. Transitions between small groups and large groups is supported
+transparently thanks to \SPRAY. Distributed real-time editing is a pertinent
+context for \SPRAY; group sizes change quickly and any participant broadcasts
+anytime to all other participants.
 
 \CRATE builds a network of browsers where each browsers is able to communicate
 with a logarithmically scaling number of browsers compared to the global network
@@ -33,65 +33,57 @@ integrated. Strong eventual consistency~\cite{bailis2013eventual} states that
 replicas must converge to an equivalent state when they integrated the same
 updates, i.e., users read the same document.
 
-% Real-time distributed collaborative editors consider multiple participants, each
-% hosting a replica of a shared sequence of characters. A participant updates at
-% any time its local copy by inserting or deleting a character. Then, the
-% operation is eventually delivered to all other members. Finally, delivered
-% operations are re-executed~\cite{saito2005optimistic}. Consistency requires that
-% all members eventually converge to an equivalent state, i.e., when the system is
-% idle, all copies become similar~\cite{bailis2013eventual}.
-
 \CRATE uses a distributed sequence data type~\cite{shapiro2011conflict} which
 provides two commutative operations: the insertion and the removal of an
 element. Commutativity allow users to avoid the difficult, time consuming, and
 error-prone task of solving conflicts due to concurrent edits. However,
 commutativity comes at the price of metadata following each character. These
-metadata (referred to as \emph{identifiers}) are unique and immutable. Their
-structure is a list the size of which is determined during their
-allocation~\cite{preguica2009commutative, weiss2009logoot}. \CRATE uses
-\LSEQ~\cite{nedelec2013lseq} as allocator function to keep these identifiers
-under acceptable growth: a polylogarithmic upper-bound on their space complexity
-compared to the document size ($\mathcal{O}((\log |document|)^2)$).
+metadata (referred to as \emph{identifiers}) are unique and immutable. The
+structure representing an identifier is a list $[\ell_1.\ell_2\ldots\ell_k]$ the
+size $k$ of which is determined during allocation. \CRATE uses an allocator
+function~\cite{nedelec2013lseq} to keep these identifiers under acceptable
+growth: a polylogarithmic upper bound on their space complexity compared to the
+document size ($\mathcal{O}((\log |document|)^2)$).
 
-An identifier is a list $[\ell_1.\ell_2\ldots\ell_k]$ where $k$ is the
-identifier depth. A total order among identifiers allows retrieving the
-sequence of characters. To encode such total order, the structure uses a simple
-lexicographic order comparing
-\begin{inparaenum}[(i)]
-\item paths -- chosen by the allocator and the most important as it determines
-  the space complexity of the approach --
-\item globally unique identifiers -- required for uniqueness and necessary in
-  some concurrent cases.
-\end{inparaenum}
-We focus our description on paths.
+% An identifier is a list $[\ell_1.\ell_2\ldots\ell_k]$ where $k$ is the
+% identifier depth. A total order among identifiers allows retrieving the
+% sequence of characters. To encode such total order, the structure uses a simple
+% lexicographic order comparing
+% \begin{inparaenum}[(i)]
+% \item paths -- chosen by the allocator and the most important as it determines
+%   the space complexity of the approach --
+% \item globally unique identifiers -- required for uniqueness and necessary in
+%   some concurrent cases.
+% \end{inparaenum}
+% We focus our description on paths.
 
-\begin{figure}
-  \centering
-  \input{./input/lseqtreeexampleB.tex}
-  \caption{\label{fig:lseqexample}\LSEQ data structure representing QWERTY.}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \input{./input/lseqtreeexampleB.tex}
+%   \caption{\label{fig:lseqexample}\LSEQ data structure representing QWERTY.}
+% \end{figure}
 
-When an insert operation is performed at a specific index in the document
-through the graphical user interface, the event is forwarded to the distributed
-data structure which translates it into \emph{allocate an identifier between the
-  identifiers adjacent to the targeted position}.  Figure~\ref{fig:lseqexample}
-shows the data structure resulting of the following editing sequence: insert 'Y'
-at 0, insert 'T' at 0, insert 'R' at 0, \ldots, insert 'Q' at 0. First, we
-observe that \LSEQ factorizes identifiers under an exponential tree
-representation. Indeed, as the depth of the tree grows, the number of potential
-children doubles. When the first insertion of Character 'Y' arrives, it
-allocates a path between the virtual adjacent identifiers paths [0] and
-[32]. Here it chooses the path [1] which is unfortunate since other insertions
-arrive preceding this character. Since there is no room for more paths at the
-first level between the virtual beginning boundary and the path of Character Y,
-the depth of the tree must grow. The new identifier is allocated between [0.0]
-and [0.64] which result in the path [0.57], etc. At the end, all identifiers are
-comparable and the resulting sequence of characters is 'QWERTY'.
+% When an insert operation is performed at a specific index in the document
+% through the graphical user interface, the event is forwarded to the distributed
+% data structure which translates it into \emph{allocate an identifier between the
+%   identifiers adjacent to the targeted position}.  Figure~\ref{fig:lseqexample}
+% shows the data structure resulting of the following editing sequence: insert 'Y'
+% at 0, insert 'T' at 0, insert 'R' at 0, \ldots, insert 'Q' at 0. First, we
+% observe that \LSEQ factorizes identifiers under an exponential tree
+% representation. Indeed, as the depth of the tree grows, the number of potential
+% children doubles. When the first insertion of Character 'Y' arrives, it
+% allocates a path between the virtual adjacent identifiers paths [0] and
+% [32]. Here it chooses the path [1] which is unfortunate since other insertions
+% arrive preceding this character. Since there is no room for more paths at the
+% first level between the virtual beginning boundary and the path of Character Y,
+% the depth of the tree must grow. The new identifier is allocated between [0.0]
+% and [0.64] which result in the path [0.57], etc. At the end, all identifiers are
+% comparable and the resulting sequence of characters is 'QWERTY'.
 
 Each identifier and character must be sent to all members of the editing
 session. For this purpose, \CRATE uses a very simple broadcast protocol built on
-top of \SPRAY following the principles of epidemic
-dissemination~\cite{demers1987epidemic}.
+top of \SPRAY following the principles of epidemic dissemination (also known as
+gossiping)~\cite{demers1987epidemic}.
 
 % Compared to Google Docs, \CRATE is decentralized and preserves
 % privacy. It also supports any number of participants where Google Docs
@@ -105,10 +97,10 @@ dissemination~\cite{demers1987epidemic}.
 % gossiping) relies on the membership protocol to propagate messages in a scalable
 % way to all members (broadcast).
 
-Algorithm~\ref{algo:gossiping} shows the operation of this protocol. When a peer
-emits a message, it sends it to its neighborhood. Each peer receiving such
+Algorithm~\ref{algo:gossiping} shows the instructions of this protocol. When a
+peer emits a message, it sends it to its neighborhood. Each peer receiving such
 messages forwards it to its neighborhood too. Messages transitively reach all
-peers of the network.
+network members.
 
 \begin{algorithm}[h]
   \input{./input/gossipingalgo.tex}
@@ -119,7 +111,7 @@ Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
 and since the latter grows logarithmically compared to the network size, the
 communication complexity of an application is upper-bounded by
 $\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
-message. Since \LSEQ provides sublinearly upper-bounded identifiers compared to
+message. Since \CRATE's identifiers are sublinearly upper-bounded compared to
 the document size, \CRATE is scalable.
 
 %%% Local Variables:

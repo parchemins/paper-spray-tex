@@ -6,10 +6,11 @@
 
 
 \algblockdefx[initially]{initially}{endInitially}
-  [0] {\textbf{INITIALLY:}} 
+[0] {\textbf{INITIALLY:}} 
 
-\algblockdefx[pas]{pas}{endPas}
-  [0] {\textbf{EVENTS:}}
+\algsetblockdefx[pas]{pas}{endPas}
+{65535}{}
+[0] {\textbf{EVENTS:}}
 
 \newcommand{\LINEFOR}[2]{%
   \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
@@ -39,6 +40,6 @@
     \State $\mathcal{P} \leftarrow
     \mathcal{P}\uplus \left\{\langle o,\, 0 \rangle\right\}$;
     \EndFunction
-  \endPas
+%%  \endPas
   
 \end{algorithmic}
