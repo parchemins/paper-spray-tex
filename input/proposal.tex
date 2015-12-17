@@ -67,7 +67,7 @@ $|\mathcal{N}|\ln(|\mathcal{N}|)$ arcs.
     protocol. }
 \end{figure*}
 
-\begin{algorithm}
+\begin{algorithm}[h]
 \input{input/joiningalgo.tex}
 \caption{\label{algo:joining}The joining protocol of \SPRAY.}
 \end{algorithm}
@@ -187,15 +187,15 @@ protocol.
 %% figure related to crash/departure, here to be on top of page
 \begin{figure*}
   \centering
-  \subfloat[Figure A][Peer $p_1$ crashes.]{
+  \subfloat[Figure A][Peer $p_1$ crashes. A lot of connections are down.]{
     \input{./input/crashexampleA.tex}}
   \hspace{10pt}
   \subfloat[Figure B][The peers $p_{3-5}$ notice that they cannot 
   reach $p_1$ anymore.]{
     \input{./input/crashexampleB.tex}}
   \hspace{10pt}
-  \subfloat[Figure C][The peers $p_3$ and $p_5$ choose to establish
-  a duplicate with one of their existing neighbor.]{
+  \subfloat[Figure C][The peers $p_3$ and $p_5$ create
+  a duplicate of one of their existing neighbor.]{
     \input{./input/crashexampleC.tex}}
   \caption{\label{fig:crashexample}Example of \SPRAY's crash/leaving
     handler. }
@@ -235,7 +235,7 @@ The shuffling algorithm provides adaptiveness at the cost of
 duplicates. Averaging the partial view sizes over exchanges provides a quick
 convergence to a network topology where the partial views are balanced.
 
-\subsection{Leaving and crashing}
+\subsection{Leaving or crashing}
 \label{subsec:leaving}
 
 In \SPRAY, peers can leave the network without notice. We make no
