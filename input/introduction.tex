@@ -18,13 +18,17 @@ Translation (NAT) and mobile networks. As a result, it opens the door to a new
 generation of large-scale distributed applications that exploit only
 browser-to-browser connections. Among the basic building blocks for such
 distributed applications, we find gossip-based peer sampling protocols such as
-\CYCLON~\cite{voulgaris2005cyclon}, which can build and maintain reliable
-overlay networks in dynamic environments.  However, \CYCLON does not effectively
-adapt to networks that grow or shrink and forces peers to maintain unnecessary
-connections.  For instance, it might require a mobile phone to maintain 10
-WebRTC connections with other remote browsers when only 6 would be enough. This
-yields unnecessary network traffic, particularly when applications employ these
-connections to broadcast messages.
+\CYCLON~\cite{voulgaris2005cyclon}, which build and maintain reliable overlay
+networks in dynamic environments.  Yet, they do not effectively adapt to
+networks that grow and shrink which forces peers to maintain superfluous
+connections. Peer-sampling-based protocols like epidemic dissemination or
+topology optimization inherit from this lack of flexibility. Small networks end
+up paying the price of the largest one.
+%For instance, it
+%might require a mobile phone to maintain 10 WebRTC connections with other remote
+%browsers when only 6 would be enough. 
+%%This yields unnecessary network traffic, particularly when applications employ
+%%these connections to broadcast messages.
 
 In this paper, we introduce \SPRAY, a random peer sampling protocol
 inspired by both \SCAMP~\cite{ganesh2003peer} and
@@ -49,14 +53,11 @@ editors on Grid'5000. Our results demonstrate that \SPRAY significantly reduces
 network traffic with respect to a standard peer sampling protocol, and adapts to
 the number of participants.
 
-The rest of this paper is organized as follows:
-Section~\ref{sec:relatedwork} reviews the related
-work. Section~\ref{sec:proposal} details the \SPRAY
-protocol. Section~\ref{subsec:experiments} presents experimentation
-results of \SPRAY and compares them to
-state-of-the-art. Section~\ref{sec:use-case} details our experiment
-with \CRATE a real-time collaborative editor running in browsers. We
-conclude and discuss about the perspective in
+The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
+reviews the related work. Section~\ref{sec:proposal} details the \SPRAY
+protocol. It also presents experimentation results of \SPRAY and compares them
+to state-of-the-art. Section~\ref{sec:use-case} details our experiment with
+\CRATE a real-time collaborative editor running in browsers. We conclude in
 Section~\ref{sec:conclusion}.
 
 %%% Local Variables:
