@@ -12,18 +12,23 @@
 % deploy such applications on web browsers.
 % that can run on laptops, desktops and mobile devices.
 
-WebRTC~\cite{webrtc} makes browser-to-browser communication easy even within
-complex network environments that involve firewalls, proxies, Net Address
-Translation (NAT) and mobile networks. As a result, it opens the door to a new
-generation of large-scale distributed applications that exploit only
-browser-to-browser connections. Among the basic building blocks for such
-distributed applications, we find gossip-based peer sampling protocols such as
-\CYCLON~\cite{voulgaris2005cyclon}, which build and maintain reliable overlay
-networks in dynamic environments.  Yet, they do not effectively adapt to
-networks that grow and shrink which forces peers to maintain superfluous
-connections. Peer-sampling-based protocols like epidemic dissemination or
-topology optimization inherit from this lack of flexibility. Small networks end
-up paying the price of the largest one.
+WebRTC~\cite{webrtc} makes browser-to-browser communication easy even
+within complex network environments that involve firewalls, proxies,
+Net Address Translation (NAT) and mobile networks. As a result, it
+opens the door to a new generation of large-scale distributed
+applications that exploit only browser-to-browser connections. Among
+the basic building blocks for such distributed applications, we find
+gossip-based peer sampling protocols such as
+\CYCLON~\cite{voulgaris2005cyclon}, which build and maintain reliable
+overlay networks in dynamic environments. However, \CYCLON is unable
+to adapt dynamically to the real number of participants. Consequently,
+Small networks end up paying the price of the largest one. This is
+particurly important in context of WebRTC where a new distributed
+application can be deployed by just sharing a link in twitter; how
+many participants you will get? The scientific challenge is to be able
+to adapt to the number of participants without measuring how many
+participants are presents in the system.
+
 %For instance, it
 %might require a mobile phone to maintain 10 WebRTC connections with other remote
 %browsers when only 6 would be enough. 
