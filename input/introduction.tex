@@ -27,7 +27,7 @@ largest one.
 % This is particurly important in context of WebRTC where a new distributed
 % application can be deployed by just sharing a link in twitter; how many
 % participants you will get?
-The scientific challenge consists in finding a way to adapt the network size
+The scientific challenge consists in finding a way to adapt to the network size
 without actually measuring its number of members.
 % The scientific challenge is to be able to adapt to the number of participants
 % without measuring how many participants are presents in the system.
@@ -38,10 +38,9 @@ without actually measuring its number of members.
 %%This yields unnecessary network traffic, particularly when applications employ
 %%these connections to broadcast messages.
 
-In this paper, we introduce \SPRAY, a random peer sampling protocol
-inspired by both \SCAMP~\cite{ganesh2003peer} and
-\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state-of-the-
-art in several ways. 
+In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
+both \SCAMP~\cite{ganesh2003peer} and \CYCLON~\cite{voulgaris2005cyclon}. \SPRAY
+improves the state-of-the-art in several ways.
 \begin{inparaenum}[(i)]
 \item It dynamically adapts the neighborhood of each peer. Thus, the
   number of connections scales logarithmically with the network size.
