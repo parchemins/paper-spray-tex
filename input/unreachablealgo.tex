@@ -2,7 +2,7 @@
 \small
 \algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
 
-\newcommand{\comment}[1]{$\rhd$ #1}
+\newcommand{\comm}[1]{$\rhd$ #1}
 
 \newcommand{\LINEFOR}[2]{%
   \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
@@ -15,11 +15,11 @@
 \newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
 
 \begin{algorithmic}[1]
-  \Function{onPeerDown}{$q$} \hfill \comment{$q$: crashed/departed peer}  
+  \Function{onPeerDown}{$q$} \hfill \comm{$q$: crashed/departed peer}  
   \State \textbf{let} $occ \leftarrow 0$;
 
   \For{\textbf{each} $\langle n,\,age\rangle \in \mathcal{P}$}
-  \hfill \comment{remove and count}
+  \hfill \comm{remove and count}
   \If {($n=q$)}
   \State $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle n,\,age\rangle \}$;
   \State $occ \leftarrow occ + 1$;
@@ -27,7 +27,7 @@
   \EndFor
 
   \For{$i\leftarrow 0$ \textbf{to} $occ$} 
-  \hfill \comment{probabilistically duplicates}
+  \hfill \comm{probabilistically duplicates}
   \If{($rand()>{1\over{|\mathcal{P}|+occ}}$)}
   \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
   \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
@@ -39,13 +39,13 @@
   \EndFunction
   \Statex
   \Function{onArcDown}{$q,\,age$}
-  \hfill \comment{$q$: arrival of the arc down}  
+  \hfill \comm{$q$: arrival of the arc down}  
   \State $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle q,\,age\rangle \}$;
   \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
   \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
   \State $\mathcal{P} \leftarrow \mathcal{P} \uplus
   \left\{\langle n,\, 0\rangle\right\}$;
-  \hfill \comment{systematically duplicates}
+  \hfill \comm{systematically duplicates}
   \EndFunction
 
 \end{algorithmic}

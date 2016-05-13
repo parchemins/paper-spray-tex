@@ -2,7 +2,7 @@
 \small
 \algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
 
-\newcommand{\comment}[1]{$\rhd$ #1}
+\newcommand{\comm}[1]{$\rhd$ #1}
 
 \algblockdefx[act]{act}{endAct}
   [0] {\textbf{ACTIVE THREAD:}}
@@ -25,7 +25,7 @@
 \begin{algorithmic}[1]
   \Statex
   \act
-    \Function{loop}{ } \hfill \comment{Every $\Delta\,t$}
+    \Function{loop}{ } \hfill \comm{Every $\Delta\,t$}
     \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
     \State \textbf{let} $ \langle q,\, age \rangle \leftarrow getOldest(\mathcal{P})$;
     \State \textbf{let} $sample \leftarrow $ \label{line:samplesize}
@@ -40,7 +40,7 @@
   \endAct
   
   \pas
-    \Function{onExchange}{$o,\, sample$} \hfill \comment{$o: origin$}
+    \Function{onExchange}{$o,\, sample$} \hfill \comm{$o: origin$}
     \State \textbf{let} $sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\over{2} \right\rceil )$;
     \State $sample' \leftarrow replace(sample',\,o,\,p);$ \label{line:replace2}
     \State $sendTo(o ,\, sample')$;

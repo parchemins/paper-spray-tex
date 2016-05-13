@@ -2,7 +2,7 @@
 \small
 \algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
 
-\newcommand{\comment}[1]{$\rhd$ #1}
+\newcommand{\comm}[1]{$\rhd$ #1}
 
 
 \algblockdefx[initially]{initially}{endInitially}
@@ -26,17 +26,17 @@
   \Statex
   \initially
     \State $\mathcal{P} \leftarrow \varnothing$;
-    \hfill \comment{the partial view is a multiset}
-    \State $p$ ; \hfill \comment{identity of the local peer}
+    \hfill \comm{the partial view is a multiset}
+    \State $p$ ; \hfill \comm{identity of the local peer}
   \endInitially
   
   \pas
-  \Function{onSubs}{$o$} \hfill \comment{$o: origin$}
+  \Function{onSubs}{$o$} \hfill \comm{$o: origin$}
     \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
     {$sendTo(q,\, 'fwdSubs',\, o)$;} \label{line:multicast}
     \EndFunction
     \Statex
-    \Function{onFwdSubs}{$o$} \hfill \comment{$o: origin$}
+    \Function{onFwdSubs}{$o$} \hfill \comm{$o: origin$}
     \State $\mathcal{P} \leftarrow
     \mathcal{P}\uplus \left\{\langle o,\, 0 \rangle\right\}$;
     \EndFunction

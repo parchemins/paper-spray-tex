@@ -2,7 +2,7 @@
 \small
 \algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
 
-\newcommand{\comment}[1]{$\rhd$ #1}
+\newcommand{\comm}[1]{$\rhd$ #1}
 
 \newcommand{\LINEFOR}[2]{%
   \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
@@ -15,15 +15,15 @@
 \newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
 
 \begin{algorithmic}[1]
-  \Function{broadcast}{$m$} \hfill \comment{$m: message$}
+  \Function{broadcast}{$m$} \hfill \comm{$m: message$}
     \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
     {$sendTo(q,\, 'broadcast',\, m)$;}
     \EndFunction
     \Statex
-  \Function{receiveBroadcast}{$m$} \hfill \comment{$m: message$}
+  \Function{receiveBroadcast}{$m$} \hfill \comm{$m: message$}
   \If {$\neg alreadyReceived(m)$} \label{line:alreadyreceived}
   \State $deliver(m)$;
-  \State $broadcast(m)$; \hfill \comment{rebroadcast}
+  \State $broadcast(m)$; \hfill \comm{rebroadcast}
   \EndIf
   \EndFunction
   
