@@ -13,7 +13,7 @@ is undersized. Finally, we expect \SPRAY to keep a negligible number
 of duplicates in its partial views. The experiments run on the
 \PEERSIM simulator~\cite{montresor2009peersim}. The code of the random
 peer sampling protocols is available on the Github
-platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
+platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 % We use \SCAMP as a baseline for experiments relative to
 % connection failures. Unlike \SCAMP, we expect \SPRAY to
@@ -40,8 +40,15 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 %%\paragraph{Clustering and convergence time}
 
 
+\subsection{Clustering and convergence time}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/simple.eps}
+  \caption{\label{fig:clustering}Clustering coefficient.}
+\end{figure}
+
 \begin{asparadesc}
-\item[CLUSTERING AND CONVERGENCE TIME]
 \item[Objective:] To observe how adaptiveness impacts clustering and convergence
   time.
 \item[Description:] The average local clustering coefficient measures peers'
@@ -97,16 +104,7 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
   higher values when \CYCLON is undersized.
 \end{asparadesc}
 
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.49\textwidth]{img/simple.eps}
-  \caption{\label{fig:clustering}Clustering coefficient.}
-\end{figure}
-
-
-%\vspace{-7pt}
-%%\paragraph{Information dissemination}
+\subsection{Information dissemination}
 
 \begin{figure}
   \centering
@@ -114,9 +112,7 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
   \caption{\label{fig:avgpath}Average shortest path length.}
 \end{figure}
 
-
 \begin{asparadesc}
-\item[INFORMATION DISSEMINATION]
 \item[Objective:] To observe how adaptiveness impacts the average shortest path
   length, i.e., the speed of information dissemination.
 \item[Description:] The average path length is the average of the
@@ -155,10 +151,6 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 \end{asparadesc}
 
 
-%%\vspace{-7pt}
-%%\paragraph{Load-balancing}
-
-
 % \begin{figure*}
 %   \centering
 %   \subfloat[Figure A][\label{fig:churnA}Global number of arcs during an experiment 
@@ -170,6 +162,8 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 %     \includegraphics[width=0.48\textwidth]{img/avgpv.eps}}
 % \end{figure*}
 
+\subsection{Load-balancing}
+
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/histo.eps}
@@ -177,7 +171,6 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \begin{asparadesc}
-\item[LOAD-BALANCING]
 \item[Objective:] To observe how adaptiveness impacts the in-degree
   distribution, i.e., the load-balancing among peers.
 \item[Description:] The in-degree of a peer shows how well it is represented in
@@ -223,6 +216,8 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 %%\vspace{-7pt}
 %%\paragraph{Adaptive partial views}
 
+\subsection{Adaptive partial view}
+
 \begin{figure}
   \centering
   \includegraphics[width=0.49\textwidth]{img/avgpv.eps}
@@ -230,7 +225,7 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \begin{asparadesc}
-\item[ADPATIVE PARTIAL VIEWS]
+
 \item[Objective:] To show the impact of adaptiveness over partial view size when
   the network size grows and shrinks over time.
 \item[Description:] In this experiment we focus on a dynamic network where peers
@@ -261,59 +256,63 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 % \vspace{-7pt}
 % \paragraph{Robustness}
 
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=0.49\textwidth]{img/resilience.eps}
-%   \caption{\label{fig:resilience}Robustness to massive failures.}
-% \end{figure}
+\subsection{Robustness}
 
-% \begin{asparadesc}
-% \item[Objective:] To show that \SPRAY is robust to massive failures.
-% \item[Description:] Counting the strong components in a network allows
-%   estimating the areas reachable by the information dissemination protocols. For
-%   instance, there are 2 strong components if a part of the network can reach
-%   another part and the converse being false.  Counting the weak components
-%   allows estimating the point until which the network is still in a repairable
-%   state, i.e., after some shufflings, the network converge to an overlay where
-%   the information dissemination is able to reach all peers again. \CYCLON has 9
-%   neighbors which targets ~9k peers. The network contains 10k members. We
-%   perform the removals after the approaches converged to a stable overlay
-%   network. We remove the batch of peers at once, from 25 to 95 percents of peers
-%   every 5 percents, i.e., 16 runs for each approach. We perform a last
-%   measurement at 99 percents. We measures the components immediately after
-%   removals. Removals concern a percentage of the peers chosen at random among
-%   the 10k members.
-% \item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
-%   components over the network size after removals. First, the figure shows
-%   that both the random peer sampling protocols \SPRAY and \CYCLON suffer from
-%   deteriorated behavior at high removal percentages, \CYCLON being slightly
-%   better in this term. Figure~\ref{fig:resilience} shows that the information
-%   dissemination (strong components) starts to slowly degrade at 45 percents,
-%   and quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience}
-%   also shows that the approaches are able to recover from such clustering until
-%   high removal rate. Indeed, the weak components start to increase at 70
-%   percents, meaning that some part of the network are completely disjoint and
-%   beyond repair.
-% \item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY expose
-%   very similar results because \CYCLON's configuration targets a network size
-%   of 10k peers, while \SPRAY adjusts itself automatically to this network size.
-%   Therefore, the arc number in the approaches are close from being identical
-%   \CYCLON is slightly better because, in this case, it has more arcs (due to
-%   \SPRAY's randomness) and because it does not have duplicates (\SPRAY contains
-%   a small amount of duplicates in the partial view,
-%   cf. Figure~\ref{fig:duplicates}). It requires a high amount of removals
-%   to endanger the information dissemination protocol's ability to reach all
-%   peers. Indeed, since all peers are equally important in the network
-%   (cf. Figure~\ref{fig:histo}), removing a particular peer does not greatly
-%   affect the whole network. The network membership protocol is able to repair
-%   the topology later than the information dissemination starts to fail because
-%   the direction of arcs is not as important as in the latter. Indeed, \CYCLON
-%   and \SPRAY are still able to repair a network until parts of the network
-%   become disjoint, i.e., there is no arc between these parts of the network.
-% \end{asparadesc}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/resilience.eps}
+  \caption{\label{fig:resilience}Robustness to massive failures.}
+\end{figure}
+
+\begin{asparadesc}
+\item[Objective:] To show that \SPRAY is robust to massive failures.
+\item[Description:] Counting the strong components in a network allows
+  estimating the areas reachable by the information dissemination protocols. For
+  instance, there are 2 strong components if a part of the network can reach
+  another part and the converse being false.  Counting the weak components
+  allows estimating the point until which the network is still in a repairable
+  state, i.e., after some shufflings, the network converge to an overlay where
+  the information dissemination is able to reach all peers again. \CYCLON has 9
+  neighbors which targets ~9k peers. The network contains 10k members. We
+  perform the removals after the approaches converged to a stable overlay
+  network. We remove the batch of peers at once, from 25 to 95 percents of peers
+  every 5 percents, i.e., 16 runs for each approach. We perform a last
+  measurement at 99 percents. We measures the components immediately after
+  removals. Removals concern a percentage of the peers chosen at random among
+  the 10k members.
+\item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
+  components over the network size after removals. First, the figure shows
+  that both the random peer sampling protocols \SPRAY and \CYCLON suffer from
+  deteriorated behavior at high removal percentages, \CYCLON being slightly
+  better in this term. Figure~\ref{fig:resilience} shows that the information
+  dissemination (strong components) starts to slowly degrade at 45 percents,
+  and quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience}
+  also shows that the approaches are able to recover from such clustering until
+  high removal rate. Indeed, the weak components start to increase at 70
+  percents, meaning that some part of the network are completely disjoint and
+  beyond repair.
+\item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY expose
+  very similar results because \CYCLON's configuration targets a network size
+  of 10k peers, while \SPRAY adjusts itself automatically to this network size.
+  Therefore, the arc number in the approaches are close from being identical
+  \CYCLON is slightly better because, in this case, it has more arcs (due to
+  \SPRAY's randomness) and because it does not have duplicates (\SPRAY contains
+  a small amount of duplicates in the partial view,
+  cf. Figure~\ref{fig:duplicates}). It requires a high amount of removals
+  to endanger the information dissemination protocol's ability to reach all
+  peers. Indeed, since all peers are equally important in the network
+  (cf. Figure~\ref{fig:histo}), removing a particular peer does not greatly
+  affect the whole network. The network membership protocol is able to repair
+  the topology later than the information dissemination starts to fail because
+  the direction of arcs is not as important as in the latter. Indeed, \CYCLON
+  and \SPRAY are still able to repair a network until parts of the network
+  become disjoint, i.e., there is no arc between these parts of the network.
+\end{asparadesc}
 
 %%\vspace{-7pt}
 %%\paragraph{Duplicates}
+
+\subsection{Duplicates}
 
 \begin{figure}
   \centering
@@ -322,7 +321,6 @@ platform at: \emph{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \begin{asparadesc} 
-\item[DUPLICATES]
 \item[Objective:] To show that a small proportion of peers contains duplicates
   in their partial view.
 \item[Description:] Using \SPRAY as random peer sampling protocol, we measure
