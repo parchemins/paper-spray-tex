@@ -115,7 +115,7 @@ transitively reach all network members.
 Since the gossiping algorithm depends of the neighborhood provided by \SPRAY,
 and since the latter grows logarithmically compared to the network size, the
 communication complexity of an application is upper-bounded by
-$\mathcal{O}(m \ln |\mathcal{N}|)$, where $m$ is the space complexity of a
+$\mathcal{O}(m \ln |V^t|)$, where $m$ is the space complexity of a
 message. Since \CRATE's identifiers are sublinearly upper-bounded compared to
 the document size, \CRATE scales well.
 

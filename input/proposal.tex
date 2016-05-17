@@ -44,9 +44,9 @@ multicasts the new identity to its neighborhood. Afterwards, to limit
 the risk of connection failures, each neighbor immediately adds the
 joining peer to their own neighborhood. This fulfills the second
 condition of the problem statement.  In total, the number of arcs in
-the network increases of $1+\ln(|\mathcal{N}|)$ using only
+the network increases of $1+\ln(|V^t|)$ using only
 neighbor-to-neighbor interactions, which leads to a total number of
-$|\mathcal{N}|\ln(|\mathcal{N}|)$ arcs.
+$|V^t|\ln(|V^t|)$ arcs.
 
 \begin{figure*}
   \centering
@@ -124,18 +124,19 @@ peer. It is divided between an active thread looping to update the partial
 view, and a passive thread which reacts to an exchange message. The functions
 which are not explicitly defined are the following:
 \begin{compactitem}
-\item $incrementAge(view)$: increments the age of each elements in the view
+\item \textsc{incrementAge}$(view)$: increments the age of each elements in the view
   and returns the modified view.
-\item $getOldest(view)$: retrieves the oldest peer contained in the view.
-\item $getSample(view, \, size)$: returns a sample of the view containing
+\item \textsc{getOldest}$(view)$: retrieves the oldest peer contained in the view.
+\item \textsc{getSample}$(view, \, size)$: returns a sample of the view containing
   $size$ elements.
-\item $replace(view,\,old,\,new)$: replaces all the occurrences of the
+\item \textsc{replace}$(view,\,old,\,new)$: replaces all the occurrences of the
   $old$ element in the view by the $new$ element and returns the
   modified view.
-\item $rand()$: generates a random floating-point number between $0$ and $1$.
+\item \textsc{rand}$()$: generates a random floating-point number between $0$
+  and $1$.
 \end{compactitem}
 
-In the active thread, Function $loop$ is called every $\Delta t$ time
+In the active thread, Function \textsc{loop} is called every $\Delta t$ time
 units. First, the function increments the age of each neighbor in
 $\mathcal{P}$. Then, it chooses the oldest peer $q$ to exchange a
 subset of its partial view. If Peer $q$ cannot be reached (i.e. it
@@ -210,9 +211,9 @@ of a sufficiently random peer sampling, such an aggregation protocol
 yields the following mean, $\mu$, and variance, $\sigma^2$, at cycle
 $i$;
 \begin{center}
-  $\mu_i = {1\over{|\mathcal{N}|}} \sum\limits_{x \in \mathcal{N}} a_{i,\,x}$
+  $\mu_i = {1\over{|V^t|}} \sum\limits_{x \in V^t} a_{i,\,x}$
   \hfill
-  $\sigma^2_i = {1\over{|\mathcal{N}|-1}}\sum\limits_{x \in \mathcal{N}}
+  $\sigma^2_i = {1\over{|V^t|-1}}\sum\limits_{x \in V^t}
   (a_{i,\,x} - \mu_i)^2$
 \end{center}
 where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The
@@ -224,7 +225,7 @@ aggregation resulting to:
 $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{(|\mathcal{P}_1| +
   |\mathcal{P}_2|) \div 2}$.  Furthermore, at each cycle, each peer is
 involved in the exchange protocol at least once (they initiate one),
-and in the best case 1+Poisson(1) (they initiate one and, in average,
+and in the best case $1+Poisson(1)$ (they initiate one and, in average,
 each peer receives another one). This relation being established, we
 know that \SPRAY's partial view sizes converge exponentially fast to
 the global average size. Additionally, we know that each cycle
@@ -242,19 +243,19 @@ In \SPRAY, peers can leave the network without notice. We make no
 distinction between node departures and crashes, but the protocol must
 react to both of them. Without such a reaction, the network could
 collapse due to an over zealous removal of arcs. When a peer joins the
-network, it injects $1+\ln(|\mathcal{N}|)$ arcs. Nevertheless, after
+network, it injects $1+\ln(|V^t|)$ arcs. Nevertheless, after
 few exchanges, the partial view of the joining peer becomes populated
 with more neighbors. Then, if this peer leaves, it removes
-$\ln(|\mathcal{N}|)$ arcs from its partial view, and another
-$\ln(|\mathcal{N}|)$ arcs from peers which have this peer in their
+$\ln(|V^t|)$ arcs from its partial view, and another
+$\ln(|V^t|)$ arcs from peers which have this peer in their
 partial views. Therefore, without any crash handler, we remove
-$2\ln(|\mathcal{N}|)$ connections instead of
-$1+\ln(|\mathcal{N}|)$. To alleviate this issue, each peer that
+$2\ln(|V^t|)$ connections instead of
+$1+\ln(|V^t|)$. To alleviate this issue, each peer that
 detects a crash may reestablish a connection with anyone in its
 neighborhood (which will spread in the network over the
 exchanges). The probability of reestablishing a connection is
 $1-{1\div{|\mathcal{P}|}}$. Since ${|\mathcal{P}|}\approx
-\ln(|\mathcal{N}|)$ peers have the crashed peer in their partial view,
+\ln(|V^t|)$ peers have the crashed peer in their partial view,
 it is likely that all of them will reestablish a connection, except
 one. Therefore, when a peer leaves, it approximately removes the
 number of connections it injected when it joined.
@@ -265,7 +266,7 @@ number of connections it injected when it joined.
 \end{algorithm}
 
 Algorithm~\ref{algo:unreachable} shows the manner in which \SPRAY deals with
-departures and crashes.  Function $onPeerDown$ shows the reaction of \SPRAY
+departures and crashes.  Function \textsc{onPeerDown} shows the reaction of \SPRAY
 when the peer $q$ is detected as crashed or departed. A first loop counts the
 occurrences of this neighbor in the partial view, and removes all of
 them. Then, the second loop probabilistically duplicates the reference of a
@@ -295,18 +296,19 @@ random graphs). Indeed, if Peer $p_1$ is the sole bridge between two
 clusters, adding arcs is not enough to ensure connectedness.
 
 Algorithm~\ref{algo:unreachable} also shows that \SPRAY distinguishes peer
-crashes and arc crashes. Indeed, Function $onArcDown$ deals with connection
-establishment failures. In this function, the failing arc is systematically
-replaced with a duplicate. Therefore, the arc count stays invariant even in
-presence of connection establishment failures. The distinction between the
-functions $onPeerDown$ and $onArcDown$ is necessary because the former is
-supposed to remove a small arc quantity over departures, contrarily to the
-latter. Without this small removal, the global arc count would grow unbounded
-with network turnover.
+crashes and arc crashes. Indeed, Function \textsc{onArcDown} deals with
+connection establishment failures. In this function, the failing arc is
+systematically replaced with a duplicate. Therefore, the arc count stays
+invariant even in presence of connection establishment failures. The distinction
+between the functions \textsc{onPeerDown} and \textsc{onArcDown} is necessary because the
+former is supposed to remove a small arc quantity over departures, contrarily to
+the latter. Without this small removal, the global arc count would grow
+unbounded with network turnover.
 
-In the context of WebRTC, \SPRAY calls the $onArcDown$ function when a connection
-establishement fails. \SPRAY calls the $onPeerDown$ function when the
-connection was established once but the neighbor is not responding anymore.
+In the context of WebRTC, \SPRAY calls the \textsc{onArcDown} function when a
+connection establishement fails. \SPRAY calls the \textsc{onPeerDown} function
+when the connection was established once but the neighbor is not responding
+anymore.
 
 % To summarize, \SPRAY provides:
 % \begin{inparaenum}[(i)]

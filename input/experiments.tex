@@ -51,10 +51,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts clustering and convergence
   time.
-\item[Description:] The average local clustering coefficient measures peers'
-  neighborhood connectivity in the network:
+\item[Description:] The average local clustering
+  coefficient~\cite{watts1998collective} measures peers' neighborhood
+  connectivity in the network:
   \begin{equation*}
-    \overline{C} = {1\over |\mathcal{N}|}\sum\limits_{x\in\mathcal{N}}C_x
+    \overline{C} = {1\over |V^t|}\sum\limits_{x\in V^t}C_x
   \end{equation*}
   where $C_x$ is the local clustering coefficient of Peer $p_x$.  The
   runs concern 0.1k, 1k, 10k and 100k peers. The representative of the
@@ -341,7 +342,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \begin{equation*}
     1- 
     (1-
-    \exp({-\ln(|\mathcal{N}|)*(\ln(|\mathcal{N}|)-1)\over{2*|\mathcal{N}|}}))
+    \exp({-\ln(|V^t|)*(\ln(|V^t|)-1)\over{2*|V^t|}}))
   \end{equation*}
 \item[Results:] Figure~\ref{fig:duplicates} shows the proportion of peers using
   a partial view containing duplicates. We observe that there always exist
