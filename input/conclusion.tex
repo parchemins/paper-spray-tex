@@ -32,13 +32,15 @@ becomes negligible in large networks.
 To highlight the improvement brought by such protocol, we built \CRATE, a
 decentralized collaborative editor directly accessible in web browsers. We
 launched experiments involving up to 600 browsers showing that message
-dissemination highly benefits from adaptive neighborhoods. \SPRAY makes building
-scalable decentralized applications easy and accessible, without requiring
-knowledge about the range of users or their number. As for broadcast, many
-topology optimizations (about localization, latency, preferences etc.) rely on
-random peer sampling protocol, e.g., the generic algorithms
-T-Man~\cite{jelasity2009tman} or Vicinity~\cite{voulgaris2005epidemic}. \SPRAY
-allows such protocols to extend their behavior to dynamic neighborhood views.
+dissemination highly benefits from adaptive neighborhoods.
+
+\SPRAY makes building scalable decentralized applications easy and accessible.
+Developers do not require to oversee the network size targeted by their
+applications. Just the same as for broadcast, many topology optimization
+protocols (e.g. about geolocalization, latency, or preferences) rely on random
+peer sampling protocol such as the generic algorithms
+T-Man~\cite{jelasity2009tman} and Vicinity~\cite{voulgaris2005epidemic}. \SPRAY
+allows such protocols to take benefict from its self-adjusting partial views.
 
 % Future work includes investigations on topology managers such as
 % T-Man~\cite{jelasity2009tman} or
