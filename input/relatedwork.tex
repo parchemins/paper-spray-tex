@@ -61,31 +61,32 @@ WebRTC does not manage routing.
 % during the forwarding process, the connection establishment will fail, even if
 % an alternative route exists as WebRTC does not manage routing.
 
-Using signaling services and existing WebRTC connections allows easy
-deployment of random peer sampling protocols~\cite{jelasity2004peer} in
-browsers that can run on mobile phones or tablets connected to mobile
-networks. In this context, it is crucial to keep the number of connections as
-low as possible in order to reduce traffic usage and limit resource
-consumption.
+Using signaling services and existing WebRTC connections allows easy deployment
+of random peer sampling protocols~\cite{jelasity2004peer} in browsers that can
+run on mobile phones or tablets connected to mobile networks. In this context,
+it is crucial to keep the number of connections as low as possible in order to
+reduce the generated traffic and limit the resource consumption.
 
 Random peer sampling protocols~\cite{jelasity2004peer, jelasity2007gossip}
-provide each peer with a partial view $\mathcal{P}$ of the network membership
-$\mathcal{N}$. They populate the partial views with references to peers chosen
-at random among $\mathcal{N}$ following a uniform distribution using local
-knowledge only. Their goal is to converge to an overlay network exposing
-properties similar to those of random graphs~\cite{erdos1959random}. They
-efficiently provide connectedness, robustness, information dissemination etc. A
-wide variety of gossip-based protocols use random peer sampling at their
-core. For instance, topology optimization protocols~\cite{voulgaris2005epidemic,
-  jelasity2009tman} aiming to improve criterion about localization, latency,
-preferences etc.
+produce overlay networks by populating the partial views with references to
+peers chosen at random in $V$ following a uniform distribution. Solely relying
+on local knowledge, their goal is to converge to a topology exposing properties
+similar to those of random graphs~\cite{erdos1959random}. Among others, they
+efficiently provide connectedness and robustness. A wide variety of gossip-based
+protocols use random peer sampling at their core. For instance, topology
+optimization protocols~\cite{voulgaris2005epidemic, jelasity2009tman} aim to
+improve criterion about localization, latency, or preferences.
 
 The representatives of random peer sampling protocols using a fixed-size partial
 view are Lpbcast~\cite{eugster2003lightweight},
-HyParView\cite{leitao2007hyparview} Newscast~\cite{tolgyeski2009adaptive}, and
-\CYCLON~\cite{voulgaris2005cyclon}. They have to know \emph{a priori} the
-maximum network size to set their parameters accordingly. These decisions cannot
-be safely retracted afterwards.
+HyParView~\cite{leitao2007hyparview} Newscast~\cite{tolgyeski2009adaptive}, and
+\CYCLON~\cite{voulgaris2005cyclon}. The developers deploying applications using
+such protocols must foresee the dimensions of the networks to setup properly
+their partial views size. These decisions cannot be safely retracted afterwards
+at runtime. As a consequence, the views are commonly oversized.
+
+% They have to know \emph{a priori} the maximum network size to set their
+% parameters accordingly. 
 
 This inflexibility makes it possible to maintains 7 connections in the browser
 despite requiring only 4, while, in the following moment, it still maintains 7
