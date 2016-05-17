@@ -281,32 +281,40 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   removals. Removals concern a percentage of the peers chosen at random among
   the 10k members.
 \item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
-  components over the network size after removals. First, the figure shows
-  that both the random peer sampling protocols \SPRAY and \CYCLON suffer from
+  components over the network size after removals. First, the figure shows that
+  both the random peer sampling protocols \SPRAY and \CYCLON suffer from
   deteriorated behavior at high removal percentages, \CYCLON being slightly
   better in this term. Figure~\ref{fig:resilience} shows that the information
-  dissemination (strong components) starts to slowly degrade at 45 percents,
-  and quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience}
-  also shows that the approaches are able to recover from such clustering until
-  high removal rate. Indeed, the weak components start to increase at 70
-  percents, meaning that some part of the network are completely disjoint and
-  beyond repair.
+  dissemination (strong components) starts to slowly degrade at 45 percents, and
+  quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience} also
+  shows that the approaches are able to recover from such clustering until high
+  removal rate. Indeed, the weak components start to increase at 70 percents,
+  meaning that some part of the network are completely disjoint and beyond
+  repair. Globally, Figure~\ref{fig:resilience} also demonstrates that the
+  logarithmic growth of these sampling protocol is an upper bound, for smaller
+  growth could be obtained without endangering the connectedness of the network.
 \item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY expose
-  very similar results because \CYCLON's configuration targets a network size
-  of 10k peers, while \SPRAY adjusts itself automatically to this network size.
+  very similar results because \CYCLON's configuration targets a network size of
+  10k peers, while \SPRAY adjusts itself automatically to this network size.
   Therefore, the arc number in the approaches are close from being identical
   \CYCLON is slightly better because, in this case, it has more arcs (due to
   \SPRAY's randomness) and because it does not have duplicates (\SPRAY contains
   a small amount of duplicates in the partial view,
-  cf. Figure~\ref{fig:duplicates}). It requires a high amount of removals
-  to endanger the information dissemination protocol's ability to reach all
+  cf. Figure~\ref{fig:duplicates}). It requires a high amount of removals to
+  endanger the information dissemination protocol's ability to reach all
   peers. Indeed, since all peers are equally important in the network
   (cf. Figure~\ref{fig:histo}), removing a particular peer does not greatly
   affect the whole network. The network membership protocol is able to repair
   the topology later than the information dissemination starts to fail because
   the direction of arcs is not as important as in the latter. Indeed, \CYCLON
   and \SPRAY are still able to repair a network until parts of the network
-  become disjoint, i.e., there is no arc between these parts of the network.
+  become disjoint, i.e., there is no arc between these parts of the network.  A
+  smaller growth could be obtained because the sharp threshold of connectedness
+  applies to random graphs according to Erd{\H o}s-R{\'
+    e}nyi~\cite{erdos1959random}. However, random peer sampling protocols
+  constraint the partial views size to reduce the variance between peers.  With
+  such slight difference, we presume that a lower bound on arcs growth could be
+  found, although that may require global knowledge.
 \end{asparadesc}
 
 %%\vspace{-7pt}
