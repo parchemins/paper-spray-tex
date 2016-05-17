@@ -88,6 +88,7 @@ at runtime. As a consequence, the views are commonly oversized.
 % They have to know \emph{a priori} the maximum network size to set their
 % parameters accordingly. 
 
+%% not happy with this paragraph
 This inflexibility makes it possible to maintains 7 connections in the browser
 despite requiring only 4, while, in the following moment, it still maintains 7
 connections while 10 would be needed.  \CYCLON's partial views are commonly
@@ -111,7 +112,7 @@ approaches either use
 Unfortunately, while they can be accurate in their estimation, they imply a
 communication overhead and may have strong assumptions (e.g. random graph
 topology). However, adaptiveness should introduce a minimum overhead to peer
-sampling in WebRTC applications.
+sampling protocols. % in WebRTC applications.
 
 \begin{figure*}
   \centering
@@ -131,16 +132,16 @@ sampling in WebRTC applications.
 \end{figure*}
 
 The sole representative of adaptive-by-design random peer sampling is
-\SCAMP~\cite{ganesh2003peer}. Its interesting property lies in
-its logarithmically growing partial view sizes meeting the sharp threshold of
+\SCAMP~\cite{ganesh2003peer}. Its interesting property lies in its
+logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
 suffers from other drawbacks. In particular, it systematically disseminates the
 connections at random. Thus, the originating peer can be several hops away from
 the arrival peer. In WebRTC, each random dissemination path must be traveled
-back to finalize the connection establishment
-(cf. Figure~\ref{fig:webrtc}). This drastically impacts the \SCAMP failure
-probability of establishing a connection. In turns, the number of connections
-quickly decreases eventually leading to partitioning.
+back to finalize the connection establishment (cf. Figure~\ref{fig:webrtc}),
+often multiple times. This drastically impacts the \SCAMP failure probability of
+establishing a connection. In turns, the number of connections quickly decreases
+eventually leading to partitioning.
 
 %  Let $P_f$ be the probability that an
 % element of the dissemination path (either a peer or a connection) crashes or
@@ -167,34 +168,36 @@ quickly decreases eventually leading to partitioning.
 Building an adaptive-by-design random peer sampling that meets WebRTC
 constraints raises the following scientific problem:
 \begin{problem}
-  Let $t$ be an arbitrary time frame, let $\mathcal{N}^t$ be the network
-  membership at that given time $t$ and let $\mathcal{P}_x^t$ be the partial
-  view of peer $p_x \in \mathcal{N}^t$.  A cost-efficient random peer sampling
-  should provide the following best-case properties:
+  Let $t$ be an arbitrary time frame, let $V^t$ be the network membership at
+  that given time $t$ and let $\mathcal{P}_x^t$ be the partial view of peer
+  $p_x \in \mathcal{V}^t$.  An efficient random peer sampling should provide
+  the following properties:
   \begin{enumerate}
   \item Partial view size: \hfill
-    $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \Theta (\ln
+    $\forall p_x \in \mathcal{N}^t,\, |\mathcal{P}_x^t| = \mathcal{O} (\ln
     |\mathcal{N}^t|)$      
-  \item Connection establishment: \hfill $O(1)$
+  \item Connection establishment: \hfill $\mathcal{O}(1)$
     %% \item  \begin{center}
     %%     Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
     %%   \end{center}
   \end{enumerate}
 \end{problem}
 
-The first condition states that the partial view size is relative to the size
-of the network at any time. It also states that partial views grow and shrink
-logarithmically compared to the size of the network. The second condition
-states that each connection establishment requires a constant number of
-intermediary peers. Since this number is constant, connection establishments
-do not depend on the network size.
+The first condition states that the partial view size is relative to the size of
+the network at any time. It also states that partial views should grow and
+shrink, at worst, logarithmically compared to the size of the network. The
+second condition states that each connection establishment requires a constant
+number of intermediary peers. Since this number is constant, connection
+establishments do not depend on the network size.
 %% The last condition states that the network
 %% overlay converges exponentially fast to a topology that is close to a random
 %% graph.
 Lpbcast, HyParView, Newscast, and \CYCLON fail to meet the first condition of
 the problem statement since they do not adapt their views to the network
 size. \SCAMP fails to meet the second condition of the problem statement since
-each connection implies an unsafe random dissemination protocol.
+each connection implies an unsafe random dissemination. The next session
+introduces \SPRAY that meets both of these constraints without any global
+knowledge.
 
 %%% Local Variables:
 %%% mode: latex
