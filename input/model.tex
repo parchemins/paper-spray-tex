@@ -1,0 +1,26 @@
+
+\section{Model}
+
+We consider a set $V$ of peers labelled from $p_1$ to $p_N$.  The peers can
+crash or leave at any time without giving notice, and they can recover or
+re-enter the network freely. We consider only non-byzantine peers.
+
+A multiset of arcs $E = (p_f,\,p_t) \in V \times V$ allows $p_f$ to communicate
+with $p_t$ but not the converse. The multiset of arcs is dynamic, i.e., arcs
+appear and disappear over time. The network $\mathcal{N}^t \in V \times E$ is a
+\emph{network overlay} at the given time $t$.
+
+The multiset of arcs starting from $p_f$ is called the \emph{partial view} of
+$p_f$, noted $\mathcal{P}_f$. The destination peers in this view are the
+\emph{neighbors} of $p_f$. A partial view can contain arcs that are stale when
+the neighbor has left or crashed.
+
+The peers communicate by the mean of messages. They only send messages to their
+neighbors. A departed peer cannot send messages. An arc can fail to deliver a
+message. A stale arc systematically fails.
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End:
