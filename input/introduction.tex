@@ -1,85 +1,117 @@
 
 \section{Introduction}
 
-% Peer sampling constitutes a fundamental mechanism for many large-scale
-% distributed applications both on the
-% cloud~\cite{decandia2007dynamo} and in a peer-to-peer
-% setting. Services such as dissemination~\cite{eugster2003lightweight,
-%   tolgyeski2009adaptive}, aggregation~\cite{jelasity2004epidemic} and
-% network management~\cite{jelasity2009tman, voulgaris2005epidemic} have
-% been based on peer sampling and the recent introduction of
-% WebRTC\footnote{\url{http://www.webrtc.org/}} opens the opportunity to
-% deploy such applications on web browsers.
-% that can run on laptops, desktops and mobile devices.
+Peer-sampling
+protocols\cite{voulgaris2005cyclon,jelasity2007gossip,tolgyeski2009adaptive}
+constitute a fundamental mechanism for a number of large-scale
+distributed applications both on the cloud~\cite{decandia2007dynamo}
+and in a peer-to-peer
+setting~\cite{Frey09Middleware,voulgaris2005sub,wuhib2009robust}. By
+providing each node with a continuously changing partial view of the
+network, they make applications resilient to churn~\cite{bertier-d2ht}
+and inherently load balancing~\cite{Frey09DSN}. In the context of
+video streaming, for example, a peer-sampling protocol makes it
+possible to distribute the streaming load over all peers without
+requiring the creation and the maintenance of rigid structures like
+multiple trees\cite{Frey09DSN, monod:THESIS}.  
 
-WebRTC~\cite{webrtc} made browser-to-browser communications easy even
-within complex network environments that involve firewalls, proxies,
-Net Address Translation (NAT) and mobile networks. A simple click on a
-http link in the browser launches a browser-based video-conferencing
-application as in Firefox Hello, a torrent download browser-based application as in
-webtorrent~\cite{webtorrent}, or a decentralized collaborative
-real-time editor as in CRATE~\cite{nedelec2016crate}. Browsers can be
-seen as an application containter and WebRTC as a communication layer
-for distributed applications deployed in browsers. Users start an
-application in their browsers, create a session URL to allow remote
-access and notify other users. Remote participants have just to click
-on this link to deploy the application in their browsers and join the session.
+% made browser-to-browser communications easy even
+% within complex network environments that involve firewalls, proxies,
+% Net Address Translation (NAT) and mobile networks. A simple click on a
+% http link in the browser launches a browser-based video-conferencing
+% application as in Firefox Hello, a torrent download browser-based application as in
+% webtorrent~\cite{webtorrent}, or a decentralized collaborative
+% real-time editor as in CRATE~\cite{nedelec2016crate}. Browsers can be
+% seen as an application containter and WebRTC as a communication layer
+% for distributed applications deployed in browsers. Users start an
+% application in their browsers, create a session URL to allow remote
+% access and notify other users. Remote participants have just to click
+% on this link to deploy the application in their browsers and join the session.
 
-Many large scale distributed applications relies on gossip-based peer
-sampling protocols such as \CYCLON~\cite{voulgaris2005cyclon} to
-enable information dissemination~\cite{eugster2003lightweight,
-  tolgyeski2009adaptive}, aggregation~\cite{jelasity2004epidemic} or
-network management~\cite{jelasity2009tman, voulgaris2005epidemic}.
+% Many large scale distributed applications relies on gossip-based peer
+% sampling protocols such as \CYCLON~\cite{voulgaris2005cyclon} to
+% enable information dissemination~\cite{eugster2003lightweight,
+%   tolgyeski2009adaptive}, aggregation~\cite{jelasity2004epidemic} or
+% network management~\cite{jelasity2009tman, voulgaris2005epidemic}.
 
-Deploying peer sampling protocols on top of WebRTC raise several issues:
+
+The recent introduction of WebRTC~\cite{webrtc} has renewed the
+research interest in this kind of decentralized applications with a
+number of proposals for applications like decentralized video
+streaming~\cite{hivejs,smoothcache2} or content-delivery
+networks\cite{Zhang:2013:MBC:2465351.2465379}. However, deploying
+existing peer sampling protocols on top of WebRTC raises important
+technical challenges. 
 \begin{inparaenum}[(1)]
 \item WebRTC does not manage addressing nor routing; this makes
   connection establishement much more costly than on IP network and
-  more likely to fail,
-\item Browsers run on desktop, laptops and mobile phones, keeping
-  resource consumption as low as possible is important,
-\item The shared http links used to launch sessions can create the
-  buzz and the number of participants can vary from few people to
-  thousands very quickly. Just publishing a session link in twitter
-  can create the buzz and generate massive joins for an unpredictable
-  period of time. Suppose massive online lecture platforms allow
-  students to share their notes. Many lectures run in parallel
-  involving various number of students, i.e., from few to
-  thousands. Also, even during the editing session the audience is
-  subject to significant changes in size, going from thousands to
-  hundreds. 
+  more likely to fail. 
+\item Browsers run on desktop, laptops and mobile phones. This
+  requires protocols that reduce resource consumption as much as
+  possible.
+\item The ability to launch WebRTC sessions through simple HTTP makes
+  applications subject to sudden bursts of popularity.  % Suppose
+  % massive online lecture platforms allow students to share their
+  % notes. Many lectures run in parallel involving various number of
+  % students, i.e., from few to thousands. Also, even during the
+  % editing
+  % session the audience is subject to significant changes in size,
+  % going from thousands to hundreds.
 \end{inparaenum}
+Consider the example of a user who is streaming a video directly from
+his mobile phone to some of his friends. The user suddenly witnesses
+some dramatic event, and his friends spread the news by twitting the
+stream's address. Instantly a huge number of users connect and start
+watching the stream on their laptops and phones. The streaming
+mechanisms, and the protocols it relies on must be able to adapt to
+this sudden burst of popularity, maintaining their quality of service,
+while being able to return to their initial configuration when the
+popularity burst subsides. 
 
-These issues raise the question of adaptability of peer-sampling
-protocols to the real number of participants. How to determine the
-best partial view size and fan-out to garantee delivery of message,
-and resilience to node removal whatever the number of participants?
+% Publishing the
+%   link to a WebRTC video stream on Twitter can create the buzz and
+%   generate massive joins for an unpredictable period of time.
 
-This question has been already addressed by
-Scamp~\cite{ganesh2003peer} that propose an adaptive protocol. Scamp
-maintain partical view size to $log(n)+k$ where $n$ is the number of
-participant. Unfortunatly, deploying Scamp on top of WebRTC fails due
-to the connection estabilishement failures of WebRTC. Another approach
-is just to oversize partial views and use protocol as
-Cyclon~\cite{voulgaris2005cyclon}. Unfortunatly, this approach
-consumes more ressources and create and renew periodically more
-connections than required. With this approach, small networks will end
-up paying the price of the largest one. It does not also provide a way
-to compute a fan-out that will ensure high delivery rate in any
-situation. Finally, it is possible to
-periodically run an algorithm that will estimate the real number of
-participants thanks to a central site or an aggregation procotol and
-then, adapt the partial view size and fan-out accordingly. However, to
-be efficient, this estimator has to run quite frequently and will have
-significant overhead compared to an approach similar to Scamp.
+Unfortunately, existing peer-sampling protocols, which lie at the
+bases of several video streaming
+solutions~\cite{Frey09Middleware,Abeni2009,smoothcache20} lack this
+capability. On the one hand, the most popular approaches like
+Cyclon~\cite{voulgaris2005cyclon}, and the RPS protocol
+family~\cite{jelasity2007gossip} provide application nodes with fixed
+sized views of the network based on parameters that have to be
+configured at deployment time. This forces developers to oversize
+partial views to handle potential bursts, either wasting resources, or
+not provisioning for large-enough settings. On the other,
+Scamp~\cite{ganesh2003peer} features some form of adaptation but falls
+short in the context of WebRTC applications. Scamp maintains partial
+views of size $log(n)+k$, $n$ being the number of nodes. But its
+connection establishment process does not support the connection
+failures that often occur in WebRTC. 
+%  Unfortunatly, deploying Scamp on
+% top of WebRTC fails due to the connection estabilishement failures of
+% WebRTC. Another approach is just to oversize partial views and use
+% protocol as Cyclon~\cite{voulgaris2005cyclon}. Unfortunatly, this
+% approach consumes more ressources and create and renew periodically
+% more connections than required. With this approach, small networks
+% will end up paying the price of the largest one. It does not also
+% provide a way to compute a fan-out that will ensure high delivery rate
+% in any situation.
+Finally, it would be possible to periodically estimate the real number
+of network nodes using an aggregation
+protocol~\cite{montresor2004robust}, and to reconfigure Cyclon, or RPS
+solutions based on this. However, this aggregation protocol would have
+to run quite frequently, resulting in significant network overhead
+to anticipate a popularity burst that may never happen. 
 
-The scientific challenge consists in finding a way to adapt to the
-network size without actually measuring its number of members as
-proposed by Scamp, but running on top of WebRTC.
+% The scientific challenge consists in finding a way to adapt to the
+% network size without actually measuring its number of members as
+% proposed by Scamp, but running on top of WebRTC.
 
-In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
-both \SCAMP~\cite{ganesh2003peer} and \CYCLON~\cite{voulgaris2005cyclon}. \SPRAY
-improves the state-of-the-art in several ways.
+In this paper, we address the challenge of a dynamically adaptive
+peer-sampling, by introducing \SPRAY, a novel random peer-sampling
+protocol inspired by both \SCAMP~\cite{ganesh2003peer} and
+\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the
+state-of-the-art in several ways.
 \begin{inparaenum}[(i)]
 \item It dynamically adapts the neighborhood of each peer. Thus, the
   number of connections scales logarithmically with the network size.
@@ -92,13 +124,19 @@ improves the state-of-the-art in several ways.
   efficiency improvement at the cost of little overhead.
 \end{inparaenum}
 
-\SPRAY relieves developers of having to foresee the number and range of users of
-their distributed applications.  To demonstrate the effectiveness of \SPRAY, we
-introduce \CRATE, a real-time decentralized editor directly running in web
-browsers, thus on laptops, tablets, or mobile phones. We experiment with \CRATE
-by deploying 600 editors on Grid'5000. Our results demonstrate that \SPRAY
-significantly reduces network traffic with respect to a standard peer sampling
-protocol, and adapts to the editing session size.
+\SPRAY not only relieves developers from having to foresee the number
+and range of users of their distributed applications, but most
+importantly it allows applications to adapt to sudden burst in
+popularity. We demonstrate the effectiveness of \SPRAY by simulation
+in the context of a large-scale flash-crowd scenario, as well as on a
+real use case using \CRATE~\cite{nedelec2016crate}, deployed on
+Grid'5000. Our results demonstrate that \SPRAY significantly reduces
+network traffic with respect to a standard peer sampling protocol, and
+adapts to the editing session size.
+
+% , a real-time decentralized editor directly
+% running in web browsers, thus on laptops, tablets, or mobile
+% phones. We experiment with \CRATE by deploying 600 editors on
 
 The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
 reviews the related work. Section~\ref{sec:proposal} details the \SPRAY
