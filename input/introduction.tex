@@ -12,31 +12,70 @@
 % deploy such applications on web browsers.
 % that can run on laptops, desktops and mobile devices.
 
-WebRTC~\cite{webrtc} makes browser-to-browser communication easy even within
-complex network environments that involve firewalls, proxies, Net Address
-Translation (NAT) and mobile networks. It opens the door to a new generation of
-large scale distributed applications that exploit only browser-to-browser
-communications. Among the basic building blocks of distributed applications, we
-find gossip-based peer sampling protocols such as
-\CYCLON~\cite{voulgaris2005cyclon}, which build and maintain reliable overlay
-networks in dynamic environments. However, for a same application, networks'
-sizes vary between each other and over time. Yet, the lack of flexibility of
-sampling approaches forces developpers to make a decision about
-dimensioning. Commonly, small networks will end up paying the price of the
-largest one.
-% This is particurly important in context of WebRTC where a new distributed
-% application can be deployed by just sharing a link in twitter; how many
-% participants you will get?
-The scientific challenge consists in finding a way to adapt to the network size
-without actually measuring its number of members.
-% The scientific challenge is to be able to adapt to the number of participants
-% without measuring how many participants are presents in the system.
+WebRTC~\cite{webrtc} made browser-to-browser communications easy even
+within complex network environments that involve firewalls, proxies,
+Net Address Translation (NAT) and mobile networks. A simple click on a
+http link in the browser launches a browser-based video-conferencing
+application as in Firefox Hello, a torrent download browser-based application as in
+webtorrent~\cite{webtorrent}, or a decentralized collaborative
+real-time editor as in CRATE~\cite{nedelec2016crate}. Browsers can be
+seen as an application containter and WebRTC as a communication layer
+for distributed applications deployed in browsers. Users start an
+application in their browsers, create a session URL to allow remote
+access and notify other users. Remote participants have just to click
+on this link to deploy the application in their browsers and join the session.
 
-%For instance, it
-%might require a mobile phone to maintain 10 WebRTC connections with other remote
-%browsers when only 6 would be enough. 
-%%This yields unnecessary network traffic, particularly when applications employ
-%%these connections to broadcast messages.
+Many large scale distributed applications relies on gossip-based peer
+sampling protocols such as \CYCLON~\cite{voulgaris2005cyclon} to
+enable information dissemination~\cite{eugster2003lightweight,
+  tolgyeski2009adaptive}, aggregation~\cite{jelasity2004epidemic} or
+network management~\cite{jelasity2009tman, voulgaris2005epidemic}.
+
+Deploying peer sampling protocols on top of WebRTC raise several issues:
+\begin{inparaenum}[(1)]
+\item WebRTC does not manage addressing nor routing; this makes
+  connection establishement much more costly than on IP network and
+  more likely to fail,
+\item Browsers run on desktop, laptops and mobile phones, keeping
+  resource consumption as low as possible is important,
+\item The shared http links used to launch sessions can create the
+  buzz and the number of participants can vary from few people to
+  thousands very quickly. Just publishing a session link in twitter
+  can create the buzz and generate massive joins for an unpredictable
+  period of time. Suppose massive online lecture platforms allow
+  students to share their notes. Many lectures run in parallel
+  involving various number of students, i.e., from few to
+  thousands. Also, even during the editing session the audience is
+  subject to significant changes in size, going from thousands to
+  hundreds. 
+\end{inparaenum}
+
+These issues raise the question of adaptability of peer-sampling
+protocols to the real number of participants. How to determine the
+best partial view size and fan-out to garantee delivery of message,
+and resilience to node removal whatever the number of participants?
+
+This question has been already addressed by
+Scamp~\cite{ganesh2003peer} that propose an adaptive protocol. Scamp
+maintain partical view size to $log(n)+k$ where $n$ is the number of
+participant. Unfortunatly, deploying Scamp on top of WebRTC fails due
+to the connection estabilishement failures of WebRTC. Another approach
+is just to oversize partial views and use protocol as
+Cyclon~\cite{voulgaris2005cyclon}. Unfortunatly, this approach
+consumes more ressources and create and renew periodically more
+connections than required. With this approach, small networks will end
+up paying the price of the largest one. It does not also provide a way
+to compute a fan-out that will ensure high delivery rate in any
+situation. Finally, it is possible to
+periodically run an algorithm that will estimate the real number of
+participants thanks to a central site or an aggregation procotol and
+then, adapt the partial view size and fan-out accordingly. However, to
+be efficient, this estimator has to run quite frequently and will have
+significant overhead compared to an approach similar to Scamp.
+
+The scientific challenge consists in finding a way to adapt to the
+network size without actually measuring its number of members as
+proposed by Scamp, but running on top of WebRTC.
 
 In this paper, we introduce \SPRAY, a random peer sampling protocol inspired by
 both \SCAMP~\cite{ganesh2003peer} and \CYCLON~\cite{voulgaris2005cyclon}. \SPRAY
