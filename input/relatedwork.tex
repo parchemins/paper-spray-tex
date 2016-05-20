@@ -135,13 +135,20 @@ The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2003peer}. Its interesting property lies in its
 logarithmically growing partial view sizes meeting the sharp threshold of
 connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
-suffers from other drawbacks. In particular, it systematically disseminates the
-connections at random. Thus, the originating peer can be several hops away from
-the arrival peer. In WebRTC, each random dissemination path must be traveled
-back to finalize the connection establishment (cf. Figure~\ref{fig:webrtc}),
-often multiple times. This drastically impacts the \SCAMP failure probability of
-establishing a connection. In turns, the number of connections quickly decreases
-eventually leading to partitioning.
+suffers from other drawbacks. The main point of criticism lies in it periodic
+balancing mechanism called \emph{lease}. After a while, each peer must join the
+network again. The arcs pointing to it are removed, and the peer chooses a
+neighbor from its untouched partial view to advertise its presence in the
+network. By doing so, it behaves as a newcomer which increases the number of
+arcs accordingly, despite it should not: the number of added arcs should be the
+exact number of removed arcs. Since all peers perform such mechanism on a
+regular basis, the number of arcs grows unbounded.  Also, \SCAMP systematically
+disseminates the connections at random. Thus, the originating peer can be
+several hops away from the arrival peer. In WebRTC, each random dissemination
+path must be traveled back to finalize the connection establishment
+(cf. Figure~\ref{fig:webrtc}), often multiple times. This drastically impacts
+the \SCAMP failure probability of establishing a connection. In turns, the
+number of connections quickly decreases eventually leading to partitioning.
 
 %  Let $P_f$ be the probability that an
 % element of the dissemination path (either a peer or a connection) crashes or
