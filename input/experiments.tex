@@ -1,18 +1,20 @@
 \section{Experimentation}
 \label{sec:experimentation}
 
-We evaluate how the adaptiveness of \SPRAY impacts common metrics of
-peer sampling performance including clustering coefficient, average
-shortest path length, in-degree distribution, and arc count. We
-compare \SPRAY with a representative of fixed-size partial-view
-approaches, namely \CYCLON. We expect \SPRAY and \CYCLON to exhibit 
-similar behaviors when \CYCLON is optimally configured in advance to
-handle the network size. We expect \SPRAY to save resources when
-\CYCLON is oversized. We expect \SPRAY to be more robust when \CYCLON
-is undersized. Finally, we expect \SPRAY to keep a negligible number
-of duplicates in its partial views. The experiments run on the
-\PEERSIM simulator~\cite{montresor2009peersim}. The code of the random
-peer sampling protocols is available on the Github
+In this section, we evaluate the benefits that \SPRAY can bring to protocols
+built on top of it. Using the example of a broadcast mechanism, we expect \SPRAY
+to keep a stable delivery rate on messages supporting network size
+variations. Then, we evaluate how the adaptiveness of \SPRAY impacts common
+metrics of peer sampling performance including clustering coefficient, average
+shortest path length, in-degree distribution, and arc count. We compare \SPRAY
+with a representative of fixed-size partial view approaches, namely \CYCLON. We
+expect \SPRAY and \CYCLON to exhibit similar behaviors when \CYCLON is optimally
+configured in advance to handle the network size. We expect \SPRAY to save
+resources when \CYCLON is oversized. We expect \SPRAY to be more robust when
+\CYCLON is undersized. Finally, we expect \SPRAY to keep a negligible number of
+duplicates in its partial views. The experiments run on the \PEERSIM
+simulator~\cite{montresor2009peersim}. The code of the random peer sampling
+protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 % We use \SCAMP as a baseline for experiments relative to
