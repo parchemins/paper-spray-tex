@@ -53,13 +53,20 @@ real-life use case about decentralized collaborative editing in web browsers.
   part of \SPRAY establishes a number of WebRTC connections depending on the
   first contact member, there are variations between independant runs. Still,
   \SPRAY scales logarithmically overall. Figure~\ref{fig:traffic} finally shows
-  that the variance is small which indicates that the network reached a state
-  where neighborhood size are balanced, hence, where the load is balanced.
+  that the variance of partial views $\sigma^2$ -- displayed in the legend --
+  stays small which indicates that the network reached a state where
+  neighborhood size are balanced, hence, where the load is balanced.
 \item [Reasons:] Broadcast uses neighborhoods to disseminate messages. Each
   member receives and forwards each operation which transitively reaches all
   members. Thus, the traffic depends on messages size multiplied by
   neighborhoods size logarithmically scaling thanks to \SPRAY. The growth during
   each run corresponds to the polylogarithmic growth of identifiers from the
   editors. Since the document size increases over time, the \LSEQ's identifiers
-  grow accordingly which impacts on messages size.
+  grow accordingly which impacts on messages size~\cite{nedelec2013lseq}.
 \end{asparadesc}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../paper"
+%%% End:

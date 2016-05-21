@@ -263,9 +263,9 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   of the network membership. We run the simulation on \SPRAY $100$
   times to avoid any side effects due to randomness. We also run the
   simulation on different configurations of \CYCLON targeting
-  different optimal network sizes. \CYCLON with 7 neighbors targets ~1k
-  peers. \CYCLON with 9 neighbors targets ~8k peers. \CYCLON with 11
-  neighbors targets ~60k peers. We perform the measurements after
+  different optimal network sizes. \CYCLON with 7 neighbors targets 1k
+  peers. \CYCLON with 9 neighbors targets 8k peers. \CYCLON with 11
+  neighbors targets 60k peers. We perform the measurements after
   convergence. The checkpoints for the measurements are 0.1k, 0.5k,
   1k, 5k, 10k, 50k, and 100k peers.
 \item[Results:] Figure~\ref{fig:avgpath} shows that both \CYCLON and
@@ -319,7 +319,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   existence of weakly connected peers and strongly connected hubs. It directly
   impacts on robustness. In this experiment, the fixed-size partial view
   approach is \CYCLON{}. It is configured with partial views of size $7$ which
-  targets a network ~1k peers.  For all the experiments, we perform the
+  targets a network 1k peers.  For all the experiments, we perform the
   in-degree measurements after convergence. The measurements concern networks
   with 0.1k, 1k, 100k, 500k peers.
 \item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
@@ -376,7 +376,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \item[Objective:] To show the impact of adaptiveness over partial view size when
   the network size grows and shrinks over time.
 \item[Description:] In this experiment we focus on a dynamic network where peers
-  can join and leave.  \CYCLON's configuration targets ~8k peers. It is
+  can join and leave.  \CYCLON's configuration targets 8k peers. It is
   oversized compared the network size during the simulation (maximum 1k
   peers). During the first half of the experimentation, 250 peers are added 4
   times successively by intervals of 10 cycles each. Thus, the network size goes
@@ -420,7 +420,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   allows estimating the point until which the network is still in a repairable
   state, i.e., after some shufflings, the network converge to an overlay where
   the information dissemination is able to reach all peers again. \CYCLON has 9
-  neighbors which targets ~9k peers. The network contains 10k members. We
+  neighbors which targets 8k peers. The network contains 10k members. We
   perform the removals after the approaches converged to a stable overlay
   network. We remove the batch of peers at once, from 25 to 95 percents of peers
   every 5 percents, i.e., 16 runs for each approach. We perform a last
@@ -438,11 +438,12 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   removal rate. Indeed, the weak components start to increase at 70 percents,
   meaning that some part of the network are completely disjoint and beyond
   repair. Globally, Figure~\ref{fig:resilience} also demonstrates that the
-  logarithmic growth of these sampling protocol is an upper bound, for smaller
-  growth could be obtained without endangering the connectedness of the network.
+  logarithmic growth of these sampling protocols constitutes an upper bound, for
+  smaller growth could be obtained without endangering the connectedness of the
+  network.
 \item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY expose
   very similar results because \CYCLON's configuration targets a network size of
-  10k peers, while \SPRAY adjusts itself automatically to this network size.
+  8k peers, while \SPRAY adjusts itself automatically to this network size.
   Therefore, the arc number in the approaches are close from being identical
   \CYCLON is slightly better because, in this case, it has more arcs (due to
   \SPRAY's randomness) and because it does not have duplicates (\SPRAY contains
@@ -451,17 +452,19 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   endanger the information dissemination protocol's ability to reach all
   peers. Indeed, since all peers are equally important in the network
   (cf. Figure~\ref{fig:histo}), removing a particular peer does not greatly
-  affect the whole network. The network membership protocol is able to repair
-  the topology later than the information dissemination starts to fail because
-  the direction of arcs is not as important as in the latter. Indeed, \CYCLON
-  and \SPRAY are still able to repair a network until parts of the network
-  become disjoint, i.e., there is no arc between these parts of the network.  A
-  smaller growth could be obtained because the sharp threshold of connectedness
-  applies to random graphs according to Erd{\H o}s-R{\'
-    e}nyi~\cite{erdos1959random}. However, random peer sampling protocols
-  constraint the partial views size to reduce the variance between peers.  With
-  such slight difference, we presume that a lower bound on arcs growth could be
-  found, although that may require global knowledge.
+  affect the whole network. The direction of arcs is more important to the
+  information dissemination than it is to the peer-sampling protocol. Indeed, if
+  an arc constitutes the last link between two clusters of the network, the
+  messages from one of these cluster cannot reach the other one. Yet, this arc
+  is enough for the peer to start the shufflings which will eventually populate
+  their views with members from each other's cluster. Hence, the network repairs
+  itself.  When clusters become fully disjoints, neither \CYCLON nor \SPRAY is
+  able to repair the network.  % A smaller growth could be obtained because the
+  % sharp threshold of connectedness applies to random graphs according to Erd{\H
+  %   o}s-R{\' e}nyi~\cite{erdos1959random}. However, random peer sampling
+  % protocols constraint the partial views size to reduce the variance between
+  % peers.  With such slight difference, we presume that a lower bound on arcs
+  % growth could be found, although that may require global knowledge.
 \end{asparadesc}
 
 %%\vspace{-7pt}
@@ -524,7 +527,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   connection establishments, contrarily to \SCAMP.
 \item[Description:] We measure both the arc count and the number of weak
   components in the network. The simulations involve \CYCLON (configured with
-  partial view containing 9 neighbors targeting a network of roughly 8100
+  partial view containing 9 neighbors targeting a network of roughly 8k
   peers), \SCAMP\footnote{A modified version of \SCAMP whose periodic protocol
     works properly when there is no connection failures. Available at
     \url{https://github.com/justayak/peersim-spray}}, and \SPRAY. They run over
