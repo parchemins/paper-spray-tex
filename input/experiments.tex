@@ -519,26 +519,50 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \item[Reasons:] The arc count of both \CYCLON and \SPRAY remains constant over
   time but for different reasons. In \CYCLON, the shuffling protocol makes sure
   that the partial view is filled to its maximum. Thus, when it uses a not
-  successfully established connection to perform an exchange, it simply
-  discards the connection, knowing that the next exchange is likely to overfill
-  its partial view. In \SPRAY, when a connection fails to establish and the
-  protocol tries to use it for an exchange, it will replace this arc with
-  another known reference. Thus, the arc count stays constant and the shuffling
-  protocol makes sure that duplicates disappear over time (the arc moves to
-  another peer where it is not a duplicate). In \SCAMP, the connections are
-  much more likely to fail than in the aforementioned protocols. Indeed,
-  contrarily to these latter, \SCAMP does not cautiously establish connections
-  with the neighbors of its neighbors.  Each hop of its ticket dissemination is
-  an opportunity of failure. Since there is no routing in such network, the
-  only way for a stamped ticket to come back to its emitter is the path it
-  traveled in the first place. Hence, all peers belonging to the path must stay
-  alive until the stamped ticket comes back in order to consistently forward
-  it.  Furthermore, its periodic protocol starts with an immediate cutting of
-  the incoming arcs of the initiating peer because it assumes that each
-  connection spread in the network will establish.  Since it does not, the peer
-  eventually becomes disconnected. Also, when its neighbors execute the
-  periodic protocol, they delete their reference in its partial view. In such
-  case, the peer becomes disconnected and partitions quickly appear.
+  successfully established connection to perform an exchange, it simply discards
+  the connection, knowing that the next exchange is likely to overfill its
+  partial view. In \SPRAY, when a connection fails to establish and the protocol
+  tries to use it for an exchange, it will replace this arc with another known
+  reference. Thus, the arc count stays constant and the shuffling protocol makes
+  sure that duplicates disappear over time (the arc moves to another peer where
+  it is not a duplicate). In \SCAMP, the connections are much more likely to
+  fail than in the aforementioned protocols. Indeed, contrarily to these latter,
+  \SCAMP does not cautiously establish connections with the neighbors of its
+  neighbors.  Each hop of its ticket dissemination is an opportunity of failure.
+  Let $P_f$ be the probability that an element of the dissemination path (either
+  a peer or a connection) crashes or leaves during a hop of the three-way
+  handshake, without any possible recovery. Let $P_E$ be the probability that a
+  connection establishment cannot be completed. Without three-way handshake,
+  $P_E$ is straightforward:
+  \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
+  corresponds to the probability that each element (arc and peer) in the path of
+  size $k+1$ stays alive during their part of the dissemination (i.e.,
+  otherwise, they are allowed to crash or leave). In the context of WebRTC, the
+  offer ticket must travel back to its emitter. As a consequence, the elements
+  of the random dissemination path are not allowed to fail until the stamped
+  ticket travels back. We obtain:
+  \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
+                                       \ldots (1-P_f)^2) \nonumber \\
+                                     &=1-(1-P_f)^{k^2+3k+2}
+  \end{align}
+  In other terms, the first chosen arc and peer in the path must stay alive
+  $2k+2$ hops, the second chosen arc and peer must stay alive $2k$ hops and so
+  on.  The complexity class of the \SCAMP failure rate increases leading to a
+  quicker degeneration of the connection count. 
+
+  % This behavior endangers the network
+  % connectedness.%%, as depicted in Section~\ref{subsec:degeneration}.
+
+  % Since there is no routing in such network, the only way for a stamped ticket
+  % to come back to its emitter is the path it traveled in the first place. Hence,
+  % all peers belonging to the path must stay alive until the stamped ticket comes
+  % back in order to consistently forward it.  Furthermore, its periodic protocol
+  % starts with an immediate cutting of the incoming arcs of the initiating peer
+  % because it assumes that each connection spread in the network will establish.
+  % Since it does not, the peer eventually becomes disconnected. Also, when its
+  % neighbors execute the periodic protocol, they delete their reference in its
+  % partial view. In such case, the peer becomes disconnected and partitions
+  % quickly appear.
 \end{asparadesc}
 
 %%% Local Variables:
