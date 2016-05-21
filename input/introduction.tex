@@ -2,9 +2,9 @@
 \section{Introduction}
 
 Peer-sampling
-protocols\cite{voulgaris2005cyclon,jelasity2007gossip,tolgyeski2009adaptive}
+protocols~\cite{voulgaris2005cyclon,jelasity2007gossip,tolgyeski2009adaptive}
 constitute a fundamental mechanism for a number of large-scale
-distributed applications both on the cloud~\cite{decandia2007dynamo}
+distributed applications both on the Cloud~\cite{decandia2007dynamo}
 and in a peer-to-peer
 setting~\cite{Frey09Middleware,voulgaris2005sub,wuhib2009robust}. By
 providing each node with a continuously changing partial view of the
@@ -13,7 +13,7 @@ and inherently load balancing~\cite{Frey09DSN}. In the context of
 video streaming, for example, a peer-sampling protocol makes it
 possible to distribute the streaming load over all peers without
 requiring the creation and the maintenance of rigid structures like
-multiple trees\cite{Frey09DSN, monod:THESIS}.  
+multiple trees~\cite{Frey09DSN, monod:THESIS}.  
 
 % made browser-to-browser communications easy even
 % within complex network environments that involve firewalls, proxies,
@@ -77,19 +77,17 @@ Unfortunately, existing peer-sampling protocols
 % Pascal: IMHO not useful here
 %, which lie at the bases of several video streaming
 %solutions~\cite{Frey09Middleware,Abeni2009,smoothcache20} 
-lack this
-capability. On the one hand, the most popular approaches like
-Cyclon~\cite{voulgaris2005cyclon}, and the RPS protocol
-family~\cite{jelasity2007gossip} provide application nodes with fixed
-sized views of the network based on parameters that have to be
-configured at deployment time. This forces developers to oversize
-partial views to handle potential bursts, either wasting resources, or
-not provisioning for large-enough settings. On the other,
-Scamp~\cite{ganesh2003peer} features some form of adaptation but falls
-short in the context of WebRTC applications. Scamp maintains partial
-views of size $log(n)+k$, $n$ being the number of nodes. But its
-connection establishment process does not support the connection
-failures that often occur in WebRTC. 
+lack this capability. On the one hand, the most popular approaches like
+\CYCLON~\cite{voulgaris2005cyclon}, and the RPS protocol
+family~\cite{jelasity2007gossip} provide application nodes with fixed sized
+views of the network based on parameters that have to be configured at
+deployment time. This forces developers to oversize partial views to handle
+potential bursts, either wasting resources, or not provisioning for large-enough
+settings. On the other, \SCAMP~\cite{ganesh2003peer} features some form of
+adaptation but falls short in the context of WebRTC applications. \SCAMP
+maintains partial views of size $\log(n)+k$, $n$ being the number of nodes, and
+$k$ being a constant. But its connection establishment process does not support
+the connection failures that often occur in WebRTC.
 %  Unfortunatly, deploying Scamp on
 % top of WebRTC fails due to the connection estabilishement failures of
 % WebRTC. Another approach is just to oversize partial views and use
@@ -101,7 +99,7 @@ failures that often occur in WebRTC.
 % in any situation.
 Finally, it would be possible to periodically estimate the real number
 of network nodes using an aggregation
-protocol~\cite{montresor2004robust}, and to reconfigure Cyclon, or RPS
+protocol~\cite{montresor2004robust}, and to reconfigure \CYCLON, or RPS
 solutions based on this. However, this aggregation protocol would have
 to run quite frequently, resulting in significant network overhead
 to anticipate a popularity burst that may never happen. 
@@ -142,12 +140,12 @@ while adapting to the current size of the network.
 % phones. We experiment with \CRATE by deploying 600 editors on
 
 The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
-reviews the related work. Section~\ref{sec:problem-statement} presents
-the problem statement. Section~\ref{sec:proposal} details the \SPRAY
-protocol. It also presents experimentation results of \SPRAY and compares them
-to state-of-the-art. Section~\ref{sec:use-case} details our experiment with
-\CRATE a real-time collaborative editor running in browsers. We conclude in
-Section~\ref{sec:conclusion}.
+reviews the related work. Section~\ref{sec:problem} states the scientific
+problem. Section~\ref{sec:proposal} details the \SPRAY
+protocol. Section~\ref{sec:experimentation} presents experimentation results of
+\SPRAY and compares them to state-of-the-art. Section~\ref{sec:use-case} details
+our experiment with \CRATE a real-time collaborative editor running in
+browsers. We conclude in Section~\ref{sec:conclusion}.
 
 %%% Local Variables:
 %%% mode: latex
