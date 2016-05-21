@@ -123,6 +123,42 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \end{center}
 \end{figure}
 
+\ \\
+
+\begin{asparadesc}
+\item [Objective:] To show how the full delivery rate behaves during a buzz,
+  i.e., a sudden massive increasing of network size shortly followed by
+  departures.
+\item [Description:] The configurations of peer-sampling protocols are similar
+  to the previous experiment. A broadcast built on top of \CYCLON with two
+  setups: partial view size of 30 with a fanout set to $\ln(100)+1$ and a fanout
+  set to $\ln(100)+3$. A broadcast built on top of \SPRAY with a partial view
+  growing as $6.\ln(|V^t|)$ and fanout as $\ln(|V^t|)+1$ and $\ln(|V^t|)+3$. The
+  simulation starts with 100 peers. The network quickly reaches 10k peers during
+  the buzz. Then the network size decreases to 3k members. In this experiment,
+  we measure the full delivery rate of messages over 100 messages per
+  measurement.
+\item [Results:] Figure~\ref{fig:peak} shows the results of this experiment. The
+  top part of the figure shows the evolution of the network size over time. The
+  bottom figure shows the full delivery rate over time. Similarly to the
+  previous experiment, Figure~\ref{fig:peak} shows that using \CYCLON and a
+  predefined fanout works well until the network size reaches unexpected
+  dimensions. During the peak, the delivery rate falls quickly. On the opposite,
+  the broadcast mechanism built on top of \SPRAY adapts the fanout to the
+  network size automatically. Thus, it does not suffer for long of massive
+  joinings. Yet, we observe a decreasing delivery rate during the departures of
+  peers, in particular when the fanout is configured to $\ln(|V|)+1$. Overall,
+  the broadcast mechanisms involving \SPRAY are more resilient to quick membership
+  changes.
+\item [Reasons:] The fanout of configurations involving \CYCLON is
+  constant. When the number of peer in the network exceeds the expectations, the
+  delivery rate quickly degenerates. Concerning \SPRAY, the fanout follows the
+  evolution of the network thanks to adaptive partial views. Yet, \SPRAY detects
+  the departures during the shuffling phase. Thus, the broadcast may use stale
+  arcs from partial views which negatively impacts the delivery rate. Since both
+  \CYCLON and \SPRAY clean their partial views over time, the delivery rate
+  recovers its expected value.
+\end{asparadesc}
 
 \subsection{Clustering and convergence time}
 
