@@ -1,20 +1,22 @@
 \section{Experimentation}
 \label{sec:experimentation}
 
-In this section, we evaluate the benefits that \SPRAY can bring to protocols
-built on top of it. Using the example of a broadcast mechanism, we expect \SPRAY
-to keep a stable delivery rate on messages supporting network size
-variations. Then, we evaluate how the adaptiveness of \SPRAY impacts common
-metrics of peer sampling performance including clustering coefficient, average
-shortest path length, in-degree distribution, and arc count. We compare \SPRAY
-with a representative of fixed-size partial view approaches, namely \CYCLON. We
-expect \SPRAY and \CYCLON to exhibit similar behaviors when \CYCLON is optimally
-configured in advance to handle the network size. We expect \SPRAY to save
-resources when \CYCLON is oversized. We expect \SPRAY to be more robust when
-\CYCLON is undersized. Finally, we expect \SPRAY to keep a negligible number of
-duplicates in its partial views. The experiments run on the \PEERSIM
-simulator~\cite{montresor2009peersim}. The code of the random peer sampling
-protocols is available on the Github
+In this section, we evaluate the benefits that \SPRAY can bring to
+protocols built on top of it. Using the example of a broadcast
+mechanism, we expect \SPRAY to keep a stable delivery rate on messages
+while supporting network size variations. Then, we evaluate how the
+adaptiveness of \SPRAY impacts common metrics of peer sampling
+performance including clustering coefficient, average shortest path
+length, in-degree distribution, and arc count. We compare \SPRAY with
+a representative of fixed-size partial view approaches, namely
+\CYCLON. We expect \SPRAY and \CYCLON to exhibit similar behaviors
+when \CYCLON is optimally configured in advance to handle the network
+size. We expect \SPRAY to save resources when \CYCLON is oversized,
+and to be more robust when \CYCLON is undersized. Finally, we expect
+\SPRAY to keep a negligible number of duplicates in its partial
+views. The experiments run on the \PEERSIM
+simulator~\cite{montresor2009peersim}. The code of the random peer
+sampling protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 % We use \SCAMP as a baseline for experiments relative to
@@ -53,49 +55,62 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \begin{asparadesc}
 \item [Objective:] To show how protocols can benefit from an adaptive random
   peer sampling protocol.
-\item [Description:] Broadcast protocols extensively use the partial views
-  provided by random peer sampling protocols to efficiently disseminate messages
-  to all the network. A broadcasting peer chooses some neighbors from its
-  partial view to whom it sends the message. Each peer receiving such message
-  broadcasts it once, in an identical way. The message transitively reach all
-  members. The number of chosen neighbors is called the \emph{fanout}. Since
-  broadcasts happen more often than shufflings of sampling protocols, the
-  partial view size is inflated and the fanout is significantly smaller than it.
-  Thus, even between two shuffles, the peer-sampling can provide different peers
-  at random. In this experiment, we configure the size of \CYCLON's partial view
-  to 30. Its fanout roughly targets 100 peers ($\ln(100)\approx 5$). To provide
-  high reliablity of messages propagation at 100 peers, we set the fanout to
-  $\ln(100)+1$, then $\ln(100)+3$. We configure \SPRAY to have partial views
-  size equal to $6.\ln(|V^t|)$ -- instead of adding only 1 arc targeting its
-  contact (cf. Section \ref{subsec:joining}), the newcomer adds 6 arcs. The
-  fanout is set to 1 sixth of the view size (i.e. $\ln(|V^t|)$). Similarly to
-  \CYCLON, a small value ($1$ then $3$) is added to this fanout, for the sake of
-  reliability. The measurements concern the full delivery rate of messages over
-  1k messages, i.e., the messages that reach all members of the network. The
-  network size grows up till 2000 peers.
+\item [Description:] Broadcast protocols extensively use the partial
+  views provided by random peer sampling protocols to efficiently
+  disseminate messages to all the network. A broadcasting peer chooses
+  some neighbors from its partial view to whom it sends the
+  message. Each peer receiving such a message broadcasts it once, in
+  an identical way. The message transitively reaches all members. The
+  number of chosen neighbors is called the \emph{fanout}. Since
+  several applications need to broadcast messages more frequently than
+  they can shuffle their neighbors, broadcast protocols tend to use
+  view sizes that are much larger than the broadcast
+  fanout~\cite{Frey09Middleware}. This allows the peer-sampling
+  protocol to provide the application with fresh peers at each
+  broadcast round without having to wait for the network's mixing
+  time~\cite{jelasity2007gossip}. In this experiment, we consider an
+  application configured to target approximately $100$ peers: a user
+  streaming the live video of a local sport event. We configure
+  \CYCLON's partial view to $6$ times the threshold fanout required
+  for $100$ nodes ($6 \ln(100) \approx 6 \cdot 5 = 30$), and consider
+  two configurations for the broadcast fanout $\ln(100)+1 \approx 6 $
+  and $\ln(100)+3 \approx 8$, which provide high reliability with
+  $100$ nodes. Similarly, we configure \SPRAY to have partial views
+  size equal to $6 \cdot \ln(|V^t|)$---instead of adding only 1 arc
+  targeting its contact (cf. Section \ref{subsec:joining}), the
+  newcomer adds 6 arcs---and set the fanout to one sixth of the view
+  size plus $1$ or $3$. This gives both protocols the same
+  configuration for $100$ nodes.  We then consider network sizes
+  varying between $100$ and $2000$ peers, and measure the full
+  delivery rate of 1k messages, i.e., we evaluate the fraction of
+  messages that reach all the members of the network.
 \item [Results:] Figure~\ref{fig:hardrate} shows the result of this
-  simulation. First, we observe that the rate of messages delivery using \CYCLON
-  suffers from an endless decreasing. The highest fanout leads to better
-  results. On the opposite, \SPRAY remains stables, despite the presence of
-  small jumps. A fanout set to $\ln(|V^t|)+1$ gives a full delivery rate above
-  90 percent. A fanout set to $\ln(|V^t|)+3$ is very close of 100
-  percent. Overall, the broadcast mechanism benefits from the adaptiveness of
-  \SPRAY's partial view which allows it to scale regarding the network size.
+  experiment. First, we observe that the rate of messages delivery
+  using \CYCLON suffers from a steady decrease. The highest fanout
+  leads to better results. In contrast, \SPRAY remains stable despite
+  the presence of small jumps. A fanout set to $\ln(|V^t|)+1$ gives a
+  full delivery rate above 90\%. A fanout set to $\ln(|V^t|)+3$ is
+  very close to 100\%. Overall, the broadcast mechanism benefits from
+  the adaptive nature of \SPRAY's partial view, which allows it to
+  scale according to the size of the network.
 \item [Reasons:] From~\cite{erdos1959random}, we know that the sharp
-  threshold of connectedness of random graphs is $\Theta(\ln(|V|))$. Regarding
-  the broadcast, it means that, with a sufficiently random and large partial
-  view, a fanout set accordingly provides around 50 percent of full delivery
-  rate. At this point, incrementing the fanout improves drastically the
-  resulting rate, but the contribution of each increment diminishes compared to
-  the previous increment. The broadcast protocol built on top of \CYCLON has a
-  constant fanout size set for a specific network size. As long as the network
-  is smaller than this value, the full delivery rate stays high. However, this
-  quickly decreases at higher network size. Using \SPRAY, the fanout growth
-  follows the growth of the partial view size which scales logarithmically
-  compared to the network size. Hence, network size variations impact the
-  fanout. The full delivery rate provided by the broadcast mechanism remains
-  stable. Since the values manipulated by peers -- partial view size and fanout
-  -- are integers, the measurements make small jumps when a rounded value
+  threshold of connectedness of random graphs is
+  $\Theta(\ln(|V|))$. Regarding the broadcast, this means that, with a
+  sufficiently random and large partial view, a fanout set accordingly
+  provides a full delivery rate of about 50\%. At this point,
+  increasing the fanout improves drastically the resulting rate, but
+  the contribution of each increment diminishes with respect to the
+  previous increment. The broadcast protocol built on top of \CYCLON
+  has a constant fanout set for a specific network size. As long as
+  the network is smaller than this value, the full delivery rate stays
+  high. However, it quickly decreases with larger network sizes.
+  \SPRAY instead allows the application fanout to follow the growth of
+  the partial view size, which scales logarithmically compared to the
+  network size. This allows the application to adapt to changes in the
+  size of the network. As a result, the full delivery rate provided by
+  the broadcast mechanism on top of \SPRAY remains stable. Since the
+  values manipulated by peers---partial view size and fanout---are
+  integers, the measurements make small jumps when a rounded value
   increases enough to be incremented.
 \end{asparadesc}
 
@@ -129,35 +144,39 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \item [Objective:] To show how the full delivery rate behaves during a buzz,
   i.e., a sudden massive increasing of network size shortly followed by
   departures.
-\item [Description:] The configurations of peer-sampling protocols are similar
-  to the previous experiment. A broadcast built on top of \CYCLON with two
-  setups: partial view size of 30 with a fanout set to $\ln(100)+1$ and a fanout
-  set to $\ln(100)+3$. A broadcast built on top of \SPRAY with a partial view
-  growing as $6.\ln(|V^t|)$ and fanout as $\ln(|V^t|)+1$ and $\ln(|V^t|)+3$. The
-  simulation starts with 100 peers. The network quickly reaches 10k peers during
-  the buzz. Then the network size decreases to 3k members. In this experiment,
-  we measure the full delivery rate of messages over 100 messages per
-  measurement.
-\item [Results:] Figure~\ref{fig:peak} shows the results of this experiment. The
-  top part of the figure shows the evolution of the network size over time. The
-  bottom figure shows the full delivery rate over time. Similarly to the
-  previous experiment, Figure~\ref{fig:peak} shows that using \CYCLON and a
-  predefined fanout works well until the network size reaches unexpected
-  dimensions. During the peak, the delivery rate falls quickly. On the opposite,
-  the broadcast mechanism built on top of \SPRAY adapts the fanout to the
-  network size automatically. Thus, it does not suffer for long of massive
-  joinings. Yet, we observe a decreasing delivery rate during the departures of
-  peers, in particular when the fanout is configured to $\ln(|V|)+1$. Overall,
-  the broadcast mechanisms involving \SPRAY are more resilient to quick membership
-  changes.
+\item [Description:] We configure \SPRAY and \CYCLON like in the
+  previous experiment. For \CYCLON, we use a partial view size of 30
+  and two broadcast fanout values: $\ln(100)+1$ and $\ln(100)+3$. For
+  \SPRAY, we use a dynamic view of $6 \cdot \ln(|V^t|)$ and broadcast
+  fanout values of $\ln(|V^t|)+1$ and $\ln(|V^t|)+3$. The simulation
+  starts with 100 peers. The network quickly reaches 10k peers during
+  the popularity burst. Then the network size decreases to 3k
+  members. In this experiment, we measure the full delivery rate over
+  each group of 100 consecutive messages.
+\item [Results:] Figure~\ref{fig:peak} shows the results of this
+  experiment. The top part of the figure shows the evolution of the
+  network size over time. The bottom figure shows the full delivery
+  rate over time. Like in the previous experiment,
+  Figure~\ref{fig:peak} shows that using \CYCLON and a predefined
+  fanout works well until the network size reaches an unexpected
+  size. During the peak, the delivery rate falls quickly. Conversely,
+  the broadcast mechanism built on top of \SPRAY automatically adapts
+  the fanout to the size of the network. Thus, it does not experience
+  performance losses while a large number of nodes suddenly join, even
+  though we observe a decrease in delivery rate during the departures
+  of peers, in particular with a fanout of $\ln(|V|)+1$. Overall, the
+  broadcast mechanisms involving \SPRAY are more resilient to quick
+  membership changes.
 \item [Reasons:] The fanout of configurations involving \CYCLON is
-  constant. When the number of peer in the network exceeds the expectations, the
-  delivery rate quickly degenerates. Concerning \SPRAY, the fanout follows the
-  evolution of the network thanks to adaptive partial views. Yet, \SPRAY detects
-  the departures during the shuffling phase. Thus, the broadcast may use stale
-  arcs from partial views which negatively impacts the delivery rate. Since both
-  \CYCLON and \SPRAY clean their partial views over time, the delivery rate
-  recovers its expected value.
+  constant. When the number of peers in the network exceeds the
+  expectations, the delivery rate quickly degenerates. Concerning
+  \SPRAY, the fanout follows the evolution of the network thanks to
+  adaptive partial views. Both \SPRAY, and \CYCLON detect departing
+  nodes during the shuffling phase. The associated delay leads to the
+  use of some stale arcs from partial views, which explains the
+  temporary decrease in delivery rate during the shrinking
+  phase. Since both \CYCLON and \SPRAY clean their partial views over
+  time, the delivery rate recovers its expected value.
 \end{asparadesc}
 
 \subsection{Clustering and convergence time}
@@ -185,7 +204,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   oversized for 0.1k peers and undersized for 10k peers and 100k
   peers.
 \item[Results:] Figure~\ref{fig:clustering} shows that \CYCLON starts
-  with a lower clustering coefficients than \SPRAY. Still, \SPRAY
+  with a lower clustering coefficient than \SPRAY. Still, \SPRAY
   converges faster than \CYCLON. Furthermore, when the number of peers
   in the network grows, the convergence time of \CYCLON suffers
   heavily. On the contrary, \SPRAY converges very quickly
@@ -219,7 +238,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   variable-size partial views that reflect the network size with a
   logarithmic growth. Thus, when the network has 1k peers, the partial
   view size adapts to this network size. This explains the slightly
-  lower view size of \SPRAY on this run (\SPRAY 7.4 vs \CYCLON 7). By
+  larger view size of \SPRAY on this run (\SPRAY 7.4 vs \CYCLON 7). By
   extending the reasoning, this also explains why \SPRAY yields lower
   $\overline{C}$ values when \CYCLON is oversized, and why it yields
   higher values when \CYCLON is undersized.
@@ -257,18 +276,19 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   disseminates the information faster than \SPRAY. Then, \SPRAY and
   \CYCLON are equivalent where the latter is optimally
   configured. Finally, \SPRAY yields better results. Overall, \SPRAY
-  scales better than \CYCLON since the gradient of the former is lower
+  scales better than \CYCLON since the gradient (slope) of the former is lower
   than any configuration of the latter.
-\item[Reasons:] We perform all the measurements after convergence where the
-  network overlay is closely related to random graphs. In such graph, the
-  diameter and average shortest path length are small, hence the results of
-  Figure~\ref{fig:avgpath}. The second observation concerns each \CYCLON
-  configuration compared alone with \SPRAY. While an oversized \CYCLON is much
-  better connected into the graph and thus yields a lower average path length
-  than \SPRAY, as soon as it is undersized, \SPRAY is, thanks to larger partial
-  views, better connected into the graph.  Consequently, it yields the shorter
-  average path length. \SPRAY scales better than any configuration of \CYCLON
-  because it follows the optimal value.
+\item[Reasons:] We perform all the measurements after convergence
+  where the network overlay is closely related to random graphs. In
+  such graph, the diameter and average shortest path length are small,
+  hence the results of Figure~\ref{fig:avgpath}. The second
+  observation concerns the comparison of each \CYCLON configuration
+  with \SPRAY.  An oversized \CYCLON is much better connected into the
+  graph and thus yields a lower average path length than
+  \SPRAY. However, when \CYCLON is undersized, \SPRAY achieves better
+  performance thanks to its larger partial views. Overall, \SPRAY
+  scales better than any configuration of \CYCLON because it follows
+  the optimal value for the size of partial views.
 \end{asparadesc}
 
 

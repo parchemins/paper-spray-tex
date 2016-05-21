@@ -26,15 +26,16 @@ mechanism or any central authority. Without intervention of the developpers or
 the users, \SPRAY makes sure that small networks do not pay the price of large
 networks.
 
-\subsection{Functioning}
+\subsection{Operation}
 
-To provide availability and responsiveness of documents, collaborative editors
-consider multiple authors, each hosting a replica of their shared
-document~\cite{saito2005optimistic}.  On updates, the local replica is directly
-modified. Then, each update is propagated to all the editing session where it is
-integrated. Strong eventual consistency~\cite{bailis2013eventual} states that a
-system is correct if and only if the replicas converge to an equivalent state
-when they integrated the same updates. In other terms, the users read identical
+To provide availability and responsiveness in documents, collaborative
+editors consider multiple authors, each hosting a replica of their
+shared document~\cite{saito2005optimistic}.  On updates, the local
+replica is directly modified. Then, each update is propagated to all
+the editing session where it is integrated. Strong eventual
+consistency~\cite{bailis2013eventual} states that a system is correct
+if and only if the replicas converge to an equivalent state when they
+integrated the same updates. In other terms, the users read identical
 documents.
 
 \CRATE uses a distributed sequence data type~\cite{shapiro2011conflict} which
