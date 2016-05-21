@@ -1,19 +1,36 @@
 
 \begin{abstract}
-  The introduction of WebRTC has opened a new playground for large-scale
-  distributed applications running in web browsers. Peer sampling protocols can
-  be used to maintain connectivity between devices. However, they do not adapt
-  to networks that can grow and shrink.  As a result, traffic can be oversized.
-  In this paper, we address the limitations of current peer sampling approaches
-  by introducing \SPRAY, a novel adaptive peer sampling protocol that maintains
-  local neighborhood tables that logarithmically scale with the total number of
-  network members. Our experiments demonstrate the ability of \SPRAY to adapt to
-  dynamic networks, reducing the number of WebRTC connections needed to maintain
-  browsers connected. To validate our proposal, we built a real-time
-  decentralized editor running in browsers, thus on laptops, tablets and mobile
-  phones. We ran experiments involving up to 600 communicating web browsers. The
-  results demonstrate that \SPRAY significantly reduces the network traffic
+
+  Peer-sampling protocols are a fundamental mechanism for a number of
+  large-scale distributed applications. The recent introduction of
+  WebRTC made easy to deploy distributed applications over a network
+  of browsers. However, deploying existing peer sampling protocol on
+  top of WebRTC raises the issue the adaptivity of peer sampling
+  protocols to sudden bursts of popularity over a network that do not
+  manage addressing nor routing. \SPRAY is a novel random peer
+  sampling protocol designed to dynamically adapt to the network size
+  and for efficient connection establishment. Experiments show the
+  flexibility of Spray and highlight its efficiency improvement at the
+  cost of little overhead. We embeded \SPRAY in a real-time
+  decentralized editor running in browsers and ran experiments
+  involving up to 600 communicating web browsers. The results
+  demonstrate that \SPRAY significantly reduces the network traffic
   according to the number of participants and saves bandwidth.
+
+  % The introduction of WebRTC has opened a new playground for large-scale
+  % distributed applications running in web browsers. Peer sampling protocols can
+  % be used to maintain connectivity between devices. However, they do not adapt
+  % to networks that can grow and shrink.  As a result, traffic can be oversized.
+  % In this paper, we address the limitations of current peer sampling approaches
+  % by introducing \SPRAY, a novel adaptive peer sampling protocol that maintains
+  % local neighborhood tables that logarithmically scale with the total number of
+  % network members. Our experiments demonstrate the ability of \SPRAY to adapt to
+  % dynamic networks, reducing the number of WebRTC connections needed to maintain
+  % browsers connected. To validate our proposal, we built a real-time
+  % decentralized editor running in browsers, thus on laptops, tablets and mobile
+  % phones. We ran experiments involving up to 600 communicating web browsers. The
+  % results demonstrate that \SPRAY significantly reduces the network traffic
+  % according to the number of participants and saves bandwidth.
 \end{abstract}
 
 
