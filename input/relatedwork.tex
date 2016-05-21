@@ -141,6 +141,15 @@ The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2003peer}. Its interesting property lies in its
 partial-view sizes that grow logarithmically with the size of the
 network. However, \SCAMP suffers from other drawbacks.
+In particular, \SCAMP uses random walks to establish new connections
+between peers. In WebRTC, each hop in these random paths must be
+traveled back and forth to finalize the connection establishment
+(cf. Figure~\ref{fig:webrtc}). This drastically increases the
+probability that \SCAMP will fail in establishing connections. In the
+presence of churn or message loss, the number of connections decreases
+quickly,  eventually leading to network partitions
+(cf. Section~\ref{subsec:degeneration}).
+
 % The main point of criticism lies in it periodic
 % balancing mechanism called \emph{lease}. After a while, each peer must join the
 % network again. The arcs pointing to it are removed, and the peer chooses a
@@ -158,14 +167,6 @@ network. However, \SCAMP suffers from other drawbacks.
 % connection. In turns, the number of connections quickly decreases eventually
 % leading to partitioning (cf. Section~\ref{subsec:degeneration}).
 
-In particular, \SCAMP uses random walks to establish new connections
-between peers. In WebRTC, each hop in these random paths must be
-traveled back and forth to finalize the connection establishment
-(cf. Figure~\ref{fig:webrtc}). This drastically increases the
-probability that \SCAMP will fail in establishing connections. In the
-presence of churn or message loss, the number of connections decreases
-quickly eventually leading to network partitions
-(cf. Section~\ref{subsec:degeneration}).
 
 % Let $P_f$ be the probability that an
 % element of the dissemination path (either a peer or a connection) crashes or
