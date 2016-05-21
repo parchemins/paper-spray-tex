@@ -31,22 +31,22 @@ paper, we show that the number of duplicates remains low and does not
 impact network connectivity.
 
 \subsection{Joining}
+\label{subsec:joining}
 
 \SPRAY's joining algorithm is the only part of the protocol where the
 global number of arcs in the network can increase. To meet the first
 requirement of the problem statement, this number of arcs must grow
-logarithmically compared to the network size. As in \SCAMP, we assume
-that peers meet this constraint. Therefore, each of them uses this
-knowledge to propagate the identity of the joining
-peer. Algorithm~\ref{algo:joining} describes \SPRAY's joining
-protocol. Line~\ref{line:multicast} shows that the contacted peer only
-multicasts the new identity to its neighborhood. Afterwards, to limit
-the risk of connection failures, each neighbor immediately adds the
-joining peer to their own neighborhood. This fulfills the second
-condition of the problem statement.  In total, the number of arcs in
-the network increases of $1+\ln(|V^t|)$ using only
-neighbor-to-neighbor interactions, which leads to a total number of
-$|V^t|\ln(|V^t|)$ arcs.
+logarithmically compared to the network size. 
+%As in \SCAMP, we assume that peers meet this constraint.
+Therefore, each peer assumes that it has such logarithmically growing view to
+propagate the identity of the joining peer. Algorithm~\ref{algo:joining}
+describes \SPRAY's joining protocol. Line~\ref{line:multicast} shows that the
+contacted peer only multicasts the new identity to its neighborhood. Afterwards,
+to limit the risk of connection failures, each neighbor immediately adds the
+joining peer to their own neighborhood. This fulfills the second condition of
+the problem statement.  In total, the number of arcs in the network increases of
+$1+\ln(|V^t|)$ using only neighbor-to-neighbor interactions, which leads to a
+total number of $|V^t|\ln(|V^t|)$ arcs.
 
 \begin{figure*}
   \centering

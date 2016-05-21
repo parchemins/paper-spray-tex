@@ -1,4 +1,4 @@
-\subsection{Experimentation}
+\section{Experimentation}
 \label{subsec:experiments}
 
 We evaluate how the adaptiveness of \SPRAY impacts common metrics of
@@ -39,7 +39,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %\vspace{-7pt}
 %%\paragraph{Clustering and convergence time}
 
-\subsubsection{Delivery rate on broadcast}
+\subsection{Delivery rate on broadcast}
 
 \begin{figure}
   \begin{center}
@@ -48,21 +48,70 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \end{center}
 \end{figure}
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.49\textwidth]{img/ninetynine.eps}
-    \caption{\label{fig:ninetynine}Ratio of peers which received 99 percent of
-      messages.}
-  \end{center}
-\end{figure}
+\begin{asparadesc}
+\item [Objective:] To show how protocols can benefit from an adaptive random
+  peer sampling protocol.
+\item [Description:] Broadcast protocols extensively use the partial views
+  provided by random peer sampling protocols to efficiently disseminate messages
+  to all the network. A broadcasting peer chooses some neighbors from its
+  partial view to whom it sends the message. Each peer receiving such message
+  broadcasts it once, in an identical way. The message transitively reach all
+  members. The number of chosen neighbors is called the \emph{fanout}. Since
+  broadcasts happen more often than shufflings of sampling protocols, the
+  partial view size is inflated and the fanout is significantly smaller than it.
+  Thus, even between two shuffles, the peer-sampling can provide different peers
+  at random. In this experiment, we configure the size of \CYCLON's partial view
+  to 30. Its fanout roughly targets 100 peers ($\ln(100)\approx 5$). To provide
+  high reliablity of messages propagation at 100 peers, we set the fanout to
+  $\ln(100)+1$, then $\ln(100)+3$. We configure \SPRAY to have partial views
+  size equal to $6.\ln(|V^t|)$ -- instead of adding only 1 arc targeting its
+  contact (cf. Section \ref{subsec:joining}), the newcomer adds 6 arcs. The
+  fanout is set to 1 sixth of the view size (i.e. $\ln(|V^t|)$). Similarly to
+  \CYCLON, a small value ($1$ then $3$) is added to this fanout, for the sake of
+  reliability. The measurements concern the full delivery rate of messages over
+  1k messages, i.e., the messages that reach all members of the network. The
+  network size grows up till 2000 peers.
+\item [Results:] Figure~\ref{fig:hardrate} shows the result of this
+  simulation. First, we observe that the rate of messages delivery using \CYCLON
+  suffers from an endless decreasing. The highest fanout leads to better
+  results. On the opposite, \SPRAY remains stables, despite the presence of
+  small jumps. A fanout set to $\ln(|V^t|)+1$ gives a full delivery rate above
+  90 percent. A fanout set to $\ln(|V^t|)+3$ is very close of 100
+  percent. Overall, the broadcast mechanism benefits from the adaptiveness of
+  \SPRAY's partial view which allows it to scale regarding the network size.
+\item [Reasons:] From~\cite{erdos1959random}, we know that the sharp
+  threshold of connectedness of random graphs is $\Theta(\ln(|V|))$. Regarding
+  the broadcast, it means that, with a sufficiently random and large partial
+  view, a fanout set accordingly provides around 50 percent of full delivery
+  rate. At this point, incrementing the fanout improves drastically the
+  resulting rate, but the contribution of each increment diminishes compared to
+  the previous increment. The broadcast protocol built on top of \CYCLON has a
+  constant fanout size set for a specific network size. As long as the network
+  is smaller than this value, the full delivery rate stays high. However, this
+  quickly decreases at higher network size. Using \SPRAY, the fanout growth
+  follows the growth of the partial view size which scales logarithmically
+  compared to the network size. Hence, network size variations impact the
+  fanout. The full delivery rate provided by the broadcast mechanism remains
+  stable. Since the values manipulated by peers -- partial view size and fanout
+  -- are integers, the measurements make small jumps when a rounded value
+  increases enough to be incremented.
+\end{asparadesc}
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.49\textwidth]{img/ninetyninedotnine.eps}
-    \caption{\label{fig:ninetyninedotnine}Ratio of peers which received 99.9 percent of
-      messages.}
-  \end{center}
-\end{figure}
+% \begin{figure}
+%   \begin{center}
+%     \includegraphics[width=0.49\textwidth]{img/ninetynine.eps}
+%     \caption{\label{fig:ninetynine}Ratio of peers which received 99 percent of
+%       messages.}
+%   \end{center}
+% \end{figure}
+
+% \begin{figure}
+%   \begin{center}
+%     \includegraphics[width=0.49\textwidth]{img/ninetyninedotnine.eps}
+%     \caption{\label{fig:ninetyninedotnine}Ratio of peers which received 99.9 percent of
+%       messages.}
+%   \end{center}
+% \end{figure}
 
 
 \begin{figure}
@@ -73,7 +122,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 
-\subsubsection{Clustering and convergence time}
+\subsection{Clustering and convergence time}
 
 \begin{figure}
   \centering
@@ -138,7 +187,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   higher values when \CYCLON is undersized.
 \end{asparadesc}
 
-\subsubsection{Information dissemination}
+\subsection{Information dissemination}
 
 \begin{figure}
   \centering
@@ -196,7 +245,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %     \includegraphics[width=0.48\textwidth]{img/avgpv.eps}}
 % \end{figure*}
 
-\subsubsection{Load-balancing}
+\subsection{Load-balancing}
 
 \begin{figure}
   \centering
@@ -250,7 +299,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %%\vspace{-7pt}
 %%\paragraph{Adaptive partial views}
 
-\subsubsection{Adaptive partial view}
+\subsection{Adaptive partial view}
 
 \begin{figure}
   \centering
@@ -290,7 +339,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 % \vspace{-7pt}
 % \paragraph{Robustness}
 
-\subsubsection{Robustness}
+\subsection{Robustness}
 
 \begin{figure}
   \centering
@@ -354,7 +403,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %%\vspace{-7pt}
 %%\paragraph{Duplicates}
 
-\subsubsection{Duplicates}
+\subsection{Duplicates}
 
 \begin{figure}
   \centering
