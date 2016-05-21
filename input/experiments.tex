@@ -481,6 +481,66 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \end{asparadesc}
 
 
+\subsection{Failures in connection establishment}
+\label{subsec:degeneration}
+
+\begin{figure}
+  \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
+  \caption{\label{fig:degeneration}\CYCLON, \SCAMP, and \SPRAY in network
+    subject to failures in the connection establishments. The x-axis denotes
+    the elapsed time in cycles ($10^3$-scaled). The y-axis of the top figure
+    denotes the global number of arcs ($10^3$-scaled). The y-axis of the bottom
+    figure denotes the ratio of weak components over the current network size.}
+\end{figure}
+
+\begin{asparadesc}
+\item[Objective:] To show that \SPRAY does not suffer from failures in
+  connection establishments, contrarily to \SCAMP.
+\item[Description:] We measure both the arc count and the number of weak
+  components in the network. The simulations involve \CYCLON (configured with
+  partial view containing 9 neighbors targeting a network of roughly 8100
+  peers), \SCAMP\footnote{A modified version of \SCAMP whose periodic protocol
+    works properly when there is no connection failures. Available at
+    \url{https://github.com/justayak/peersim-spray}}, and \SPRAY. They run over
+  50k cycles. The network initially contains 10k members.  To establish a
+  connection, we use the WebRTC three-way handshake, i.e., the initial peer
+  emits an offer ticket, the arrival peer stamps the ticket, the initial peer
+  finalizes the connection using the stamped ticket
+  (cf. Section~\ref{sec:relatedwork}). The probability that the ticket fails to
+  arrive to its destination is set to $10^{-3}$ for each hop.
+\item[Results:] Figure~\ref{fig:degeneration} has two parts. The
+  top figure shows the arc count of the random peer samplings while the bottom
+  figure shows the weak components of the network.  First, we observe that, as
+  expected, the arc count of \CYCLON and \SPRAY stays constant over cycles: 90k
+  and 93k arcs for \CYCLON and \SPRAY respectively. Second, we observe that
+  \SCAMP suffers from the failures on connection establishments. It directly
+  impacts on the connectedness of the network represented by the weak
+  components ratio. The network of \SCAMP quickly degrades.
+\item[Reasons:] The arc count of both \CYCLON and \SPRAY remains constant over
+  time but for different reasons. In \CYCLON, the shuffling protocol makes sure
+  that the partial view is filled to its maximum. Thus, when it uses a not
+  successfully established connection to perform an exchange, it simply
+  discards the connection, knowing that the next exchange is likely to overfill
+  its partial view. In \SPRAY, when a connection fails to establish and the
+  protocol tries to use it for an exchange, it will replace this arc with
+  another known reference. Thus, the arc count stays constant and the shuffling
+  protocol makes sure that duplicates disappear over time (the arc moves to
+  another peer where it is not a duplicate). In \SCAMP, the connections are
+  much more likely to fail than in the aforementioned protocols. Indeed,
+  contrarily to these latter, \SCAMP does not cautiously establish connections
+  with the neighbors of its neighbors.  Each hop of its ticket dissemination is
+  an opportunity of failure. Since there is no routing in such network, the
+  only way for a stamped ticket to come back to its emitter is the path it
+  traveled in the first place. Hence, all peers belonging to the path must stay
+  alive until the stamped ticket comes back in order to consistently forward
+  it.  Furthermore, its periodic protocol starts with an immediate cutting of
+  the incoming arcs of the initiating peer because it assumes that each
+  connection spread in the network will establish.  Since it does not, the peer
+  eventually becomes disconnected. Also, when its neighbors execute the
+  periodic protocol, they delete their reference in its partial view. In such
+  case, the peer becomes disconnected and partitions quickly appear.
+\end{asparadesc}
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../paper"
