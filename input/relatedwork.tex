@@ -31,18 +31,20 @@ The resulting network overlay: a fully connected network composed of
 \section{Related work}
 \label{sec:relatedwork}
 
-WebRTC allows real-time peer-to-peer communication between browsers even when
-complex network settings such as firewalls, proxies or Net Address Translation
-(NAT) are involved. However, WebRTC does not manage addressing nor routing. To
-establish a connection, the browsers exchange offers and acknowledgments through
-a common mediator, e.g., mails, dedicated signaling services~\cite{peerjs},
-existing WebRTC connections~\cite{p} etc. Figure~\ref{fig:webrtcA} describes the
-very first connection of one peer $p_1$ with another
-$p_2$. Figure~\ref{fig:webrtcB} shows that $p_3$ is able to use $p_2$ as
-mediator instead of the signaling service. Figure~\ref{fig:webrtcC} shows the
-resulting network. Notice that if $p_2$ crashes during the forwarding process,
-the connection establishment will fail, even if an alternative route exists as
-WebRTC does not manage routing.
+WebRTC enables real-time peer-to-peer communication between browsers
+even in complex network settings with firewalls, proxies or Network
+Address Translators (NAT). However, WebRTC manages neither addressing
+nor routing. To establish a connection, two browsers need to exchange
+offers and acknowledgments through a common mediator, e.g., mails,
+dedicated signaling services~\cite{peerjs}, existing WebRTC
+connections~\cite{p} etc. Figure~\ref{fig:webrtcA} describes the very
+first connection of one peer $p_1$ with another $p_2$ using a
+signaling server. Figure~\ref{fig:webrtcB} shows instead that $p_3$
+can later use $p_2$ as mediator instead of the signaling
+service. Figure~\ref{fig:webrtcC} shows the resulting network. Note
+that if $p_2$ crashes or leaves the network during the forwarding
+process, the connection establishment will fail, even if an
+alternative route exists as WebRTC does not manage routing.
 
 % In Figure~\ref{fig:webrtcA}, $p_1$
 % wants to connect to $p_2$. Therefore, $p_1$ pushes an offer ticket to a shared
@@ -61,59 +63,62 @@ WebRTC does not manage routing.
 % during the forwarding process, the connection establishment will fail, even if
 % an alternative route exists as WebRTC does not manage routing.
 
-Using signaling services and existing WebRTC connections allows easy deployment
-of random peer sampling protocols~\cite{jelasity2004peer} in browsers that can
-run on mobile phones or tablets connected to mobile networks. In this context,
-it is crucial to keep the number of connections as low as possible in order to
-reduce the generated traffic and limit the resource consumption.
+Using signaling services and existing WebRTC connections makes it easy
+to deploy random peer sampling protocols~\cite{jelasity2004peer} in
+browsers that can run on mobile phones or tablets connected to mobile
+networks~\cite{Carvajal-Gómez2015}. However, the complexity of the
+WebRTC connection process further requires nodes to establish as few
+connections as possible in order to reduce the generated traffic and
+limit resource consumption. Unfortunately existing protocols fail at
+this task.
 
-Random peer sampling protocols~\cite{jelasity2004peer, jelasity2007gossip}
-produce overlay networks by populating the partial views with references to
-peers chosen at random among the network members following a uniform
-distribution. Solely relying on local knowledge, their goal is to converge to a
-topology exposing properties similar to those of random
-graphs~\cite{erdos1959random}. Among others, they efficiently provide
-connectedness and robustness. A wide variety of gossip-based protocols use
-random peer sampling at their core. For instance, topology optimization
-protocols~\cite{voulgaris2005epidemic, jelasity2009tman} aim to improve
-criterion about localization, latency, or preferences.
+Random peer sampling protocols~\cite{jelasity2004peer,
+  jelasity2007gossip} produce overlay networks by populating the
+partial views with references to peers chosen at random among the
+network members following a uniform distribution. Solely relying on
+local knowledge, they converge to a topology exposing properties
+similar to those of random graphs~\cite{erdos1959random}. Among
+others, they efficiently provide connectedness and robustness. A wide
+variety of gossip-based protocols use random peer sampling at their
+core. For instance, topology optimization
+protocols~\cite{voulgaris2005epidemic, jelasity2009tman} aim at
+improving localization, latency, or at addressing user preferences.
 
-The representatives of random peer sampling protocols using a fixed-size partial
-view are Lpbcast~\cite{eugster2003lightweight},
-HyParView~\cite{leitao2007hyparview} Newscast~\cite{tolgyeski2009adaptive}, and
-\CYCLON~\cite{voulgaris2005cyclon}. The developers deploying applications using
-such protocols must foresee the dimensions of the networks to setup properly
-their partial views size. These decisions cannot be safely retracted afterwards
-at runtime. As a consequence, the views are commonly oversized.
+The representatives of random peer sampling protocols using a
+fixed-size partial view comprise
+Lpbcast~\cite{eugster2003lightweight},
+HyParView~\cite{leitao2007hyparview}
+Newscast~\cite{tolgyeski2009adaptive}, and
+\CYCLON~\cite{voulgaris2005cyclon}. The developers deploying
+applications using such protocols must foresee the dimensions of the
+networks to setup properly their partial views size. These decisions
+cannot be safely retracted afterwards at runtime. As a consequence,
+applications tend to overestimate the required view sizes.
 
-% They have to know \emph{a priori} the maximum network size to set their
-% parameters accordingly. 
+For example, a \CYCLON-based application mat maintain 7 connections in
+the browser despite requiring only 4. While this causes little harm in
+standard IP-based networks. Maintaining too many active WebRTC
+connections may uselessly overload a device. This calls for a dynamic
+peer sampling service that can adapt to a dynamic number of
+participants.
 
-%% not happy with this paragraph
-This inflexibility makes it possible to maintains 7 connections in the browser
-despite requiring only 4, while, in the following moment, it still maintains 7
-connections while 10 would be needed.  \CYCLON's partial views are commonly
-oversized compared to the actual network size to prevent having too few
-connections per peer, which, consequently, introduces overhead.  When WebRTC is
-involved, we need a dynamic peer sampling service that is able to adapt to the
-dynamic number of participants.
+A way to achieve this adaptive behavior may consists in using one of
+the several protocols for network-size estimation. For
+example,~\cite{ganesh2007peer} samples and analyzes a subset of the
+network and deduces the overall network size using probabilistic
+functions.  Sketching techniques~\cite{baquero2012extrema} use instead
+hashing to represent a large number of distinct node identities and
+estimate the size of the using the resulting collisions in hash
+values. Finally, averaging techniques~\cite{jelasity2004epidemic} use
+aggregations that converge over exchanges to a value which depends on
+the network size. Unfortunately, while they can be accurate in their
+estimations, these approaches add a communication overhead which makes
+them too expensive for mobile devices like mobile phones.
 
-Network size estimators can introduce adaptiveness in peer sampling. These
-approaches either use
-\begin{inparaenum}[(i)]
-\item sampling techniques~\cite{ganesh2007peer} which analyze a network subset
-  and deduce the network size using probabilistic functions,
-\item sketching techniques~\cite{baquero2012extrema}
-  which use hashing to compress the high amount of data and deduce the network
-  size using the collisions,
-\item averaging techniques~\cite{jelasity2004epidemic}
-  which use aggregations that converge over exchanges to a value which depends
-  on the network size.
-\end{inparaenum}
-Unfortunately, while they can be accurate in their estimation, they imply a
-communication overhead and may have strong assumptions (e.g. random graph
-topology). However, adaptiveness should introduce a minimum overhead to peer
-sampling protocols. % in WebRTC applications.
+
+% However, adaptiveness
+% should introduce a minimum overhead to peer sampling
+% protocols. % in WebRTC applications.
 
 \begin{figure*}
   \centering
@@ -134,9 +139,8 @@ sampling protocols. % in WebRTC applications.
 
 The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2003peer}. Its interesting property lies in its
-logarithmically growing partial view sizes meeting the sharp threshold of
-connectedness of random graphs~\cite{erdos1959random}. Nevertheless, \SCAMP
-suffers from other drawbacks. 
+partial-view sizes that grow logarithmically with the size of the
+network. However, \SCAMP suffers from other drawbacks.
 % The main point of criticism lies in it periodic
 % balancing mechanism called \emph{lease}. After a while, each peer must join the
 % network again. The arcs pointing to it are removed, and the peer chooses a
@@ -145,13 +149,46 @@ suffers from other drawbacks.
 % arcs accordingly, despite it should not: the number of added arcs should be the
 % exact number of removed arcs. Since all peers perform such mechanism on a
 % regular basis, the number of arcs grows unbounded.  Also, 
-\SCAMP systematically disseminates the connections at random. Thus, the
-originating peer can be several hops away from the arrival peer. In WebRTC, each
-random dissemination path must be traveled back to finalize the connection
-establishment (cf. Figure~\ref{fig:webrtc}), often multiple times. This
-drastically impacts the \SCAMP failure probability of establishing a
-connection. In turns, the number of connections quickly decreases eventually
-leading to partitioning (cf. Section~\ref{subsec:degeneration}).
+
+% \SCAMP systematically disseminates the connections at random. Thus, the
+% originating peer can be several hops away from the arrival peer. In WebRTC, each
+% random dissemination path must be traveled back to finalize the connection
+% establishment (cf. Figure~\ref{fig:webrtc}), often multiple times. This
+% drastically impacts the \SCAMP failure probability of establishing a
+% connection. In turns, the number of connections quickly decreases eventually
+% leading to partitioning (cf. Section~\ref{subsec:degeneration}).
+
+In particular, \SCAMP uses random walks to establish new connections
+between peers. In WebRTC, each hop in these random paths must be
+traveled back and forth to finalize the connection establishment
+(cf. Figure~\ref{fig:webrtc}). This drastically increases the
+probability that \SCAMP will fail in establishing connections. In the
+presence of churn or message loss, the number of connections decreases
+quickly eventually leading to network partitions
+(cf. Section~\ref{subsec:degeneration}).
+
+% Let $P_f$ be the probability that an
+% element of the dissemination path (either a peer or a connection) crashes or
+% leaves during a hop of the three-way handshake, without any possible
+% recovery. Let $P_E$ be the probability that a connection establishment cannot
+% be completed. Without three-way handshake, $P_E$ is straightforward:
+% \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
+% corresponds to the probability that each element (arc and peer) in the path of
+% size $k+1$ stays alive during their part of the dissemination (i.e., otherwise,
+% they are allowed to crash or leave). In the context of WebRTC, the offer ticket must
+% travel back to its emitter. As a consequence, the elements of the random
+% dissemination path are not allowed to fail until the stamped ticket travels
+% back. We obtain:
+% \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
+%                                      \ldots (1-P_f)^2) \nonumber \\
+%                                    &=1-(1-P_f)^{k^2+3k+2}
+% \end{align}
+% In other terms, the first chosen arc and peer in the path must stay alive $2k+2$
+% hops, the second chosen arc and peer must stay alive $2k$ hops and so on.  The
+% complexity class of the \SCAMP failure rate increases leading to a quicker
+% degeneration of the connection count. This behavior endangers the network
+% connectedness.%%, as depicted in Section~\ref{subsec:degeneration}.
+
 
 
 %%% Local Variables:
