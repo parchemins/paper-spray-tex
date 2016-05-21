@@ -38,8 +38,9 @@ multiple trees\cite{Frey09DSN, monod:THESIS}.
 The recent introduction of WebRTC~\cite{webrtc} has renewed the
 research interest in this kind of decentralized applications with a
 number of proposals for applications like decentralized video
-streaming~\cite{hivejs,smoothcache2} or content-delivery
-networks\cite{Zhang:2013:MBC:2465351.2465379}. However, deploying
+streaming~\cite{hivejs,smoothcache2}, content-delivery
+networks~\cite{Zhang:2013:MBC:2465351.2465379} or real-time
+collaborative editors~\cite{nedelec2016crate}. However, deploying
 existing peer sampling protocols on top of WebRTC raises important
 technical challenges. 
 \begin{inparaenum}[(1)]
@@ -72,9 +73,11 @@ popularity burst subsides.
 %   link to a WebRTC video stream on Twitter can create the buzz and
 %   generate massive joins for an unpredictable period of time.
 
-Unfortunately, existing peer-sampling protocols, which lie at the
-bases of several video streaming
-solutions~\cite{Frey09Middleware,Abeni2009,smoothcache20} lack this
+Unfortunately, existing peer-sampling protocols
+% Pascal: IMHO not useful here
+%, which lie at the bases of several video streaming
+%solutions~\cite{Frey09Middleware,Abeni2009,smoothcache20} 
+lack this
 capability. On the one hand, the most popular approaches like
 Cyclon~\cite{voulgaris2005cyclon}, and the RPS protocol
 family~\cite{jelasity2007gossip} provide application nodes with fixed
@@ -139,7 +142,8 @@ while adapting to the current size of the network.
 % phones. We experiment with \CRATE by deploying 600 editors on
 
 The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
-reviews the related work. Section~\ref{sec:proposal} details the \SPRAY
+reviews the related work. Section~\ref{sec:problem-statement} presents
+the problem statement. Section~\ref{sec:proposal} details the \SPRAY
 protocol. It also presents experimentation results of \SPRAY and compares them
 to state-of-the-art. Section~\ref{sec:use-case} details our experiment with
 \CRATE a real-time collaborative editor running in browsers. We conclude in
