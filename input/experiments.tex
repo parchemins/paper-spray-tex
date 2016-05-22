@@ -437,11 +437,10 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   In our experiment, we configure \CYCLON's view size to 9, which
   targets 8k peers. The network contains 10k members. We perform the
   removals after the approaches have converged to a stable overlay
-  network. We remove a batch of peers at once, from 25 to 95 percent
+  network. We remove a random set of peers at once, from 25 to 95 percent
   of peers every 5 percents, i.e., 16 runs for each approach. We
   perform a last measurement at 99 percent. We measure the number of
-  components immediately after each removal. Removals concern a
-  percentage of the peers chosen at random among the 10k members.
+  components immediately after each removal.
 \item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
   components over the network size after removals. First, the figure shows that
   both the random peer sampling protocols \SPRAY and \CYCLON suffer from
@@ -525,8 +524,8 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \item[Reasons:] As the network grows, the chances of a particular peer to have
   at least twice the reference to another peer becomes smaller. Indeed, while
   the network grows linearly, the number of references to a particular peer
-  only grows logarithmically. Nevertheless, the birthday paradox reminds that
-  this proportion is not as small as it seems to be.
+  only grows logarithmically. % Nevertheless, the birthday paradox reminds that
+  % this proportion is not as small as it seems to be.
 \end{asparadesc}
 
 
@@ -553,48 +552,48 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   emits an offer ticket, the arrival peer stamps the ticket, the initial peer
   finalizes the connection using the stamped ticket
   (cf. Section~\ref{sec:relatedwork}). The probability that the ticket fails to
-  arrive to its destination is set to $10^{-3}$ for each hop.
-\item[Results:] Figure~\ref{fig:degeneration} has two parts. The
-  top figure shows the arc count of the random peer samplings while the bottom
-  figure shows the weak components of the network.  First, we observe that, as
-  expected, the arc count of \CYCLON and \SPRAY stays constant over cycles: 90k
-  and 93k arcs for \CYCLON and \SPRAY respectively. Second, we observe that
-  \SCAMP suffers from the failures on connection establishments. It directly
-  impacts on the connectedness of the network represented by the weak
-  components ratio. The network of \SCAMP quickly degrades.
-\item[Reasons:] The arc count of both \CYCLON and \SPRAY remains constant over
-  time but for different reasons. In \CYCLON, the shuffling protocol makes sure
-  that the partial view is filled to its maximum. Thus, when it uses a not
-  successfully established connection to perform an exchange, it simply discards
-  the connection, knowing that the next exchange is likely to overfill its
-  partial view. In \SPRAY, when a connection fails to establish and the protocol
-  tries to use it for an exchange, it will replace this arc with another known
-  reference. Thus, the arc count stays constant and the shuffling protocol makes
-  sure that duplicates disappear over time (the arc moves to another peer where
-  it is not a duplicate). In \SCAMP, the connections are much more likely to
-  fail than in the aforementioned protocols. Indeed, contrarily to these latter,
-  \SCAMP does not cautiously establish connections with the neighbors of its
-  neighbors.  Each hop of its ticket dissemination is an opportunity of failure.
-  Let $P_f$ be the probability that an element of the dissemination path (either
-  a peer or a connection) crashes or leaves during a hop of the three-way
-  handshake, without any possible recovery. Let $P_E$ be the probability that a
-  connection establishment cannot be completed. Without three-way handshake,
-  $P_E$ is straightforward:
-  \begin{equation} P_{E,\,1way}^{Scamp}=1-(1- P_f)^{k+1} \end{equation} This
-  corresponds to the probability that each element (arc and peer) in the path of
-  size $k+1$ stays alive during their part of the dissemination (i.e.,
-  otherwise, they are allowed to crash or leave). In the context of WebRTC, the
-  offer ticket must travel back to its emitter. As a consequence, the elements
-  of the random dissemination path are not allowed to fail until the stamped
-  ticket travels back. We obtain:
+  traverse a hop is set to $10^{-3}$.
+\item[Results:] Figure~\ref{fig:degeneration} has two parts. The top
+  figure shows the arc count of the random peer samplings while the
+  bottom figure shows the weak components of the network.  First, we
+  observe that, as expected, the arc counts of \CYCLON and \SPRAY
+  stays constant over cycles: 90k and 93k arcs for \CYCLON and \SPRAY
+  respectively. Second, we observe that \SCAMP suffers from failures
+  in connection establishment. This directly impacts network
+  connectedness as measured by the weak-component ratio. The network
+  of \SCAMP quickly degrades.
+\item[Reasons:] The arc counts of \CYCLON and \SPRAY remains constant
+  over time but for different reasons. In \CYCLON, the shuffling
+  protocol makes sure that the partial view is filled to its
+  maximum. When a peer removes a broken connection, it replaces it
+  with a fresh one in the following round.  In \SPRAY, when the
+  protocol tries to use a broken connection, it replaces it with
+  another known one. Thus, the arc count stays constant and the
+  shuffling protocol makes sure that duplicates disappear over time
+  (the arc moves to another peer where it is not a duplicate).
+  \SCAMP, however, does not establish new connections with the
+  neighbors of its neighbors.  Each hop of connection establishment
+  process is an opportunity for failure.  Let $P_f$ be the probability
+  that an element of the dissemination path (either a peer or a
+  connection) crashes or leaves during a hop of the three-way
+  handshake, without any possible recovery. Let $P_E$ be the
+  probability that a connection establishment cannot be
+  completed. Without three-way handshake, $P_E$ is straightforward:
+  \begin{equation} P_{E,\,1way}^{Scamp}=1-(1-
+    P_f)^{k+1} \end{equation} This corresponds to the probability that
+  each element (arc and peer) in the path of size $k+1$ stays alive
+  during the random walk. In the context of WebRTC, the offer ticket
+  must travel back to its emitter. As a consequence, the elements of
+  the random walk cannot fail until the stamped ticket travels
+  back. We obtain:
   \begin{align} P_{E,\,3way}^{Scamp} &=1 - ((1-P_f)^{2(k+1)} (1-P_f)^{2k}
                                        \ldots (1-P_f)^2) \nonumber \\
                                      &=1-(1-P_f)^{k^2+3k+2}
   \end{align}
-  In other terms, the first chosen arc and peer in the path must stay alive
-  $2k+2$ hops, the second chosen arc and peer must stay alive $2k$ hops and so
-  on.  The complexity class of the \SCAMP failure rate increases leading to a
-  quicker degeneration of the connection count. 
+  In other terms, the first chosen arc and peer in the path must stay
+  alive $2k+2$ hops, the second chosen arc and peer must stay alive
+  $2k$ hops and so on.  This long duration leads to a quicker
+  degeneration of the connection count.
 
   % This behavior endangers the network
   % connectedness.%%, as depicted in Section~\ref{subsec:degeneration}.
