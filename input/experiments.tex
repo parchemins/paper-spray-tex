@@ -412,12 +412,6 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \subsection{Robustness}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.49\textwidth]{img/resilience.eps}
-  \caption{\label{fig:resilience}Robustness to massive failures.}
-\end{figure}
-
 \begin{asparadesc}
 \item[Objective:] To show \SPRAY's robustness to failures.
 \item[Description:] To evaluate robustness, we count the number of
@@ -486,6 +480,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   % growth could be found, although that may require global knowledge.
 \end{asparadesc}
 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/resilience.eps}
+  \caption{\label{fig:resilience}Robustness to massive failures.}
+\end{figure}
+
+
+
 %%\vspace{-7pt}
 %%\paragraph{Duplicates}
 
@@ -532,11 +534,6 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \subsection{Failures in connection establishment}
 \label{subsec:degeneration}
 
-\begin{figure}
-  \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
-  \caption{\label{fig:degeneration}Number of arcs and partitioning in networks
-    subject to failures in the connection establishments.}
-\end{figure}
 
 \begin{asparadesc}
 \item[Objective:] To show that \SPRAY does not suffer from failures in
@@ -609,6 +606,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   % partial view. In such case, the peer becomes disconnected and partitions
   % quickly appear.
 \end{asparadesc}
+
+
+\begin{figure}
+  \centering \includegraphics[width=0.49\textwidth]{img/degen.eps}
+  \caption{\label{fig:degeneration}Number of arcs and partitioning in networks
+    subject to failures in the connection establishments.}
+\end{figure}
+
 
 %%% Local Variables:
 %%% mode: latex
