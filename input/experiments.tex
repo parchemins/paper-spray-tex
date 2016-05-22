@@ -413,20 +413,28 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \begin{asparadesc}
 \item[Objective:] To show that \SPRAY is robust to massive failures.
-\item[Description:] Counting the strong components in a network allows
-  estimating the areas reachable by the information dissemination protocols. For
-  instance, there are 2 strong components if a part of the network can reach
-  another part and the converse being false.  Counting the weak components
-  allows estimating the point until which the network is still in a repairable
-  state, i.e., after some shufflings, the network converge to an overlay where
-  the information dissemination is able to reach all peers again. \CYCLON has 9
-  neighbors which targets 8k peers. The network contains 10k members. We
-  perform the removals after the approaches converged to a stable overlay
-  network. We remove the batch of peers at once, from 25 to 95 percents of peers
-  every 5 percents, i.e., 16 runs for each approach. We perform a last
-  measurement at 99 percents. We measures the components immediately after
-  removals. Removals concern a percentage of the peers chosen at random among
-  the 10k members.
+\item[Description:] To evaluate robustness, we count the number of
+  weakly and strongly connected components of the network. Counting
+  strong components allows us to estimate the effectiveness of
+  information dissemination protocols. For example, with two strong
+  components, bidirectional communication between the two components
+  cannot be achieved. But the network may still be in a repairable
+  state.  For example, the first strong component may be able to reach
+  the second, but the second may not reach the first. This happens if
+  the two strong components constitute a single weak
+  component. Counting the weak components therefore allows us to
+  estimate to what extent the network can be repaired.  After some
+  shuffling, a unidirectional link between two strong components may
+  in fact give birth to one or more links in the other direction.
+
+  In our experiment, we configure \CYCLON's view size to 9, which
+  targets 8k peers. The network contains 10k members. We perform the
+  removals after the approaches have converged to a stable overlay
+  network. We remove a batch of peers at once, from 25 to 95 percent
+  of peers every 5 percents, i.e., 16 runs for each approach. We
+  perform a last measurement at 99 percent. We measure the number of
+  components immediately after each removal. Removals concern a
+  percentage of the peers chosen at random among the 10k members.
 \item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
   components over the network size after removals. First, the figure shows that
   both the random peer sampling protocols \SPRAY and \CYCLON suffer from
@@ -437,29 +445,34 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   shows that the approaches are able to recover from such clustering until high
   removal rate. Indeed, the weak components start to increase at 70 percents,
   meaning that some part of the network are completely disjoint and beyond
-  repair. Globally, Figure~\ref{fig:resilience} also demonstrates that the
-  logarithmic growth of these sampling protocols constitutes an upper bound, for
-  smaller growth could be obtained without endangering the connectedness of the
-  network.
-\item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY expose
-  very similar results because \CYCLON's configuration targets a network size of
-  8k peers, while \SPRAY adjusts itself automatically to this network size.
-  Therefore, the arc number in the approaches are close from being identical
-  \CYCLON is slightly better because, in this case, it has more arcs (due to
-  \SPRAY's randomness) and because it does not have duplicates (\SPRAY contains
-  a small amount of duplicates in the partial view,
-  cf. Figure~\ref{fig:duplicates}). It requires a high amount of removals to
-  endanger the information dissemination protocol's ability to reach all
-  peers. Indeed, since all peers are equally important in the network
-  (cf. Figure~\ref{fig:histo}), removing a particular peer does not greatly
-  affect the whole network. The direction of arcs is more important to the
-  information dissemination than it is to the peer-sampling protocol. Indeed, if
-  an arc constitutes the last link between two clusters of the network, the
-  messages from one of these cluster cannot reach the other one. Yet, this arc
-  is enough for the peer to start the shufflings which will eventually populate
-  their views with members from each other's cluster. Hence, the network repairs
-  itself.  When clusters become fully disjoints, neither \CYCLON nor \SPRAY is
-  able to repair the network.  % A smaller growth could be obtained because the
+  repair.%  Globally, Figure~\ref{fig:resilience} also demonstrates that the
+  % logarithmic growth of these sampling protocols constitutes an upper bound, for
+  % smaller growth could be obtained without endangering the connectedness of the
+  % network.
+\item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY
+  yield very similar results because \CYCLON's configuration targets a
+  network size of 8k peers, while \SPRAY adjusts itself automatically
+  to this network size.  Therefore, the two protocols create very
+  similar numbers of arcs. Yet \CYCLON performs slightly better for
+  two reasons. First the variance in the degree distribution of \SPRAY
+  causes \CYCLON to have more arcs in this specific
+  experiment. Second, \SPRAY wastes some of its neighbors due to the
+  presence of duplicate entries in its views (yet, the number of
+  duplicates remains small cf. Figure~\ref{fig:duplicates}). Still
+  both protocols preserve the ability to disseminate information until
+  very large removal percentages. Another way to interpret this result
+  consists in observing that when all peers have similar degrees,
+  (cf. Figure~\ref{fig:histo}), removing a particular peer does not
+  greatly affect connectedness. As suggested above, the direction of
+  arcs impacts more information dissemination than the peer-sampling
+  protocol itself. If an arc constitutes the last link between two
+  clusters of the network, the messages from one of these clusters
+  cannot reach the other one. Yet, this arc is enough for the
+  peer-sampling protocol to start shuffling the views, ultimately
+  populating them with members from both cluster. Hence, the network
+  repairs itself.  When clusters become fully disjoints, neither
+  \CYCLON nor \SPRAY is able to repair the
+  network.  % A smaller growth could be obtained because the
   % sharp threshold of connectedness applies to random graphs according to Erd{\H
   %   o}s-R{\' e}nyi~\cite{erdos1959random}. However, random peer sampling
   % protocols constraint the partial views size to reduce the variance between
