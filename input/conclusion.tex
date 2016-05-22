@@ -29,22 +29,22 @@ duplicates in the partial views. However, our simulations supported by
 theoretical analysis show that the number of duplicates remains very low and
 becomes negligible in large networks.
 
-To highlight the improvement brought by such protocol, we demonstrated
-how a broadcast protocol can take advantage of adaptiveness of \SPRAY to
-adjust the fanout and handle sudden burst of popularity. We also built
+To highlight the improvements brought by \SPRAY, we demonstrated how a
+broadcast protocol can take advantage of its adaptiveness to adjust
+the fanout and handle a sudden burst of popularity. We also built
 \CRATE, a decentralized collaborative editor directly accessible in
 web browsers with a full implementation of \SPRAY on top of WebRTC. We
 launched experiments involving up to 600 browsers showing that message
 dissemination highly benefits from adaptive neighborhoods.
 
 \SPRAY makes building scalable decentralized applications in browsers
-easy and accessible.  Developers do not require to oversee the network
+easy and accessible.  Developers do not require to foresee the network
 size targeted by their applications. Just the same as for broadcast,
 many topology optimization protocols (e.g. about geolocalization,
 latency, or preferences) rely on random peer sampling protocol such as
 the generic algorithms T-Man~\cite{jelasity2009tman} and
 Vicinity~\cite{voulgaris2005epidemic}. \SPRAY allows such protocols to
-take benefict from its self-adjusting partial views.
+benefit from its self-adjusting partial views.
 
 % Future work includes investigations on topology managers such as
 % T-Man~\cite{jelasity2009tman} or
