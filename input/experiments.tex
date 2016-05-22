@@ -49,13 +49,6 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \subsection{Delivery rate on broadcast}
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.49\textwidth]{img/hardrate.eps}
-    \caption{\label{fig:hardrate}Ratio of messages delivered to all peers.}
-  \end{center}
-\end{figure}
-
 \begin{asparadesc}
 \item [Objective:] To show how broadcast protocols can benefit from
   an adaptive random peer sampling protocol.
@@ -118,6 +111,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   increases enough to be incremented.
 \end{asparadesc}
 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.49\textwidth]{img/hardrate.eps}
+    \caption{\label{fig:hardrate}Ratio of messages delivered to all peers.}
+  \end{center}
+\end{figure}
+
+
 % \begin{figure}
 %   \begin{center}
 %     \includegraphics[width=0.49\textwidth]{img/ninetynine.eps}
@@ -134,13 +135,6 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %   \end{center}
 % \end{figure}
 
-
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.49\textwidth]{img/peak.eps}
-    \caption{\label{fig:peak}Full delivery rate of messages during a buzz.}
-  \end{center}
-\end{figure}
 
 \ \\
 
@@ -183,13 +177,17 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   time, the delivery rate recovers its expected value.
 \end{asparadesc}
 
-\subsection{Clustering and convergence time}
 
 \begin{figure}
-  \centering
-  \includegraphics[width=0.49\textwidth]{img/simple.eps}
-  \caption{\label{fig:clustering}Clustering coefficient.}
+  \begin{center}
+    \includegraphics[width=0.49\textwidth]{img/peak.eps}
+    \caption{\label{fig:peak}Full delivery rate of messages during a buzz.}
+  \end{center}
 \end{figure}
+
+
+
+\subsection{Clustering and convergence time}
 
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts clustering and convergence
@@ -247,6 +245,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   $\overline{C}$ values when \CYCLON is oversized, and why it yields
   higher values when \CYCLON is undersized.
 \end{asparadesc}
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.49\textwidth]{img/simple.eps}
+  \caption{\label{fig:clustering}Clustering coefficient.}
+\end{figure}
+
+
 
 \subsection{Information dissemination}
 
