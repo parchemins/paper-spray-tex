@@ -7,14 +7,18 @@ mechanism, we expect \SPRAY to keep a stable delivery rate on messages
 while supporting network size variations. Then, we evaluate how the
 adaptiveness of \SPRAY impacts common metrics of peer sampling
 performance including clustering coefficient, average shortest path
-length, in-degree distribution, and arc count. We compare \SPRAY with
+length, in-degree distribution, robustness, and arc count. We compare \SPRAY with
 a representative of fixed-size partial view approaches, namely
 \CYCLON. We expect \SPRAY and \CYCLON to exhibit similar behaviors
 when \CYCLON is optimally configured in advance to handle the network
 size. We expect \SPRAY to save resources when \CYCLON is oversized,
 and to be more robust when \CYCLON is undersized. Finally, we expect
 \SPRAY to keep a negligible number of duplicates in its partial
-views. The experiments run on the \PEERSIM
+views. We also evaluate the impact of the WebRTC connection establishment
+on \CYCLON, \SCAMP, and \SPRAY, in  networks subject to message loss.
+We expect a normal behavior for \CYCLON and \SPRAY while \SCAMP becomes
+quickly partitioned.
+The experiments run on the \PEERSIM
 simulator~\cite{montresor2009peersim}. The code of the random peer
 sampling protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
@@ -53,8 +57,8 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \begin{asparadesc}
-\item [Objective:] To show how protocols can benefit from an adaptive random
-  peer sampling protocol.
+\item [Objective:] To show how broadcast protocols can benefit from
+  an adaptive random peer sampling protocol.
 \item [Description:] Broadcast protocols extensively use the partial
   views provided by random peer sampling protocols to efficiently
   disseminate messages to all the network. A broadcasting peer chooses
