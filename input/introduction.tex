@@ -110,6 +110,36 @@ happen.
 % network size without actually measuring its number of members as
 % proposed by Scamp, but running on top of WebRTC.
 
+%% FORCE POSITIONNING
+\begin{figure*}
+\centering
+\subfloat[Figure A][\label{fig:webrtcA}
+$p_1$ connects to $p_2$ using the signaling service. 
+1: $p_1$ pushes its offer ticket; 
+2: $p_2$ pulls the ticket; 
+3: $p_2$ pushes its response; 
+4: $p_1$: pulls the response and establishes a 
+connection with $p_2$. $p_3$ does the same with $p_2$. 
+%%Figure~\ref{fig:webrtcB} depicts the resulting network.
+]{
+  \input{input/signalingexampleA.tex}}
+\hspace{5pt}
+\subfloat[Figure B][\label{fig:webrtcB}
+$p_1$ connects to $p_3$ using $p_2$ as mediator. 
+1: $p_1$ sends its offer ticket to $p_2$; 
+2: $p_2$ forwards it to $p_3$ and registers $p_1$ as the emitter; 
+3: $p_3$ sends its response to $p_2$; 
+4: $p_2$ forwards it to the emitter $p_1$ which connects to $p_3$.]{
+  \input{input/signalingexampleB.tex}}
+\hspace{5pt}
+\subfloat[Figure C][\label{fig:webrtcC}
+The resulting network overlay: a fully connected network composed of
+3 members.]{
+  \input{input/signalingexampleC.tex}}
+\caption{\label{fig:webrtc}Creating an overlay network on top of WebRTC.}
+\end{figure*}
+
+
 In this paper, we address the challenge of a dynamically adaptive
 peer-sampling, by introducing \SPRAY, a novel random peer-sampling
 protocol inspired by both \SCAMP~\cite{ganesh2003peer} and
@@ -148,6 +178,9 @@ protocol. Section~\ref{sec:experimentation} presents experimentation results of
 \SPRAY and compares them to state-of-the-art. Section~\ref{sec:use-case} details
 our experiment with \CRATE, a real-time collaborative editor running in
 browsers. We conclude in Section~\ref{sec:conclusion}.
+
+
+
 
 %%% Local Variables:
 %%% mode: latex
