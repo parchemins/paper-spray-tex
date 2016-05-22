@@ -318,27 +318,30 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts the in-degree
   distribution, i.e., the load-balancing among peers.
-\item[Description:] The in-degree of a peer shows how well it is represented in
-  others' partial view. The in-degree distribution of the network highlights the
-  existence of weakly connected peers and strongly connected hubs. It directly
-  impacts on robustness. In this experiment, the fixed-size partial view
-  approach is \CYCLON{}. It is configured with partial views of size $7$ which
-  targets a network 1k peers.  For all the experiments, we perform the
-  in-degree measurements after convergence. The measurements concern networks
+\item[Description:] The in-degree of a peer shows how well it is
+  represented in others' partial views. The in-degree distribution of
+  the network highlights the existence of weakly connected peers and
+  strongly connected hubs. This directly impacts robustness. In this
+  experiment, the fixed-size partial view approach is \CYCLON{}. It is
+  configured with partial views of size $7$ which targets a network 1k
+  peers.  For all the experiments, we perform the in-degree
+  measurements after convergence. The measurements concern networks
   with 0.1k, 1k, 100k, 500k peers.
-\item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
-  \CYCLON and \SPRAY. In the top figure, we observe that the distribution and
-  the degrees of \CYCLON are identical, independently of the network
-  size. Thus, the distribution of 0.1k peers is identical to the 500k one with
-  a mean value of roughly 7 with a strong peak on this value. On the other
-  hand, the bottom figure shows that the distribution of \SPRAY follows average
-  partial view size which follows the network size
-  growth. Figure~\ref{fig:histo} also shows that peers are very gathered around
-  the mean partial view size. For instance, for the run with 500k peers using
-  \SPRAY, the mean value for the in-degree is 13.37 and 88 percents of the
-  peers have an in-degree comprised between 12 and 14 included. It means that
-  the load is well balanced among peers. Since peers are equally important in
-  term of connectedness, the network is robust to failures.
+\item[Results:] Figure~\ref{fig:histo} shows the in-degree
+  distribution of \CYCLON and \SPRAY. In the top figure, we observe
+  that the distribution and the degrees of \CYCLON are identical,
+  independently of the network size. Thus, the distribution of 0.1k
+  peers is identical to the 500k one with a mean value of roughly 7
+  with a strong peak on this value. On the other hand, the bottom
+  figure shows that the distribution of \SPRAY follows the average
+  partial view size, which itself follows the growth of the size of
+  the network. Figure~\ref{fig:histo} also shows that peers are very
+  gathered around the mean partial view size. For instance, for the
+  run with 500k peers using \SPRAY, the mean value for the in-degree
+  is 13.37 and 88\% of the peers have an in-degree between 12 and 14
+  included. This means that the load is well balanced among
+  peers. Since peers are equally important in terms of connectedness,
+  the network is robust to failures.
 \item[Reasons:] Once configured, \CYCLON must handle any number of
   peers in the network with a fixed-size partial view and since the
   partial view size is constant, the in-degree of peers stays
@@ -416,7 +419,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \begin{asparadesc}
-\item[Objective:] To show that \SPRAY is robust to massive failures.
+\item[Objective:] To show \SPRAY's robustness to failures.
 \item[Description:] To evaluate robustness, we count the number of
   weakly and strongly connected components of the network. Counting
   strong components allows us to estimate the effectiveness of
