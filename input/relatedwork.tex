@@ -7,15 +7,15 @@ even in complex network settings with firewalls, proxies or Network
 Address Translators (NAT). However, WebRTC manages neither addressing
 nor routing. To establish a connection, two browsers need to exchange
 offers and acknowledgments through a common mediator, e.g., mails,
-dedicated signaling services~\cite{peerjs}, existing WebRTC
-connections~\cite{p} etc. Figure~\ref{fig:webrtcA} describes the very
+dedicated signaling services~\cite{peerjs}, or existing WebRTC
+connections~\cite{p}. Figure~\ref{fig:webrtcA} describes the very
 first connection of one peer $p_1$ with another $p_2$ using a
 signaling server. Figure~\ref{fig:webrtcB} shows instead that $p_3$
 can later use $p_2$ as mediator instead of the signaling
 service. Figure~\ref{fig:webrtcC} shows the resulting network. Note
-that if $p_2$ crashes or leaves the network during the forwarding
-process, the connection establishment will fail, even if an
-alternative route exists as WebRTC does not manage routing.
+that if $p_2$ crashes or leaves during the forwarding
+process, the connection establishment will fail, even if
+alternative routes exist as WebRTC does not manage routing.
 
 % In Figure~\ref{fig:webrtcA}, $p_1$
 % wants to connect to $p_2$. Therefore, $p_1$ pushes an offer ticket to a shared
@@ -110,7 +110,7 @@ them too expensive for mobile phones and similar devices.
 
 The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2003peer}. Its interesting property lies in its
-partial-view sizes that grow logarithmically with the size of the
+partial view sizes that grow logarithmically with the size of the
 network. However, \SCAMP suffers from other drawbacks.
 In particular, \SCAMP uses random walks to establish new connections
 between peers. In WebRTC, each hop in these random paths must be
