@@ -43,17 +43,16 @@ connections as possible in order to reduce the generated traffic and
 limit resource consumption. Unfortunately existing protocols fail at
 this task.
 
-Random peer sampling protocols~\cite{jelasity2004peer,
-  jelasity2007gossip} produce overlay networks by populating the
-partial views with references to peers chosen at random among the
-network members following a uniform distribution. Solely relying on
-local knowledge, they converge to a topology exposing properties
-similar to those of random graphs~\cite{erdos1959random}. Among
-others, they efficiently provide connectedness and robustness. A wide
-variety of gossip-based protocols use random peer sampling at their
-core. For instance, topology optimization
-protocols~\cite{voulgaris2005epidemic, jelasity2009tman} aim at
-improving localization, latency, or at addressing user preferences.
+Random peer sampling protocols~\cite{jelasity2004peer,jelasity2007gossip}
+produce overlay networks by populating the partial views with references to
+peers chosen at random among the network members following a uniform
+distribution. Solely relying on local knowledge, they converge to a topology
+exposing properties similar to those of random
+graphs~\cite{erdos1959random}. Among others, they efficiently provide
+connectedness and robustness. A wide variety of gossip-based protocols use
+random peer sampling at their core. For instance, topology optimization
+protocols~\cite{voulgaris2005epidemic,jelasity2009tman} aim at improving
+localization, latency, or at addressing user preferences.
 
 The representatives of random peer sampling protocols using a
 fixed-size partial view comprise
