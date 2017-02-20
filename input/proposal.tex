@@ -3,16 +3,16 @@
 \label{sec:proposal}
 
 \SPRAY is an adaptive-by-design random peer sampling protocol inspired by
-\SCAMP~\cite{ganesh2003peer} and \CYCLON~\cite{voulgaris2005cyclon}. It
-comprises three parts representing the lifecycle of a peer in the network.
-First, the joining process injects a logarithmically growing number of arcs
-into the network. Hence, the number of arcs scales with the network size.  Next,
-each peer runs a periodic process in order to balance the partial views both in
-terms of partial view size and uniformity of the referenced peers within
-them. Quickly, the overlay network converges to a topology exposing properties
-close to those of random graphs. Finally, a peer is able to leave at any time 
-without giving notice (equivalent to a crash) while the network properties do
-not degrade.
+\SCAMP~\cite{ganesh2001scamp,ganesh2003peer} and
+\CYCLON~\cite{voulgaris2005cyclon}. It comprises three parts representing the
+lifecycle of a peer in the network.  First, the joining process injects a
+logarithmically growing number of arcs into the network. Hence, the number of
+arcs scales with the network size.  Next, each peer runs a periodic process in
+order to balance the partial views both in terms of partial view size and
+uniformity of the referenced peers within them. Quickly, the overlay network
+converges to a topology exposing properties close to those of random
+graphs. Finally, a peer is able to leave at any time without giving notice
+(equivalent to a crash) while the network properties do not degrade.
 
 The key to adaptiveness consists in keeping a consistent global number
 of arcs during the whole protocol. Indeed, unlike \CYCLON, \SPRAY is
