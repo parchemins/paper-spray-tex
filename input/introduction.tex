@@ -74,19 +74,18 @@ Unfortunately, existing peer-sampling protocols
 % Pascal: IMHO not useful here
 %, which lie at the bases of several video streaming
 %solutions~\cite{Frey09Middleware,Abeni2009,smoothcache20} 
-lack this capability. On the one hand, \SCAMP~\cite{ganesh2003peer}
-features some form of adaptation but falls short in the context of
-WebRTC applications. \SCAMP maintains partial views of size
-$\log(n)+k$, $n$ being the number of nodes, and $k$ being a
-constant. But its connection establishment process based on random
-walks cannot handle the connection failures that often occur in
-WebRTC. On the other hand, the most popular approaches like
-\CYCLON~\cite{voulgaris2005cyclon} and the whole RPS protocol
-family~\cite{jelasity2007gossip} provide application nodes with
-fixed-size views of the network based on parameters that have to be
-configured at deployment time. This forces developers to oversize
-partial views to handle potential bursts, either wasting resources, or
-not provisioning for large-enough settings.
+lack this capability. On the one hand, \SCAMP~\cite{ganesh2001scamp,
+  ganesh2003peer} features some form of adaptation but falls short in the
+context of WebRTC applications. \SCAMP maintains partial views of size
+$\log(n)+k$, $n$ being the number of nodes, and $k$ being a constant. But its
+connection establishment process based on random walks cannot handle the
+connection failures that often occur in WebRTC. On the other hand, the most
+popular approaches like \CYCLON~\cite{voulgaris2005cyclon} and the whole RPS
+protocol family~\cite{jelasity2007gossip} provide application nodes with
+fixed-size views of the network based on parameters that have to be configured
+at deployment time. This forces developers to oversize partial views to handle
+potential bursts, either wasting resources, or not provisioning for large-enough
+settings.
 %  Unfortunatly, deploying Scamp on
 % top of WebRTC fails due to the connection estabilishement failures of
 % WebRTC. Another approach is just to oversize partial views and use
@@ -110,7 +109,7 @@ happen.
 
 In this paper, we address the challenge of a dynamically adaptive
 peer-sampling, by introducing \SPRAY, a novel random peer-sampling
-protocol inspired by both \SCAMP~\cite{ganesh2003peer} and
+protocol inspired by both \SCAMP~\cite{ganesh2001, ganesh2003peer} and
 \CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the
 state-of-the-art in several ways.
 \begin{inparaenum}[(i)]

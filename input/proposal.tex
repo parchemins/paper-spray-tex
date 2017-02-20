@@ -48,7 +48,7 @@ joining peer to its own neighborhood. This fulfills the second
 condition of the problem statement.  In total, the number of arcs in
 the network increases of $1+\ln(|V^t|)$ using only
 neighbor-to-neighbor interactions, which leads to a total number of
-$|V^t|\ln(|V^t|)$ arcs.
+$|V^t|\ln(|V^t|)$ arcs~\cite{ganesh2001scamp}.
 
 \begin{algorithm}[h]
 \input{input/joiningalgo.tex}
@@ -114,7 +114,7 @@ decreases the arc count.
 
 If duplicates have a negative impact on network properties, most of
 them disappear after shuffling and they proportionally become
-negligible as the network grows (cf. Figure~\ref{fig:duplicates}).
+negligible as the network grows.
 
 \begin{algorithm}[h]
   \input{./input/cyclicalgo.tex}
@@ -143,14 +143,14 @@ units. First, the function increments the age of each neighbor in
 $\mathcal{P}$. Then, it chooses the oldest peer $q$ to exchange a
 subset of its partial view. If Peer $q$ cannot be reached (i.e. it
 crashed/left), peer $p$ executes the crash-handling function
-(cf. Section~\ref{subsec:leaving}) and repeats the process until it
+(see Section~\ref{subsec:leaving}) and repeats the process until it
 finds a reachable peer $q$. Thus, the aging process (which is an
 inheritance from \CYCLON) speeds up the removal of crashed or departed
 peers. Once it finds a reachable neighbor $q$, Peer $p$ selects a
 sample of its partial view, excluding one occurrence of $q$ and
 including itself. The size of this sample is half of its partial view,
 with at least one peer: the initiating peer
-(cf. Line~\ref{line:samplesize}). The answer of $q$ contains half of
+(see Line~\ref{line:samplesize}). The answer of $q$ contains half of
 its partial view. Since peers can appear multiple times in
 $\mathcal{P}$, the exchanging peers may send references to the other
 peer, e.g., Peer $p$'s sample can contain references to $q$. Such
@@ -158,7 +158,7 @@ sample, without further processing, would create self-loop ($q$'s
 partial view contains references to $q$). To alleviate this
 undesirable behavior, all occurrences of the other peer are replaced
 with the emitting peer
-(cf. Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both
+(see Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both
 of them remove the sample they sent from their view and add the
 received sample.
 
@@ -309,9 +309,9 @@ the arc while the other peers will duplicate one of their existing
 arcs. In this case, Peer $p_1$ injected $5$ connections when it
 joined. It removes $7-2 =5 $ connections when it leaves. The global
 number of connections remains logarithmic with respect to the number
-peers in the network. Nevertheless, we can see that connectedness is
-not entirely guaranteed (only with the high probability implied by
-random graphs). Indeed, if Peer $p_1$ is the sole bridge between two
+peers in the network. Nevertheless, we observe that connectedness is
+not entirely guaranteed -- only with the high probability implied by
+random graphs. Indeed, if Peer $p_1$ is the sole bridge between two
 clusters, adding arcs is not enough to ensure connectedness.
 
 Algorithm~\ref{algo:unreachable} also shows that \SPRAY distinguishes peer

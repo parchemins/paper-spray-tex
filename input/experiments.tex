@@ -76,7 +76,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   and $\ln(100)+3 \approx 8$, which provide high reliability with
   $100$ nodes. Similarly, we configure \SPRAY to have partial views
   size equal to $6 \cdot \ln(|V^t|)$---instead of adding only 1 arc
-  targeting its contact (cf. Section \ref{subsec:joining}), the
+  targeting its contact (see Section \ref{subsec:joining}), the
   newcomer adds 6 arcs---and sets the fanout to one sixth of the view
   size plus $1$ or $3$. This gives both protocols the same
   configuration for $100$ nodes.  We then consider network sizes
@@ -418,7 +418,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   arcs, the average partial view size grows as more peers join the network.
   The removal of 500 peers implies a decreasing slope. The slightly decreasing
   number of arcs after the removal is due to peers realizing that some arcs are
-  dead, leading to a probabilistic removal (cf. Algorithm~\ref{algo:unreachable}).
+  dead, leading to a probabilistic removal (see Algorithm~\ref{algo:unreachable}).
 \end{asparadesc}
 
 % \vspace{-7pt}
@@ -479,11 +479,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   causes \CYCLON to have more arcs in this specific
   experiment. Second, \SPRAY wastes some of its neighbors due to the
   presence of duplicate entries in its views (yet, the number of
-  duplicates remains small cf. Figure~\ref{fig:duplicates}). Still
+  duplicates remains small -- see Figure~\ref{fig:duplicates}). Still
   both protocols preserve the ability to disseminate information until
   very large removal percentages. Another way to interpret this result
   consists in observing that when all peers have similar degrees,
-  (cf. Figure~\ref{fig:histo}), removing a particular peer does not
+  (see Figure~\ref{fig:histo}), removing a particular peer does not
   greatly affect connectedness. As suggested above, the direction of
   arcs impacts more information dissemination than the peer-sampling
   protocol itself. If an arc constitutes the last link between two
@@ -564,7 +564,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   connection, we use the WebRTC three-way handshake, i.e., the initial peer
   emits an offer ticket, the arrival peer stamps the ticket, the initial peer
   finalizes the connection using the stamped ticket
-  (cf. Section~\ref{sec:relatedwork}). The probability that the ticket fails to
+  (see Section~\ref{sec:relatedwork}). The probability that the ticket fails to
   traverse a hop is set to $10^{-3}$.
 
 \begin{figure}
