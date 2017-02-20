@@ -50,25 +50,6 @@ the network increases of $1+\ln(|V^t|)$ using only
 neighbor-to-neighbor interactions, which leads to a total number of
 $|V^t|\ln(|V^t|)$ arcs.
 
-\begin{figure*}
-  \centering
-  \subfloat[Figure A]
-  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
-  latter the multiset $\{p_6,\,p_9\}$.]{
-    \input{./input/cyclicexampleA.tex}}
-  \hspace{10pt}
-  \subfloat[Figure B][Peer $p_1$ receives the $p_6$'s message. 
-  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
-  partial view.]{
-    \input{./input/cyclicexampleB.tex}}
-  \hspace{10pt}
-  \subfloat[Figure C][Peer $p_6$ receives the $p_1$'s response, it
-  adds $\{p_2\}$ to its partial view.]{
-    \input{./input/cyclicexampleC.tex}}
-  \caption{\label{fig:cyclicexample}Example of the \SPRAY's shuffling
-    protocol. }
-\end{figure*}
-
 \begin{algorithm}[h]
 \input{input/joiningalgo.tex}
 \caption{\label{algo:joining}The joining protocol of \SPRAY.}
@@ -84,6 +65,23 @@ identity of the joining peer to all neighbors, independently of the
 age. The $onFwdSubs$ event is called when a peer receives such
 forwarded subscription. It adds the peer as one of its neighbor with
 an age set to $0$ meaning that it is a brand new reference.
+
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][$p_1$ contacts $p_2$ to join the network. $p_1$ adds
+  $p_2$ to its neighborhood. $p_1$ sends its request to $p_2$.]{
+    \input{./input/joiningexampleA.tex}}
+  \hspace{8pt}
+  \subfloat[Figure B][The $onSubs(p_1)$ event is raised at $p_2$
+  which forwards the subscription to its neighbors.]{
+    \input{./input/joiningexampleB.tex}}
+  \hspace{8pt}
+  \subfloat[Figure C][The $onFwdSubs(p_1)$ event is raised at $p_{3-6}$. The 
+  peers add $p_1$ to their neighborhood.]{
+    \input{./input/joiningexampleC.tex}}
+  \caption{\label{fig:joiningexample}Example of the \SPRAY's joining
+    protocol.}
+\end{figure*}
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario.  Peer
 $p_1$ contacts $p_2$ to join the network composed of $\{p_2$, $p_3$,
@@ -106,13 +104,13 @@ shuffling balances the partial view sizes and randomly mixes the
 neighborhoods between peers. Nevertheless, the global number of arcs
 in the network remains unchanged.
 
-In \SPRAY's shuffling protocol, each of the involved peers sends half
-of its partial views to the other. After integration, their view sizes
-both tend to the average of their initial sizes their sum remains
-unchanged. In order to keep the arc number invariant, the partial
-views of \SPRAY are multisets. If a peer receives an already known
-reference, it still stores it, yet as a duplicate. Thus, the \SPRAY's
-shuffling protocol never increases nor decreases the arc count.
+In \SPRAY's shuffling protocol, each of the involved peers sends half of its
+partial view to the other. After integration, their view sizes both tend to the
+average of their initial sizes. The sum of their elements remains unchanged. In
+order to keep the arc number invariant, the partial views of \SPRAY are
+multisets. If a peer receives an already known reference, it still stores it,
+yet as a duplicate. Thus, the \SPRAY's shuffling protocol never increases nor
+decreases the arc count.
 
 If duplicates have a negative impact on network properties, most of
 them disappear after shuffling and they proportionally become
@@ -128,7 +126,7 @@ each peer. It is divided between an active thread looping to update
 the partial view, and a passive thread which reacts to messages. The
 functions which are not explicitly defined are the following:
 \begin{compactitem}
-\item \textsc{incrementAge}$(view)$: increments the age of each elements in the view
+\item \textsc{incrementAge}$(view)$: increments the age of each element in the view
   and returns the modified view.
 \item \textsc{getOldest}$(view)$: retrieves the oldest peer contained in the view.
 \item \textsc{getSample}$(view, \, size)$: returns a sample of the view containing
@@ -164,21 +162,38 @@ with the emitting peer
 of them remove the sample they sent from their view and add the
 received sample.
 
-Figure~\ref{fig:cyclicexample} depicts \SPRAY's shuffling
-procedure. This scenario follows from Figure~\ref{fig:joiningexample}:
-Peer $p_1$ just joined the network. Peer $p_6$ initiates an exchange
-with $p_1$ (the oldest among the $p_6$'s partial view). It randomly
-chooses $\left\lceil{|\mathcal{P}_6|\div 2}\right\rceil = 1$ peer
-among its neighborhood. In this case, it picks $p_9$ from
-$\{p_9,\,p_8,\,p_7\}$.  It sends the chosen peer plus its own identity
-to Peer $p_1$. In response, the latter picks
-$\left\lceil{|\mathcal{P}_1|\div 2}\right\rceil = 1$ peer from its
-partial view. It sends back its sole neighbor $p_2$ and directly adds
-the received neighbor to its partial view. After receipt, Peer $p_6$
-removes the sent neighbors from its partial view, removes an
-occurrence of $p_1$, and adds the received peer from $p_1$. Peers
-$\{p_6,\,p_9\}$ compose $p_1$'s partial view. Peers
-$\{p_2,\,p_7,\,p_8\}$ compose that of $p_6$.
+\begin{figure*}
+  \centering
+  \subfloat[Figure A]
+  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
+  latter the multiset $\{p_6,\,p_9\}$.]{
+    \input{./input/cyclicexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][Peer $p_1$ receives $p_6$'s message. 
+  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
+  partial view.]{
+    \input{./input/cyclicexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][Peer $p_6$ receives $p_1$'s response, it
+  adds $\{p_2\}$ to its partial view.]{
+    \input{./input/cyclicexampleC.tex}}
+  \caption{\label{fig:cyclicexample}Example of the \SPRAY's shuffling
+    protocol. }
+\end{figure*}
+
+Figure~\ref{fig:cyclicexample} depicts \SPRAY's shuffling procedure. This
+scenario follows from Figure~\ref{fig:joiningexample}: Peer $p_1$ just joined
+the network. Peer $p_6$ initiates an exchange with $p_1$ (the oldest among 
+$p_6$'s partial view). It randomly chooses
+$\left\lceil{|\mathcal{P}_6|\div 2} - 1 \right \rceil = 1$ peer among its
+neighborhood. In this case, it picks $p_9$ from $\{p_7,\,p_8,\,p_9\}$.  It sends
+the chosen peer plus its own identity to Peer $p_1$. In response, the latter
+picks $\left\lceil{|\mathcal{P}_1|\div 2}\right\rceil = 1$ peer from its partial
+view. It sends back its sole neighbor $p_2$ and directly adds the received
+neighbor to its partial view. After receipt, Peer $p_6$ removes the sent
+neighbor from its partial view, removes an occurrence of $p_1$, and adds the
+received peer from $p_1$. Peers $\{p_6,\,p_9\}$ compose $p_1$'s partial
+view. Peers $\{p_2,\,p_7,\,p_8\}$ compose that of $p_6$.
 
 The example shows that, at first, the initiating peer has $4$ peers in
 its partial view, while the receiving peer has only $1$ peer.
@@ -189,30 +204,13 @@ sizes of network members. It also scatters neighbors in order to remove
 the highly clustered groups which may appear because of the joining
 protocol.
 
-%% figure related to crash/departure, here to be on top of page
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][Peer $p_1$ crashes. A lot of connections are down.]{
-    \input{./input/crashexampleA.tex}}
-  \hspace{10pt}
-  \subfloat[Figure B][The peers $p_{3-5}$ notice that they cannot 
-  reach $p_1$ anymore.]{
-    \input{./input/crashexampleB.tex}}
-  \hspace{10pt}
-  \subfloat[Figure C][The peers $p_3$ and $p_5$ create
-  a duplicate of one of their existing neighbor.]{
-    \input{./input/crashexampleC.tex}}
-  \caption{\label{fig:crashexample}Example of \SPRAY's crash/leaving
-    handler. }
-\end{figure*}
-
 Concerning the convergence time of the shuffling algorithm, there
 exists a close relationship between \SPRAY and the proactive
 aggregation protocol introduced
 in~\cite{jelasity2004epidemic}. Given a
 distribution of values associated with peers, and under the assumption
 of a sufficiently random peer sampling, such an aggregation protocol
-yields the following mean, $\mu$, and variance, $\sigma^2$, at cycle
+yields the following mean $\mu$, and variance $\sigma^2$, at cycle
 $i$;
 \begin{center}
   $\mu_i = {1\over{|V^t|}} \sum\limits_{x \in V^t} a_{i,\,x}$
@@ -222,14 +220,14 @@ $i$;
 \end{center}
 where $a_{i,\,x}$ is the value held by Peer $p_x$ at cycle $i$. The
 estimated variance must converge to $0$ over cycles. In other terms,
-the values tends to be the same over cycles. In the \SPRAY case, the
+the values tend to be the same over cycles. In the \SPRAY case, the
 value $a_{i,\,x}$ is the partial view size of Peer $p_x$ at cycle
 $i$. Indeed, each exchange from Peer $p_1$ to Peer $p_2$ is an
 aggregation resulting to:
 $|\mathcal{P}_1|\approx|\mathcal{P}_2|\approx{(|\mathcal{P}_1| +
   |\mathcal{P}_2|) \div 2}$.  Furthermore, at each cycle, each peer is
 involved in the exchange protocol at least once (they initiate one),
-and in the best case $1+Poisson(1)$ (they initiate one and, in average,
+and in the best case $1+Poisson(1)$ (they initiate one and, on average,
 each peer receives another one). This relation being established, we
 know that \SPRAY's partial view sizes converge exponentially fast to
 the global average size. Additionally, we know that each cycle
@@ -286,9 +284,27 @@ $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
 appropriate operation. Only $p_3$ duplicates one of its connections. In total,
 $5$ connections have been removed.
 
+
+%% figure related to crash/departure, here to be on top of page
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][Peer $p_1$ crashes. A lot of connections are down.]{
+    \input{./input/crashexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][The peers $p_{3-5}$ notice that they cannot 
+  reach $p_1$ anymore.]{
+    \input{./input/crashexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][The peers $p_3$ and $p_5$ create
+  a duplicate of one of their existing neighbor.]{
+    \input{./input/crashexampleC.tex}}
+  \caption{\label{fig:crashexample}Example of \SPRAY's crash/leaving
+    handler. }
+\end{figure*}
+
 The example shows that some peers reestablish connections if they
 detect dead ones. The probability depends on the partial view size of
-each of these peer. On average, one of these peers will likely remove
+each of these peers. On average, one of these peers will likely remove
 the arc while the other peers will duplicate one of their existing
 arcs. In this case, Peer $p_1$ injected $5$ connections when it
 joined. It removes $7-2 =5 $ connections when it leaves. The global
@@ -302,14 +318,14 @@ Algorithm~\ref{algo:unreachable} also shows that \SPRAY distinguishes peer
 crashes and arc crashes. Indeed, Function \textsc{onArcDown} deals with
 connection establishment failures. In this function, the failing arc is
 systematically replaced with a duplicate. Therefore, the arc count stays
-invariant even in presence of connection establishment failures. The distinction
-between the functions \textsc{onPeerDown} and \textsc{onArcDown} is necessary because the
-former is supposed to remove a small arc quantity over departures, contrarily to
-the latter. Without this small removal, the global arc count would grow
-unbounded with network turnover.
+invariant even in the presence of connection establishment failures. The
+distinction between the functions \textsc{onPeerDown} and \textsc{onArcDown} is
+necessary because the former is supposed to remove a small arc quantity over
+departures, contrarily to the latter. Without this small removal, the global arc
+count would grow unbounded with network turnover.
 
 In the context of WebRTC, \SPRAY calls the \textsc{onArcDown} function
-when a connection establishement fails. \SPRAY calls the
+when a connection establishment fails. \SPRAY calls the
 \textsc{onPeerDown} function when the connection was established once
 but the neighbor is no longer responding.
 

@@ -77,12 +77,12 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   $100$ nodes. Similarly, we configure \SPRAY to have partial views
   size equal to $6 \cdot \ln(|V^t|)$---instead of adding only 1 arc
   targeting its contact (cf. Section \ref{subsec:joining}), the
-  newcomer adds 6 arcs---and set the fanout to one sixth of the view
+  newcomer adds 6 arcs---and sets the fanout to one sixth of the view
   size plus $1$ or $3$. This gives both protocols the same
   configuration for $100$ nodes.  We then consider network sizes
   varying between $100$ and $2000$ peers, and measure the full
   delivery rate of 1k messages, i.e., we evaluate the fraction of
-  messages that reach all the members of the network.
+  all messages that reach all the members of the network.
 
 \begin{figure}
   \begin{center}
@@ -391,7 +391,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   the network size grows and shrinks over time.
 \item[Description:] In this experiment we focus on a dynamic network where peers
   can join and leave.  \CYCLON's configuration targets 8k peers. It is
-  oversized compared the network size during the simulation (maximum 1k
+  oversized compared the network size during the simulation (maximum of 1k
   peers). During the first half of the experimentation, 250 peers are added 4
   times successively by intervals of 10 cycles each. Thus, the network size goes
   from 0 to 1k peers in 40 rounds. Then, half of the network leaves without
@@ -411,11 +411,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   partial views logarithmically grow while the network grows. When the removals
   occur at cycle 40, the peers using \CYCLON remove the dead arcs while
   refilling their partial view until they reach the configured partial view
-  size. \SPRAY only remove the arcs to reflect the departed peers. At the end,
-  the \SPRAY partial views contain in average 6.6 neighbors (recall
-  $\ln(1000)\approx 6.9$).
+  size. The peers using \SPRAY only remove the arcs to reflect the departed
+  peers. At the end, the \SPRAY partial views contain on average 6.6 neighbors
+  (recall $\ln(1000)\approx 6.9$).
 \item[Reasons:] Since each peer injects a logarithmically growing number of
-  arcs, the average partial view size grows as more peers joins the network.
+  arcs, the average partial view size grows as more peers join the network.
   The removal of 500 peers implies a decreasing slope. The slightly decreasing
   number of arcs after the removal is due to peers realizing that some arcs are
   dead, leading to a probabilistic removal (cf. Algorithm~\ref{algo:unreachable}).

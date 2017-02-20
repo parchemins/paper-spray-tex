@@ -2,6 +2,34 @@
 \section{Related work}
 \label{sec:relatedwork}
 
+\begin{figure*}
+\centering
+\subfloat[Figure A][\label{fig:webrtcA}
+$p_1$ connects to $p_2$ using the signaling service. 
+1: $p_1$ pushes its offer ticket; 
+2: $p_2$ pulls the ticket; 
+3: $p_2$ pushes its response; 
+4: $p_1$: pulls the response and establishes a 
+connection with $p_2$. $p_3$ does the same with $p_2$. 
+%%Figure~\ref{fig:webrtcB} depicts the resulting network.
+]{
+  \input{input/signalingexampleA.tex}}
+\hspace{5pt}
+\subfloat[Figure B][\label{fig:webrtcB}
+$p_1$ connects to $p_3$ using $p_2$ as mediator. 
+1: $p_1$ sends its offer ticket to $p_2$; 
+2: $p_2$ forwards it to $p_3$ and registers $p_1$ as the emitter; 
+3: $p_3$ sends its response to $p_2$; 
+4: $p_2$ forwards it to the emitter $p_1$ which connects to $p_3$.]{
+  \input{input/signalingexampleB.tex}}
+\hspace{5pt}
+\subfloat[Figure C][\label{fig:webrtcC}
+The resulting network overlay: a fully connected network composed of
+3 members.]{
+  \input{input/signalingexampleC.tex}}
+\caption{\label{fig:webrtc}Creating an overlay network on top of WebRTC.}
+\end{figure*}
+
 WebRTC enables real-time peer-to-peer communication between browsers
 even in complex network settings with firewalls, proxies or Network
 Address Translators (NAT). However, WebRTC manages neither addressing
@@ -72,40 +100,22 @@ connections may uselessly overload a device. This calls for a dynamic
 peer sampling service that can adapt to a dynamic number of
 participants.
 
-A way to achieve this adaptive behavior may consists in using one of
-the several protocols for network-size estimation. For
-example,~\cite{ganesh2007peer} samples and analyzes a subset of the
-network and deduces the overall network size using probabilistic
-functions.  Sketching techniques~\cite{baquero2012extrema} use instead
-hashing to represent a large number of distinct node identities and
-estimate the size of the using the resulting collisions in hash
-values. Finally, averaging techniques~\cite{jelasity2004epidemic} use
-aggregations that converge over exchanges to a value which depends on
-the network size. Unfortunately, while they can be accurate in their
-estimations, these approaches add a communication overhead which makes
-them too expensive for mobile phones and similar devices.
+A way to achieve this adaptive behavior may consist in using one of the several
+protocols for network-size estimation. For example,~\cite{ganesh2007peer}
+samples and analyzes a subset of the network and deduces the overall network
+size using probabilistic functions.  Sketching
+techniques~\cite{baquero2012extrema} use instead hashing to represent a large
+number of distinct node identities and estimate the size of the network thanks
+to the resulting collisions in hash values. Finally, averaging
+techniques~\cite{jelasity2004epidemic} use aggregations that converge over
+exchanges to a value which depends on the network size. Unfortunately, while
+they can be accurate in their estimations, these approaches add a communication
+overhead which makes them too expensive for mobile phones and similar devices.
 
 
 % However, adaptiveness
 % should introduce a minimum overhead to peer sampling
 % protocols. % in WebRTC applications.
-
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][$p_1$ contacts $p_2$ to join the network. $p_1$ adds
-  $p_2$ to its neighborhood. $p_1$ sends its request to $p_2$.]{
-    \input{./input/joiningexampleA.tex}}
-  \hspace{8pt}
-  \subfloat[Figure B][The $onSubs(p_1)$ event is raised at $p_1$
-  which forwards the subscription to $p_1$'s neighborhood.]{
-    \input{./input/joiningexampleB.tex}}
-  \hspace{8pt}
-  \subfloat[Figure C][The $onFwdSubs(p_1)$ event is raised at $p_{3-6}$. The 
-  peers add $p_1$ to their neighborhood.]{
-    \input{./input/joiningexampleC.tex}}
-  \caption{\label{fig:joiningexample}Example of the \SPRAY's joining
-    protocol.}
-\end{figure*}
 
 The sole representative of adaptive-by-design random peer sampling is
 \SCAMP~\cite{ganesh2003peer}. Its interesting property lies in its
