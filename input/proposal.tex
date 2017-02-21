@@ -242,17 +242,21 @@ converges to a network topology where the partial views are balanced.
 \subsection{Leaving or crashing}
 \label{subsec:leaving}
 
-In \SPRAY, peers can leave the network without notice. We make no distinction
-between node departures and crashes, but the protocol must react to both of
-them. Without such a reaction, the network could collapse due to an over zealous
-removal of arcs. When a peer joins the network, it injects $1+\ln(|V^t|)$
-arcs. Nevertheless, after few exchanges, the partial view of the joining peer
-becomes populated with more neighbors. Then, if this peer leaves, it removes
-$\ln(|V^t|)$ arcs from its partial view, and another $\ln(|V^t|)$ arcs from
-peers which have this peer in their partial views. Therefore, without any crash
-handler, we remove $2\ln(|V^t|)$ connections instead of $1+\ln(|V^t|)$. To solve
-this, each peer that detects a crash may reestablish a connection with anyone in
-its neighborhood. % (which will spread in the network over the exchanges).
+In \SPRAY, peers can leave the network without notice. As such, we make no
+distinction between node departures and crashes. Peers that crash or leave the
+network do not save information about the network. Consequently, if they join
+the network afterwards, they are considered as completely new peers.
+
+\SPRAY must react properly to departures and crashes. Without reaction, the
+network would collapse due to an over zealous removal of arcs. Indeed, a peer
+joining the network injects $1+\ln(|V^t|)$ arcs. Nevertheless, after few
+exchanges, its partial view becomes populated with more neighbors. Then, if this
+peer leaves, it removes $\ln(|V^t|)$ arcs from its partial view, and another
+$\ln(|V^t|)$ arcs from peers which have this peer in their partial
+views. Therefore, without any crash handler, we remove $2\ln(|V^t|)$ connections
+instead of $1+\ln(|V^t|)$. To solve this, each peer that detects a crash may
+reestablish a connection with anyone in its
+neighborhood. % (which will spread in the network over the exchanges).
 The peer reestablishes a connection with probability
 $1-{1\div{|\mathcal{P}|}}$. Since ${|\mathcal{P}|}\approx \ln(|V^t|)$ peers have
 the crashed peer in their partial view, it is likely that all of them will
