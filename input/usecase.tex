@@ -1,8 +1,34 @@
 
 \section{Use case: broadcasting messages}
 
+%In this section, we evaluate the benefits that \SPRAY can bring to
+%protocols built on top of it. Using the example of a broadcast
+%mechanism, we expect \SPRAY to keep a stable delivery rate on messages
+%while supporting network size variations. Then, 
+
+In this section, we highlight how protocols built on top of \SPRAY can benefit
+from its adaptiveness. We focus on broadcasting messages. Firstly, we use the
+case of \emph{three-phase gossip} that aims to reduce the traffic and balance it
+among links in traffic intensive application such as video streaming. Using
+\SPRAY, we expect to keep a ratio on message delivery stable while the size of
+the network fluctuates. Using \CYCLON, we expect degraded performance when the
+size of the network is higher than expected at configuration time. Secondly, we
+use the case of \emph{gossiping} in decentralized real-time collaborative
+editing. Using \SPRAY, we expect the generated traffic to scale logarithmically
+to the size of the network.
+
+The first experiment run on the \PEERSIM simulator~\cite{montresor2009peersim}
+and the code is available on the Github
+platform\footnote{\url{https://github.com/justayak/peersim-spray}}. The second
+experiment is a simulation involving up to 600 interconnected Web browsers on
+the Grid'5000 testbed. The code is available on the Github
+platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 \subsection{Streaming}
+
+\subsubsection{Operation}
+
+\subsubsection{Experimentation}
 
 \begin{asparadesc}
 \item [Objective:] To show how broadcast protocols can benefit from
@@ -128,7 +154,7 @@
 \label{sec:use-case}
 
 In order to demonstrate the performance of \SPRAY with a real scenario, we
-introduce \CRATE\footnote{\url{https://github.com/Chat-Wane/CRATE}}, a real-time
+introduce \CRATE, a real-time
 editor that allows editing anytime and anywhere, whatever the number of
 participants, without any third party~\cite{nedelec2016crate}. Compared to
 trending Cloud-based editors such as Google Docs, it alleviates privacy,

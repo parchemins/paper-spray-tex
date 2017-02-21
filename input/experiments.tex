@@ -3,25 +3,23 @@
 \section{Experimentation}
 \label{sec:experimentation}
 
-In this section, we evaluate the benefits that \SPRAY can bring to
-protocols built on top of it. Using the example of a broadcast
-mechanism, we expect \SPRAY to keep a stable delivery rate on messages
-while supporting network size variations. Then, we evaluate how the
-adaptiveness of \SPRAY impacts common metrics of peer sampling
-performance including clustering coefficient, average shortest path
-length, in-degree distribution, robustness, and arc count. We compare \SPRAY with
-a representative of fixed-size partial view approaches, namely
-\CYCLON. We expect \SPRAY and \CYCLON to exhibit similar behaviors
-when \CYCLON is optimally configured in advance to handle the network
-size. We expect \SPRAY to save resources when \CYCLON is oversized,
-and to be more robust when \CYCLON is undersized. Finally, we expect
-\SPRAY to keep a negligible number of duplicates in its partial
-views. We also evaluate the impact of the WebRTC connection establishment
-on \CYCLON, \SCAMP, and \SPRAY, in  networks subject to message loss.
-We expect a normal behavior for \CYCLON and \SPRAY while \SCAMP becomes
-quickly partitioned.
-The experiments run on the \PEERSIM
-simulator~\cite{montresor2009peersim}. The code of the random peer
+
+In this section, we evaluate how the adaptiveness of \SPRAY impacts common
+metrics of peer sampling performance including clustering coefficient, average
+shortest path length, in-degree distribution, robustness, and arc count. We
+compare \SPRAY with a representative of fixed-size partial view approaches,
+namely \CYCLON. We expect \SPRAY and \CYCLON to exhibit similar behaviors when
+\CYCLON is optimally configured in advance to handle the network size. We expect
+\SPRAY to save resources when \CYCLON is oversized, and to be more robust when
+\CYCLON is undersized. Finally, we expect \SPRAY to keep a negligible number of
+duplicates in its partial views. We also evaluate the impact of the WebRTC
+connection establishment on \CYCLON, \SCAMP, and \SPRAY, in networks subject to
+message loss.  We expect a normal behavior for \CYCLON and \SPRAY while \SCAMP
+becomes quickly partitioned.
+
+The experiments run on the \PEERSIM simulator~\cite{montresor2009peersim}, a
+well-known program written in Java that allows simulations to reach high scale
+in terms of number of peers. Our implementation of the evaluated random peer
 sampling protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
