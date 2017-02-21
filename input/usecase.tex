@@ -301,11 +301,24 @@ real-life use case about decentralized collaborative editing in web browsers.
   distributed among peers. Each experiment runs during 8 hours of which 7 hours
   are dedicated to editing. The document size reaches millions of characters.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\SCALE\textwidth]{img/traffic.eps}
-  \caption{\label{fig:traffic}Average traffic per second.}
-\end{figure}
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\SCALE\textwidth]{img/traffic.eps}
+%   \caption{\label{fig:traffic}Average traffic per second.}
+% \end{figure}
+
+\begin{figure*}
+\centering
+\subfloat[Figure A]
+[\label{fig:warmup}Warmup time: peers join the session.]
+{\includegraphics[width=0.5\textwidth]{img/warmup.eps}}%
+\subfloat[Figure B]
+[\label{fig:traffic}Editing time: peers write a document.]
+{\includegraphics[width=0.5\textwidth]{img/traffic.eps}}%
+\hspace{-15pt}
+\caption{Average traffic per second.}
+\end{figure*}
+
 
 \item [Results:] Figure~\ref{fig:traffic} shows the average traffic
   per second of members involved in the editing session. The x-axis
