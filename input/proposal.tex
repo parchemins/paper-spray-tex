@@ -141,27 +141,30 @@ functions which are not explicitly defined are the following:
 
 In the active thread, Function \textsc{loop} is called every $\Delta t$ time
 units. First, the function increments the age of each neighbor in
-$\mathcal{P}$. Then, it chooses the oldest peer $q$ to exchange a
-subset of its partial view. If Peer $q$ cannot be reached (i.e. it
-crashed/left), peer $p$ executes the crash-handling function
-(see Section~\ref{subsec:leaving}) and repeats the process until it
-finds a reachable peer $q$. Thus, the aging process (which is an
-inheritance from \CYCLON) speeds up the removal of crashed or departed
-peers. Once it finds a reachable neighbor $q$, Peer $p$ selects a
-sample of its partial view, excluding one occurrence of $q$ and
-including itself. The size of this sample is half of its partial view,
-with at least one peer: the initiating peer
-(see Line~\ref{line:samplesize}). The answer of $q$ contains half of
-its partial view. Since peers can appear multiple times in
-$\mathcal{P}$, the exchanging peers may send references to the other
-peer, e.g., Peer $p$'s sample can contain references to $q$. Such
-sample, without further processing, would create self-loop ($q$'s
-partial view contains references to $q$). To alleviate this
-undesirable behavior, all occurrences of the other peer are replaced
-with the emitting peer
-(see Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both
-of them remove the sample they sent from their view and add the
-received sample.
+$\mathcal{P}$. Then, it chooses the oldest peer $q$ to exchange a subset of its
+partial view.  Peer $p$ selects a sample of its partial view, excluding one
+occurrence of $q$ and including itself. The size of this sample is half of its
+partial view, with at least one peer: the initiating peer (see
+Line~\ref{line:samplesize}).  It sends this subset to Peer $q$ and awaits its
+sample. If Peer $q$ does not send its sample in time, Peer $p$ considers $q$ as
+crashed or departed and executes the corresponding function (see
+Section~\ref{subsec:leaving}). The answer of $q$ contains half of its partial
+view. Since peers can appear multiple times in $\mathcal{P}$, the exchanging
+peers may send references to the other peer, e.g., Peer $p$'s sample can contain
+references to $q$. Such sample, without further processing, would create
+self-loop ($q$'s partial view contains references to $q$). To alleviate this
+undesirable behavior, all occurrences of the other peer are replaced with the
+emitting peer (see Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards,
+both of them remove the sample they sent from their view and add the received
+sample. It is worth noting that Peer $p$ removes at least 1 occurrence of $q$
+and Peer $q$ adds at least 1 occurence of $p$, for the sake of connectedness.
+
+% and
+% repeats the process until it finds a reachable peer $q$.
+%Thus, the aging process (which is an
+%inheritance from \CYCLON) speeds up the removal of crashed or departed
+%peers.
+
 
 \begin{figure*}
   \centering

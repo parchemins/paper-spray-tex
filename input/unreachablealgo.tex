@@ -28,7 +28,7 @@
 
   \For{$i\leftarrow 0$ \textbf{to} $occ$} 
   \hfill \comm{probabilistically duplicates}
-  \If{($rand()>{1\over{|\mathcal{P}|+occ}}$)}
+  \If{($rand()>{1\div{(|\mathcal{P}|+occ}})$)}
   \State \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
   \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$;
   \State $\mathcal{P} \leftarrow \mathcal{P} \uplus
