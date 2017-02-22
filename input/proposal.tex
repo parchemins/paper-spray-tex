@@ -146,18 +146,19 @@ partial view.  Peer $p$ selects a sample of its partial view, excluding one
 occurrence of $q$ and including itself. The size of this sample is half of its
 partial view, with at least one peer: the initiating peer (see
 Line~\ref{line:samplesize}).  It sends this subset to Peer $q$ and awaits its
-sample. If Peer $q$ does not send its sample in time, Peer $p$ considers $q$ as
-crashed or departed and executes the corresponding function (see
-Section~\ref{subsec:leaving}). The answer of $q$ contains half of its partial
-view. Since peers can appear multiple times in $\mathcal{P}$, the exchanging
-peers may send references to the other peer, e.g., Peer $p$'s sample can contain
-references to $q$. Such sample, without further processing, would create
-self-loop ($q$'s partial view contains references to $q$). To alleviate this
-undesirable behavior, all occurrences of the other peer are replaced with the
-emitting peer (see Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards,
-both of them remove the sample they sent from their view and add the received
-sample. It is worth noting that Peer $p$ removes at least 1 occurrence of $q$
-and Peer $q$ adds at least 1 occurence of $p$, for the sake of connectedness.
+sample. If Peer $q$ does not send its sample in time (it may retry to tackle
+with message losses), Peer $p$ considers $q$ as crashed or departed and executes the
+corresponding function (see Section~\ref{subsec:leaving}). The answer of $q$
+contains half of its partial view. Since peers can appear multiple times in
+$\mathcal{P}$, the exchanging peers may send references to the other peer, e.g.,
+Peer $p$'s sample can contain references to $q$. Such sample, without further
+processing, would create self-loop ($q$'s partial view contains references to
+$q$). To alleviate this undesirable behavior, all occurrences of the other peer
+are replaced with the emitting peer (see
+Line~\ref{line:replace1},~\ref{line:replace2}).  Afterwards, both of them remove
+the sample they sent from their view and add the received sample. It is worth
+noting that Peer $p$ removes at least 1 occurrence of $q$ and Peer $q$ adds at
+least 1 occurence of $p$, for the sake of connectedness.
 
 % and
 % repeats the process until it finds a reachable peer $q$.
@@ -332,10 +333,10 @@ necessary because the former is supposed to remove a small arc quantity over
 departures, contrarily to the latter. Without this small removal, the global arc
 count would grow unbounded with network turnover.
 
-In the context of WebRTC, \SPRAY calls the \textsc{onArcDown} function
-when a connection establishment fails. \SPRAY calls the
-\textsc{onPeerDown} function when the connection was established once
-but the neighbor is no longer responding.
+In the context of WebRTC, \SPRAY calls the \textsc{onArcDown} function when a
+connection establishment fails. It may happen due to network misconfiguration or
+to message losses. \SPRAY calls the \textsc{onPeerDown} function when the
+connection was established once but the neighbor is no longer responding.
 
 % To summarize, \SPRAY provides:
 % \begin{inparaenum}[(i)]
