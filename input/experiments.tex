@@ -5,7 +5,7 @@
 
 
 In this section, we evaluate how the adaptiveness of \SPRAY impacts common
-metrics of peer sampling performance including clustering coefficient, average
+metrics of peer-sampling performance including clustering coefficient, average
 shortest path length, in-degree distribution, robustness, and arc count. We
 compare \SPRAY with a representative of fixed-size partial view approaches,
 namely \CYCLON. We expect \SPRAY and \CYCLON to exhibit similar behaviors when
@@ -79,12 +79,13 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
     \overline{C} = {1\over |V^t|}\sum\limits_{x\in V^t}C_x
   \end{equation*}
   where $C_x$ is the local clustering coefficient of Peer $p_x$. The higher the
-  coefficient, the more peers are tied together. Random graphs have a
-  coefficient close to 0. The runs concern 0.1k, 1k, 10k and 100k peers. The
-  representative of the fixed-size approach is \CYCLON which is optimally
-  configured for 1k peers: $\ln(1000)\approx 7$ neighbors. During exchanges, the
-  peers using \CYCLON shuffle $3$ out of their $7$ neighbors. \CYCLON is
-  oversized for 0.1k peers and undersized for 10k peers and 100k peers.
+  coefficient, the more peers are tied together. The coefficient of complete
+  graphs is 1. The coefficient of random graphs is close to 0. The runs concern
+  0.1k, 1k, 10k and 100k peers. The representative of the fixed-size approach is
+  \CYCLON which is optimally configured for 1k peers: $\ln(1000)\approx 7$
+  neighbors. During exchanges, the peers using \CYCLON shuffle $3$ out of their
+  $7$ neighbors. \CYCLON is oversized for 0.1k peers and undersized for 10k
+  peers and 100k peers.
 
 \begin{figure}
   \centering
@@ -120,10 +121,10 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   the clustering coefficient after convergence is divided by $10$. On the other
   hand, peers using \SPRAY have a partial view the size of which reflects the
   network size. When the network has 1k peers, \SPRAY and \CYCLON have roughly
-  the same average partial view size (\SPRAY 7.1 vs \CYCLON 7), hence identical
-  clustering coefficient measurements. By extending the reasoning, this also
-  explains why \SPRAY yields lower $\overline{C}$ values when \CYCLON is
-  oversized, and why it yields higher values when \CYCLON is undersized.
+  the same average partial view size (\SPRAY 7.1 vs \CYCLON 7), hence almost
+  identical clustering coefficient measurements. By extending the reasoning,
+  this also explains why \SPRAY yields lower $\overline{C}$ values when \CYCLON
+  is oversized, and why it yields higher values when \CYCLON is undersized.
 \end{asparadesc}
 
 \subsection{Information dissemination}
@@ -297,27 +298,26 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \begin{asparadesc}
 \item[Objective:] To show \SPRAY's robustness to failures.
-\item[Description:] To evaluate robustness, we count the number of
-  weakly and strongly connected components of the network. Counting
-  strong components allows us to estimate the effectiveness of
-  information dissemination protocols. For example, with two strong
-  components, bidirectional communication between the two components
-  cannot be achieved. But the network may still be in a repairable
-  state.  For example, the first strong component may be able to reach
-  the second, but the second may not reach the first. This happens if
-  the two strong components constitute a single weak
-  component. Counting the weak components therefore allows us to
-  estimate to what extent the network can be repaired.  After some
-  shuffling, a unidirectional link between two strong components may
-  in fact give birth to one or more links in the other direction.
+\item[Description:] To evaluate robustness, we count the number of weakly and
+  strongly connected components of the network. Counting strong components
+  allows us to estimate the effectiveness of information dissemination protocols
+  built on top of random peer-sampling protocols. For example, with two strong
+  components, bidirectional communication between the two components cannot be
+  achieved. The first strong component may be able to reach the second, but the
+  second may not reach the first. However, the network remains in a repairable
+  state, for at least one link units these components. After some shuffling, the
+  two strong components add links to each other. Thus, the two strong components
+  merge into one. Therefore, counting the weak components allows us to estimate
+  to what extent the network can be repaired, i.e., two weak components exist
+  when there is no link to unit them.
 
-  In our experiment, we configure \CYCLON's view size to 9, which
-  targets 8k peers. The network contains 10k members. We perform the
-  removals after the approaches have converged to a stable overlay
-  network. We remove a random set of peers at once, from 25 to 95 percent
-  of peers every 5 percents, i.e., 16 runs for each approach. We
-  perform a last measurement at 99 percent. We measure the number of
-  components immediately after each removal.
+  In our experiment, we configure \CYCLON's view size to 9, which targets 8k
+  peers. The network contains 10k members. We perform the removals after the
+  approaches have converged to a stable overlay network. We remove a random set
+  of peers at once following a uniform distribution, from 25 to 95 percent of
+  peers every 5 percents, i.e., 16 runs for each approach. We perform a last
+  measurement at 99 percent. We measure the number of components immediately
+  after each removal.
 
 \begin{figure}
   \centering
@@ -325,42 +325,48 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \caption{\label{fig:resilience}Robustness to massive failures.}
 \end{figure}
 
-\item[Results:] Figure~\ref{fig:resilience} shows the ratio of strong/weak
-  components over the network size after removals. First, the figure shows that
-  both the random peer sampling protocols \SPRAY and \CYCLON suffer from
+\item[Results:] Figure~\ref{fig:resilience} shows the robustness of \SPRAY and
+  \CYCLON to massive random failures. The x-axis denotes the percentage of peers
+  removed at once. The y-axis denotes the ratio of strong/weak components over
+  the network size after removals. First, Figure~\ref{fig:resilience} shows that
+  both the random peer-sampling protocols \SPRAY and \CYCLON suffer from
   deteriorated behavior at high removal percentages, \CYCLON being slightly
-  better in this term. Figure~\ref{fig:resilience} shows that the information
-  dissemination (strong components) starts to slowly degrade at 45 percents, and
-  quickly degrade at 70 percents. Fortunately, Figure~\ref{fig:resilience} also
-  shows that the approaches are able to recover from such clustering until high
-  removal ratio. Indeed, the weak components start to increase at 70 percents,
-  meaning that some part of the network are completely disjoint and beyond
-  repair.%  Globally, Figure~\ref{fig:resilience} also demonstrates that the
-  % logarithmic growth of these sampling protocols constitutes an upper bound, for
-  % smaller growth could be obtained without endangering the connectedness of the
+  better in this term. Figure~\ref{fig:resilience} shows that the number of
+  strong components starts to increase at 45 percents and to quickly increase at
+  70 percents. Hence, the information dissemination starts to degrade at 45
+  percents of removals: messages broadcast by some peers cannot reach all peers.
+  Fortunately, Figure~\ref{fig:resilience} also shows that the approaches are
+  able to recover from dire state until high removal ratio. Indeed, the number
+  of weak components starts to increase at 70 percents of removals, meaning that
+  there is no link between some parts of the network to unit them. In other
+  terms, some parts of the network became completely disjoint. Shuffling cannot
+  be initiated between members of each other disjoint parts. Consequently, the
+  network cannot fully repair itself above 70 percents of removals.
+
+  % Globally, Figure~\ref{fig:resilience} also demonstrates that the logarithmic
+  % growth of these sampling protocols constitutes an upper bound, for
+  % smaller growth could be obtained without endangering the connectedness of
+  % the
   % network.
-\item[Reasons:] The random peer sampling approaches \CYCLON and \SPRAY
-  yield very similar results because \CYCLON's configuration targets a
-  network size of 8k peers, while \SPRAY adjusts itself automatically
-  to this network size.  Therefore, the two protocols create very
-  similar numbers of arcs. Yet \CYCLON performs slightly better for
-  two reasons. First the variance in the degree distribution of \SPRAY
-  causes \CYCLON to have more arcs in this specific
-  experiment. Second, \SPRAY wastes some of its neighbors due to the
-  presence of duplicate entries in its views (yet, the number of
-  duplicates remains small -- see Figure~\ref{fig:duplicates}). Still
-  both protocols preserve the ability to disseminate information until
-  very large removal percentages. Another way to interpret this result
-  consists in observing that when all peers have similar degrees,
-  (see Figure~\ref{fig:histo}), removing a particular peer does not
-  greatly affect connectedness. As suggested above, the direction of
-  arcs impacts more information dissemination than the peer-sampling
-  protocol itself. If an arc constitutes the last link between two
-  clusters of the network, the messages from one of these clusters
-  cannot reach the other one. Yet, this arc is enough for the
-  peer-sampling protocol to start shuffling the views, ultimately
-  populating them with members from both cluster. Hence, the network
-  repairs itself.  When clusters become fully disjoints, neither
+\item[Reasons:] The random peer-sampling approaches \CYCLON and \SPRAY yield
+  very similar results because \CYCLON's configuration targets a network size of
+  8k peers, while \SPRAY adjusts itself automatically to this network size.
+  Therefore, the two protocols create very similar numbers of arcs. Yet \CYCLON
+  performs slightly better for two reasons. First the variance in the degree
+  distribution of \SPRAY causes \CYCLON to have more arcs in this specific
+  experiment. Second, \SPRAY wastes some of its neighbors due to the presence of
+  duplicate entries in its views (yet the number of duplicates remains small --
+  see Figure~\ref{fig:duplicates}). Still both protocols preserve the ability to
+  disseminate information until very large removal percentages. Another way to
+  interpret this result consists in observing that when all peers have similar
+  degrees, (see Figure~\ref{fig:histo}), removing a particular peer does not
+  greatly affect connectedness. As suggested above, the direction of arcs
+  impacts more information dissemination than the peer-sampling protocol
+  itself. If an arc constitutes the last link between two clusters of the
+  network, the messages from one of these clusters cannot reach the other
+  one. Yet, this arc is enough for the peer-sampling protocol to start shuffling
+  the views, ultimately populating them with members from both cluster. Hence,
+  the network repairs itself.  When clusters become fully disjoints, neither
   \CYCLON nor \SPRAY is able to repair the
   network.  % A smaller growth could be obtained because the
   % sharp threshold of connectedness applies to random graphs according to Erd{\H
@@ -379,13 +385,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \begin{asparadesc} 
 \item[Objective:] To show that a small proportion of peers contains duplicates
   in their partial view.
-\item[Description:] Using \SPRAY as random peer sampling protocol, we measure
+\item[Description:] Using \SPRAY as random peer-sampling protocol, we measure
   the amount of peers which have a partial view containing at least one
-  duplicated reference. We perform the measurements on networks containing
-  0.1k, 1k, 10k, 100k, and 500k peers. We measure the number of duplicates
-  after convergence. We put this in relation with a theoretical approximation
-  from the birthday paradox. The probability of a peer to not have duplicates
-  is approximately:
+  duplicated reference. We perform the measurements on networks containing 0.1k,
+  1k, 10k, 100k, and 500k peers. We measure the number of duplicates after
+  convergence. We put this in relation with a theoretical approximation from the
+  birthday paradox where the view size would be the number of randomly chosen
+  people and the identity of peers would be the birthdates. The probability of a
+  peer to \emph{not} have duplicates is approximately:
   \begin{equation*}
     1- 
     (1-
@@ -405,14 +412,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   when the network size is small (e.g. 5 percents for 0.1k peers). It becomes a
   minor overhead when the network size is larger (e.g. less than 1 percent for
   10k peers). The birthday paradox approximation seems to follow very closely
-  the experimental results. It empirically confirms that there exists a relation
-  between the duplicates and the birthday paradox. The proportion of peers
-  without duplicates tends to 100 percents as the network size grows.
-\item[Reasons:] As the network grows, the chances of a particular peer to have
-  at least twice the reference to another peer becomes smaller. Indeed, while
-  the network grows linearly, the number of references to a particular peer
-  only grows logarithmically. % Nevertheless, the birthday paradox reminds that
-  % this proportion is not as small as it seems to be.
+  the experimental results. It empirically indicates that there exists a
+  relation between the duplicates and the birthday paradox. The proportion of
+  peers without duplicates tends to 100 percents as the network size grows.
+\item[Reasons:] While the number of peers in the network grows linearly, the
+  neighborhood size of each peer only grows logarithmically. This significant
+  difference between the growths leads to the fact that the chances of a
+  particular peer to have at least twice the reference to another peer becomes
+  smaller as the number of peers in the network increases.
 \end{asparadesc}
 
 
@@ -443,7 +450,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \item[Results:] Figure~\ref{fig:degeneration} has two parts. The top
-  figure shows the arc count of the random peer samplings while the
+  figure shows the arc count of the random peer-samplings while the
   bottom figure shows the weak components of the network.  First, we
   observe that, as expected, the arc counts of \CYCLON and \SPRAY
   stays constant over cycles: 90k and 93k arcs for \CYCLON and \SPRAY
