@@ -253,43 +253,130 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 %%\vspace{-7pt}
 %%\paragraph{Adaptive partial views}
 
-\subsection{Adaptive partial view}
+\subsection{Adaptive partial views}
+
+\begin{figure*}
+\centering
+\subfloat[Figure A]
+[\label{fig:small}Mininum, maximum, average, and standard deviation of
+the size of partial views.]
+{\includegraphics[width=0.8\textwidth]{img/small.eps}}
+
+\subfloat[Figure B]
+[\label{fig:extended}Average size of partial views over long period of time.]
+{\includegraphics[width=0.8\textwidth]{img/extended.eps}}%
+\caption{Partial view size measurements in networks subject to churn.}
+\end{figure*}
 
 \begin{asparadesc}
+\item [Objective:] To show that using \SPRAY, the partial views grow and shrink
+  logarithmically compared to the network size.
+  %% To show that \SPRAY is non-deterministic
+\item [Description:] In this experiment we focus on dynamic networks where peers
+  can join and leave. In this experiment, we create 4 networks that vary from 50
+  to 100 peers, from 500 to 1k peers, from 5k to 10k peers, and 50k to 100k
+  peers. First, we create a network of half the maximum targeted size. Second,
+  we repeatedly inject then disconnect half the maximum targeted size in periods
+  of 240 cycles including a 40 cycles break inbetween injection and
+  disconnection phases. For instance, in the network the size of which varies
+  from 50k to 100k, 500 peers join the network at each cycle during the
+  injection phases until it reaches 100k peers; then 40 cycles last; then 500
+  peers leave the network at each cycle during the disconnection phases until it
+  reaches 50k peers, and so on. During the experiments, we measure the maximum,
+  the minimum, the average, and the standard deviation of the size of partial
+  views.
+\item [Results:] Figure~\ref{fig:small} focuses on the first 680 rounds of the
+  experiment about the network varying from 5k to 10k peers. The top part of the
+  figure shows the number of peer over time. The bottom part of the figure shows
+  the measurements made on partial views. We observe that 
+  \begin{inparaenum}[(i)]
+    \item partial views grow logarithmically when the network size increases;
+    \item partial views shrink logarithmically when the network size shrinks;
+    \item while the extreme values of partial view size are spread during
+      joining phases (from 1 to 12), standard deviation remains small, meaning
+      that most of peers have the same partial view size.
+  \end{inparaenum}
+  Figure~\ref{fig:extended} shows the results of the 4 runs over 28k cycles,
+  i.e., 100 injection/removal phases. The x-axis denotes the time in cycles. The
+  y-axis denotes the average partial view size of peers. We observe
+  that 
+  \begin{inparaenum}[(i)]
+  \item the average partial view size does not necessarily fit exactly the theoretical
+    expectation;
+  \item the average partial view size varies even for a network reaching the
+    same number of peers;
+  \item variations are more important as the number of peers is lower.
+  \end{inparaenum}
+\item [Reasons:] A peer joining the network injects at least one arc plus a
+  number of arcs depending on the contact peer. Since we choose the contact peer
+  at random, and the partial views are averaged over shuffles, this number of
+  injected arcs is the average partial view size on average. It leads to a
+  logarithmic progression of the number of arcs. However, the peer joining the
+  network only have one peer in its partial view while adding more arcs to its
+  contact's neighborhood. Since we choose the contact peer at random, it may be
+  chosen multiple times during 1 cycle which increases quickly its neighbors'
+  number of arcs above the average. Consequently, we observe a large difference
+  between the minimum and the maximum, but the standard deviation remains
+  low. The latter is even more lowered after shuffling, for it makes partial
+  views converge to their average size. 
 
-\item[Objective:] To show the impact of adaptiveness over partial view size when
-  the network size grows and shrinks over time.
-\item[Description:] In this experiment we focus on a dynamic network where peers
-  can join and leave.  \CYCLON's configuration targets 8k peers. It is
-  oversized compared the network size during the simulation (maximum of 1k
-  peers). During the first half of the experimentation, 250 peers are added 4
-  times successively by intervals of 10 cycles each. Thus, the network size goes
-  from 0 to 1k peers in 40 rounds. Then, half of the network leaves without
-  giving notice (500 peers). Finally, 250 peers join two additional times. The
-  final network contains 1k members. The measurements concern the average
-  partial view size.
+  When a peer leaves the network, there is a logarithmic number of peers that
+  detect the departure. They probabilistically duplicate an arc in such manner
+  that one of them do not. Overall, it removes a logarithmic number of arcs plus
+  one which correspond to the number of arcs injected during the latest
+  joining. Consequently, the partial views shrink logarithmically when the
+  network size diminishes.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\SCALE\textwidth]{img/avgpv.eps}
-  \caption{\label{fig:churn}Average partial view size with churn.}
-\end{figure}
-
-\item[Results:] Figure~\ref{fig:churn} shows the average partial view size of
-  \SPRAY and \CYCLON. As expected, \CYCLON immediately converges to the
-  configured partial view size (9 neighbors). On the other hand, \SPRAY's
-  partial views logarithmically grow while the network grows. When the removals
-  occur at cycle 40, the peers using \CYCLON remove the dead arcs while
-  refilling their partial view until they reach the configured partial view
-  size. The peers using \SPRAY only remove the arcs to reflect the departed
-  peers. At the end, the \SPRAY partial views contain on average 6.6 neighbors
-  (recall $\ln(1000)\approx 6.9$).
-\item[Reasons:] Since each peer injects a logarithmically growing number of
-  arcs, the average partial view size grows as more peers join the network.
-  The removal of 500 peers implies a decreasing slope. The slightly decreasing
-  number of arcs after the removal is due to peers realizing that some arcs are
-  dead, leading to a probabilistic removal (see Algorithm~\ref{algo:unreachable}).
+  If we choose multiple time a same contact peer, its neighbors' number of arcs
+  increases above the average. If one of these neighbors is chosen as contact
+  peer before any shufflings, the global number of arcs increases too
+  quickly. On the other hand, we may choose the newest peers as contact node
+  hence increasing the number of arc too slowly, for they have fewer
+  neighbors. Depending on these choices, the average partial view size can grow
+  too high or too low compared to the theoretical value. Yet, it remains
+  logarithmic, for these choices are made at random following a uniform
+  distribution. These choices are more influential when the network size is low,
+  for any addition or removal of arcs is proportionally more important.
 \end{asparadesc}
+
+% \subsection{Adaptive partial view}
+
+% \begin{asparadesc}
+
+% \item[Objective:] To show the impact of adaptiveness over partial view size when
+%   the network size grows and shrinks over time.
+% \item[Description:] In this experiment we focus on a dynamic network where peers
+%   can join and leave.  \CYCLON's configuration targets 8k peers. It is
+%   oversized compared the network size during the simulation (maximum of 1k
+%   peers). During the first half of the experimentation, 250 peers are added 4
+%   times successively by intervals of 10 cycles each. Thus, the network size goes
+%   from 0 to 1k peers in 40 rounds. Then, half of the network leaves without
+%   giving notice (500 peers). Finally, 250 peers join two additional times. The
+%   final network contains 1k members. The measurements concern the average
+%   partial view size.
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=\SCALE\textwidth]{img/avgpv.eps}
+%   \caption{\label{fig:churn}Average partial view size with churn.}
+% \end{figure}
+
+% \item[Results:] Figure~\ref{fig:churn} shows the average partial view size of
+%   \SPRAY and \CYCLON. As expected, \CYCLON immediately converges to the
+%   configured partial view size (9 neighbors). On the other hand, \SPRAY's
+%   partial views logarithmically grow while the network grows. When the removals
+%   occur at cycle 40, the peers using \CYCLON remove the dead arcs while
+%   refilling their partial view until they reach the configured partial view
+%   size. The peers using \SPRAY only remove the arcs to reflect the departed
+%   peers. At the end, the \SPRAY partial views contain on average 6.6 neighbors
+%   (recall $\ln(1000)\approx 6.9$).
+% \item[Reasons:] Since each peer injects a logarithmically growing number of
+%   arcs, the average partial view size grows as more peers join the network.
+%   The removal of 500 peers implies a decreasing slope. The slightly decreasing
+%   number of arcs after the removal is due to peers realizing that some arcs are
+%   dead, leading to a probabilistic removal (see Algorithm~\ref{algo:unreachable}).
+% \end{asparadesc}
+
 
 % \vspace{-7pt}
 % \paragraph{Robustness}
