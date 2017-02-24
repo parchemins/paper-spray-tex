@@ -192,15 +192,17 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \begin{asparadesc}
 \item[Objective:] To observe how adaptiveness impacts the in-degree
   distribution, i.e., the load-balancing among peers.
-\item[Description:] The in-degree of a peer shows how well it is
-  represented in others' partial views. The in-degree distribution of
-  the network highlights the existence of weakly connected peers and
-  strongly connected hubs. This directly impacts robustness. In this
-  experiment, the fixed-size partial view approach is \CYCLON{}. It is
-  configured with partial views of size $7$ which targets a network 1k
-  peers.  For all the experiments, we perform the in-degree
-  measurements after convergence. The measurements concern networks
-  with 0.1k, 1k, 100k, 500k peers.
+\item[Description:] The in-degree of a peer shows how well it is represented in
+  others' partial views. The in-degree distribution of the network can highlight
+  the existence of weakly connected peers and strongly connected hubs. These
+  peers have an in-degree far from the average in-degree value. It directly
+  impacts robustness, for few crashes or departures may disconnect a weakly
+  connected peer; and disconnections of hubs deeply impact the rest of the
+  network. In this experiment, the fixed-size partial view approach is
+  \CYCLON. It is configured with partial views of size $7$ which targets a
+  network 1k peers.  For all the experiments, we perform the in-degree
+  measurements after convergence. The measurements concern networks with 0.1k,
+  1k, 100k, 500k peers.
 
 \begin{figure}
   \centering
@@ -208,21 +210,21 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \caption{\label{fig:histo}In-degree distribution.}
 \end{figure}
 
-\item[Results:] Figure~\ref{fig:histo} shows the in-degree
-  distribution of \CYCLON and \SPRAY. In the top figure, we observe
-  that the distribution and the degrees of \CYCLON are identical,
-  independently of the network size. Thus, the distribution of 0.1k
-  peers is identical to the 500k one with a mean value of roughly 7
-  with a strong peak on this value. On the other hand, the bottom
-  figure shows that the distribution of \SPRAY follows the average
-  partial view size, which itself follows the growth of the size of
-  the network. Figure~\ref{fig:histo} also shows that peers are very
-  gathered around the mean partial view size. For instance, for the
-  run with 500k peers using \SPRAY, the mean value for the in-degree
-  is 13.37 and 88\% of the peers have an in-degree between 12 and 14
-  included. This means that the load is well balanced among
-  peers. Since peers are equally important in terms of connectedness,
-  the network is robust to failures.
+\item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
+  \CYCLON and \SPRAY. In the top figure, we observe that the distribution and
+  the degrees of \CYCLON are identical, independently of the network size. Thus,
+  the distribution of 0.1k peers is identical to the 500k one with a mean value
+  of roughly 7 with a strong peak on this value. On the other hand, the bottom
+  figure shows that the distribution of \SPRAY follows the average partial view
+  size, which itself follows the growth of the size of the
+  network. Figure~\ref{fig:histo} also shows that peers are very gathered around
+  the mean partial view size. For instance, for the run with 500k peers using
+  \SPRAY, the mean value for the in-degree is 13.37 and 88\% of the peers have
+  an in-degree between 12 and 14 included. Even the highest in-degree value 18
+  is not far from the average in-degree. For both \SPRAY and \CYCLON, this means
+  that the load is well balanced among peers. For both \SPRAY and \CYCLON, there
+  are no hubs nor weakly connected peers. Since peers are equally important in
+  terms of connectedness, the network is robust to failures.
 \item[Reasons:] Once configured, \CYCLON must handle any number of
   peers in the network with a fixed-size partial view and since the
   partial view size is constant, the in-degree of peers stays
@@ -243,7 +245,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   network size falls in-between integer values. For instance, if the
   average partial view size is 6.5, then half of them have a size of 6
   while the other half have a size of 7. Such network is robust to
-  failure because no peer is more important than others in term of
+  failure because no peer is more important than others in terms of
   connectedness. Therefore, if some random peer crashes, it will not
   affect the network as much as if a strongly connected peer crashed.
 \end{asparadesc}
@@ -277,7 +279,7 @@ the size of partial views.]
   to 100 peers, from 500 to 1k peers, from 5k to 10k peers, and 50k to 100k
   peers. First, we create a network of half the maximum targeted size. Second,
   we repeatedly inject then disconnect half the maximum targeted size in periods
-  of 240 cycles including a 40 cycles break inbetween injection and
+  of 240 cycles including a 40 cycles break in between injection and
   disconnection phases. For instance, in the network the size of which varies
   from 50k to 100k, 500 peers join the network at each cycle during the
   injection phases until it reaches 100k peers; then 40 cycles last; then 500
@@ -536,15 +538,14 @@ the size of partial views.]
     subject to failures in the connection establishments.}
 \end{figure}
 
-\item[Results:] Figure~\ref{fig:degeneration} has two parts. The top
-  figure shows the arc count of the random peer-samplings while the
-  bottom figure shows the weak components of the network.  First, we
-  observe that, as expected, the arc counts of \CYCLON and \SPRAY
-  stays constant over cycles: 90k and 93k arcs for \CYCLON and \SPRAY
-  respectively. Second, we observe that \SCAMP suffers from failures
-  in connection establishment. This directly impacts network
-  connectedness as measured by the weak-component ratio. The network
-  of \SCAMP quickly degrades.
+\item[Results:] Figure~\ref{fig:degeneration} has two parts. The top figure
+  shows the arc count of the random peer-sampling protocols while the bottom
+  figure shows the weak components of the network.  First, we observe that, as
+  expected, the arc counts of \CYCLON and \SPRAY stays constant over cycles: 90k
+  and 93k arcs for \CYCLON and \SPRAY respectively. Second, we observe that
+  \SCAMP suffers from failures in connection establishment. This directly
+  impacts network connectedness as measured by the weak-component ratio. The
+  network of \SCAMP quickly degrades.
 \item[Reasons:] The arc counts of \CYCLON and \SPRAY remains constant
   over time but for different reasons. In \CYCLON, the shuffling
   protocol makes sure that the partial view is filled to its
