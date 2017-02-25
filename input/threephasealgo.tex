@@ -1,0 +1,57 @@
+
+\small
+\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+
+\newcommand{\comm}[1]{$\rhd$ #1}
+
+\newcommand{\LINEFOR}[2]{%
+  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+  }
+
+\newcommand{\LINEIFTHEN}[2]{%
+  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
+  }
+
+\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
+
+\algblockdefx[initially]{initially}{endInitially}
+[0] {\textbf{INITIALLY:}} 
+
+\algblockdefx[act]{act}{endAct}
+[0] {\textbf{ACTIVE THREAD:}}
+
+\algsetblockdefx[pas]{pas}{endPas}
+{65535}{}
+[0] {\textbf{PASSIVE THREAD:}}
+
+
+\begin{algorithmic}[1]
+  \Statex
+  \initially
+  \State $B$ \hfill \comm{buffer of messages}
+  \State $b$ \hfill \comm{number of advertised messages}
+  \State $f$ \hfill \comm{fanout $f \leq |P|$}
+  \endInitially
+  
+  \act
+  \Function{advertisementLoop}{$(\,)$} \hfill \comm{every $\delta$ time} 
+  \State \textbf{let} $advertiseTo \leftarrow getPeers(P,\,f)$; \hfill \comm{$f$ distinct random peers from $P$}
+  \State \textbf{let} $advertisement \leftarrow getIdentifiers(B,\,b)$; \hfill \comm{$b$ distinct random message Ids}
+  \State \LINEFOR{\textbf{each} $q \in advertiseTo$}{$sendTo(q,\, 'advertisement',\, advertisement)$;}
+  \EndFunction
+  \endAct
+
+  \pas
+  \Function{onAdvertisement}{$o,\, ads$} \hfill \comm{$o: advertiser$}
+  \For {\textbf{each} $(id \in ads)$}
+  \State \LINEIFTHEN{$id \not\in B$}{$sendTo(o,\, 'request',\, id)$;}
+  \EndFor  
+  \EndFunction
+  
+  \State
+  \Function{onRequest}{$o,\, id$} \hfill \comm{$o: requester$}
+  \State \textbf{let} $message \leftarrow getMessage(B,\,id)$; \hfill \comm{get the requested message from the buffer}
+  \State $sendTo(o, \, message)$; \hfill \comm{finally send the message}
+  \EndFunction
+
+\end{algorithmic}

@@ -26,11 +26,42 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 \subsection{Streaming}
 
-%Streaming 
+%% Streaming
+
+Video streaming has grown in importance over recent years. In such applications, 
+
 
 \subsubsection{Operation}
 
-Three-phase gossip comprises 3 steps. 
+Using gossiping, all peers send their messages and incoming messages to all
+their neighbors. It balances the load among peers. In addition, the probability
+that a message reach all peers is very high, even in presence of message loss.
+However, it generates numerous duplicates of messages. It becomes a burden when
+these messages are heavy. To alleviate this issue, peers using three-phase
+gossip uses advertisements to notify their neighborhood of received messages
+that they will serve on request. Thus, the duplicates of heavy messages become
+duplicates of advertisements which is considerably lighter. While advertisements
+lower the generated traffic, the load is not balanced among peers anymore: some
+peers may serve messages repeatedly until the shuffling process of the random
+peer-sampling protocol operates. To alleviate this issue, peers using
+three-phase gossip should get random peers at each advertisement phase. A simple
+way to fill this requirement consists in increasing the partial view size and to
+broadcast advertisements to a random subset of this view -- the size of this
+subset is called $fanout$. Theoretical results suggest that this fanout should
+be set to $\ln(N)+c$ where $N$ is the number of peers in the network and $c$ is
+a positive integer (\REF).
+
+\begin{algorithm}[h]
+  \input{./input/threephasealgo.tex}
+  \caption{\label{algo:threephase}Three-phase gossip.}
+\end{algorithm}
+
+Algorithm~\ref{algo:threephase} shows the operation of three-phase gossip. It
+works in three steps. First, every $\delta$ time, each peer advertises to $f$
+neighbors the messages it can serve. Second, a peer receiving such advertisement
+requests to the advertiser the messages it did not receive yet. Third, the
+advertiser sends the requested message back.
+
 
 \subsubsection{Experimentation}
 
@@ -256,7 +287,7 @@ use of partial views to efficiently disseminate messages.
 
 \begin{algorithm}[h]
   \input{./input/gossipingalgo.tex}
-  \caption{\label{algo:gossiping}Epidemic dissemination protocol.}
+  \caption{\label{algo:gossiping}gossip.}
 \end{algorithm}
 
 Algorithm~\ref{algo:gossiping} shows the instructions of this protocol. When a
