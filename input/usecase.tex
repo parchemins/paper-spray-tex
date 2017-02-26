@@ -26,25 +26,27 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 \subsection{Streaming}
 
-Live video streaming has grown in importance over recent years. The uploading
-bitrate required by these applications is such that single sources do not have
-enough uploading capabilities to serve numerous clients. Consequently, streaming
-applications must distribute the load to reach large scale in terms of number of
-clients.
+Live video streaming has grown in importance over recent years. For instance,
+broadcasts of eSports competitions can gather dozens of thousands viewers
+(\REF). The uploading bitrate required by these applications is such that single
+sources do not have enough capabilities to serve numerous clients.
+Consequently, streaming applications must distribute the load to reach large
+scale in terms of number of clients. Gossiping allows clients to collaborate for
+the sake of scalability.
 
 \subsubsection{Operation}
 
-Using gossiping, all peers send their messages and incoming messages to all
-their neighbors. It balances the load among peers. In addition, the probability
-that a message reach all peers is very high, even in presence of message loss.
-However, it generates numerous duplicates of messages. It becomes a burden when
-these messages are heavy. To alleviate this issue, peers using three-phase
-gossip uses advertisements to notify their neighborhood of received messages
-that they will serve on request. Thus, the duplicates of heavy messages become
-duplicates of advertisements which is considerably lighter. While advertisements
-lower the generated traffic, the load is not balanced among peers anymore: some
-peers may serve messages repeatedly until the shuffling process of the random
-peer-sampling protocol operates. To alleviate this issue, peers using
+Using gossiping (\REF), all peers send their messages and incoming messages to
+all their neighbors. It balances the load among peers. In addition, the
+probability that a message reach all peers is very high, even in presence of
+message loss.  However, it generates numerous duplicates of messages. It becomes
+a burden when these messages are heavy. To alleviate this issue, peers using
+three-phase gossip uses advertisements to notify their neighborhood of received
+messages that they will serve on request. Thus, the duplicates of heavy messages
+become duplicates of advertisements which is considerably lighter. While
+advertisements lower the generated traffic, the load is not balanced among peers
+anymore: some peers may serve messages repeatedly until the shuffling process of
+the random peer-sampling protocol operates. To alleviate this issue, peers using
 three-phase gossip should get random peers at each advertisement phase. A simple
 way to fill this requirement consists in increasing the partial view size and to
 broadcast advertisements to a random subset of this view -- the size of this
