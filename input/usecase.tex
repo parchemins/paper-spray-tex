@@ -26,10 +26,11 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 \subsection{Streaming}
 
-%% Streaming
-
-Video streaming has grown in importance over recent years. In such applications, 
-
+Live video streaming has grown in importance over recent years. The uploading
+bitrate required by these applications is such that single sources do not have
+enough uploading capabilities to serve numerous clients. Consequently, streaming
+applications must distribute the load to reach large scale in terms of number of
+clients.
 
 \subsubsection{Operation}
 
@@ -62,37 +63,39 @@ neighbors the messages it can serve. Second, a peer receiving such advertisement
 requests to the advertiser the messages it did not receive yet. Third, the
 advertiser sends the requested message back.
 
-
 \subsubsection{Experimentation}
 
 \begin{asparadesc}
 \item [Objective:] To show how broadcast protocols can benefit from
   an adaptive random peer sampling protocol.
-\item [Description:] Broadcast protocols extensively use the partial views
-  provided by random peer sampling protocols to efficiently disseminate messages
-  to all the network. A broadcasting peer chooses some neighbors from its
-  partial view to whom it sends the message. Each peer receiving such a message
-  broadcasts it once, in an identical way. The message transitively reaches all
-  members. The number of chosen neighbors is called the \emph{fanout}. Since
-  several applications need to broadcast messages more frequently than they can
-  shuffle their neighbors, broadcast protocols tend to use view sizes that are
-  much larger than the broadcast fanout~\cite{Frey09Middleware}. This allows the
-  peer-sampling protocol to provide the application with fresh peers at each
-  broadcast round without having to wait for the network's mixing
-  time~\cite{jelasity2007gossip}. In this experiment, we consider an application
-  configured to target approximately $100$ peers: a user streaming the live
-  video of a local sport event. We configure \CYCLON's partial view to $6$ times
-  the threshold fanout required for $100$ nodes
-  ($6 \ln(100) \approx 6 \cdot 5 = 30$), and consider two configurations for the
-  broadcast fanout $\ln(100)+1 \approx 6 $ and $\ln(100)+3 \approx 8$, which
-  provide high reliability with $100$ nodes. Similarly, we configure \SPRAY to
-  have partial views size equal to $6 \cdot \ln(|V^t|)$---instead of adding only
-  1 arc targeting its contact (see Section \ref{subsec:joining}), the newcomer
-  adds 6 arcs---and sets the fanout to one sixth of the view size plus $1$ or
-  $3$. This gives both protocols the same configuration for $100$ peers.  We
-  then consider network sizes growing from $100$ to $2000$ peers, and measure
-  the ratio of fully delivered messages to 1k sent messages, i.e., we evaluate
-  the fraction of all messages that reach all the members of the network.
+\item [Description:] 
+  % Broadcast protocols extensively use the partial views provided by random peer
+  % sampling protocols to efficiently disseminate messages to all the network. A
+  % broadcasting peer chooses some neighbors from its partial view to whom it
+  % sends the message. Each peer receiving such a message broadcasts it once, in
+  % an identical way. The message transitively reaches all members. The number of
+  % chosen neighbors is called the \emph{fanout}. Since several applications need
+  % to broadcast messages more frequently than they can shuffle their neighbors,
+  % broadcast protocols tend to use view sizes that are much larger than the
+  % broadcast fanout~\cite{Frey09Middleware}. This allows the peer-sampling
+  % protocol to provide the application with fresh peers at each broadcast round
+  % without having to wait for the network's mixing
+  % time~\cite{jelasity2007gossip}. 
+  In this experiment, we consider an application configured to target
+  approximately $100$ peers. 
+  % : a user streaming the live video of a local sport event.
+  We configure \CYCLON's partial view to $6$ times the threshold fanout required
+  for $100$ nodes ($6 \ln(100) \approx 6 \cdot 5 = 30$), and consider two
+  configurations for the broadcast fanout $\ln(100)+1 \approx 6 $ and
+  $\ln(100)+3 \approx 8$, which provide high reliability with $100$
+  nodes. Similarly, we configure \SPRAY to have partial views size equal to
+  $6 \cdot \ln(|V^t|)$---instead of adding only 1 arc targeting its contact (see
+  Section \ref{subsec:joining}), the newcomer adds 6 arcs---and sets the fanout
+  to one sixth of the view size plus $1$ or $3$. This gives both protocols the
+  same configuration for $100$ peers.  We then consider network sizes growing
+  from $100$ to $2000$ peers, and measure the ratio of fully delivered messages
+  to 1k sent messages, i.e., we evaluate the fraction of all messages that reach
+  all the members of the network.
 
 \begin{figure}
   \begin{center}
