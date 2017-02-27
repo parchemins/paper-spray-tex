@@ -12,7 +12,7 @@
 % in term of adaptiveness and reliability, of a core component of many
 % large-scale distributed applications: peer-sampling protocols.
 
-In this paper, we described \SPRAY, an adaptive-by-design random peer sampling
+In this paper, we described \SPRAY, an adaptive-by-design random peer-sampling
 approach designed to fit WebRTC's constraints.  \SPRAY provides:
 \begin{inparaenum}[(i)]
 \item logarithmically growing partial views reflecting the global network size,
@@ -22,7 +22,7 @@ approach designed to fit WebRTC's constraints.  \SPRAY provides:
 %   properties similar to random graphs.
 \end{inparaenum}
 Our experiments demonstrate how \SPRAY's adaptiveness improves the performance
-of random peer sampling when the size of the network changes. In particular, the
+of random peer-sampling when the size of the network changes. In particular, the
 average shortest path length scales better and the in-degree evolves with the
 network size.
 %, and it converges faster.
@@ -43,10 +43,18 @@ benefits of adaptive neighborhoods.
 easy and accessible.  Developers do not require to foresee the network
 size targeted by their applications. Just the same as for broadcast,
 many topology optimization protocols (e.g. about geolocalization,
-latency, or preferences) rely on random peer sampling protocol such as
+latency, or preferences) rely on random peer-sampling protocol such as
 the generic algorithms T-Man~\cite{jelasity2009tman} and
 Vicinity~\cite{voulgaris2005epidemic}. \SPRAY allows such protocols to
 benefit from its self-adjusting partial views.
+
+Peer-sampling protocols build overlay networks. These overlay networks do not
+necessarily reflect the underlying topology made of routers. Using WebRTC, a
+connection establishment may fail depending on network
+configurations. Section~\ref{subsec:leaving} states that such failures should be
+handled by replacing failed links by duplicates to known peers. As future work,
+it would be interesting to see if this strategy leads to an overlay network that
+self-adapts to the real underlying topology.
 
 % Future work includes investigations on topology managers such as
 % T-Man~\cite{jelasity2009tman} or
