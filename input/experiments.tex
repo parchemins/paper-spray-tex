@@ -215,7 +215,8 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   while the other half have 7 (out-degree). As consequence, the average
   in-degree value will also be 6.5. However, while \SPRAY and \CYCLON constrain
   the size of partial views respectively to the average and to a constant value,
-  they do not constrain the size of in-views.
+  they do not constrain the size of in-views, hence the distributions of
+  Figure~\ref{fig:histo}.
 \end{asparadesc}
 
 
@@ -273,6 +274,12 @@ the size of partial views.]
     same number of peers;
   \item variations are more important as the number of peers is lower.
   \end{inparaenum}
+
+  These results show that developers could use \SPRAY to deploy protocols such
+  as distributed hash tables~\cite{camarillo2014self} or routing
+  protocols~\cite{kleinberg2000smallworld} that normally require the use of
+  network size estimators to work.
+
 \item [Reasons:] A peer joining the network injects at least one arc plus a
   number of arcs depending on the contact peer. Since we choose the contact peer
   at random, and the partial views are averaged over shuffles, this number of
