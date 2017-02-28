@@ -8,18 +8,19 @@
 %mechanism, we expect \SPRAY to keep a stable delivery rate on messages
 %while supporting network size variations. Then, 
 
-In this section, we highlight how protocols built on top of \SPRAY can benefit
-from its adaptiveness. We focus on broadcasting messages. Firstly, we use the
-case of \emph{three-phase gossip} that aims to reduce the traffic and balance it
-among links in traffic intensive application such as video streaming. Using
-\SPRAY, we expect to keep a ratio on message delivery stable while the size of
-the network fluctuates. Using \CYCLON, we expect degraded performance when the
-size of the network is higher than expected at configuration time. Secondly, we
-use the case of \emph{gossiping} in decentralized real-time collaborative
-editing. Using \SPRAY, we expect the generated traffic to scale logarithmically
-to the size of the network.
+In this section, we highlight how protocols built on top of \SPRAY can
+benefit from its adaptiveness. We focus on broadcasting
+messages. Firstly, we consider the case of video streaming using a
+three-phase gossip protocol~\cite{FlightPath,Frey09DSN,monod:THESIS}.
+Using \SPRAY, we expect a stable message-delivery rate even when the
+size of the network fluctuates. Using \CYCLON, we expect degraded
+performance when the size of the network is larger than expected at
+configuration time. Secondly, we use the case of \emph{gossiping} in
+decentralized real-time collaborative editing. Using \SPRAY, we expect
+the generated traffic to scale logarithmically with respect to the
+size of the network.
 
-The first experiment run on the \PEERSIM simulator~\cite{montresor2009peersim}
+The first experiment runs on the \PEERSIM simulator~\cite{montresor2009peersim}
 and the code is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}. The second
 experiment is a simulation involving up to 600 interconnected Web browsers on
@@ -28,44 +29,55 @@ platform\footnote{\url{https://github.com/Chat-Wane/CRATE}}.
 
 \subsection{Streaming}
 
-Live video streaming has grown in importance over recent years. For instance,
-broadcasts of eSports competitions can gather dozens of thousands viewers
-(\REF). The uploading bitrate required by these applications is such that single
-sources do not have enough capabilities to serve numerous clients.
-Consequently, streaming applications must distribute the load to reach large
-scale in terms of number of clients. Gossiping allows clients to collaborate for
-the sake of scalability.
+Live video streaming has grown in importance over recent years and
+companies offering peer-to-peer streaming gather large numbers of
+viewers. For example,
+HiveStreaming\footnote{\url{https://www.hivestreaming.com/}} declared
+having a customer network of 400k peers~\cite{smoothcache2}. The
+uploading bitrate required to serve such a large number of users would
+lead to huge operational costs, which can instead be saved through
+direct peer-to-peer exchanges.
 
 \subsubsection{Operation}
+A number of existing
+systems~\cite{Frey09Middleware,Zhang07Understanding,monod:THESIS} use
+some variant of gossip to achieve effective stream dissemination in
+the presence of churn. In the following, we consider the three-phase
+variant adopted
+by~\cite{FlightPath,Frey09DSN,monod:THESIS,Zhang07Understanding}. Nodes
+gossip advertisement messages for available packets to \emph{fanout}
+other nodes, which then pull the packets they need.
+Algorithm~\ref{algo:threephase} details the protocol's
+operation. First, with a time interval of $\delta$ ($200ms$
+in\cite{Frey09DSN,Frey09Middleware}), each peer advertises the packets
+it can serve to $f$ (fanout) neighbors. Second, a peer receiving such
+an advertisement requests the packets it needs. Third, the advertising
+peer sends the requested packets.
 
-Using gossiping (\REF), all peers send their messages and incoming messages to
-all their neighbors. It balances the load among peers. In addition, the
-probability that a message reach all peers is very high, even in presence of
-message loss.  However, it generates numerous duplicates of messages. It becomes
-a burden when these messages are heavy. To alleviate this issue, peers using
-three-phase gossip uses advertisements to notify their neighborhood of received
-messages that they will serve on request. Thus, the duplicates of heavy messages
-become duplicates of advertisements which is considerably lighter. While
-advertisements lower the generated traffic, the load is not balanced among peers
-anymore: some peers may serve messages repeatedly until the shuffling process of
-the random peer-sampling protocol operates. To alleviate this issue, peers using
-three-phase gossip should get random peers at each advertisement phase. A simple
-way to fill this requirement consists in increasing the partial view size and to
-broadcast advertisements to a random subset of this view -- the size of this
-subset is called $fanout$. Theoretical results suggest that this fanout should
-be set to $\ln(N)+c$ where $N$ is the number of peers in the network and $c$ is
-a positive integer (\REF).
+In their analysis of this three-phase model, the authors
+of~\cite{Frey09DSN} observed that, in bandwidth-constrained scenarios,
+peers should vary their communication partners as often as possible in
+order to equalize everyone's contribution. There are two ways to
+achieve this in a large scale setting: (i) refreshing the view of the
+peer-sampling protocol (e.g. Cyclon, Spray) before sending each
+advertisement packet, or (ii) using a view that is much larger than
+the gossip fanout and refreshing it less often. Due to the relatively
+small size of view-exchange messages, solution (ii) achieves the best
+trade-off, while solution (i) would be extremely impractical and waste
+a significant amount of bandwidth just for packet
+headers---\cite{Frey09DSN,Frey09Middleware} have each node send $5$
+advertisement packets per second.
+
+For this reason, \cite{frey:hal-01479885} follows solution (ii) and sets the
+fanout to $\ln(N)+c$ (according to theory\cite{PRD}), $N$ being the
+number of participating peers, and $c$ a positive constant.
 
 \begin{algorithm}[h]
   \input{./input/threephasealgo.tex}
   \caption{\label{algo:threephase}Three-phase gossip.}
 \end{algorithm}
 
-Algorithm~\ref{algo:threephase} shows the operation of three-phase gossip. It
-works in three steps. First, every $\delta$ time, each peer advertises to $f$
-neighbors the messages it can serve. Second, a peer receiving such advertisement
-requests to the advertiser the messages it did not receive yet. Third, the
-advertiser sends the requested message back.
+
 
 \subsubsection{Experimentation}
 
@@ -85,21 +97,24 @@ advertiser sends the requested message back.
   % protocol to provide the application with fresh peers at each broadcast round
   % without having to wait for the network's mixing
   % time~\cite{jelasity2007gossip}. 
-  In this experiment, we consider an application configured to target
-  approximately $100$ peers. 
+  In this experiment, we reproduce the first gossip phase of the
+  protocol in~\cite{Frey09DSN,monod:THESIS,frey:hal-01479885} and model an
+  application that streams live content to $100$ peers.
   % : a user streaming the live video of a local sport event.
-  We configure \CYCLON's partial view to $6$ times the threshold fanout required
-  for $100$ nodes ($6 \ln(100) \approx 6 \cdot 5 = 30$), and consider two
-  configurations for the broadcast fanout $\ln(100)+1 \approx 6 $ and
-  $\ln(100)+3 \approx 8$, which provide high reliability with $100$
-  nodes. Similarly, we configure \SPRAY to have partial views size equal to
-  $6 \cdot \ln(|V^t|)$---instead of adding only 1 arc targeting its contact (see
-  Section \ref{subsec:joining}), the newcomer adds 6 arcs---and sets the fanout
-  to one sixth of the view size plus $1$ or $3$. This gives both protocols the
-  same configuration for $100$ peers.  We then consider network sizes growing
-  from $100$ to $2000$ peers, and measure the ratio of fully delivered messages
-  to 1k sent messages, i.e., we evaluate the fraction of all messages that reach
-  all the members of the network.
+  We configure \CYCLON's partial view to $6$ times the threshold
+  fanout required for $100$ nodes ($6 \ln(100) \approx 6 \cdot 5 =
+  30$, analogously to~\cite{frey:hal-01479885}), and consider two configurations
+  for the broadcast fanout $\ln(100)+1 \approx 6 $ and $\ln(100)+3
+  \approx 8$, which provide high reliability with $100$
+  nodes. Similarly, we configure \SPRAY to have partial views size
+  equal to $6 \cdot \ln(|V^t|)$---instead of adding only 1 arc
+  targeting its contact (see Section \ref{subsec:joining}), the
+  newcomer adds 6 arcs---and sets the fanout to one sixth of the view
+  size plus $1$ or $3$. This gives both protocols the same
+  configuration for $100$ peers.  We then consider network sizes
+  growing from $100$ to $2000$ peers, and measure the ratio of fully
+  delivered messages to 1k sent messages, i.e., we evaluate the
+  fraction of all messages that reach all the members of the network.
 
 \begin{figure}
   \begin{center}
@@ -108,33 +123,34 @@ advertiser sends the requested message back.
   \end{center}
 \end{figure}
 
-\item [Results:] Figure~\ref{fig:hardrate} shows the result of this
-  experiment. First, we observe that the ratio of messages fully delivered using
-  \CYCLON suffers from a steady decrease. The highest fanout leads to better
-  results. In contrast, \SPRAY remains stable despite the presence of small
-  jumps. A fanout set to $\ln(|V^t|)+1$ gives a full delivery ratio above 90\%. A
-  fanout set to $\ln(|V^t|)+3$ is very close to 100\%. Overall, the broadcast
-  mechanism benefits from the adaptive nature of \SPRAY's partial view, which
-  allows it to scale according to the size of the network.
-\item [Reasons:] From~\cite{erdos1959random}, we know that the sharp
-  threshold of connectedness of random graphs is
-  $\Theta(\ln(|V|))$. Regarding the broadcast, this means that, with a
-  sufficiently random and large partial view, a fanout set accordingly
-  provides a full delivery ratio of about 50\%. At this point,
-  increasing the fanout improves drastically the resulting ratio, but
-  the contribution of each increment diminishes with respect to the
-  previous increment. The broadcast protocol built on top of \CYCLON
-  has a constant fanout set for a specific network size. As long as
-  the network is smaller than this value, the full delivery ratio stays
-  high. However, it quickly decreases with larger network sizes.
-  \SPRAY instead allows the application fanout to follow the growth of
-  the partial view size, which scales logarithmically compared to the
-  network size. This allows the application to adapt to changes in the
-  size of the network. As a result, the full delivery ratio provided by
-  the broadcast mechanism on top of \SPRAY remains stable. Since the
-  values manipulated by peers---partial view size and fanout---are
-  integers, the measurements make small jumps when a rounded value
-  increases enough to be incremented.
+\item [Results:] Figure~\ref{fig:hardrate} shows the results of this
+  experiment. First, we observe that the ratio of fully delivered
+  messages using \CYCLON suffers from a steady decrease. The highest
+  fanout leads to better results. In contrast, \SPRAY remains stable
+  despite the presence of small jumps. A fanout set to $\ln(|V^t|)+1$
+  gives a full delivery ratio above 90\%. A fanout set to
+  $\ln(|V^t|)+3$ is very close to 100\%. Overall, the broadcast
+  mechanism benefits from the adaptive nature of \SPRAY's partial
+  view, which allows it to scale according to the size of the network.
+\item [Reasons:] To ensure a fair use of the bandwidth contributed by
+  peers, we configure the view size to be larger than the fanout. This
+  allows stream packets in three-phase gossip to follow ``almost''
+  random subtrees of the complete overlay. But it also leads the first
+  gossip phase to require a fanout of at least $\ln(N)+c$~\cite{PRD},
+  as the random sub-graphs of the overlay grafted in the first phase
+  may fail to reach all nodes if the fanout is too low. In our case,
+  the broadcast protocol built on top of \CYCLON has a constant fanout
+  set for a specific network size. As long as the network is smaller
+  than this value, the full delivery ratio stays high. However, it
+  quickly decreases with larger network sizes.  \SPRAY instead allows
+  the application fanout to follow the growth of the partial view
+  size, which scales logarithmically compared to the network
+  size. This allows the streaming application to adapt to changes in
+  the size of the network. As a result, the full delivery ratio
+  provided by the broadcast mechanism on top of \SPRAY remains
+  stable. Since the values manipulated by peers---partial view size
+  and fanout---are integers, the measurements make small jumps when a
+  rounded value increases enough to be incremented.
 \end{asparadesc}
 
 \ \\
@@ -171,9 +187,9 @@ advertiser sends the requested message back.
   the fanout to the size of the network. Thus, it does not experience
   performance losses while a large number of nodes suddenly join, even
   though we observe a decrease in delivery ratio during the departures
-  of peers, in particular with a fanout of $\ln(|V|)+1$. Overall, the
-  broadcast mechanisms involving \SPRAY are more resilient to quick
-  membership changes.
+  of peers, in particular with a fanout of $\ln(|V|)+1$. This
+  demonstrates that, in the context of three-phase gossip, \SPRAY
+  makes broadcast more resilient to quick membership changes.
 \item [Reasons:] The fanout of configurations involving \CYCLON is
   constant. When the number of peers in the network exceeds the
   expectations, the delivery ratio quickly degenerates. Concerning
