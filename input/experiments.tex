@@ -278,7 +278,8 @@ the size of partial views.]
   These results show that developers could use \SPRAY to deploy protocols such
   as distributed hash tables~\cite{camarillo2014self} or routing
   protocols~\cite{kleinberg2000smallworld} that normally require the use of
-  network size estimators to work.
+  network size estimators to work. The estimate provided by \SPRAY is not
+  precise but comes at no cost while network size estimators involve traffic.
 
 \item [Reasons:] A peer joining the network injects at least one arc plus a
   number of arcs depending on the contact peer. Since we choose the contact peer
@@ -403,6 +404,10 @@ the size of partial views.]
   be initiated between members of each other disjoint parts. Consequently, the
   network cannot fully repair itself above 70 percents of removals.
 
+  These results show that both \SPRAY and \CYCLON fit contexts such as the
+  internet where numerous peers can join and leave freely in short periods of
+  time.
+
   % Globally, Figure~\ref{fig:resilience} also demonstrates that the logarithmic
   % growth of these sampling protocols constitutes an upper bound, for
   % smaller growth could be obtained without endangering the connectedness of
@@ -427,18 +432,15 @@ the size of partial views.]
   one. Yet, this arc is enough for the peer-sampling protocol to start shuffling
   the views, ultimately populating them with members from both cluster. Hence,
   the network repairs itself.  When clusters become fully disjoints, neither
-  \CYCLON nor \SPRAY is able to repair the
-  network.  % A smaller growth could be obtained because the
-  % sharp threshold of connectedness applies to random graphs according to Erd{\H
-  %   o}s-R{\' e}nyi~\cite{erdos1959random}. However, random peer sampling
+  \CYCLON nor \SPRAY is able to repair the network.
+
+  % A smaller growth could be obtained because the sharp threshold of
+  % connectedness applies to random graphs according to Erd{\H
+  % o}s-R{\' e}nyi~\cite{erdos1959random}. However, random peer sampling
   % protocols constraint the partial views size to reduce the variance between
   % peers.  With such slight difference, we presume that a lower bound on arcs
   % growth could be found, although that may require global knowledge.
 \end{asparadesc}
-
-
-%%\vspace{-7pt}
-%%\paragraph{Duplicates}
 
 \subsection{Duplicates}
 
@@ -509,14 +511,18 @@ the size of partial views.]
     subject to failures in the connection establishments.}
 \end{figure}
 
-\item[Results:] Figure~\ref{fig:degeneration} has two parts. The top figure
-  shows the arc count of the random peer-sampling protocols while the bottom
-  figure shows the weak components of the network.  First, we observe that, as
-  expected, the arc counts of \CYCLON and \SPRAY stays constant over cycles: 90k
-  and 93k arcs for \CYCLON and \SPRAY respectively. Second, we observe that
-  \SCAMP suffers from failures in connection establishment. This directly
-  impacts network connectedness as measured by the weak-component ratio. The
-  network of \SCAMP quickly degrades.
+\item[Results:] The top part of Figure~\ref{fig:degeneration} shows the arc
+  count of the random peer-sampling protocols while the bottom part of
+  Figure~\ref{fig:degeneration} shows the weak components of the network.  As
+  expected, we observe that the arc counts of \CYCLON and \SPRAY stays constant
+  over cycles: 90k and 93k arcs for \CYCLON and \SPRAY respectively. On the
+  other hand, \SCAMP suffers from failures in connection establishment. This
+  directly impacts network connectedness as measured by the weak-component
+  ratio. The network of \SCAMP quickly degrades.
+
+  These results show that both \SPRAY and \CYCLON fit the constraints set by
+  WebRTC.
+
 \item[Reasons:] The arc counts of \CYCLON and \SPRAY remains constant
   over time but for different reasons. In \CYCLON, the shuffling
   protocol makes sure that the partial view is filled to its
