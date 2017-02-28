@@ -40,16 +40,16 @@ direct peer-to-peer exchanges.
 
 \subsubsection{Operation}
 A number of existing
-systems~\cite{Frey09Middleware,Zhang07Understanding,monod:THESIS} use
+systems~\cite{Frey09Middleware,monod:THESIS,Zhang07Understanding} use
 some variant of gossip to achieve effective stream dissemination in
 the presence of churn. In the following, we consider the three-phase
 variant adopted
-by~\cite{FlightPath,Frey09DSN,monod:THESIS,Zhang07Understanding}. Nodes
+by~\cite{Frey09DSN,FlightPath,monod:THESIS,Zhang07Understanding}. Nodes
 gossip advertisement messages for available packets to \emph{fanout}
 other nodes, which then pull the packets they need.
-Algorithm~\ref{algo:threephase} details the protocol's
-operation. First, with a time interval of $\delta$ ($200ms$
-in\cite{Frey09DSN,Frey09Middleware}), each peer advertises the packets
+Algorithm~\ref{algo:threephase} details the operation of this protocol.
+First, with a time interval of $\delta$ ($200ms$
+in~\cite{Frey09DSN,Frey09Middleware}), each peer advertises the packets
 it can serve to $f$ (fanout) neighbors. Second, a peer receiving such
 an advertisement requests the packets it needs. Third, the advertising
 peer sends the requested packets.
@@ -58,19 +58,22 @@ In their analysis of this three-phase model, the authors
 of~\cite{Frey09DSN} observed that, in bandwidth-constrained scenarios,
 peers should vary their communication partners as often as possible in
 order to equalize everyone's contribution. There are two ways to
-achieve this in a large scale setting: (i) refreshing the view of the
-peer-sampling protocol (e.g. Cyclon, Spray) before sending each
-advertisement packet, or (ii) using a view that is much larger than
-the gossip fanout and refreshing it less often. Due to the relatively
-small size of view-exchange messages, solution (ii) achieves the best
-trade-off, while solution (i) would be extremely impractical and waste
-a significant amount of bandwidth just for packet
-headers---\cite{Frey09DSN,Frey09Middleware} have each node send $5$
-advertisement packets per second.
+achieve this in a large scale setting:
+\begin{inparaenum}[(i)]
+\item \label{enum:refreshing} refreshing the view of the peer-sampling protocol
+  (e.g. \CYCLON, or \SPRAY) before sending each advertisement packet, or
+\item \label{enum:larger} using a view that is much larger than the gossip
+  fanout and refreshing it less often.
+\end{inparaenum}
+Due to the relatively small size of view-exchange messages, solution
+(\ref{enum:larger}) achieves the best trade-off, while solution
+(\ref{enum:refreshing}) is extremely impractical and waste a significant
+amount of bandwidth just for packet headers---\cite{Frey09DSN,Frey09Middleware}
+have each node send $5$ advertisement packets per second.
 
-For this reason, \cite{frey:hal-01479885} follows solution (ii) and sets the
-fanout to $\ln(N)+c$ (according to theory\cite{PRD}), $N$ being the
-number of participating peers, and $c$ a positive constant.
+For this reason, \cite{frey:hal-01479885} follows solution (\ref{enum:larger})
+and sets the fanout to $\ln(N)+c$ (according to theory~\cite{PRD}), $N$ being the
+number of participating peers, and $c$ being a positive constant.
 
 \begin{algorithm}[h]
   \input{./input/threephasealgo.tex}
@@ -98,7 +101,7 @@ number of participating peers, and $c$ a positive constant.
   % without having to wait for the network's mixing
   % time~\cite{jelasity2007gossip}. 
   In this experiment, we reproduce the first gossip phase of the
-  protocol in~\cite{Frey09DSN,monod:THESIS,frey:hal-01479885} and model an
+  protocol in~\cite{Frey09DSN,frey:hal-01479885,monod:THESIS} and model an
   application that streams live content to $100$ peers.
   % : a user streaming the live video of a local sport event.
   We configure \CYCLON's partial view to $6$ times the threshold
@@ -194,7 +197,7 @@ number of participating peers, and $c$ a positive constant.
   constant. When the number of peers in the network exceeds the
   expectations, the delivery ratio quickly degenerates. Concerning
   \SPRAY, the fanout follows the evolution of the network thanks to
-  adaptive partial views. Both \SPRAY, and \CYCLON detect departing
+  adaptive partial views. Both \SPRAY and \CYCLON detect departing
   nodes during the shuffling phase. The associated delay leads to the
   use of some stale arcs from partial views, which explains the
   temporary decrease in delivery ratio during the shrinking
