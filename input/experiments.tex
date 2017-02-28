@@ -176,49 +176,48 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \end{figure}
 
 \item[Results:] Figure~\ref{fig:histo} shows the in-degree distribution of
-  \CYCLON and \SPRAY. In the top figure, we observe that the distribution and
-  the degrees of \CYCLON are identical, independently of the network size. Thus,
-  the distribution of 0.1k peers is identical to the 500k one with a mean value
-  of roughly 7 with a strong peak on this value. On the other hand, the bottom
-  figure shows that the distribution of \SPRAY follows the average partial view
-  size, which itself follows the growth of the size of the
-  network. Figure~\ref{fig:histo} also shows that peers are very gathered around
-  the mean partial view size. For instance, for the run with 500k peers using
-  \SPRAY, the mean value for the in-degree is 13.37 and 88\% of the peers have
-  an in-degree between 12 and 14 included. Even the highest in-degree value 18
-  is not far from the average in-degree. For both \SPRAY and \CYCLON, this means
-  that the load is well balanced among peers. For both \SPRAY and \CYCLON, there
-  are no hubs nor weakly connected peers. Since peers are equally important in
-  terms of connectedness, the network is robust to failures.
-\item[Reasons:] Once configured, \CYCLON must handle any number of
-  peers in the network with a fixed-size partial view and since the
-  partial view size is constant, the in-degree of peers stays
-  stable. 
-  % Proportionally, the number of times
-  % that a particular peer is referenced does not change compared to
-  % the network
-  % size. Indeed, the number of arcs that a new peer brings to the
-  % network when it
-  % joins constitutes that many arcs targeting it after the shuffling
-  % rounds. S
-  On the other hand, in \SPRAY, each joining peer brings an increasing
-  number of arcs in the network. Thus, the in-degree of each peer
-  grows reflecting the network size. Hence, the distribution in the
-  bottom figure shifts slowly to higher in-degree values as the
-  network size grows.  \SPRAY does not peak on a particular value as
-  \CYCLON because the average partial view size for a particular
-  network size falls in-between integer values. For instance, if the
-  average partial view size is 6.5, then half of them have a size of 6
-  while the other half have a size of 7. Such network is robust to
-  failure because no peer is more important than others in terms of
-  connectedness. Therefore, if some random peer crashes, it will not
-  affect the network as much as if a strongly connected peer crashed.
+  \CYCLON and \SPRAY. The x-axis denotes the in-degree. The y-axis denotes the
+  percentage of peers with such in-degree in the network. The top part of
+  Figure~\ref{fig:histo} focuses on \CYCLON. We observe that the in-degree
+  distributions are identical independently of the network size. For instance,
+  the distribution of 0.1k peers is identical to the one of 500k peers. The mean
+  value is roughly 7 and we observe a strong peak on this value. On the other
+  hand, the bottom part of Figure~\ref{fig:histo} focuses on \SPRAY. We observe
+  that the distribution of \SPRAY follows the average partial view size, which
+  itself follows the growth of the size of the network.
+
+  Figure~\ref{fig:histo} also shows that peers are very gathered around the mean
+  partial view size for both \SPRAY and \CYCLON. For instance, for the run with
+  500k peers using \SPRAY, the mean in-degree value is 13.37 and 88\% of peers
+  have an in-degree between 12 and 14 included. Even the highest in-degree value
+  18 is not far from the average in-degree. Thus, there are no weakly connected
+  peers nor strongly connected hubs.
+
+  These results show that both \SPRAY and \CYCLON are resilient to random
+  failures, for peers are equally important in terms of connectedness. These
+  results also show that developers could use both \SPRAY and \CYCLON to build
+  dissemination protocols that would balance the download among peers. Using
+  \SPRAY, the download would increase and decrease following the fluctuations in
+  network size.
+
+\item[Reasons:] Once configured, \CYCLON must handle any number of peers in the
+  network with a fixed-size partial view and since the partial view size is
+  constant, the in-degree of peers stays stable.  On the other hand, in \SPRAY,
+  each joining peer brings an increasing number of arcs in the network. Thus,
+  the in-degree of peers slowly grows reflecting the network size. Hence, the
+  distribution in the bottom part of Figure~\ref{fig:histo} shifts slowly to
+  higher in-degree values as the network size grows.
+
+  \SPRAY does not peak on a particular value as \CYCLON does because the average
+  partial view size for a particular network size may fall in-between integer
+  values. For instance, if peers using \SPRAY have partial views that contain
+  6.5 neighbors on average, it means that half these peers have 6 neighbors
+  while the other half have 7 (out-degree). As consequence, the average
+  in-degree value will also be 6.5. However, while \SPRAY and \CYCLON constrain
+  the size of partial views respectively to the average and to a constant value,
+  they do not constrain the size of in-views.
 \end{asparadesc}
 
-
-
-%%\vspace{-7pt}
-%%\paragraph{Adaptive partial views}
 
 \subsection{Adaptive partial views}
 
