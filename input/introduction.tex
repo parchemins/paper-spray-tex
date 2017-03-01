@@ -40,37 +40,41 @@ this sudden burst of popularity, maintaining their quality of service,
 while being able to return to their initial configuration when the
 popularity burst subsides. 
 
-Unfortunately, existing peer-sampling protocols lack adaptiveness or reliability
-in the context of WebRTC. On the one hand,
+Unfortunately, existing peer-sampling protocols lack adaptiveness or
+reliability in the context of WebRTC. On the one hand,
 \SCAMP~\cite{ganesh2001scamp,ganesh2003peer} provides adaptiveness by
-maintaining partial views of size $\ln(n)+k$, $n$ being the number of nodes and
-$k$ being a constant. However, \SCAMP is not reliable in the context of WebRTC,
-for its connection establishment process is based on random walks and cannot
-handle the connection failures that often occur in WebRTC. On the other hand,
-the most popular approaches like \CYCLON~\cite{voulgaris2005cyclon} and the
-whole RPS protocol family~\cite{jelasity2007gossip} are reliable in the context
-of WebRTC but are not adaptive: developers have to configure fixed-size views at
-deployment time. This forces developers to oversize partial views to handle
-potential bursts, either wasting resources or not provisioning for large-enough
-settings. A simple solution to address this problem estimates the actual number
-of network nodes by periodically running an aggregation
-protocol~\cite{montresor2004robust}, then resizes the partial views. However,
-this aggregation protocol would have to run quite frequently, resulting in
-significant network overhead to anticipate a popularity burst that may never
-happen. Our approach provides adaptiveness and reliability by locally
-self-adjusting the size of partial views at join, leave, and shuffle times. At a
-marginal cost, partial view size converges towards $\ln(n)$. This not only makes
-our approach adaptive but also outputs the size of the network to the
-application level allowing applications to adapt to sudden burst in popularity
-at no additional cost. We demonstrate the impact of our approach on two
-use-cases that use RPS to broadcast messages. The first one implements a live
-video streaming based on three-phase gossip. In this case, adaptiveness allows
-message delivery to remain stable even in presence of burst in popularity. The
-second one implements a real-time collaborative editor. In this case,
-adaptiveness allows the editors to adjust the traffic to the size of the
-network. Some distributed hash table protocols such as D2HT~\cite{bertier-d2ht}
-require both the knowledge of the size of the network to compute the view of
-each node, and a random peer sampling protocol to provide connectivity in the
+maintaining partial views of size $\ln(n)+k$, $n$ being the number of
+nodes and $k$ being a constant. However, \SCAMP is not reliable in the
+context of WebRTC, for its connection establishment process is based
+on random walks and cannot handle the connection failures that often
+occur in WebRTC. On the other hand, the most popular approaches like
+\CYCLON~\cite{voulgaris2005cyclon} and the whole RPS protocol
+family~\cite{jelasity2007gossip} are reliable in the context of WebRTC
+but are not adaptive: developers have to configure fixed-size views at
+deployment time. This forces developers to oversize partial views to
+handle potential bursts, either wasting resources or not provisioning
+for large-enough settings. A simple solution to address this problem
+estimates the actual number of network nodes by periodically running
+an aggregation protocol~\cite{montresor2004robust}, then resizes the
+partial views. However, this aggregation protocol would have to run
+quite frequently, resulting in significant network overhead to
+anticipate a popularity burst that may never happen. Our approach
+provides adaptiveness and reliability by locally self-adjusting the
+size of partial views at join, leave, and shuffle times. At a marginal
+cost, partial view size converges towards $\ln(n)$. This not only
+makes our approach adaptive but also outputs the size of the network
+to the application level allowing applications to adapt to sudden
+burst in popularity at no additional cost. We demonstrate the impact
+of our approach on two use-cases that use RPS to broadcast
+messages. The first one implements a live video streaming based on
+three-phase gossip~\cite{FlightPath,Frey09DSN,monod:THESIS}. In this
+case, adaptiveness allows message delivery to remain stable even in
+presence of burst in popularity. The second one implements a real-time
+collaborative editor. In this case, adaptiveness allows the editors to
+adjust the traffic to the size of the network. Some distributed hash
+table protocols such as D2HT~\cite{bertier-d2ht} require both the
+knowledge of the size of the network to compute the view of each node,
+and a random peer sampling protocol to provide connectivity in the
 presence of high churn. Our approach provides both at the same cost.
 
 % The scientific challenge consists in finding a way to adapt to the
