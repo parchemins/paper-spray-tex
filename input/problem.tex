@@ -32,19 +32,19 @@ constraints raises the following scientific problem:
   \item Partial view size: \hfill
     $\forall p_x \in V^t,\, |\mathcal{P}_x^t| = \mathcal{O} (\ln
     |V^t|)$      
-  \item Connection establishment: \hfill $\mathcal{O}(1)$
+  \item Connection establishment by a node: \hfill $\mathcal{O}(1)$
     %% \item  \begin{center}
     %%     Convergence speed: \hfill $\Theta(\exp \, t^{-1})$
     %%   \end{center}
   \end{enumerate}
 \end{problem}
 
-The first condition states that the partial view size is relative to the size of
-the network at any time. It also states that partial views should grow and
-shrink, at worst, logarithmically compared to the size of the network. The
-second condition states that each connection establishment requires a constant
-number of intermediary peers. Since this number is constant, connection
-establishments do not depend on the network size.
+The first condition states that the partial view size is relative to
+the size of the network at any time. It also states that partial views
+should grow and shrink, at worst, logarithmically compared to the size
+of the network. The second condition states that a node should be able
+to establish a connection by relying only on a constant number of
+intermediary peers, independently of network size.
 %% The last condition states that the network
 %% overlay converges exponentially fast to a topology that is close to a random
 %% graph.
