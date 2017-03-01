@@ -121,7 +121,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   \SPRAY and \CYCLON become equivalent where the latter is optimally
   configured. Finally, \SPRAY has smaller values than \CYCLON. Overall, \SPRAY
   scales better than \CYCLON since the gradient (slope) of the former is lower
-  than any configuration of the latter.
+  than any configuration of the latter. Empirically, we observe that \CYCLON
+  builds networks with an average shortest path length of
+  $\smash{\ln(N)\over {\ln(|P|)}}$ where $N$ is the network size and $|P|$ is
+  constant, while \SPRAY builds networks with an average shortest path length of
+  $\smash{\ln(N)\over{\ln(\ln(N))} }$.
 
   These results show that developers could use both \SPRAY and \CYCLON to build
   efficient information dissemination protocols. Nevertheless, they should use
