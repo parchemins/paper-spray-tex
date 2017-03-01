@@ -39,14 +39,16 @@ launched experiments involving up to 600 browsers showing the %that message
 %dissemination highly
 benefits of adaptive neighborhoods.
 
-\SPRAY makes building scalable decentralized applications in browsers
-easy and accessible.  Developers do not require to foresee the network
-size targeted by their applications. Just the same as for broadcast,
-many topology optimization protocols (e.g. about geolocalization,
-latency, or preferences) rely on random peer-sampling protocol such as
-the generic algorithms T-Man~\cite{jelasity2009tman} and
-Vicinity~\cite{voulgaris2005epidemic}. \SPRAY allows such protocols to
-benefit from its self-adjusting partial views.
+\SPRAY makes building scalable decentralized applications in browsers easy and
+accessible.  Developers do not require to foresee the network size targeted by
+their applications. Just the same as for broadcast, many topology optimization
+protocols (e.g. about geolocalization, latency, or preferences) rely on random
+peer-sampling protocol such as the generic algorithms
+T-Man~\cite{jelasity2009tman} and Vicinity~\cite{voulgaris2005epidemic}. \SPRAY
+allows such protocols to benefit from its self-adjusting partial
+views. Protocols such as D2HT~\cite{bertier-d2ht} require both an estimator of
+the network size and a random peer-sampling protocol. Since \SPRAY provides both
+at same cost, a \SPRAY-based D2HT would be an interesting perspective.
 
 Peer-sampling protocols build overlay networks. These overlay networks do not
 necessarily reflect the underlying topology made of routers. Using WebRTC, a
