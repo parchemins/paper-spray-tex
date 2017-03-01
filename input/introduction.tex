@@ -65,16 +65,16 @@ cost, partial view size converges towards $\ln(n)$. This not only
 makes our approach adaptive but also outputs the size of the network
 to the application level allowing applications to adapt to sudden
 burst in popularity at no additional cost. We demonstrate the impact
-of our approach on two use-cases that use RPS to broadcast
+of our approach on two use cases that use RPS to broadcast
 messages. The first one implements a live video streaming based on
-three-phase gossip~\cite{FlightPath,Frey09DSN,monod:THESIS}. In this
+three-phase gossip~\cite{Frey09DSN,FlightPath,monod:THESIS}. In this
 case, adaptiveness allows message delivery to remain stable even in
 presence of burst in popularity. The second one implements a real-time
 collaborative editor. In this case, adaptiveness allows the editors to
 adjust the traffic to the size of the network. Some distributed hash
 table protocols such as D2HT~\cite{bertier-d2ht} require both the
 knowledge of the size of the network to compute the view of each node,
-and a random peer sampling protocol to provide connectivity in the
+and a random peer-sampling protocol to provide connectivity in the
 presence of high churn. Our approach provides both at the same cost.
 
 % The scientific challenge consists in finding a way to adapt to the
@@ -97,7 +97,7 @@ several ways.
   failures, it can quickly disseminate messages.
 \item Experiments show that \SPRAY provides adaptiveness and reliability at a
   marginal cost.
-\item Use-cases demonstrate how the estimation of the network size positively
+\item Use cases demonstrate how the estimation of the network size positively
   impacts two RPS-based broadcast protocols either on traffic or message
   delivery.
 \end{inparaenum}

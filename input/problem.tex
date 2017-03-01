@@ -21,13 +21,13 @@ The peers communicate by means of messages. They only send messages to
 their neighbors. A departed peer cannot send messages. An arc may fail
 to deliver a message. A stale arc systematically fails.
 
-Building an adaptive-by-design random peer sampling that meets WebRTC
+Building an adaptive-by-design random peer-sampling that meets WebRTC
 constraints raises the following scientific problem:
 \begin{problem}
   Let $t$ be an arbitrary time frame, let $V^t$ be the network membership at
   that given time $t$ and let $\mathcal{P}_x^t$ be the partial view of peer
-  $p_x \in \mathcal{V}^t$.  An efficient random peer sampling should provide
-  the following properties:
+  $p_x \in \mathcal{V}^t$.  An adaptive and reliable random peer-sampling should
+  provide the following properties:
   \begin{enumerate}
   \item Partial view size: \hfill
     $\forall p_x \in V^t,\, |\mathcal{P}_x^t| = \mathcal{O} (\ln
@@ -39,12 +39,13 @@ constraints raises the following scientific problem:
   \end{enumerate}
 \end{problem}
 
-The first condition states that the partial view size is relative to
-the size of the network at any time. It also states that partial views
-should grow and shrink, at worst, logarithmically compared to the size
-of the network. The second condition states that a node should be able
-to establish a connection by relying only on a constant number of
-intermediary peers, independently of network size.
+The first condition states that the partial view size is relative to the size of
+the network at any time. It also states that partial views should grow and
+shrink, at worst, logarithmically compared to the size of the network. This is a
+condition for adaptiveness and not a requirement for network connectivity. The
+second condition states that a node should be able to establish a connection by
+relying only on a constant number of intermediary peers, independently of
+network size.
 %% The last condition states that the network
 %% overlay converges exponentially fast to a topology that is close to a random
 %% graph.
