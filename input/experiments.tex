@@ -459,10 +459,8 @@ the size of partial views.]
   birthday paradox where the view size would be the number of randomly chosen
   people and the identity of peers would be the birthdates. The probability of a
   peer to \emph{not} have duplicates is approximately:
-  \begin{equation*}
-    1- 
-    (1-
-    \exp({-\ln(|V^t|)*(\ln(|V^t|)-1)\over{2*|V^t|}}))
+  \begin{equation*} 
+    -\exp({-\ln(|V^t|)*(\ln(|V^t|)-1)\over{2*|V^t|}})
   \end{equation*}
 
 \begin{figure}
