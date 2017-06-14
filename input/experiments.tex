@@ -317,47 +317,32 @@ the size of partial views.]
   for any addition or removal of arcs is proportionally more important.
 \end{asparadesc}
 
-% \subsection{Adaptive partial view}
+\subsection{Accuracy as estimator}
 
-% \begin{asparadesc}
+\begin{asparadesc}
+\item [Objective:] To show the accuracy of \SPRAY's partial views when used as a
+  network size estimator.
+\item [Description:] To evaluate the accuracy of this network size estimator, we
+  measure the average and standard deviation of the network size estimation. The
+  estimation quality is the ratio of measured estimations to the actual network
+  size. This allows us to see how far from the actual network size the
+  estimation can be. 
 
-% \item[Objective:] To show the impact of adaptiveness over partial view size when
-%   the network size grows and shrinks over time.
-% \item[Description:] In this experiment we focus on a dynamic network where peers
-%   can join and leave.  \CYCLON's configuration targets 8k peers. It is
-%   oversized compared the network size during the simulation (maximum of 1k
-%   peers). During the first half of the experimentation, 250 peers are added 4
-%   times successively by intervals of 10 cycles each. Thus, the network size goes
-%   from 0 to 1k peers in 40 rounds. Then, half of the network leaves without
-%   giving notice (500 peers). Finally, 250 peers join two additional times. The
-%   final network contains 1k members. The measurements concern the average
-%   partial view size.
+  In our experiment, peers use \SPRAY and join the network by groups of 1k peers
+  until the network reaches a size of 100k peers. We evaluate two estimators
+  based on the partial views of \SPRAY. The first estimator uses the local
+  partial view only.  \SPRAY provides a view the size of which is
+  $|P| \approx \ln(N)$. Its estimator is $\widehat{N}= \exp{(|P|)}$.
 
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=\SCALE\textwidth]{img/avgpv.eps}
-%   \caption{\label{fig:churn}Average partial view size with churn.}
-% \end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=\SCALE\textwidth]{img/estimator.eps}
+  \caption{\label{fig:estimator}Quality of network size estimation.}
+\end{figure}
 
-% \item[Results:] Figure~\ref{fig:churn} shows the average partial view size of
-%   \SPRAY and \CYCLON. As expected, \CYCLON immediately converges to the
-%   configured partial view size (9 neighbors). On the other hand, \SPRAY's
-%   partial views logarithmically grow while the network grows. When the removals
-%   occur at cycle 40, the peers using \CYCLON remove the dead arcs while
-%   refilling their partial view until they reach the configured partial view
-%   size. The peers using \SPRAY only remove the arcs to reflect the departed
-%   peers. At the end, the \SPRAY partial views contain on average 6.6 neighbors
-%   (recall $\ln(1000)\approx 6.9$).
-% \item[Reasons:] Since each peer injects a logarithmically growing number of
-%   arcs, the average partial view size grows as more peers join the network.
-%   The removal of 500 peers implies a decreasing slope. The slightly decreasing
-%   number of arcs after the removal is due to peers realizing that some arcs are
-%   dead, leading to a probabilistic removal (see Algorithm~\ref{algo:unreachable}).
-% \end{asparadesc}
-
-
-% \vspace{-7pt}
-% \paragraph{Robustness}
+\item [Results:]
+\item [Reasons:]
+\end{asparadesc}
 
 \subsection{Robustness}
 
