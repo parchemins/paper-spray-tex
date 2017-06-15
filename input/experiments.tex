@@ -335,14 +335,14 @@ the size of partial views.]
   until the network reaches a size of 100k peers. We evaluate two estimators
   based on the partial views of \SPRAY. The first estimator uses the local
   partial view only.  \SPRAY provides to Peer $x$ a view the size of which is
-  $|P_x| \approx \ln(N)$. To estimate the network size, a Peer $x$ processes:
+  $|P^t_x| \approx \ln(|V^t|)$. To estimate the network size, a Peer $x$ processes:
   \begin{equation*}
-    \widehat{N}= \exp{(|P_x|)}
+    \widehat{V^t}= \exp{(|P^t_x|)}
   \end{equation*}
   The second estimator uses the local partial view and asks for the neighbors'
   partial view size. Peer $x$ averages the values and computes the estimate:
   \begin{equation*}
-    \widehat{N} = \exp({ {|P_x| + \sum_{i \in P_x} {|P_i|}} \over{|P_x|+1} })
+    \widehat{V^t} = \exp({ {|P^t_x| + \sum_{i \in P^t_x} {|P^t_i|}} \over{|P^t_x|+1} })
   \end{equation*}
 
 \begin{figure}
@@ -374,11 +374,12 @@ the size of partial views.]
   size of views is an integer value, the estimation at a given time for
   particular peer can be off by 1.  For instance, when the network reaches 65k
   peers, the average partial view size just starts to go above 11, meaning that
-  some peers have 12 neighbors in their partial view. Since the estimation using
-  local only knowledge is $\widehat{N} = \exp(|P|)$, increasing by 1 the view
-  size results in a much larger estimate. Hence the sudden increase in standard
+  some peers have 12 neighbors in their partial view. Since Peer $x$'s
+  estimation using local only knowledge is
+  $\smash{\widehat{V^t_x} = \exp(|P^t_x|)}$, increasing by 1 the view size
+  results in a much larger estimate. Hence the sudden increase in standard
   deviation at such network sizes. The standard deviation decreases as the
-  actual network size approaches the overly estimated size.
+  actual network size approaches the overestimated size.
  
   This effect can be decreased by averaging on the neighbors' partial view size:
   the computed value is no longer an integer but an aggregation of
