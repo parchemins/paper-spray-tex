@@ -9,18 +9,20 @@ metrics of peer-sampling performance including clustering coefficient, average
 shortest path length, in-degree distribution, robustness, and arc count. We
 compare \SPRAY with a representative of fixed-size partial view approaches,
 namely \CYCLON. We expect \SPRAY and \CYCLON to exhibit similar behaviors when
-\CYCLON is configured in advance to handle the network size. We expect \SPRAY to
-save resources when \CYCLON is oversized, and to be more robust when \CYCLON is
-undersized. Finally, we expect \SPRAY to keep a negligible number of duplicates
-in its partial views. We also evaluate the impact of the WebRTC connection
-establishment on \CYCLON, \SCAMP, and \SPRAY, in networks subject to message
-loss.  We expect a normal behavior for \CYCLON and \SPRAY while \SCAMP becomes
-quickly partitioned.
+\CYCLON is configured in advance to the logarithm of the targeted network
+size. We expect \SPRAY to save resources when \CYCLON provides larger views, and
+to be more robust when \CYCLON provides smaller views. We expect \SPRAY-based
+network size estimators to provide an estimate at least accurate enough to
+inform about the order of magnitude of the actual network size.  Finally, we
+expect \SPRAY to keep a negligible number of duplicates in its partial views. We
+also evaluate the impact of the WebRTC connection establishment on \CYCLON,
+\SCAMP, and \SPRAY, in networks subject to message loss.  We expect a normal
+behavior for \CYCLON and \SPRAY while \SCAMP becomes quickly partitioned.
 
 The experiments run on the \PEERSIM simulator~\cite{montresor2009peersim}, a
 well-known program written in Java that allows simulations to reach high scale
-in terms of number of peers. Our implementation of the evaluated random peer
-sampling protocols is available on the Github
+in terms of number of peers. Our implementation of the evaluated random
+peer-sampling protocols is available on the Github
 platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 
@@ -42,11 +44,17 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   For each approach, the experiment comprises 4 runs respectively building a
   network of 0.1k, 1k, 10k, and 100k peers. Peers join the network at
   once. Peers join the network through a contact peer chosen at random following
-  a uniform distribution. The representative of the fixed-size approach is
-  \CYCLON which is configured for 1k peers: $\ln(1000)\approx 7$
-  neighbors.  \CYCLON is oversized for 0.1k peers and undersized for 10k peers
-  and 100k peers. During exchanges, the peers using \CYCLON shuffle $3$ out of
-  their $7$ neighbors.
+  a uniform distribution. 
+  
+  Out of fairness, we configure the representative of fixed-size approaches
+  \CYCLON to provide $7$ neighbors which is close to the number of neighbors
+  provided by \SPRAY when the network size reaches 1k peers
+  ($\ln(1000)\approx 7$). Compared to \SPRAY, \CYCLON is oversized for 0.1k
+  peers and undersized for 10k peers and 100k peers. During exchanges, the peers
+  using \CYCLON shuffle $3$ out of their $7$ neighbors.
+
+  % The representative of the fixed-size approach is \CYCLON which is configured
+  % for 1k peers: $\ln(1000)\approx 7$ neighbors.
 
 \begin{figure}
   \centering
@@ -60,8 +68,8 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   Figure~\ref{fig:clustering} also shows that both approaches converge to a low
   clustering coefficient which is characteristic of random graphs. Nevertheless,
   \CYCLON and \SPRAY do not reach the same values after convergence. Except when
-  \CYCLON's configuration aims for 1k peers, \SPRAY's values are either below
-  (when \CYCLON is oversized) or above (when \CYCLON is undersized).
+  the network comprises 1k peers, \SPRAY's values are either below when \CYCLON
+  is comparatively oversized; or above when \CYCLON is comparatively undersized.
   
   These results show that both \SPRAY and \CYCLON can be deployed at once. They
   start ready-to-use but do not have their optimal properties. However, no
@@ -86,7 +94,8 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   the same average partial view size (\SPRAY $7.1$ vs \CYCLON $7$), hence almost
   identical clustering coefficient measurements. By extending the reasoning,
   this also explains why \SPRAY yields lower $\overline{C}$ values when \CYCLON
-  is oversized, and why it yields higher values when \CYCLON is undersized.
+  is comparatively oversized, and why it yields higher values when \CYCLON is
+  comparatively undersized.
 \end{asparadesc}
 
 
@@ -102,11 +111,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   path length on a subset of the network membership.
 
   We run the simulation on \SPRAY $100$ times to avoid any side effects due to
-  randomness. The experiment comprises 3 runs for \CYCLON: \CYCLON set to 7
-  neighbors targets 1k peers; \CYCLON set to 9 neighbors targets 8k peers;
-  \CYCLON set to 11 neighbors targets 60k peers. We perform the measurements
-  after convergence. The checkpoints for the measurements are 0.1k, 0.5k, 1k,
-  5k, 10k, 50k, and 100k peers.
+  randomness. The experiment comprises 3 runs for \CYCLON: we set \CYCLON to
+  provide $7$ neighbors which is close to the number of neighbors provided by
+  \SPRAY when the network reaches 1k peers; we set \CYCLON to provide 9
+  neighbors which is close to the number of neighbors provided by \SPRAY when
+  the network reaches 8k peers; we set \CYCLON to provide 11 neighbors which is
+  close to the number of neighbors provided by \SPRAY when the network reaches
+  60k peers. We perform the measurements after convergence. The checkpoints for
+  the measurements are 0.1k, 0.5k, 1k, 5k, 10k, 50k, and 100k peers.
 
 \begin{figure}
   \centering
@@ -117,15 +129,15 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \item[Results:] Figure~\ref{fig:avgpath} shows that both \CYCLON and \SPRAY have
   a relatively small average shortest path length.  Figure~\ref{fig:avgpath}
   also shows that each run of \CYCLON is divided in three parts compared to
-  \SPRAY. First, an oversized \CYCLON has smaller values than \SPRAY. Then,
-  \SPRAY and \CYCLON become equivalent where the latter is configured to the
-  logarithm of the actual network size. Finally, \SPRAY has smaller values than
+  \SPRAY. \CYCLON starts with smaller values than \SPRAY. \SPRAY and \CYCLON
+  become equivalent when the latter is configured to the logarithm of the actual
+  network size. After this point, \SPRAY has smaller values than
   \CYCLON. Overall, \SPRAY scales better than \CYCLON since the gradient (slope)
   of the former is lower than any configuration of the latter. Empirically, we
   observe that \CYCLON builds networks with an average shortest path length of
-  $\smash{\ln(N)\over {\ln(|P|)}}$ where $N$ is the network size and $|P|$ is
-  constant, while \SPRAY builds networks with an average shortest path length of
-  $\smash{\ln(N)\over{\ln(\ln(N))} }$.
+  $\smash{\ln(|V^t|)\over {\ln(|P|)}}$ where $|P|$ is constant, while \SPRAY
+  builds networks with an average shortest path length of
+  $\smash{\ln(|V^t|)\over{\ln(\ln(|V^t|))} }$.
 
   These results show that developers could use both \SPRAY and \CYCLON to build
   efficient information dissemination protocols. Nevertheless, they should use
@@ -136,11 +148,14 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   convergence, the network overlay become closely related to random graphs. In
   particular, the diameter and average shortest path length remain small.
 
-  Since the number of arcs using an oversized \CYCLON is greater, it yields a
-  lower average path length than \SPRAY. Conversely, since the number of arcs
-  using an undersized \CYCLON is lower, \SPRAY achieves better performance
-  thanks to its larger partial views. Overall, \SPRAY scales better than any
-  configuration of \CYCLON, for it adds arcs as the network grows.
+  Before reaching the point where the number of neighbors provided by \SPRAY is
+  equivalent to the number of neighbors provided by \CYCLON, \CYCLON provides
+  more neighbors than \SPRAY. Since the number of arcs is greater, it yields a
+  lower average path length. Conversely, when the number of peers in the network
+  goes over the point where \SPRAY and \CYCLON are equivalent, \SPRAY provides
+  more neighbors than \CYCLON. Therefore, the lower average path length is
+  smaller using \SPRAY. Overall, \SPRAY scales better than any configuration of
+  \CYCLON, for it adds arcs as the network grows.
 \end{asparadesc}
 
 
@@ -170,8 +185,9 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
   For each approach, the experiment comprises 4 runs respectively building a
   network of 0.1k, 1k, 100k, and 500k peers. We configure \CYCLON with partial
-  views of size $7$ which targets a network of 1k peers.  We perform the
-  in-degree measurements after convergence.
+  views of size $7$ which is close to the number of neighbors provided by \SPRAY
+  when the network reaches 1k peers.  We perform the in-degree measurements
+  after convergence.
 
 \begin{figure}
   \centering
@@ -403,13 +419,14 @@ the size of partial views.]
   to what extent the network can be repaired, i.e., two weak components exist
   when there is no link to unit them.
 
-  In our experiment, we configure \CYCLON's view size to 9, which targets 8k
+  In our experiment, we configure \CYCLON's view size to 9 which is
+  approximately equivalent to \SPRAY's view size when the network reaches 8k
   peers. The network contains 10k members. We perform the removals after the
   approaches have converged to a stable overlay network. We remove a random set
-  of peers at once following a uniform distribution, from 25 to 95 percent of
-  peers every 5 percents, i.e., 16 runs for each approach. We perform a last
-  measurement at 99 percent. We measure the number of components immediately
-  after each removal.
+  of peers at once following a uniform distribution. We remove from 25 to 95
+  percent of peers every 5 percents, i.e., 16 runs for each approach. We perform
+  a last measurement at 99 percent. We measure the number of components
+  immediately after each removal.
 
 \begin{figure}
   \centering
@@ -445,11 +462,10 @@ the size of partial views.]
   % the
   % network.
 \item[Reasons:] The random peer-sampling approaches \CYCLON and \SPRAY yield
-  very similar results because \CYCLON's configuration targets a network size of
-  8k peers, while \SPRAY adjusts itself automatically to this network size.
-  Therefore, the two protocols create very similar numbers of arcs. Yet \CYCLON
-  performs slightly better for two reasons. First the variance in the degree
-  distribution of \SPRAY causes \CYCLON to have more arcs in this specific
+  very similar results because the number of neighbors provided by both
+  approaches is very close when the network reaches 10k.  Yet \CYCLON performs
+  slightly better for two reasons. First the variance in the degree distribution
+  of \SPRAY causes \CYCLON to have more arcs in this specific
   experiment. Second, \SPRAY wastes some of its neighbors due to the presence of
   duplicate entries in its views (yet the number of duplicates remains small --
   see Figure~\ref{fig:duplicates}). Still both protocols preserve the ability to
@@ -522,16 +538,15 @@ the size of partial views.]
 \item[Objective:] To show that \SPRAY does not suffer from failures in
   connection establishments, contrarily to \SCAMP.
 \item[Description:] We measure both the arc count and the number of weak
-  components in the network. The simulations involve \CYCLON (configured with
-  partial view containing 9 neighbors targeting a network of roughly 8k
-  peers), \SCAMP\footnote{A modified version of \SCAMP whose periodic protocol
-    works properly when there is no connection failures. Available at
-    \url{https://github.com/justayak/peersim-spray}}, and \SPRAY. They run over
-  50k cycles. The network initially contains 10k members.  To establish a
-  connection, we use the WebRTC three-way handshake, i.e., the initial peer
-  emits an offer ticket, the arrival peer stamps the ticket, the initial peer
-  finalizes the connection using the stamped ticket
-  (see Section~\ref{sec:relatedwork}). The probability that the ticket fails to
+  components in the network. The simulations involve \CYCLON configured with
+  partial views containing 9 neighbors, \SCAMP\footnote{A modified version of
+    \SCAMP whose periodic protocol works properly when there is no connection
+    failures. Available at \url{https://github.com/justayak/peersim-spray}}, and
+  \SPRAY. They run over 50k cycles. The network initially contains 10k members.
+  To establish a connection, we use the WebRTC three-way handshake, i.e., the
+  initial peer emits an offer ticket, the arrival peer stamps the ticket, the
+  initial peer finalizes the connection using the stamped ticket (see
+  Section~\ref{sec:relatedwork}). The probability that the ticket fails to
   traverse a hop is set to $10^{-3}$.
 
 \begin{figure}
