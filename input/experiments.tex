@@ -46,12 +46,13 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
   once. Peers join the network through a contact peer chosen at random following
   a uniform distribution. 
   
-  Out of fairness, we configure the representative of fixed-size approaches
-  \CYCLON to provide $7$ neighbors which is close to the number of neighbors
-  provided by \SPRAY when the network size reaches 1k peers
-  ($\ln(1000)\approx 7$). Compared to \SPRAY, \CYCLON is oversized for 0.1k
-  peers and undersized for 10k peers and 100k peers. During exchanges, the peers
-  using \CYCLON shuffle $3$ out of their $7$ neighbors.
+  For the sake of fairness, we configure the representative of
+  fixed-size approaches, \CYCLON, to provide $7$ neighbors which is
+  close to the number of neighbors provided by \SPRAY when the network
+  size reaches 1k peers ($\ln(1000)\approx 7$). Compared to \SPRAY,
+  \CYCLON is oversized for 0.1k peers and undersized for 10k peers and
+  100k peers. During exchanges, the peers using \CYCLON shuffle $3$
+  out of their $7$ neighbors.
 
   % The representative of the fixed-size approach is \CYCLON which is configured
   % for 1k peers: $\ln(1000)\approx 7$ neighbors.
@@ -299,10 +300,10 @@ the size of partial views.]
   as distributed hash tables~\cite{camarillo2014self} or routing
   protocols~\cite{kleinberg2000smallworld} that could benefit from random
   peer-sampling protocols properties and that normally require the use of
-  network size estimators to work.
+  network-size estimators to work.
 
   % The estimate provided by \SPRAY is not precise but comes
-  % at no cost while network size estimators involve traffic.
+  % at no cost while network-size estimators involve traffic.
 
 \item [Reasons:] A peer joining the network injects at least one arc plus a
   number of arcs depending on the contact peer. Since we choose the contact peer
@@ -336,22 +337,21 @@ the size of partial views.]
   for any addition or removal of arcs is proportionally more important.
 \end{asparadesc}
 
-\subsection{Network size estimator}
+\subsection{Network-size estimation}
 
 \begin{asparadesc}
 \item [Objective:] To show the accuracy of \SPRAY's partial views when used as a
-  network size estimator.
-\item [Description:] To evaluate the accuracy of this network size estimator, we
-  measure the average and standard deviation of the network size estimation. The
-  estimation quality is the ratio of measured estimations to the actual network
-  size. This allows us to see how far from the actual network size the
-  estimation can be. 
-
-  In our experiment, peers use \SPRAY and join the network by groups of 1k peers
-  until the network reaches a size of 100k peers. We evaluate two estimators
-  based on the partial views of \SPRAY. The first estimator uses the local
-  partial view only.  \SPRAY provides to Peer $x$ a view the size of which is
-  $|P^t_x| \approx \ln(|V^t|)$. To estimate the network size, a Peer $x$ processes:
+  network-size estimator.
+\item [Description:] To evaluate the accuracy of \SPRAY as a
+  network-size estimator, we define estimation quality as the ratio of
+  measured estimations to the actual network size. This allows us to
+  see how far from the actual network size the estimation can be.  In
+  our experiment, peers use \SPRAY and join the network by groups of
+  1k peers until the network reaches a size of 100k peers. We evaluate
+  two estimators based on the partial views of \SPRAY. The first
+  estimator uses the local partial view only.  \SPRAY provides a peer
+  $x$ with a view of size $|P^t_x| \approx \ln(|V^t|)$. To estimate
+  the network size, peer $x$ processes:
   \begin{equation*}
     \widehat{V^t}= \exp{(|P^t_x|)}
   \end{equation*}
@@ -364,42 +364,47 @@ the size of partial views.]
 \begin{figure}
   \centering
   \includegraphics[width=\SCALE\textwidth]{img/estimator.eps}
-  \caption{\label{fig:estimator}Quality of network size estimation.}
+  \caption{\label{fig:estimator}Quality of network-size estimation.}
 \end{figure}
 
-\item [Results:] Figure~\ref{fig:estimator} shows the quality of the estimation
-  over a network of increasing size. We observe that the quality of estimates
-  depends of the network size. We observe that using local knowledge only, most
-  peers are able to compute an estimation of the network size ranging from
-  $\pm 10\%$ to $\pm 30\%$ of the actual network size. We also observe that
-  increasing the knowledge using peers' neighborhood improves the estimation by
-  decreasing the range of estimates around the mean (from $\pm 5\%$ to
-  $\pm 10\%$).
+\item [Results:] Figure~\ref{fig:estimator} shows mean and standard
+  deviation of the estimation quality with increasing network
+  sizes. We observe that the estimation quality depends on the network
+  size. Using local knowledge only, most peers are able to compute an
+  estimation ranging from $\pm 10\%$ to $\pm 30\%$ of the actual
+  network size. We also observe that increasing the available
+  knowledge using peers' neighborhoods improves the estimation by
+  decreasing the variation of estimates around the mean (from $\pm
+  5\%$ to $\pm 10\%$).
 
-  These results show empirically that applications that require to estimate the
-  network size can use \SPRAY's partial view size as input to know the order of
-  magnitude of the actual network size. The use of local knowledge only leads to
-  an inaccurate estimate but it comes at no cost while network size estimators
-  generate traffic. Applications can easily increase accuracy on-demand by
-  asking their neighbors for their partial view size.
+  These results show empirically that applications that need to
+  estimate the network size can use \SPRAY's partial view size as
+  input to know the order of magnitude of the actual network size. The
+  use of local knowledge only leads to an inaccurate estimate but it
+  comes at no cost while full-fledged network-size estimators generate
+  traffic~\cite{montresor2004robust}. Applications can easily increase
+  accuracy on-demand by asking their neighbors for their partial view
+  sizes for a limited cost.
 
-\item [Reasons:] Particularly in the case of local only knowledge, the standard
-  deviation on the quality of the estimate grows and shrinks while the network
-  size grows. Figure~\ref{fig:estimator} shows that measured values narrow
-  before quickly raising at repeated but increasingly distant times.  Since the
-  size of views is an integer value, the estimation at a given time for
-  particular peer can be off by 1.  For instance, when the network reaches 65k
-  peers, the average partial view size just starts to go above 11, meaning that
-  some peers have 12 neighbors in their partial view. Since Peer $x$'s
-  estimation using local only knowledge is
-  $\smash{\widehat{V^t_x} = \exp(|P^t_x|)}$, increasing by 1 the view size
-  results in a much larger estimate. Hence the sudden increase in standard
-  deviation at such network sizes. The standard deviation decreases as the
-  actual network size approaches the overestimated size.
+\item [Reasons:] The standard deviation of the estimation quality
+  grows and shrinks while the network size increases, particularly in
+  the case of local-only knowledge. Figure~\ref{fig:estimator} shows
+  that the variance of estimates narrows before quickly raising at
+  increasingly sized intervals.  Since the size of views is an integer
+  value, the logarithm of the estimation for a peer at a given time
+  can be off by 1.  For instance, when the network reaches 65k peers,
+  the average partial view size just starts to go above 11, meaning
+  that some peers have 12 neighbors in their partial views. Since the
+  local-knowledge estimation of a peer $x$ is $\smash{\widehat{V^t_x}
+    = \exp(|P^t_x|)}$, increasing peer $x$'s view size by $1$ results
+  in a much larger estimate. Hence the sudden increase in standard
+  deviation at such network sizes. The standard deviation decreases as
+  the actual network size approaches the overestimated size.
  
-  This effect can be decreased by averaging on the neighbors' partial view size:
-  the computed value is no longer an integer but an aggregation of
-  representative values chosen at random.
+  This effect can be mitigated by averaging the local value with the
+  neighbors' partial view sizes: the computed value is no longer an
+  integer but an aggregation of representative values chosen at
+  random.
 \end{asparadesc}
 
 \subsection{Robustness}

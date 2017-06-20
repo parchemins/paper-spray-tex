@@ -210,32 +210,37 @@ number of participating peers, and $c$ being a positive constant.
 
 %In order to demonstrate the performance of \SPRAY with a real scenario, we
 %introduce 
-\CRATE is a real-time editor that allows authors to write anytime and anywhere,
-whatever the number of participants, without any third
-party~\cite{nedelec2016crate}. Compared to trending Cloud-based editors such as
-Google Docs, it alleviates privacy, scalability, and single point of failure
-issues while remaining easy to use.  It can be used for small groups but also
-during events such as massive online lectures, TV shows, conferences that gather
-larger groups. For instance, online lecture sessions reach thousands of
-students. Transitions between small groups and large groups is supported
-transparently thanks to \SPRAY. Distributed real-time editing is a pertinent
-context for \SPRAY, for group sizes are not the same depending on the document,
-group sizes change quickly over time, and any participant broadcasts its changes
-to all other participants.
+\CRATE is a real-time editor that allows authors to write anytime and
+anywhere, whatever the number of participants, without any third
+party~\cite{nedelec2016crate}. Compared to trending Cloud-based
+editors such as Google Docs, it alleviates privacy, scalability, and
+single-point-of-failure issues while remaining easy to use.  It can be
+used for small groups but also during events such as massive online
+lectures, TV shows, or conferences that gather larger groups. For
+instance, online lecture sessions reach thousands of
+students. Transitions between small groups and large groups is
+supported transparently thanks to \SPRAY. Distributed real-time
+editing is a pertinent context for \SPRAY for group sizes differ
+depending on the document, and change quickly over time.\df{I am not
+  sure what the following text is for ``and any
+participant broadcasts its changes to all other participants.''}
 
-\CRATE builds a network of browsers where each browser is able to communicate
-with a logarithmically scaling number of browsers compared to the global network
-size. Each change performed on documents transits through neighbors and reaches
-all members in a scalable way~\cite{birman1999bimodal}. Unlike the
-state-of-the-art~\cite{tolgyeski2009adaptive,voulgaris2005cyclon}, \SPRAY allows
-the diffusion cost to adapt to the network size without any probing mechanism or
-any central authority.  The developers do not have to overestimate the
-parameters of peer-sampling protocols to get a system that well behave for
-largest networks as well as for small networks. This would increase the cost of
-maintaining connections alive (e.g. in WebRTC context) and more importantly the
-cost of protocols built on top of it (e.g. broadcasting protocols).  Without
-intervention of the developers or the users, \SPRAY makes sure that small
-networks do not pay the price of large networks.
+\CRATE builds a network of browsers where each browser is able to
+communicate with a logarithmically scaling number of browsers compared
+to the global network size. Each change performed on documents
+transits through neighbors and reaches all members in a scalable
+way~\cite{birman1999bimodal}. Unlike the
+state-of-the-art~\cite{tolgyeski2009adaptive,voulgaris2005cyclon},
+\SPRAY allows the diffusion cost to adapt to the network size without
+any probing mechanism or any central authority.  Without \SPRAY,
+developers would have to overestimate the parameters of peer-sampling
+protocols to get a system that behaves well for large as well as for
+small networks. This would increase the cost of maintaining
+connections alive (e.g. in a WebRTC context) and more importantly the
+cost of application protocols (e.g. broadcasting protocols).  \SPRAY,
+on the other hand, ensures that small networks do not pay the price of
+large networks without requiring the intervention of developers or
+end users. 
 
 \subsubsection{Operation}
 
