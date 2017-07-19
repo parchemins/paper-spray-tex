@@ -1,4 +1,4 @@
-\newcommand\SCALE{0.8}
+\newcommand\SCALE{1}
 
 \section{Experimentation}
 \label{sec:experimentation}
@@ -59,7 +59,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\SCALE\textwidth]{img/clustering.eps}
+  \includegraphics[width=\SCALE\columnwidth]{img/clustering.eps}
   \caption{\label{fig:clustering}Clustering coefficient.}
 \end{figure}
 
@@ -123,7 +123,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\SCALE\textwidth]{img/avgpath.eps}
+  \includegraphics[width=\SCALE\columnwidth]{img/avgpath.eps}
   \caption{\label{fig:avgpath}Average shortest path length.}
 \end{figure}
 
@@ -192,7 +192,7 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 
 \begin{figure}
   \centering
-  \includegraphics[width=\SCALE\textwidth]{img/histo.eps}
+  \includegraphics[width=\SCALE\columnwidth]{img/histo.eps}
   \caption{\label{fig:histo}In-degree distribution.}
 \end{figure}
 
@@ -248,11 +248,11 @@ platform\footnote{\url{https://github.com/justayak/peersim-spray}}.
 \subfloat[Figure A]
 [\label{fig:small}Mininum, maximum, average, and standard deviation of
 the size of partial views.]
-{\includegraphics[width=0.8\textwidth]{img/small.eps}}
-
+{\includegraphics[width=\SCALE\columnwidth]{img/small.eps}}%
+\hspace{10pt}
 \subfloat[Figure B]
 [\label{fig:extended}Average size of partial views over long period of time.]
-{\includegraphics[width=0.8\textwidth]{img/extended.eps}}%
+{\includegraphics[width=\SCALE\columnwidth]{img/extended.eps}}%
 \caption{Partial view size measurements in networks subject to churn.}
 \end{figure*}
 
@@ -363,7 +363,7 @@ the size of partial views.]
 
 \begin{figure}
   \centering
-  \includegraphics[width=\SCALE\textwidth]{img/estimator.eps}
+  \includegraphics[width=\SCALE\columnwidth]{img/estimator.eps}
   \caption{\label{fig:estimator}Quality of network-size estimation.}
 \end{figure}
 
@@ -435,7 +435,7 @@ the size of partial views.]
 
 \begin{figure}
   \centering
-  \includegraphics[width=\SCALE\textwidth]{img/resilience.eps}
+  \includegraphics[width=\SCALE\columnwidth]{img/resilience.eps}
   \caption{\label{fig:resilience}Robustness to massive failures.}
 \end{figure}
 
@@ -513,7 +513,7 @@ the size of partial views.]
 
 \begin{figure}
   \centering
-  \includegraphics[width=\SCALE\textwidth]{img/duplicates.eps}
+  \includegraphics[width=\SCALE\columnwidth]{img/duplicates.eps}
   \caption{\label{fig:duplicates}Duplicates in networks of different size.}
 \end{figure}
 
@@ -555,7 +555,7 @@ the size of partial views.]
   traverse a hop is set to $10^{-3}$.
 
 \begin{figure}
-  \centering \includegraphics[width=\SCALE\textwidth]{img/degen.eps}
+  \centering \includegraphics[width=\SCALE\columnwidth]{img/degen.eps}
   \caption{\label{fig:degeneration}Number of arcs and partitioning in networks
     subject to failures in the connection establishments.}
 \end{figure}

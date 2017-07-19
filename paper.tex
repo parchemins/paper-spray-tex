@@ -1,6 +1,5 @@
-\documentclass[onecolumn, a4paper]{svjour3}
+\documentclass{class-for-drafts}
 
-\RequirePackage{fix-cm}
 %\usepackage{lmodern}
 %\usepackage[nocompress]{cite}
 \usepackage{hyperref}
@@ -53,7 +52,7 @@
 %\setlength{\belowcaptionskip}{-15pt} %% reduce spacing below figures
 %\setlength{\intextsep}{7pt} %% reduce spacing on top/bottom of algorithms
 
-%\newtheorem{problem}{Problem Statement}
+\newtheorem{problem}{Problem Statement}
 %paralist
 \renewcommand*\descriptionlabel[1]{%
 \scshape #1}
@@ -76,18 +75,18 @@
 
 \title{An Adaptive Peer-Sampling Protocol\\for Building Networks of Browsers}
 
+\numberOfAuthors{5}
 \author{Brice N\'edelec \and Julian Tanke \and Davide Frey \and Pascal Molli
   \and Achour Most\'efaoui}
+\proceedings{World Wide Web Journal, July 2017}
 
-\institute{B. N{\'e}delec \at LS2N, University of Nantes, 2, rue de la Houssini{\`e}re 
-BP 92208 44322 Nantes Cedex 3, France\\\email{brice.nedelec@univ-nantes.fr}
-\and J. Tanke \at LS2N, University of Nantes\\\email{s6jutank@uni-bonn.de}
-\and D. Frey \at INRIA Bretagne-Atlantique, Campus Universitaire de Beaulieu
-35042 Rennes Cedex, France\\\email{davide.frey@inria.fr}
-\and P. Molli \at LS2N, University of Nantes\\\email{pascal.molli@univ-nantes.fr}
-\and A. Most{\'e}faoui \at LS2N, University of Nantes\\\email{achour.mostefaoui@univ-nantes.fr}}
-
-\date{}
+% \institute{B. N{\'e}delec \at LS2N, University of Nantes, 2, rue de la Houssini{\`e}re 
+% BP 92208 44322 Nantes Cedex 3, France\\\email{brice.nedelec@univ-nantes.fr}
+% \and J. Tanke \at LS2N, University of Nantes\\\email{s6jutank@uni-bonn.de}
+% \and D. Frey \at INRIA Bretagne-Atlantique, Campus Universitaire de Beaulieu
+% 35042 Rennes Cedex, France\\\email{davide.frey@inria.fr}
+% \and P. Molli \at LS2N, University of Nantes\\\email{pascal.molli@univ-nantes.fr}
+% \and A. Most{\'e}faoui \at LS2N, University of Nantes\\\email{achour.mostefaoui@univ-nantes.fr}}
 
 \maketitle
 \input{input/abstract.tex}
