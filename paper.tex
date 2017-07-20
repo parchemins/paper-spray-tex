@@ -18,7 +18,8 @@
 %% images
 \usepackage{graphicx}
 %% inparaenum
-\usepackage[defblank]{paralist}
+\usepackage{paralist}
+
 %% tables
 \usepackage{booktabs}
 \usepackage{multirow}
@@ -53,11 +54,7 @@
 %\setlength{\intextsep}{7pt} %% reduce spacing on top/bottom of algorithms
 
 \newtheorem{problem}{Problem Statement}
-%paralist
-\renewcommand*\descriptionlabel[1]{%
-\scshape #1}
-\renewcommand\paradescriptionlabel[1]{%
-\scshape #1}
+
 
 %%% (TODO) remove before submission
 % \AtBeginDocument{%
@@ -83,7 +80,7 @@
   Campus Universitaire de Beaulieu \\
   35042 Rennes Cedex, France}
 
-\numberOfAuthors{5}
+\numberOfAuthors{1000}
 
 \author{Brice
   N{\'e}delec\footnote{\label{univnantes}\url{first.last@univ-nantes.fr}}
@@ -115,7 +112,7 @@
 \input{input/experiments.tex}
 \input{input/usecase.tex}
 \input{input/conclusion.tex}
-%\input{input/acknowledgment.tex}
+\input{input/acknowledgment.tex}
 
 %% Bibliographie
 \bibliographystyle{abbrv}
