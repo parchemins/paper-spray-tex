@@ -77,3 +77,4 @@
   \fi
 }
                            
+\newcommand{\keywords}[1]{\vspace{0.5cm} \noindent \textit{\textbf{Keywords:} #1}}
