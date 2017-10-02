@@ -1,0 +1,18 @@
+\begin{tikzpicture}{scale=1.5}
+
+  \newcommand\X{65pt};
+  \newcommand\Y{15pt};
+
+
+  \draw[->] (27+0*\X, 0*\Y) -- node[anchor=north]{\small{leaves}} (-5+1*\X, 0*\Y);
+
+  \draw[fill=white, very thick]
+  (1*\X, 0*\Y) node{$p$} +(-5pt,-5pt) rectangle +(5pt,5pt);
+  
+
+  \draw[fill=white, dashed]
+  (0*\X, 0*\Y) node[align=center]{network\\of size $n$}
+  +(-27pt,-25pt) rectangle +(27pt,25pt);
+
+ 
+\end{tikzpicture}
