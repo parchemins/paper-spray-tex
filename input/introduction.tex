@@ -81,20 +81,61 @@ presence of high churn. Our approach provides both at the same cost.
 % network size without actually measuring its number of members as
 % proposed by Scamp, but running on top of WebRTC.
 
-In this paper, we address the challenge of a dynamically adaptive peer-sampling,
+%% In this paper, 
+We address the challenge of a dynamically adaptive peer-sampling,
 by introducing \SPRAY, a novel random peer-sampling protocol inspired by both
 \SCAMP~\cite{ganesh2001scamp,ganesh2003peer} and
 \CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state-of-the-art in
 several ways.
+
+\paragraph{Adaptive.}
+Peers using \SPRAY see their neighborhood size growing and shrinking
+automatically regarding the global network size using local knowledge only. In
+addition, the neighborhood size scales logarithmically compared to the network
+size. \SPRAY achieves this by dividing the life cycle of a peer in 3 phases: 
+\begin{enumerate}[(i)]
+\item When a peer \emph{joins}, we must add logarithmic number of links to the
+  network. The peer joins using a contact peer already inside the network. This
+  contact has a neighborhood the size of which is the logarithm of the network
+  size. The contact simply asks to its neighbors to establish a link with the
+  newcomer to get the proper global number of arcs.
+\item When a peer stays in the network, it periodically \emph{shuffles} its
+  neighborhood with one of its current neighbor. During shuffles, the global
+  number of arcs must remain constant. Involved peers give a part of their
+  neighborhood. They remove the link to given neighbors and the other involved
+  peer must create a link to these. Shuffles may create duplicated links that
+  must be temporarily kept.  Over shuffles, the number of duplicates remains
+  small compared to the network size and becomes negligible as the network
+  grows.
+\item When a peer \emph{crashes or leaves}, we must remove a logarithmic number
+  of links. This number must match the number of links added during the joining
+  phase of the newest peer. Unfortunately, these departures leads to an
+  overzealous removal of links. To fix the number of arcs, all but one of the
+  peers that have the departed peer in their neighborhood should create a
+  duplicated link. Since they do not know each other, they cannot
+  communicate. They use their neighborhood size to process the probability of
+  duplicating.
+\end{enumerate}
+
+  %% It dynamically adapts the neighborhood of each peer. Thus, the number of
+  %% connections scales logarithmically with the network size.
+
+\paragraph{Cautious.}
+It only uses neighbor-to-neighbor interactions to establish connections. Thus, a
+node needs to rely only on a constant number of other nodes to establish a
+connection regardless of network size.
+
+\paragraph{Fast.}
+It quickly converges to a topology with properties similar to those of random
+graphs. Thus, the network becomes robust to massive failures, it can quickly
+disseminate messages.
+
+
+
+\paragraph{Use cases.} \SPRAY alone provides all desirable properties of random
+peer-sampling protocols. 
+
 \begin{inparaenum}[(i)]
-\item It dynamically adapts the neighborhood of each peer. Thus, the number of
-  connections scales logarithmically with the network size.
-\item It only uses neighbor-to-neighbor interactions to establish
-  connections. Thus, a node needs to rely only on a constant number of
-  other nodes to establish a connection regardless of network size.
-\item It quickly converges to a topology with properties similar to
-  those of random graphs. Thus, the network becomes robust to massive
-  failures, it can quickly disseminate messages.
 \item Experiments show that \SPRAY provides adaptiveness and reliability at a
   marginal cost.
 \item Use cases demonstrate how the estimation of the network size positively
@@ -102,12 +143,14 @@ several ways.
   delivery.
 \end{inparaenum}
 
-The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
-reviews the related work. Section~\ref{sec:problem} states the scientific
-problem. Section~\ref{sec:proposal} details the \SPRAY
-protocol. Section~\ref{sec:experimentation} presents experimentation results of
-\SPRAY and compares them to state-of-the-art. Section~\ref{sec:usecase} details
-our use-cases. We conclude in Section~\ref{sec:conclusion}.
+
+
+% The rest of this paper is organized as follows: Section~\ref{sec:relatedwork}
+% reviews the related work. Section~\ref{sec:problem} states the scientific
+% problem. Section~\ref{sec:proposal} details the \SPRAY
+% protocol. Section~\ref{sec:experimentation} presents experimentation results of
+% \SPRAY and compares them to state-of-the-art. Section~\ref{sec:usecase} details
+% our use-cases. We conclude in Section~\ref{sec:conclusion}.
 
 
 
