@@ -4,23 +4,26 @@
 
 Peer-sampling
 protocols~\cite{jelasity2007gossip,tolgyeski2009adaptive,voulgaris2005cyclon}
-constitute a fundamental mechanism for a number of large-scale distributed
-applications both on the Cloud~\cite{decandia2007dynamo} and in a peer-to-peer
-setting~\cite{Frey09Middleware,voulgaris2005sub,wuhib2009robust}. By providing
-each node with a continuously changing partial view of the network, they make
-applications resilient to churn~\cite{bertier-d2ht} and inherently load
-balancing~\cite{Frey09DSN}. In the context of video streaming, for example, a
-peer-sampling protocol makes it possible to distribute the streaming load over
-all peers without requiring the creation and the maintenance of rigid structures
-like multiple trees~\cite{Frey09DSN,monod:THESIS}.
+constitute a fundamental mechanism for a number of large-scale
+distributed applications both on the Cloud~\cite{decandia2007dynamo}
+and in a peer-to-peer
+setting~\cite{Frey09Middleware,voulgaris2005sub,wuhib2009robust}. By
+providing each node with a continuously changing partial view of the
+network, they make applications resilient to churn~\cite{bertier-d2ht}
+and inherently load balancing~\cite{Frey09DSN}. In the context of
+video streaming, for example, a peer-sampling protocol makes it
+possible to distribute the streaming load over all peers without
+requiring the creation and the maintenance of rigid structures like
+multiple trees~\cite{Frey09DSN,monod:THESIS}.
 
 The recent introduction of WebRTC~\cite{webrtc} has renewed the
-research interest in a variety of applications that require
-peer-sampling protocols such as video streaming~\cite{hivejs,smoothcache2},
-content-delivery networks~\cite{Zhang:2013:MBC:2465351.2465379}, or
-real-time collaborative editors~\cite{nedelec2016crate}. However,
-deploying existing peer-sampling protocols on top of WebRTC raises
-important technical challenges.
+research interest in applications that require peer-sampling protocols
+such as content-delivery
+networks~\cite{Zhang:2013:MBC:2465351.2465379}, real-time
+collaborative editors~\cite{nedelec2016crate}, or video streaming
+platforms~\cite{hivejs,smoothcache2}. However, deploying existing
+peer-sampling protocols on top of WebRTC raises important technical
+challenges.
 \begin{inparaenum}[(1)]
 \item WebRTC does not manage addressing nor routing; this makes
   connection establishment much more costly than on IP networks and
@@ -59,35 +62,35 @@ estimates the actual number of network nodes by periodically running
 an aggregation protocol~\cite{montresor2004robust}, then resizes the
 partial views. However, this aggregation protocol would have to run
 quite frequently, resulting in significant network overhead to
-anticipate a popularity burst that may never happen. Our approach
+anticipate a popularity burst that may never happen. 
+
+We address the challenge of dynamically adaptive peer sampling, by
+introducing \SPRAY, a novel random peer-sampling protocol that
 provides adaptiveness and reliability by locally self-adjusting the
 size of partial views at join, leave, and shuffle times. At a marginal
 cost, partial view size converges towards $\ln(n)$. This not only
 makes our approach adaptive but also outputs the size of the network
 to the application level allowing applications to adapt to sudden
-burst in popularity at no additional cost. We demonstrate the impact
-of our approach on two use cases that use RPS to broadcast
-messages. The first one implements a live video streaming based on
-three-phase gossip~\cite{Frey09DSN,FlightPath,monod:THESIS}. In this
-case, adaptiveness allows message delivery to remain stable even in
-presence of burst in popularity. The second one implements a real-time
+burst in popularity at no additional cost.  For example, some
+distributed hash table protocols such as D2HT~\cite{bertier-d2ht}
+require both the knowledge of the size of the network to compute the
+view of each node, and a random peer-sampling protocol to provide
+connectivity in the presence of high churn. \SPRAY provides both at
+the same cost.  We demonstrate the impact of our approach on two use
+cases that use RPS to broadcast messages. The first one implements a
+live video streaming based on three-phase
+gossip~\cite{Frey09DSN,FlightPath,monod:THESIS}. In this case,
+adaptiveness allows message delivery to remain stable even in presence
+of burst in popularity. The second one implements a real-time
 collaborative editor. In this case, adaptiveness allows the editors to
-adjust the traffic to the size of the network. Some distributed hash
-table protocols such as D2HT~\cite{bertier-d2ht} require both the
-knowledge of the size of the network to compute the view of each node,
-and a random peer-sampling protocol to provide connectivity in the
-presence of high churn. Our approach provides both at the same cost.
+adjust the traffic to the size of the network.
 
-% The scientific challenge consists in finding a way to adapt to the
-% network size without actually measuring its number of members as
-% proposed by Scamp, but running on top of WebRTC.
 
-%% In this paper, 
-We address the challenge of a dynamically adaptive peer-sampling,
-by introducing \SPRAY, a novel random peer-sampling protocol inspired by both
-\SCAMP~\cite{ganesh2001scamp,ganesh2003peer} and
-\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state-of-the-art in
-several ways.
+
+
+Inspired by both \SCAMP~\cite{ganesh2001scamp,ganesh2003peer} and
+\CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the
+state-of-the-art in several ways.
 
 \begin{figure*}
   \begin{center}
@@ -104,17 +107,19 @@ several ways.
 \end{figure*}
 
 \paragraph{Adaptive.}
-Peers using \SPRAY see their neighborhood size growing and shrinking
-automatically regarding the global network size using local knowledge only. In
-addition, the neighborhood size scales logarithmically compared to the network
-size. Figure~\ref{fig:cycle} shows that \SPRAY achieves this by dividing the
-life cycle of a peer in 3 phases:
+Peers using \SPRAY see their neighborhood size grow and shrink
+automatically according to the global network size using local
+knowledge only. In addition, the neighborhood size scales
+logarithmically compared to the network size. Figure~\ref{fig:cycle}
+shows that \SPRAY achieves this by dividing the life cycle of a peer
+in 3 phases:
 \begin{enumerate}[(i)]
-\item When a peer \emph{joins}, we must add logarithmic number of links to the
-  network. The peer joins using a contact peer already inside the network. This
-  contact has a neighborhood the size of which is the logarithm of the network
-  size. The contact simply asks to its neighbors to establish a link with the
-  newcomer to get the proper global number of arcs.
+\item When a peer \emph{joins}, we must add a logarithmic number of
+  links to the network. The peer joins using a contact peer already
+  inside the network. This contact has a neighborhood whose size is
+  the logarithm of the network size. The contact simply asks to its
+  neighbors to establish a link with the newcomer to get the proper
+  global number of arcs.
 \item When a peer stays in the network, it periodically \emph{shuffles} its
   neighborhood with one of its current neighbor. During shuffles, the global
   number of arcs must remain constant. Involved peers give a part of their
@@ -123,20 +128,21 @@ life cycle of a peer in 3 phases:
   must be temporarily kept.  Over shuffles, the number of duplicates remains
   small compared to the network size and becomes negligible as the network
   grows.
-\item When a peer \emph{crashes} or \emph{leaves}, we must remove a logarithmic
-  number of links. This number must match the number of links added during the
-  joining phase of the newest peer. Unfortunately, these departures leads to an
-  overzealous removal of links. To fix the number of arcs, all but one of the
-  peers that have the departed peer in their neighborhood should create a
+\item When a peer \emph{crashes} or \emph{leaves}, we must remove a
+  logarithmic number of links. This number must match the number of
+  links added during the joining phase of the newest
+  peer. Unfortunately, these departures lead to an overzealous removal
+  of links. To fix the number of arcs, all but one of the peers that
+  have the departed peer in their neighborhoods should create a
   duplicated link. Since they do not know each other, they cannot
-  communicate. They use their neighborhood size to process the probability of
-  duplicating.
+  communicate. They thus duplicate their links according to
+  probabilities that depend on their neighborhood sizes.
 \end{enumerate}
 
-\noindent Figure~\ref{fig:extended} shows the results of an experiment where 4 distinct
-networks of size have a membership continuously oscillating from 50k to 100k peers, 5k
-to 10k peers, 500 to 1k peers, and 50 to 100 peers. We measure the average
-partial view size of peers. We see that
+\noindent Figure~\ref{fig:extended} shows the results of an experiment
+where 4 distinct networks have sizes that continuously oscillate from
+50k to 100k peers, 5k to 10k peers, 500 to 1k peers, and 50 to 100
+peers. We measure the average partial view size of peers. We see that
 \begin{inparaenum}[(i)]
 \item the measures are not far from the theoretical values (dashed);
 \item the partial view sizes vary reflecting the network size;
@@ -159,11 +165,11 @@ partial view size of peers. We see that
 %% connections scales logarithmically with the network size.
 
 \paragraph{Cautious.}
-All along the life cycle of a peer, it uses simple neighbor-to-neighbor
-interactions to create links.  Peers rely on a constant number of other nodes to
-create links regardless of network size. The chances to execute backup
-strategies due to network failures -- message losses or peer crashes -- are kept
-minimal.
+All along the life cycle of a peer, it uses simple
+neighbor-to-neighbor interactions to create links.  Peers rely on a
+constant number of other nodes to create links regardless of network
+size. The chances to execute backup strategies due to network failures
+---message losses or peer crashes---are kept to a minimum.
 
 
 \begin{figure}
@@ -195,29 +201,31 @@ minimal.
 
 
 \paragraph{Fast.}
-The network quickly converges to a topology with properties similar to those of
-random graphs. The clustering coefficient is low. The incoming and outgoing arcs
-numbers are balanced among peers. There exists no hubs nor weakly connected
-peers. The network becomes robust to massive failures. The average shortest path
-length grows logarithmically. It can quickly disseminate messages. \\
-Figure~\ref{fig:clustering} shows the results of an experiment highlighting the
-fast convergence of random peer-sampling protocols such as \SPRAY or \CYCLON. In
-this experiment, peers continuously join their respective network. The resulting
-networks see their oldest peers highly clustered compared to the newest
-peers. We can see that
+The network quickly converges to a topology with properties similar to
+those of random graphs. The clustering coefficient is low. The number
+of incoming and outgoing arcs is balanced among peers. There exist no
+hubs or weakly connected peers. The network becomes robust to massive
+failures. The average shortest path
+length grows logarithmically. This allows applications to  quickly disseminate messages.\\
+Figure~\ref{fig:clustering} shows the results of an experiment
+highlighting the fast convergence of random peer-sampling protocols
+such as \SPRAY or \CYCLON. In this experiment, peers continuously join
+their respective network. The resulting networks see their oldest
+peers highly clustered compared to the newest peers. We can see that
 \begin{inparaenum}[(i)]
 \item both random peer-sampling protocols behave identically by converging to
   small clustering coefficient values;
 \item they converge very quickly to a stable topology even when the network
   comprises a large number of peers.
 \end{inparaenum}
-This means that an application can bootstrap a network all at once and expect
-properties similar to those of random graphs at short term.
+This means that an application can bootstrap a network all at once and
+expect to reach properties similar to those of random graphs in a short
+time.
 
 \ \\ \indent \SPRAY alone provides all desirable properties of random peer-sampling
 protocols. It maintains a connected topology even in presence of massive network
-failures. In addition, its neighborhood size provides an insight of the network
-size. Protocols and applications can benefit of this feature. Firstly, we show
+failures. In addition, its neighborhood size provides an insight on the network
+size. Protocols and applications can benefit from this feature. Firstly, we show
 the accuracy of a network size estimator using partial view sizes. Secondly, we
 provide 2 examples of broadcast protocols.
 
@@ -232,35 +240,37 @@ local view plus the view size of its neighbors. We see that
 This means that an application can improve its estimation on demand depending on
 the available resources.
 
-\paragraph{Three-phases broadcast.} Depending on the application, message size
-preclude the possibility for each peer to broadcast each message to the whole
-neighborhood. For example,
-HiveStreaming\footnote{\url{https://www.hivestreaming.com/}} declared having a
-customer network of 400k peers~\cite{smoothcache2}. The uploading bitrate
-required to serve such a large number of users would lead to huge operational
-costs, which can instead be saved through direct peer-to-peer exchanges.  To
-solve this issue, three-phase broadcast assigns to each message an identifier
-and each process serves the message on demand, i.e., it is a push-pull broadcast
-where it pushes the identifiers and it pulls the corresponding message. In their
-analysis of this three-phase model, the authors of~\cite{Frey09DSN} observed
-that, in bandwidth-constrained scenarios, peers should vary their communication
-partners as often as possible in order to equalize everyone's contribution. One
-way to achieve this in large scale setting consists in using a view much larger
-that the gossip fanout and refreshing it less often. \\
-Figure~\ref{fig:hardrate} shows the results of measurements concerning the
-proportion of messages delivered to the whole network over 1k messages. The
-network grows over time. We compare a broadcast that adjusts its fanout (the
-number of neighbors it sends/forwards a message to) using the partial view size
-(\SPRAY), and a fanout configured in advance (\CYCLON). We see that
+\paragraph{Three-phase broadcast.}
+HiveStreaming\footnote{\url{https://www.hivestreaming.com/}} declared
+having a customer network of 400k peers~\cite{smoothcache2}. The
+upload bitrate required to serve such a large number of users from a
+single server would lead to huge operational costs, which can instead
+be saved through direct peer-to-peer exchanges. Gossip appears like a
+promising solution, but the redundancy associated with naive gossip
+dissemination makes it impractical for applications such as video
+streaming.  To solve this issue, existing approaches adopt a
+three-phase push-pull approach where nodes push message identifiers
+and pull only the messages they need. In this three-phase model, peers
+should vary their communication partners as often as possible by
+grafting a different dissemination tree for each stream packet in
+order to equalize everyone's contribution~\cite{Frey09DSN}. But this
+has the side effect that not every node receives all messages if the
+dissemination fanout is too small for the size of the network.
+Figure~\ref{fig:hardrate} shows the results of measurements concerning
+the proportion of messages delivered to the whole network over 1k
+messages. The network grows over time. We compare a broadcast that
+adjusts its fanout (the number of neighbors it sends/forwards a
+message to) using the partial view size (\SPRAY), and one that
+configures it in advance (\CYCLON). We see that
 \begin{inparaenum}
-\item when configured in advance, the full message delivery quickly drops as the
-  network size increases; 
-\item on the opposite, when the fanout adjusts to the adaptive partial view
-  size, the full message delivery stays relatively stable.
+\item when configuring the fanout in advance, the proportion of fully
+  delivered messages quickly drops as the network size increases;
+\item in contrast, when adjusting the fanout based on the adaptive
+  partial view size, the proportion of fully delivered messages remains
+  relatively stable.
 \end{inparaenum}
-This means that applications that requires full delivery can rely on
-\SPRAY-based broadcast to bound the reliability of message delivery whatever the
-network size.
+This means that applications that require reliable message delivery
+can rely on \SPRAY to maintain reliability whatever the network size.
 
 
 \paragraph{Reliable broadcast.} \CRATE is a real-time editor that allows authors
@@ -274,9 +284,9 @@ document~\cite{saito2005optimistic}.  On updates, the local replica is directly
 modified. Then, using broadcast, each update is propagated to all the editing
 session where it is integrated.  It does not use three-phases broadcast because
 \begin{inparaenum}[(i)]
-\item each message convey an operation that remains small in size and
-\item real-time editing requires fast propagation, we cannot wait for additional
-  round-trip of messages to retrieve the updates.
+\item each message conveys an operation that remains small in size and
+\item real-time editing requires fast propagation (we cannot wait for additional
+  round-trip messages to retrieve the updates).
 \end{inparaenum} Instead, the broadcast protocol sends each message to all its
 neighbors exactly once. \\
 Figure~\ref{fig:traffic} shows the results of measurements concerning the
@@ -285,24 +295,25 @@ involves up to 600 real interconnected Web browsers. They type at a constant
 pace over time. Each operation is broadcast to the whole network. We see that
 \begin{inparaenum}
 \item the generated traffic increases over time because of the replicated data
-  structure, i.e., message size increases as new character are inserted in the
+  structure, i.e., message size increases as new characters are inserted in the
   document;
-\item the broadcast protocol automatically adjusts to the network size so the
+\item the broadcast protocol automatically adapts to the network size so the
   generated traffic reflects it.
 \end{inparaenum}
 
 \ \\
 
-\SPRAY makes building scalable decentralized applications in browsers easy and
-accessible.  Developers do not require to foresee the network size targeted by
-their applications. Just the same as for broadcast, many topology optimization
-protocols (e.g. about geolocalization, latency, or preferences) rely on random
-peer-sampling protocol such as the generic algorithms
-T-Man~\cite{jelasity2009tman} and Vicinity~\cite{voulgaris2005epidemic}. \SPRAY
-allows such protocols to benefit from its self-adjusting partial
-views. Protocols such as D2HT~\cite{bertier-d2ht} require both an estimator of
-the network size and a random peer-sampling protocol. Since \SPRAY provides both
-at same cost, a \SPRAY-based D2HT would be an interesting perspective.
+\SPRAY makes building scalable decentralized applications in browsers
+easy and accessible.  Developers do not need to foresee the network
+size targeted by their applications. As in the case of broadcast, many
+topology optimization protocols such as the generic
+T-Man~\cite{jelasity2009tman} and
+Vicinity~\cite{voulgaris2005epidemic} rely on random peer-sampling
+protocols. \SPRAY allows such protocols to benefit from its
+self-adjusting partial views. Protocols such as
+D2HT~\cite{bertier-d2ht} require both an estimator of the network size
+and a random peer-sampling protocol. Since \SPRAY provides both at
+same cost, a \SPRAY-based D2HT would be an interesting perspective.
 
 % \begin{inparaenum}[(i)]
 % \item Experiments show that \SPRAY provides adaptiveness and reliability at a
