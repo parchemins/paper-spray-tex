@@ -1,4 +1,4 @@
-\newcommand\SCALE{0.45}
+\newcommand\SCALE{0.49}
 
 % \section{Introduction}
 
@@ -89,7 +89,7 @@ by introducing \SPRAY, a novel random peer-sampling protocol inspired by both
 \CYCLON~\cite{voulgaris2005cyclon}. \SPRAY improves the state-of-the-art in
 several ways.
 
-\begin{figure}
+\begin{figure*}
   \begin{center}
     \subfloat[Figure A] [add $1+\ln(n)$ links]
     {\input{input/figcycleA.tex}}
@@ -101,7 +101,7 @@ several ways.
     {\input{input/figcycleC.tex}}
     \caption{\label{fig:cycle} Life cycle of a peer.}
   \end{center}
-\end{figure}
+\end{figure*}
 
 \paragraph{Adaptive.}
 Peers using \SPRAY see their neighborhood size growing and shrinking
@@ -133,7 +133,7 @@ life cycle of a peer in 3 phases:
   duplicating.
 \end{enumerate}
 
-Figure~\ref{fig:extended} shows the results of an experiment where 4 distinct
+\noindent Figure~\ref{fig:extended} shows the results of an experiment where 4 distinct
 networks of size have a membership continuously oscillating from 50k to 100k peers, 5k
 to 10k peers, 500 to 1k peers, and 50 to 100 peers. We measure the average
 partial view size of peers. We see that
@@ -191,7 +191,7 @@ the accuracy of a network size estimator using partial view sizes. Secondly, we
 provide 2 examples of broadcast protocols.
 
 
-\begin{figure}
+\begin{figure*}
   \begin{center}
     \subfloat[Figure A] [\label{fig:estimator} The quality of the network 
     size estimator based on neighborhood size.]
@@ -204,7 +204,7 @@ provide 2 examples of broadcast protocols.
     {\includegraphics[width=\SCALE\textwidth]{img/traffic.eps}}
     \caption{Example of protocols and applications benefiting from \SPRAY.}
   \end{center}
-\end{figure}
+\end{figure*}
 
 \paragraph{Estimator.} Figure~\ref{fig:estimator} shows the results of
 measurements concerning the average estimation of network size over the actual
@@ -245,6 +245,8 @@ the whole network. We see that
 \item the broadcast protocol automatically adjusts to the network size so the
   generated traffic reflects it.
 \end{inparaenum}
+
+\ \\
 
 \SPRAY makes building scalable decentralized applications in browsers easy and
 accessible.  Developers do not require to foresee the network size targeted by
