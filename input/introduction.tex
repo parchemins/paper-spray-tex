@@ -165,31 +165,14 @@ create links regardless of network size. The chances to execute backup
 strategies due to network failures -- message losses or peer crashes -- are kept
 minimal.
 
-\paragraph{Fast.}
-The network quickly converges to a topology with properties similar to those of
-random graphs. The clustering coefficient is low. The incoming and outgoing arcs
-numbers are balanced among peers. There exists no hubs nor weakly connected
-peers. The network becomes robust to massive failures. The average shortest path
-length grows logarithmically. It can quickly disseminate messages.
 
-
-% \begin{figure}
-%   \begin{center}
-%     \includegraphics[width=\SCALE\textwidth]{./img/estimator.eps}
-%     \caption{\label{fig:estimator} The quality of the network size estimator
-%       based on neighborhood size.}
-%   \end{center}
-% \end{figure}
-
-
-
-\ \\ \indent \SPRAY alone provides all desirable properties of random peer-sampling
-protocols. It maintains a connected topology even in presence of massive network
-failures. In addition, its neighborhood size provides an insight of the network
-size. Protocols and applications can benefit of this feature. Firstly, we show
-the accuracy of a network size estimator using partial view sizes. Secondly, we
-provide 2 examples of broadcast protocols.
-
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\SCALE\textwidth]{./img/clustering.eps}
+    \caption{\label{fig:clustering} Fast convergence to a network with low
+      clustering coefficient.}
+  \end{center}
+\end{figure}
 
 \begin{figure*}
   \begin{center}
@@ -206,6 +189,38 @@ provide 2 examples of broadcast protocols.
   \end{center}
 \end{figure*}
 
+
+
+
+
+
+\paragraph{Fast.}
+The network quickly converges to a topology with properties similar to those of
+random graphs. The clustering coefficient is low. The incoming and outgoing arcs
+numbers are balanced among peers. There exists no hubs nor weakly connected
+peers. The network becomes robust to massive failures. The average shortest path
+length grows logarithmically. It can quickly disseminate messages. \\
+Figure~\ref{fig:clustering} shows the results of an experiment highlighting the
+fast convergence of random peer-sampling protocols such as \SPRAY or \CYCLON. In
+this experiment, peers continously join their respective network. The resulting
+networks see their oldest peers highly clustered compared to the newest
+peers. We can see that
+\begin{inparaenum}[(i)]
+\item both random peer-sampling protocols behave identically by converging to
+  small clustering coefficient values;
+\item they converge very quickly to a stable topology even when the network
+  comprises a large number of peers.
+\end{inparaenum}
+This means that an application can bootstrap a network all at once and expect
+properties similar to those of random graphs at short term.
+
+\ \\ \indent \SPRAY alone provides all desirable properties of random peer-sampling
+protocols. It maintains a connected topology even in presence of massive network
+failures. In addition, its neighborhood size provides an insight of the network
+size. Protocols and applications can benefit of this feature. Firstly, we show
+the accuracy of a network size estimator using partial view sizes. Secondly, we
+provide 2 examples of broadcast protocols.
+
 \paragraph{Estimator.} Figure~\ref{fig:estimator} shows the results of
 measurements concerning the average estimation of network size over the actual
 network size. The estimator either uses the local partial view size only or the
@@ -217,12 +232,26 @@ local view plus the view size of its neighbors. We see that
 This means that an application can improve its estimation on demand depending on
 the available resources.
 
-\paragraph{Three-phases broadcast.} Figure~\ref{fig:hardrate} shows the results
-of measurements concerning the proportion of messages delivered to the whole
-network over 1k messages. The network grows over time. We compare a broadcast
-that adjusts its fanout (the number of neighbors it sends/forwards a message to)
-using the partial view size (\SPRAY), and a fanout configured in advance
-(\CYCLON). We see that
+\paragraph{Three-phases broadcast.} Depending on the application, message size
+preclude the possibility for each peer to broadcast each message to the whole
+neighborhood. For example,
+HiveStreaming\footnote{\url{https://www.hivestreaming.com/}} declared having a
+customer network of 400k peers~\cite{smoothcache2}. The uploading bitrate
+required to serve such a large number of users would lead to huge operational
+costs, which can instead be saved through direct peer-to-peer exchanges.  To
+solve this issue, three-phase broadcast assigns to each message an identifier
+and each process serves the message on demand, i.e., it is a push-pull broadcast
+where it pushes the identifiers and it pulls the corresponding message. In their
+analysis of this three-phase model, the authors of~\cite{Frey09DSN} observed
+that, in bandwidth-constrained scenarios, peers should vary their communication
+partners as often as possible in order to equalize everyone's contribution. One
+way to achieve this in large scale setting consists in using a view much larger
+that the gossip fanout and refreshing it less often. \\
+Figure~\ref{fig:hardrate} shows the results of measurements concerning the
+proportion of messages delivered to the whole network over 1k messages. The
+network grows over time. We compare a broadcast that adjusts its fanout (the
+number of neighbors it sends/forwards a message to) using the partial view size
+(\SPRAY), and a fanout configured in advance (\CYCLON). We see that
 \begin{inparaenum}
 \item when configured in advance, the full message delivery quickly drops as the
   network size increases; 
@@ -234,14 +263,30 @@ This means that applications that requires full delivery can rely on
 network size.
 
 
-\paragraph{Reliable broadcast.} Figure~\ref{fig:traffic} shows the results of
-measurements concerning the traffic generated by decentralized collaborative
-editing. This experiment involves up to 600 real interconnected Web
-browsers. They type at a constant pace over time. Each operation is broadcast to
-the whole network. We see that
+\paragraph{Reliable broadcast.} \CRATE is a real-time editor that allows authors
+to write anytime and anywhere, whatever the number of participants, without any
+third party~\cite{nedelec2016crate}. Compared to trending Cloud-based editors
+such as Google Docs, it alleviates privacy, scalability, and
+single-point-of-failure issues while remaining easy to use.  To provide
+availability and responsiveness in documents, collaborative editors consider
+multiple authors, each hosting a replica of their shared
+document~\cite{saito2005optimistic}.  On updates, the local replica is directly
+modified. Then, using broadcast, each update is propagated to all the editing
+session where it is integrated.  It does not use three-phases broadcast because
+\begin{inparaenum}[(i)]
+\item each message convey an operation that remains small in size and
+\item real-time editing requires fast propagation, we cannot wait for additional
+  round-trip of messages to retrieve the updates.
+\end{inparaenum} Instead, the broadcast protocol sends each message to all its
+neighbors exactly once. \\
+Figure~\ref{fig:traffic} shows the results of measurements concerning the
+traffic generated by decentralized collaborative editing. This experiment
+involves up to 600 real interconnected Web browsers. They type at a constant
+pace over time. Each operation is broadcast to the whole network. We see that
 \begin{inparaenum}
 \item the generated traffic increases over time because of the replicated data
-  structure;
+  structure, i.e., message size increases as new character are inserted in the
+  document;
 \item the broadcast protocol automatically adjusts to the network size so the
   generated traffic reflects it.
 \end{inparaenum}
