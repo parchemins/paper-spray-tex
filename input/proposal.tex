@@ -69,8 +69,9 @@ neighbor-to-neighbor interactions, which leads to a total number of
 $|V^t|\ln(|V^t|)$ arcs~\cite{ganesh2001scamp}.
 
 \begin{algorithm}[h]
-\input{input/joiningalgo.tex}
-\caption{\label{algo:joining}The joining protocol of \SPRAY running at Peer $p$.}
+  \SetAlCapHSkip{0em}
+  \input{input/joiningalgo.tex}
+  \caption{\label{algo:joining}Joining protocol of \SPRAY running at $p$.}
 \end{algorithm}
 
 The partial view is a multiset of pairs $\langle n,\, age\rangle$
@@ -102,6 +103,27 @@ described in the next section will re-balance the partial views.
 \subsection{Shuffling}
 \label{subsec:cyclic}
 
+
+\begin{figure*}
+  \centering
+  \subfloat[Figure A]
+  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
+  latter the multiset $\{p_6,\,p_9\}$.]{
+    \input{./input/cyclicexampleA.tex}}
+  \hspace{10pt}
+  \subfloat[Figure B][Peer $p_1$ receives $p_6$'s message. 
+  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
+  partial view.]{
+    \input{./input/cyclicexampleB.tex}}
+  \hspace{10pt}
+  \subfloat[Figure C][Peer $p_6$ receives $p_1$'s response, it
+  adds $\{p_2\}$ to its partial view.]{
+    \input{./input/cyclicexampleC.tex}}
+  \caption{\label{fig:cyclicexample}Example of the shuffling
+    protocol of \SPRAY. }
+\end{figure*}
+
+
 Unlike \CYCLON, \SPRAY shuffles partial views of different sizes. The
 shuffling balances the partial view sizes and randomly mixes the
 neighborhoods between peers. Nevertheless, the global number of arcs
@@ -120,9 +142,9 @@ them disappear after shuffling and they proportionally become
 negligible as the network grows.
 
 \begin{algorithm}[h]
+  \SetAlCapHSkip{0em}
   \input{./input/cyclicalgo.tex}
-  \caption{\label{algo:scamplon}The cyclic protocol of \SPRAY running at Peer
-    $p$.}
+  \caption{\label{algo:scamplon}Cyclic protocol of \SPRAY running at $p$.}
 \end{algorithm}
 
 Algorithm~\ref{algo:scamplon} shows the \SPRAY protocol running at
@@ -169,25 +191,23 @@ least 1 occurence of $p$, for the sake of connectedness.
 %inheritance from \CYCLON) speeds up the removal of crashed or departed
 %peers.
 
-
+%% figure related to crash/departure, here to be on top of page
 \begin{figure*}
   \centering
-  \subfloat[Figure A]
-  [Peer $p_6$ initiates the exchange with $p_1$ by sending to the
-  latter the multiset $\{p_6,\,p_9\}$.]{
-    \input{./input/cyclicexampleA.tex}}
+  \subfloat[Figure A][Peer $p_1$ crashes. A lot of connections are down.]{
+    \input{./input/crashexampleA.tex}}
   \hspace{10pt}
-  \subfloat[Figure B][Peer $p_1$ receives $p_6$'s message. 
-  It sends back the multiset $\{p_2\}$ and adds $\{p_6,\,p_9\}$ to its 
-  partial view.]{
-    \input{./input/cyclicexampleB.tex}}
+  \subfloat[Figure B][The peers $p_{3-5}$ notice that they cannot 
+  reach $p_1$ anymore.]{
+    \input{./input/crashexampleB.tex}}
   \hspace{10pt}
-  \subfloat[Figure C][Peer $p_6$ receives $p_1$'s response, it
-  adds $\{p_2\}$ to its partial view.]{
-    \input{./input/cyclicexampleC.tex}}
-  \caption{\label{fig:cyclicexample}Example of the shuffling
-    protocol of \SPRAY. }
+  \subfloat[Figure C][The peers $p_3$ and $p_5$ create
+  a duplicate of one of their existing neighbor.]{
+    \input{./input/crashexampleC.tex}}
+  \caption{\label{fig:crashexample}Example of the crash/leaving
+    handler of \SPRAY. }
 \end{figure*}
+
 
 Figure~\ref{fig:cyclicexample} depicts \SPRAY's shuffling procedure. This
 scenario follows from Figure~\ref{fig:joiningexample}: Peer $p_1$ just joined
@@ -273,8 +293,9 @@ joined node. Duplicates created by this procedure will disappear over time as
 peers shuffle their partial view.
 
 \begin{algorithm}[h]
+  \SetAlCapHSkip{0em}
   \input{./input/unreachablealgo.tex}
-  \caption{\label{algo:unreachable}The crash/departure handler of \SPRAY running
+  \caption{\label{algo:unreachable}Crash and departure handler of \SPRAY running
     at Peer $p$.}
 \end{algorithm}
 
@@ -296,23 +317,6 @@ $p_{13}$. Identically, $p_3$ and $p_4$ detect the crash/leaving and run the
 appropriate operation. Only $p_3$ duplicates one of its connections. In total,
 $5$ connections have been removed.
 
-
-%% figure related to crash/departure, here to be on top of page
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][Peer $p_1$ crashes. A lot of connections are down.]{
-    \input{./input/crashexampleA.tex}}
-  \hspace{10pt}
-  \subfloat[Figure B][The peers $p_{3-5}$ notice that they cannot 
-  reach $p_1$ anymore.]{
-    \input{./input/crashexampleB.tex}}
-  \hspace{10pt}
-  \subfloat[Figure C][The peers $p_3$ and $p_5$ create
-  a duplicate of one of their existing neighbor.]{
-    \input{./input/crashexampleC.tex}}
-  \caption{\label{fig:crashexample}Example of the crash/leaving
-    handler of \SPRAY. }
-\end{figure*}
 
 The example shows that some peers reestablish connections if they
 detect dead ones. The probability depends on the partial view size of

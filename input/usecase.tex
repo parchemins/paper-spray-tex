@@ -75,10 +75,10 @@ For this reason, \cite{frey:hal-01479885} follows solution (\ref{enum:larger})
 and sets the fanout to $\ln(N)+c$ (according to theory~\cite{PRD}), $N$ being the
 number of participating peers, and $c$ being a positive constant.
 
-\begin{algorithm*}[h]
+\begin{algorithm}[h]
   \input{./input/threephasealgo.tex}
   \caption{\label{algo:threephase}Three-phase gossip.}
-\end{algorithm*}
+\end{algorithm}
 
 
 
@@ -319,7 +319,7 @@ use of partial views to efficiently disseminate messages.
 
 \begin{algorithm}[h]
   \input{./input/gossipingalgo.tex}
-  \caption{\label{algo:gossiping}gossip.}
+  \caption{\label{algo:gossiping}Gossip.}
 \end{algorithm}
 
 Algorithm~\ref{algo:gossiping} shows the instructions of this protocol. When a

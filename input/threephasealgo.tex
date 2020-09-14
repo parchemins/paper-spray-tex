@@ -4,35 +4,47 @@
 \SetKwProg{INITIALLY}{INITIALLY}{}{}
 \SetKwProg{PASSIVE}{PASSIVE THREAD}{}{}
 \SetKwProg{ACTIVE}{ACTIVE THREAD}{}{}
+\SetKwComment{tcp}{$\triangleright$~}{}
 \DontPrintSemicolon
 \LinesNumbered
 
+\newcommand{\LET}[0]{\textbf{let}\xspace}
+
 \INITIALLY {} {
-  $B$ \hfill \Comment{buffer of packets} \;
-  $b$ \hfill \Comment{number of advertised packets} \;
-  $f$ \hfill \Comment{fanout $f \leq |P|$}
+  $B$ \hfill \tcp*[r]{buffer of packets} 
+  $b$ \hfill \tcp*[r]{number of advertised packets} 
+  $f$ \hfill \tcp*[f]{fanout $f \leq |P|$}
 }
+
+\BlankLine
+\BlankLine
   
 \ACTIVE {} {
-  \Function{advertisementLoop ( )} { % \hfill \comm{every $\delta$ time} 
-    \textbf{let} $advertiseTo \leftarrow getPeers(P,\,f)$ \hfill \Comment{$f$ distinct random peers from $P$} \;
-  \textbf{let} $advertisement \leftarrow getIdentifiers(B,\,b)$ \hfill \Comment{$b$ distinct random packet Ids} \;
-  \lFor{\textbf{each} $q \in advertiseTo$} {$sendTo(q,\, 'advertisement',\, advertisement)$}
+  \Function{\textup{advertisementLoop ( )} \tcp*[f]{every $\delta$ time}} {
+    \tcp*[l]{$f$ distinct random peers from $P$} 
+    \LET $advertiseTo \leftarrow $ getPeers($P$, $f$) \;
+    \tcp*[l]{$b$ distinct random packet Ids} 
+    \LET $ads \leftarrow $ getIdentifiers($B$, $b$)\;
+    \ForEach{$q \in advertiseTo$} {sendTo($q$, ``$advertisement$'', $ads$)}
   }
 }
 
+\BlankLine
+\BlankLine
+
 \PASSIVE {} {
-  \Function{onAdvertisement ($o,\, ads$)} { % \hfill \comm{$o: advertiser$}
-    \For {\textbf{each} $(id \in ads)$} {
-      \lIf{$id \not\in B$}{$sendTo(o,\, 'request',\, id)$ }
+  \Function{\textup{onAdvertisement ($o$, $ads$)}} { %\tcp*[l]{$o: advertiser$} } {
+    \ForEach {$id \in ads$} {
+      \lIf{$id \not\in B$}{sendTo($o$, ``$request$'', $id$)}
     }
   }
 
   \BlankLine
   
-  \Function{onRequest ($o,\, id$)} { % \hfill \comm{$o: requester$}
-     \textbf{let} $packet \leftarrow getMessage(B,\,id)$ \hfill \Comment{get the requested packet from the buffer} \;
-     $sendTo(o, \, packet)$ \hfill \Comment{finally send the packet} \;
+  \Function{\textup{onRequest ($o$, $id$)}} { % \hfill \comm{$o: requester$}
+     \tcp*[l]{get requested packets from buffer}
+     \LET $packet \leftarrow $ getMessage($B$, $id$) \;
+     sendTo($o$, $packet$) \tcp*[f]{finally send packets} 
   }
 }
 

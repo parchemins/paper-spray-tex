@@ -1,20 +1,21 @@
 
 \small
 \SetKwProg{Function}{function}{}{}
+\SetKwComment{tcp}{$\triangleright$~}{}
 \DontPrintSemicolon
 \LinesNumbered
 
-\Function{broadcast ($m$)} { % \hfill \comm{$m: message$}
-  \lFor{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
-    {$sendTo(q,\, 'broadcast',\, m)$;}
+\Function{\textup{broadcast ($m$)} \tcp*[f]{$m$: message}} {
+  \lForEach {$\langle q,\,\_\, \rangle \in \mathcal{P}$}
+    {sendTo($q$, ``$broadcast$'', $m$)}
 }
 
 \BlankLine
 
-\Function{receiveBroadcast ($m$)} { % \hfill \comm{$m: message$}
-  \If {$\neg alreadyReceived(m)$ \label{line:alreadyreceived}} {
-     $deliver(m)$ \;
-     $broadcast(m)$ \hfill \Comment{rebroadcast} \;
+\Function{\textup{receiveBroadcast ($m$)} \tcp*[f]{$m$: message}} {
+  \If {$\neg$\textup{alreadyReceived($m$)} \label{line:alreadyreceived}} {
+     deliver($m$) \;
+     broadcast($m$) \tcp*[f]{rebroadcast}
   }
 }
 

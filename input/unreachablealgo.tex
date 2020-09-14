@@ -1,25 +1,30 @@
 
 \small
 \SetKwProg{Function}{function}{}{}
+\SetKwComment{tcp}{$\triangleright$~}{}
 \DontPrintSemicolon
 \LinesNumbered
-  
-\Function{onPeerDown ($q$)} { %\comm{$q$: crashed/departed peer}  
-  \textbf{let} $occ \leftarrow 0$ \;
 
-  \For{\textbf{each} $\langle n,\,age\rangle \in \mathcal{P}$} {
-  %   \hfill \comm{remove and count}
+\newcommand{\LET}[0]{\textbf{let}\xspace}
+\newcommand{\FROM}[0]{\textup{\textbf{from}}\xspace}
+\newcommand{\TO}[0]{\textup{\textbf{to}}\xspace}
+
+\Function{\textup{onPeerDown ($q$)} \tcp*[f]{$q$: crashed/departed}} {
+  \LET $occ \leftarrow 0$ \;
+
+  \ForEach(\tcp*[f]{remove and count}) { $\langle n, age\rangle \in \mathcal{P}$ }  {
     \If {$n=q$} {
        $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle n,\,age\rangle \}$ \;
        $occ \leftarrow occ + 1$ \;
     }
   }
 
-  \For{$i$ \textbf{from} $0$ \textbf{to} $occ$} {
-           %  \hfill \comm{probabilistically duplicates}
-    \If{$rand()>{1\div{(|\mathcal{P}|+occ}})$} {
-       \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
-         \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$ \;
+  \For{$i$ \FROM $0$ \TO $occ$} {
+    \tcp*[l]{probabilistically duplicates}
+
+    \If{$\textup{rand( )}>{1\div{(|\mathcal{P}|+occ}})$} {
+       \LET $\langle n,\,\_ \,\rangle \leftarrow
+         \mathcal{P}[\left\lfloor \textup{rand( )}*|\mathcal{P}|\right\rfloor]$ \;
        $\mathcal{P} \leftarrow \mathcal{P} \uplus \left\{\langle n,\, 0\rangle\right\}$
     }
   }
@@ -27,11 +32,11 @@
 
 \BlankLine
 
-\Function{onArcDown($q, age$)} {
-%  \hfill \comm{$q$: arrival of the arc down}  
-  $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle q,\,age\rangle \}$ \;
-  \textbf{let} $\langle n,\,\_ \,\rangle \leftarrow
-  \mathcal{P}[\left\lfloor rand()*|\mathcal{P}|\right\rfloor]$ \;
-  $\mathcal{P} \leftarrow \mathcal{P} \uplus \left\{\langle n,\, 0\rangle\right\}$ \;
-  %  \hfill \comm{systematically duplicates}
+\Function{\textup{onArcDown($q$, $age$)} \tcp*[f]{$q$: arc arrival}} {
+  $\mathcal{P} \leftarrow \mathcal{P}\setminus \{\langle q, age\rangle \}$ \;
+  \tcp*[l]{systematically duplicates}
+  \LET $\langle n, \_ \rangle \leftarrow
+  \mathcal{P}[\left\lfloor \textup{rand( )}*|\mathcal{P}|\right\rfloor]$ \;
+  $\mathcal{P} \leftarrow \mathcal{P} \uplus \left\{\langle n, 0\rangle\right\}$ \;
+
 }

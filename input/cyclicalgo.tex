@@ -1,30 +1,50 @@
 
 \small
 \SetKwProg{Function}{function}{}{}
+\SetKwProg{PASSIVE}{PASSIVE THREAD}{}{}
+\SetKwProg{ACTIVE}{ACTIVE THREAD}{}{}
+\SetKwComment{tcp}{$\triangleright$~}{}
 \DontPrintSemicolon
 \LinesNumbered
 
-\Function{loop}{ % \comm{Every $\Delta\,t$}
-  $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$ \;
-  \textbf{let} $ \langle q,\, age \rangle \leftarrow getOldest(\mathcal{P})$ \;
-  \textbf{let} $sample \leftarrow $ \label{line:samplesize} $\smash{getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\div{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}}$ \;
-  $sample \leftarrow replace(sample,\,q,\,p)$; \label{line:replace1} \;
-  \textbf{let} $sample' \leftarrow sendTo(q,\, 'exchange',\, sample))$ \;
-  \lWhile {$(\neg timeout(sample') \wedge \neg sample')$} {$waitForQ$}
-  %    \hfill \Comment{Awaiting $q$'s sample}
-  \If {$\neg timeout(sample')$} {
-     $sample' \leftarrow replace(sample',\,p,\,q)$ \;
+\newcommand{\LET}[0]{\textbf{let}\xspace}
+
+\ACTIVE {} {
+\Function{\textup{loop ( )} \tcp*[f]{Every $\Delta t$} }{
+  $\mathcal{P} \leftarrow $ incrementAge($\mathcal{P}$) \;
+  \LET $ \langle q,\, age \rangle \leftarrow $ getOldest($\mathcal{P}$) \;
+  \BlankLine
+  \LET $sample \leftarrow $ \label{line:samplesize}
+       getSample($\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}$, \\
+       \hskip\algorithmicindent $\left \lceil{|\mathcal{P}|\div{2}} \right \rceil-1$) $\uplus \left\{\langle p, 0 \rangle\right\}$ \;
+  $sample \leftarrow $ replace($sample, q, p$) \label{line:replace1} \;
+  \BlankLine
+  \LET $sample' \leftarrow $ sendTo($q$, ``$exchange$'', $sample$) \;
+  \BlankLine
+  \While {$\neg$\textup{timeout($sample'$)} $\wedge \neg sample'$}
+     {$waitForQ$  \tcp*[f]{Awaiting $q$'s sample}}
+  
+  \If {$\neg$\textup{timeout($sample'$)}} {
+     $sample' \leftarrow $ replace($sample$, $p$, $q$) \;
      $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample) \uplus sample'$
   } \Else {
-     $onPeerDown(q)$ \hfill \Comment{see Algorithm~\ref{algo:unreachable}}
+     onPeerDown($q$) \tcp*[f]{see Algorithm~\ref{algo:unreachable}}
   }
 }
+}
 
+\BlankLine
+\BlankLine
 
-\Function{onExchange}{$o,\, sample$} { %  \hfill \comm{$o: origin$}
-  \textbf{let} $\smash{sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\div{2} \right\rceil )}$ \;
-  $sample' \leftarrow replace(sample',\,o,\,p)$ \label{line:replace2} \;
-  $sendTo(o ,\, sample')$ \; 
-  $sample' \leftarrow replace(sample',\,p,\,o)$ \;
+\PASSIVE {} {
+\Function{\textup{onExchange ($o$, $sample$)} \tcp*[f]{$o$: origin}} {
+  \LET $sample' \leftarrow $ getSample($\mathcal{P}$,
+                                       $\left\lceil |\mathcal{P}|\div{2} \right\rceil$) \;
+  $sample' \leftarrow $ replace($sample'$, $o$, $p$) \label{line:replace2} \;
+  \BlankLine
+  sendTo($o$, $sample'$) \;
+  \BlankLine
+  $sample' \leftarrow $ replace($sample'$, $p$, $o$) \;
   $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample') \uplus sample$ \;
+}
 }
