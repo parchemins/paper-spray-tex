@@ -52,7 +52,7 @@
 }
 \renewcommand\copyright[1]{\def\@copyright{#1}}
 
-\newcommand\numberOfAuthors[1]{\def\@numberOfAuthors{#1}}
+\def\@numberOfAuthors{1000}
 \def\and{\end{tabular} & \begin{tabular}[t]{c}\large}
 \def\aff{\\}
 

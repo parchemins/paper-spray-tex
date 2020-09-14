@@ -1,4 +1,4 @@
-\documentclass[twocolumn]{article}
+\documentclass{class-for-drafts}
 
 %\usepackage{lmodern}
 %\usepackage[nocompress]{cite}
@@ -6,14 +6,13 @@
 %% url
 \usepackage{url}
 %% maths
-\usepackage{amsmath}
+\usepackage{amsmath,amssymb}
 %%\usepackage{amsfonts}
-\usepackage{amssymb}
 %% \usepackage{amsthm}
+
 %% algorithms
-\usepackage{algorithm}
 \usepackage{algorithmicx}
-\usepackage[noend]{algpseudocode}
+\usepackage[ruled, linesnumbered, noend]{algorithm2e}
 
 %% images
 \usepackage{graphicx}
@@ -26,8 +25,6 @@
 %% figures
 %\usepackage{caption}
 \usepackage{subfig}
-%\usepackage[font=small, skip=2pt]{caption}
-%\usepackage[font=small]{subfig}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathreplacing,plotmarks,shapes,matrix}
 %% transform eps in pdf crossplateform
@@ -37,7 +34,6 @@
 \usepackage{hyphenat}
 \hyphenation{brow-sers brow-ser}
 
-\newcommand{\df}[1]{\footnote{\textbf{Davide:} #1}}
 \newcommand{\TOFIX}[1]{\textcolor{orange}{#1}}
 \newcommand{\TODO}[1]{\textcolor{red}{#1}}
 \newcommand{\REF}[0]{\textcolor{purple}{REF}}
@@ -50,25 +46,9 @@
 \newcommand{\CRATE}[0]{\textsc{Crate}\xspace}
 \newcommand{\PEERSIM}[0]{\textsc{PeerSim}\xspace}
 
-%\setlength{\belowcaptionskip}{-15pt} %% reduce spacing below figures
-%\setlength{\intextsep}{7pt} %% reduce spacing on top/bottom of algorithms
-
 \newtheorem{problem}{Problem Statement}
 
-
-%%% (TODO) remove before submission
-% \AtBeginDocument{%
-%   \setlength{\oddsidemargin}{\dimexpr(\paperwidth-\textwidth)/2-1in}%
-%   \setlength{\evensidemargin}{\oddsidemargin}%
-%   \setlength{\topmargin}{%
-%     \dimexpr(\paperheight-\textheight)/2-\headheight-\headsep-1in}%
-% }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{authblk}
-\begin{document}
+
 
 \title{An Adaptive Peer-Sampling Protocol\\for Building Networks of Browsers}
 
@@ -82,21 +62,15 @@
   35042 Rennes Cedex, France\\
   \url{davide.frey@inria.fr}}
 
-%\numberOfAuthors{1000}
+\author{Brice N{\'e}delec, Julian Tanke, Pascal Molli, Achour
+  Most{\'e}faoui \aff \affLSNN \and Davide Frey \aff \affINRIA}
 
-\author[1]{Brice N{\'e}delec}
-\author[1]{Julian Tanke}
-\author[1]{Pascal Molli}
-\author[1]{Achour Most{\'e}faoui}
-\author[2]{Davide Frey}
-\affil[1]{\affLSNN}
-\affil[2]{\affINRIA}
+\begin{document}
 
-%\proceedings{World Wide Web Journal, July 2017}
+\proceedings{World Wide Web Journal, July 2017}
 
-%\copyright{The final publication is available at Springer via:\\
-%  \url{http://dx.doi.org/10.1007/s11280-017-0478-5}}
-
+\copyright{The final publication is available at Springer via:\\
+  \url{http://dx.doi.org/10.1007/s11280-017-0478-5}}
 
 % \institute{B. N{\'e}delec \at LS2N, University of Nantes, 2, rue de la Houssini{\`e}re 
 % BP 92208 44322 Nantes Cedex 3, France\\\email{brice.nedelec@univ-nantes.fr}
@@ -118,10 +92,7 @@
 \input{input/conclusion.tex}
 \input{input/acknowledgment.tex}
 
-%% Bibliographie
-\bibliographystyle{abbrv}
 \bibliography{bibliographie}
-\clearpage
   
 \end{document}
 

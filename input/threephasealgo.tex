@@ -1,57 +1,38 @@
 
 \small
-\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+\SetKwProg{Function}{function}{}{}
+\SetKwProg{INITIALLY}{INITIALLY}{}{}
+\SetKwProg{PASSIVE}{PASSIVE THREAD}{}{}
+\SetKwProg{ACTIVE}{ACTIVE THREAD}{}{}
+\DontPrintSemicolon
+\LinesNumbered
 
-\newcommand{\comm}[1]{$\rhd$ #1}
+\INITIALLY {} {
+  $B$ \hfill \Comment{buffer of packets} \;
+  $b$ \hfill \Comment{number of advertised packets} \;
+  $f$ \hfill \Comment{fanout $f \leq |P|$}
+}
+  
+\ACTIVE {} {
+  \Function{advertisementLoop ( )} { % \hfill \comm{every $\delta$ time} 
+    \textbf{let} $advertiseTo \leftarrow getPeers(P,\,f)$ \hfill \Comment{$f$ distinct random peers from $P$} \;
+  \textbf{let} $advertisement \leftarrow getIdentifiers(B,\,b)$ \hfill \Comment{$b$ distinct random packet Ids} \;
+  \lFor{\textbf{each} $q \in advertiseTo$} {$sendTo(q,\, 'advertisement',\, advertisement)$}
+  }
+}
 
-\newcommand{\LINEFOR}[2]{%
-  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+\PASSIVE {} {
+  \Function{onAdvertisement ($o,\, ads$)} { % \hfill \comm{$o: advertiser$}
+    \For {\textbf{each} $(id \in ads)$} {
+      \lIf{$id \not\in B$}{$sendTo(o,\, 'request',\, id)$ }
+    }
   }
 
-\newcommand{\LINEIFTHEN}[2]{%
-  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
+  \BlankLine
+  
+  \Function{onRequest ($o,\, id$)} { % \hfill \comm{$o: requester$}
+     \textbf{let} $packet \leftarrow getMessage(B,\,id)$ \hfill \Comment{get the requested packet from the buffer} \;
+     $sendTo(o, \, packet)$ \hfill \Comment{finally send the packet} \;
   }
+}
 
-\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
-
-\algblockdefx[initially]{initially}{endInitially}
-[0] {\textbf{INITIALLY:}} 
-
-\algblockdefx[act]{act}{endAct}
-[0] {\textbf{ACTIVE THREAD:}}
-
-\algsetblockdefx[pas]{pas}{endPas}
-{65535}{}
-[0] {\textbf{PASSIVE THREAD:}}
-
-
-\begin{algorithmic}[1]
-  \Statex
-  \initially
-  \State $B$ \hfill \comm{buffer of packets}
-  \State $b$ \hfill \comm{number of advertised packets}
-  \State $f$ \hfill \comm{fanout $f \leq |P|$}
-  \endInitially
-  
-  \act
-  \Function{advertisementLoop}{$(\,)$} \hfill \comm{every $\delta$ time} 
-  \State \textbf{let} $advertiseTo \leftarrow getPeers(P,\,f)$; \hfill \comm{$f$ distinct random peers from $P$}
-  \State \textbf{let} $advertisement \leftarrow getIdentifiers(B,\,b)$; \hfill \comm{$b$ distinct random packet Ids}
-  \State \LINEFOR{\textbf{each} $q \in advertiseTo$}{$sendTo(q,\, 'advertisement',\, advertisement)$;}
-  \EndFunction
-  \endAct
-
-  \pas
-  \Function{onAdvertisement}{$o,\, ads$} \hfill \comm{$o: advertiser$}
-  \For {\textbf{each} $(id \in ads)$}
-  \State \LINEIFTHEN{$id \not\in B$}{$sendTo(o,\, 'request',\, id)$;}
-  \EndFor  
-  \EndFunction
-  
-  \State
-  \Function{onRequest}{$o,\, id$} \hfill \comm{$o: requester$}
-  \State \textbf{let} $packet \leftarrow getMessage(B,\,id)$; \hfill \comm{get the requested packet from the buffer}
-  \State $sendTo(o, \, packet)$; \hfill \comm{finally send the packet}
-  \EndFunction
-
-\end{algorithmic}

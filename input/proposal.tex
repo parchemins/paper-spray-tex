@@ -2,6 +2,23 @@
 \section{Spray}
 \label{sec:proposal}
 
+\begin{figure*}
+  \centering
+  \subfloat[Figure A][$p_1$ contacts $p_2$ to join the network. $p_1$ adds
+  $p_2$ to its neighborhood. $p_1$ sends its request to $p_2$.]{
+    \input{./input/joiningexampleA.tex}}
+  \hspace{8pt}
+  \subfloat[Figure B][The $onSubs(p_1)$ event is raised at $p_2$
+  which forwards the subscription to its neighbors.]{
+    \input{./input/joiningexampleB.tex}}
+  \hspace{8pt}
+  \subfloat[Figure C][The $onFwdSubs(p_1)$ event is raised at $p_{3-6}$. The 
+  peers add $p_1$ to their neighborhood.]{
+    \input{./input/joiningexampleC.tex}}
+  \caption{\label{fig:joiningexample}Example of the joining
+    protocol of \SPRAY.}
+\end{figure*}
+
 \SPRAY is an adaptive-by-design random peer-sampling protocol inspired by
 \SCAMP~\cite{ganesh2001scamp,ganesh2003peer} and
 \CYCLON~\cite{voulgaris2005cyclon}. It comprises three parts representing the
@@ -29,6 +46,7 @@ and the leaving processes to create \emph{duplicates} in partial views. Thus,
 a partial view may contain multiple occurrences of a particular neighbor. In this
 paper, we show that the number of duplicates remains low and does not
 impact network connectivity.
+
 
 \subsection{Joining}
 \label{subsec:joining}
@@ -66,22 +84,7 @@ age. The $onFwdSubs$ event is called when a peer receives such
 forwarded subscription. It adds the peer as one of its neighbor with
 an age set to $0$ meaning that it is a brand new reference.
 
-\begin{figure*}
-  \centering
-  \subfloat[Figure A][$p_1$ contacts $p_2$ to join the network. $p_1$ adds
-  $p_2$ to its neighborhood. $p_1$ sends its request to $p_2$.]{
-    \input{./input/joiningexampleA.tex}}
-  \hspace{8pt}
-  \subfloat[Figure B][The $onSubs(p_1)$ event is raised at $p_2$
-  which forwards the subscription to its neighbors.]{
-    \input{./input/joiningexampleB.tex}}
-  \hspace{8pt}
-  \subfloat[Figure C][The $onFwdSubs(p_1)$ event is raised at $p_{3-6}$. The 
-  peers add $p_1$ to their neighborhood.]{
-    \input{./input/joiningexampleC.tex}}
-  \caption{\label{fig:joiningexample}Example of the joining
-    protocol of \SPRAY.}
-\end{figure*}
+
 
 Figure~\ref{fig:joiningexample} depicts a joining scenario.  Peer
 $p_1$ contacts $p_2$ to join the network composed of $\{p_2$, $p_3$,
@@ -116,11 +119,11 @@ If duplicates have a negative impact on network properties, most of
 them disappear after shuffling and they proportionally become
 negligible as the network grows.
 
-\begin{algorithm*}[h]
+\begin{algorithm}[h]
   \input{./input/cyclicalgo.tex}
   \caption{\label{algo:scamplon}The cyclic protocol of \SPRAY running at Peer
     $p$.}
-\end{algorithm*}
+\end{algorithm}
 
 Algorithm~\ref{algo:scamplon} shows the \SPRAY protocol running at
 each peer. It is divided between an active thread looping to update

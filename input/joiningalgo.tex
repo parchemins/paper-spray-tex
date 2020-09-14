@@ -1,45 +1,25 @@
 
 \small
-\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+\SetKwProg{Function}{function}{}{}
+\SetKwProg{INITIALLY}{INITIALLY}{}{}
+\SetKwProg{EVENTS}{EVENTS}{}{}
+\DontPrintSemicolon
+\LinesNumbered
 
-\newcommand{\comm}[1]{$\rhd$ #1}
+\INITIALLY {} {
+  $\mathcal{P} \leftarrow \varnothing$ \Comment{the partial view is a multiset} \;
+}
 
-
-\algblockdefx[initially]{initially}{endInitially}
-[0] {\textbf{INITIALLY:}} 
-
-\algsetblockdefx[pas]{pas}{endPas}
-{65535}{}
-[0] {\textbf{EVENTS:}}
-
-\newcommand{\LINEFOR}[2]{%
-  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+\EVENTS {} {
+  \Function{onSubs($o$)} { % \hfill \comm{$o: origin$}
+    \lFor{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
+    {$sendTo(q,\, 'fwdSubs',\, o)$} \label{line:multicast}
   }
 
-\newcommand{\LINEIFTHEN}[2]{%
-  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
+  \BlankLine
+
+  \Function{onFwdSubs($o$)} {% \hfill \comm{$o: origin$}
+    $\mathcal{P} \leftarrow \mathcal{P}\uplus \left\{\langle o,\, 0 \rangle\right\}$
   }
 
-\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
-
-\begin{algorithmic}[1]
-  \Statex
-  \initially
-    \State $\mathcal{P} \leftarrow \varnothing$;
-    \hfill \comm{the partial view is a multiset}
-%    \State $p$ ; \hfill \comm{identity of the local peer}
-  \endInitially
-  
-  \pas
-  \Function{onSubs}{$o$} \hfill \comm{$o: origin$}
-    \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
-    {$sendTo(q,\, 'fwdSubs',\, o)$;} \label{line:multicast}
-    \EndFunction
-    \Statex
-    \Function{onFwdSubs}{$o$} \hfill \comm{$o: origin$}
-    \State $\mathcal{P} \leftarrow
-    \mathcal{P}\uplus \left\{\langle o,\, 0 \rangle\right\}$;
-    \EndFunction
-%%  \endPas
-  
-\end{algorithmic}
+}

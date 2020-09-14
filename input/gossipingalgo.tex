@@ -1,30 +1,20 @@
 
 \small
-\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+\SetKwProg{Function}{function}{}{}
+\DontPrintSemicolon
+\LinesNumbered
 
-\newcommand{\comm}[1]{$\rhd$ #1}
-
-\newcommand{\LINEFOR}[2]{%
-  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
-  }
-
-\newcommand{\LINEIFTHEN}[2]{%
-  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
-  }
-
-\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
-
-\begin{algorithmic}[1]
-  \Function{broadcast}{$m$} \hfill \comm{$m: message$}
-    \State \LINEFOR{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
+\Function{broadcast ($m$)} { % \hfill \comm{$m: message$}
+  \lFor{\textbf{each} $\langle q,\,\_\, \rangle \in\mathcal{P}$}
     {$sendTo(q,\, 'broadcast',\, m)$;}
-    \EndFunction
-    \Statex
-  \Function{receiveBroadcast}{$m$} \hfill \comm{$m: message$}
-  \If {$\neg alreadyReceived(m)$} \label{line:alreadyreceived}
-  \State $deliver(m)$;
-  \State $broadcast(m)$; \hfill \comm{rebroadcast}
-  \EndIf
-  \EndFunction
-  
-\end{algorithmic}
+}
+
+\BlankLine
+
+\Function{receiveBroadcast ($m$)} { % \hfill \comm{$m: message$}
+  \If {$\neg alreadyReceived(m)$ \label{line:alreadyreceived}} {
+     $deliver(m)$ \;
+     $broadcast(m)$ \hfill \Comment{rebroadcast} \;
+  }
+}
+

@@ -1,69 +1,30 @@
 
-%\small
-\algrenewcommand{\algorithmiccomment}[1]{\hskip2em$\rhd$ #1}
+\small
+\SetKwProg{Function}{function}{}{}
+\DontPrintSemicolon
+\LinesNumbered
 
-\newcommand{\comm}[1]{$\rhd$ #1}
-
-\algblockdefx[act]{act}{endAct}
-  [0] {\textbf{ACTIVE THREAD:}}
-
-\algsetblockdefx[pas]{pas}{endPas}
-{65535}{}
-[0] {\textbf{PASSIVE THREAD:}}
-
-
-\newcommand{\LINEFOR}[2]{%
-  \algorithmicfor\ {#1}\ \algorithmicdo\ {#2} %
+\Function{loop}{ % \comm{Every $\Delta\,t$}
+  $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$ \;
+  \textbf{let} $ \langle q,\, age \rangle \leftarrow getOldest(\mathcal{P})$ \;
+  \textbf{let} $sample \leftarrow $ \label{line:samplesize} $\smash{getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\div{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}}$ \;
+  $sample \leftarrow replace(sample,\,q,\,p)$; \label{line:replace1} \;
+  \textbf{let} $sample' \leftarrow sendTo(q,\, 'exchange',\, sample))$ \;
+  \lWhile {$(\neg timeout(sample') \wedge \neg sample')$} {$waitForQ$}
+  %    \hfill \Comment{Awaiting $q$'s sample}
+  \If {$\neg timeout(sample')$} {
+     $sample' \leftarrow replace(sample',\,p,\,q)$ \;
+     $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample) \uplus sample'$
+  } \Else {
+     $onPeerDown(q)$ \hfill \Comment{see Algorithm~\ref{algo:unreachable}}
   }
-
-\newcommand{\LINEWHILE}[2]{%
-  \algorithmicwhile\ {#1}\ \algorithmicdo\ {#2} %
-  }
+}
 
 
-\newcommand{\LINEIFTHEN}[2]{%
-  \algorithmicif\ {#1}\ \algorithmicthen\ {#2} %
-  }
-
-\newcommand{\INDSTATE}[1][1]{\State\hspace{\algorithmicindent}}
-
-\begin{algorithmic}[1]
-  \Statex
-  \act
-    \Function{loop}{ } \hfill \comm{Every $\Delta\,t$}
-    \State $\mathcal{P} \leftarrow incrementAge(\mathcal{P})$;
-    \State \textbf{let} $ \langle q,\, age \rangle \leftarrow getOldest(\mathcal{P})$;
-    \State \textbf{let} $sample \leftarrow $ \label{line:samplesize} $\smash{getSample(\mathcal{P}\setminus\left\{\langle q, age\rangle\right\}, \left \lceil{|\mathcal{P}|\div{2}} \right \rceil-1) \uplus \left\{\langle p, 0 \rangle\right\}}$;
-    \State $sample \leftarrow replace(sample,\,q,\,p)$; \label{line:replace1}
-    \State \textbf{let} $sample' \leftarrow sendTo(q,\, 'exchange',\, sample))$;
-    \State \LINEWHILE {$(\neg timeout(sample') \wedge \neg sample')$} {$waitForQ$;}
-    \hfill \Comment{Awaiting $q$'s sample}
-    \If {$\neg timeout(sample')$}
-%    \State \textbf{let} $sample'\leftarrow response$;
-    \State $sample' \leftarrow replace(sample',\,p,\,q)$;
-    \State $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample) \uplus
-    sample'$;
-    \Else
-    \State $onPeerDown(q)$; \hfill \Comment{see Algorithm~\ref{algo:unreachable}}
-    \EndIf
-    \EndFunction
-  \endAct
-  
-  \pas
-    \Function{onExchange}{$o,\, sample$} \hfill \comm{$o: origin$}
-    \State \textbf{let} $\smash{sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\div{2} \right\rceil )}$;
-    \State $sample' \leftarrow replace(sample',\,o,\,p);$ \label{line:replace2}
-%    \State \textbf{let} $ack \leftarrow sendTo(o ,\, sample')$;
-    \State $sendTo(o ,\, sample')$;
-%    \State \LINEWHILE {$(\neg timeout(ack) \wedge \neg ack)$} {$wait$;} \hfill \Comment{Awaiting an acknowledgement}
-%    \If {$\neg timeout(ack)$}
-    \State $sample' \leftarrow replace(sample',\,p,\,o)$;
-    \State $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample') \uplus
-    sample$; 
-%    \Else
-%    \State $onPeerDown(q)$; \hfill \Comment{see Algorithm~\ref{algo:unreachable}}
-%    \EndIf
-    \EndFunction
-%%  \endPas
-  
-\end{algorithmic}
+\Function{onExchange}{$o,\, sample$} { %  \hfill \comm{$o: origin$}
+  \textbf{let} $\smash{sample' \leftarrow getSample(\mathcal{P} ,\, \left\lceil |\mathcal{P}|\div{2} \right\rceil )}$ \;
+  $sample' \leftarrow replace(sample',\,o,\,p)$ \label{line:replace2} \;
+  $sendTo(o ,\, sample')$ \; 
+  $sample' \leftarrow replace(sample',\,p,\,o)$ \;
+  $\mathcal{P} \leftarrow (\mathcal{P} \setminus sample') \uplus sample$ \;
+}
